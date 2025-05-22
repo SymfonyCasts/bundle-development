@@ -109,6 +109,7 @@ class AppFixtures extends Fixture
             EOF,
         ]);
 
+
         // category: Bizarre Science
         // tags: [science, time, travel]
         ArticleFactory::createOne([

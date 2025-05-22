@@ -11,37 +11,38 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        <nav class="bg-blue-800 mb-5">
-            <a style="margin-left: 75px;" class="navbar-brand space-brand" href="{{ path('app_homepage') }}">The Space Bar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="text-purple-600" href="#">Local Asteroids</a>
-                    </li>
-                    <li class="nav-item">
-                        <a style="color: #fff;" class="nav-link" href="#">Weather</a>
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-info my-2 my-sm-0" type="submit">Search</button>
-                </form>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown" style="margin-right: 75px;">
-                        <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="nav-profile-img rounded-circle" src="{{ asset('images/astronaut-profile.png') }}">
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Profile</a>
-                            <a class="dropdown-item" href="#">Create Post</a>
-                            <a class="dropdown-item" href="#">Logout</a>
+    <body class="bg-[url('../images/bg-planet.png')] bg-contain bg-no-repeat">
+        <nav class="flex items-center justify-between flex-wrap py-6 mx-auto px-4">
+            <div class="flex items-end flex-shrink-0 mr-6 text-white">
+                <a href="{{ path('app_homepage') }}" class="font-semibold text-xl tracking-tight">
+                    <img class="max-h-[45px]" src="{{ asset('images/spacebar-logo.png') }}" alt="Spacebar Logo">
+                </a>
+                <a href="#" class="block ml-6 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-6">Local Asteroids</a>
+                <a href="#" class="block ml-6 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-6">Weather</a>
+                <a href="#" class="block ml-6 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-6">Journal</a>
+            </div>
+            <div class="flex">
+                <form class="max-w-md mx-auto mr-1.5">   
+                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
                         </div>
-                    </li>
-                </ul>
+                        <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 rounded-[40px] bg-white focus:ring-blue-500 focus:border-blue-500 " placeholder="Search" required />
+                    </div>
+                </form>
+                <div class="block lg:hidden">
+                    <button class="flex items-center px-3 py-2">
+                        <img class="h-14 w-14" src="{{ asset('images/profile-img.png') }}">
+                    </button>
+                </div>
+                <div class="hidden w-full flex-grow lg:flex lg:items-center lg:w-auto">
+                    <div class="font-bold uppercase lg:flex-grow">
+                        <img class="h-14 w-14" src="{{ asset('images/profile-img.png') }}">
+                    </div>
+                </div>
             </div>
         </nav>
 
