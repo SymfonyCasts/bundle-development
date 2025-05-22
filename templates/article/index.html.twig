@@ -2,44 +2,85 @@
 
 {% block body %}
     
-    <div class="max-w-6xl px-5">
-        <h1 class="text-7xl text-white">Your source for the latest news and trends from around the galaxy</h1>
+    <div class="max-w-7xl px-5 mx-auto">
+        <h1 class="text-7xl text-white mt-6 mb-12 text-center">Your source for the latest news and trends from around the galaxy</h1>
         <div>
             <!-- Supporting Articles -->
 
             {% for article in articles %}
-            <div class="bg-white my-2">
+            <div class="bg-white my-2 rounded-2xl p-5">
                 <a href="{{ path('app_article_show', {slug: article.slug}) }}">
-                    <img class="article-img" src="{{ asset('images/%s.png'|format(article.slug)) }}">
-                    <div class="article-title d-inline-block pl-3 align-middle">
-                        <span>{{ article.title }}</span>
-                        <br>
-                        <span class="align-left article-details"><img class="article-author-img rounded-circle" src="{{ asset('images/alien-profile.png') }}"> {{ article.author }} </span>
-                        <span class="pl-5 article-details float-right"> {{ article.publishedAt|date('F j, Y') }}</span>
+                    <div class="flex">
+                        <img class="rounded-2xl" src="{{ asset('images/%s.png'|format(article.slug)) }}">
+                        <div class="article-title d-inline-block pl-3 align-middle">
+                            <div class="text-[#E53384] font-bold mt-8"> {{ article.publishedAt|date('F j, Y') }}</div>
+                            <div class="text-5xl font-medium mt-4">{{ article.title }}</div>
+                            <div class="flex items-center">
+                                <img class="rounded-full mr-1.5 h-10 w-10" src="{{ asset('images/alien-profile.png') }}"> 
+                                <div>{{ article.author }}</div>
+                            </div>
+                        </div>
                     </div>
                 </a>
             </div>
             {% endfor %}
         </div>
 
-        <!-- Right bar ad space -->
+        <div class="flex justify-center mt-[80px]">
+            <div class="relative bg-[#FFE941] rounded-4xl flex justify-between p-4.5 w-[600px]">
+                <img class="absolute bottom-0 left-4 h-[140px]" src="{{ asset('images/icecream.png') }}">
+                <div class="ml-[80px]">
+                    <div class="capitalize font-bold opacity-75">New Flavor</div>
+                    <div class="text-[42px]">Space Ice Cream</div>
+                </div>
+                <button class="rounded-lg p-2.5 text-white bg-black font-bold capitalize self-center">Buy Now</button>
+            </div>
+        </div>
 
+        <div class="bg-white rounded-2xl p-5 mt-[80px]">
+            <h3 class="text-6xl font-bold">Trending Quotes</h3>
 
-        <div class="col-sm-12 col-md-4 text-center">
-            <div class="ad-space mx-auto mt-1 pb-2 pt-2">
-                <img class="advertisement-img" src="{{ asset('images/space-ice.png') }}">
-                <p><span class="advertisement-text">New:</span> Space Ice Cream!</p>
-                <button class="btn btn-info">Buy Now!</button>
+            <div class="flex mb-3">
+                <img class="rounded-full h-[75px] outline-8 outline-[#219AD3] outline-offset-4" src="" alt="">
+                <div class="ml-4">
+                    <div>
+                        "Our two greatest problems are gravity and paperwork. We can lick gravity, but sometimes the paperwork is overwhelming."
+                    </div>
+                    <div class="font-bold">
+                        <a href="https://en.wikipedia.org/wiki/Sunita_Williams">Sunita William</a>
+                    </div>
+                    <div class="text-[#219AD3] font-bold">Discovery Astronaut</div>
+                </div>
             </div>
 
-            <div class="quote-space pb-2 pt-2 px-5">
-                <h3 class="text-center pb-3">Trending Quotes</h3>
-                <p><i class="fa fa-comment"></i> "Our two greatest problems are gravity and paperwork. We can lick gravity, but sometimes the paperwork is overwhelming." <br>— <a href="https://en.wikipedia.org/wiki/Wernher_von_Braun">Wernher von Braun, Rocket Engineer</a></p>
-
-                <p class="pt-4"><i class="fa fa-comment"></i> "Let's face it, space is a risky business. I always considered every launch a barely controlled explosion." <br>— <a href="https://en.wikipedia.org/wiki/Aaron_Cohen_(Deputy_NASA_administrator)">Aaron Cohen, NASA Administrator</a></p>
-
-                <p class="pt-4"><i class="fa fa-comment"></i> "If offered a seat on a rocket ship, don't ask what seat. Just get on."<br>— <a href="https://en.wikipedia.org/wiki/Christa_McAuliffe">Christa McAuliffe, Challenger Astronaut</a>
+            <div class="flex mb-8">
+                <img class="rounded-full h-[75px] outline-8 outline-[#D35121] outline-offset-4" src="{{ asset('images/chris-hadfield.png') }}" alt="Aaron Cohen">
+                <div class="ml-4">
+                    <div>
+                        "If you don't like airline food, you'll probably have the same impression of space station food. I would not fly to space for the food."
+                    </div>
+                    <div class="font-bold">
+                        <a href="https://en.wikipedia.org/wiki/Chris_Hadfield">Chris Hadfield</a>
+                    </div>
+                    <div class="text-[#D35121] font-bold">Atlantis & Endeavour Astronaut</div>
+                </div>
             </div>
+
+            <div class="flex mb-8">
+                <img class="rounded-full h-[75px] outline-8 outline-[#2CCA7B] outline-offset-4"  src="{{ asset('images/christa-mcauliffe.png') }}" alt="Christa McAuliffe">
+                <div class="ml-4">
+                    <div>
+                        "If offered a seat on a rocket ship, don't ask what seat. Just get on."
+                    </div>
+                    <div class="font-bold">
+                        <a href="https://en.wikipedia.org/wiki/Christa_McAuliffe">Christa McAuliffe</a>
+                    </div>
+                    <div class="font-bold text-[#2CCA7B]">
+                        Challenger Astronaut
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
 {% endblock %}
