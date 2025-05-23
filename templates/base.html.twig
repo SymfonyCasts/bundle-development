@@ -4,6 +4,9 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome to the SpaceBar{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap" rel="stylesheet">
         {% block stylesheets %}
         {% endblock %}
 
@@ -17,9 +20,9 @@
                 <a href="{{ path('app_homepage') }}" class="font-semibold text-xl tracking-tight">
                     <img class="max-h-[45px]" src="{{ asset('images/spacebar-logo.png') }}" alt="Spacebar Logo">
                 </a>
-                <a href="#" class="block ml-6 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-6">Local Asteroids</a>
-                <a href="#" class="block ml-6 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-6">Weather</a>
-                <a href="#" class="block ml-6 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-6">Journal</a>
+                <a href="#" class="block ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Local Asteroids</a>
+                <a href="#" class="block ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Weather</a>
+                <a href="#" class="block ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Journal</a>
             </div>
             <div class="flex">
                 <form class="max-w-md mx-auto mr-1.5">   
@@ -45,9 +48,9 @@
                 </div>
             </div>
         </nav>
-
-        {% block body %}{% endblock %}
-
+        <div class="max-w-7xl px-5 mx-auto">
+            {% block body %}{% endblock %}
+        </div>
         <footer class="footer">
             <div class="container text-center">
                 <span class="text-muted">Made with <i class="fa fa-heart" style="color: red;"></i> by the guys and gals at <a href="https://symfonycasts.com">SymfonyCasts</a></span>
