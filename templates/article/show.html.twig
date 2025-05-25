@@ -9,16 +9,16 @@
     <div class="md:pl-5">
         <div class="mt-3 flex items-center">
             <div class="mr-4 flex items-baseline">
-                <i class="fa fa-calendar mr-1 text-gray-500"></i>
                 <span class="text-[#E53384] font-bold">{{ article.publishedAt|date('F j, Y') }}</span>
             </div>
-            <div class="mr-4 flex items-baseline">
-                <i class="fa fa-rocket mr-1 text-gray-500"></i>
+        
+            <div class="flex items-baseline bg-[#2792dc] text-white p-1.5 rounded text-sm">
+                <i class="fa fa-rocket mr-1"></i>
                 {{ article.category.name }}
             </div>
             {% if article.tags %}
-                <div class="flex items-baseline">
-                    <i class="fa fa-tag mr-1 text-gray-500"></i>
+                <div class="flex items-baseline bg-[#2792dc] text-white p-1.5 rounded text-sm mx-2">
+                    <i class="fa fa-tag mr-1"></i>
                     <ul class="flex items-center">
                         {% for tag in article.tags %}
                             <li class="mr-1">{{ tag.name }}</li>
@@ -26,8 +26,10 @@
                     </ul>
                 </div>
             {% endif %}
+            
         </div>
-        <div class="text-4xl font-medium">{{ article.title }}</div>
+        <div class="text-4xl font-medium my-3">{{ article.title }}</div>
+        
         <div class="flex items-center mt-3">
             <img class="rounded-full h-10 w-10" src="{{ asset('images/alien-profile.png') }}">
             <div class="ml-2 mr-9">{{ article.author }}</div>
