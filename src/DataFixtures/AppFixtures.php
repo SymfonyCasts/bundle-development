@@ -3,6 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Factory\ArticleFactory;
+use App\Factory\CategoryFactory;
+use App\Factory\TagFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -10,13 +12,20 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // category: Space Oddities
-        // tags: [space, food]
+        $space = TagFactory::createOne(['name' => 'space']);
+        $food = TagFactory::createOne(['name' => 'food']);
+        $mercury = TagFactory::createOne(['name' => 'mercury']);
+        $travel = TagFactory::createOne(['name' => 'travel']);
+        $science = TagFactory::createOne(['name' => 'science']);
+        $time = TagFactory::createOne(['name' => 'time']);
+
         ArticleFactory::createOne([
             'title' => 'Why Asteroids Taste Like Bacon',
             'slug' => 'asteroid',
             'author' => 'Mike Ferengi',
             'publishedAt' => new \DateTimeImmutable('-1 day'),
+            'category' => CategoryFactory::new(['name' => 'Space Oddities']),
+            'tags' => [$space, $food],
             'content' => <<<EOF
             It sounds like the fever dream of a sci-fi chef: **asteroids that taste like bacon**. But this tasty tale isn’t just a space-faring fantasy — it has roots in real science, with a sizzling sprinkle of imagination.
 
@@ -56,13 +65,13 @@ class AppFixtures extends Fixture
             EOF,
         ]);
 
-        // category: Astro Travel
-        // tags: [mercury, space, travel]
         ArticleFactory::createOne([
             'title' => 'Life on Planet Mercury: Tan, Relaxing and Fabulous',
             'slug' => 'mercury',
             'author' => 'Amy Oort',
             'publishedAt' => new \DateTimeImmutable('-1 week'),
+            'category' => CategoryFactory::new(['name' => 'Astro Travel']),
+            'tags' => [$mercury, $space, $travel],
             'content' => <<<EOF
             Move over, Mars. Forget Venus. If you’re looking for the **ultimate cosmic getaway**, there's a new (extremely hot) destination on the block: **Planet Mercury** — where the sun always shines, the tan lines are out of this world, and *"fabulous"* takes on a whole new temperature.
 
@@ -109,14 +118,13 @@ class AppFixtures extends Fixture
             EOF,
         ]);
 
-
-        // category: Bizarre Science
-        // tags: [science, time, travel]
         ArticleFactory::createOne([
             'title' => 'Light Speed Travel: Fountain of Youth or Fallacy',
             'slug' => 'lightspeed',
             'author' => 'Alpha Centauri',
             'publishedAt' => new \DateTimeImmutable('-1 month'),
+            'category' => CategoryFactory::new(['name' => 'Bizarre Science']),
+            'tags' => [$science, $time, $travel],
             'content' => <<<EOF
             It’s a sci-fi classic: hop aboard a starship, hit light speed, and zip around the galaxy while barely aging a day. Meanwhile, everyone back on Earth gets old, pays taxes, and forgets your Netflix password.
 

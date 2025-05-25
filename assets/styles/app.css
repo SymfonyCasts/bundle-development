@@ -12,8 +12,10 @@ body {
     margin-top: 15px;
 }
 
-.article-text p, ul, li {
-    font-size: 18px;
+.article-text {
+    p, ul, li {
+        font-size: 18px;
+    }
 }
 
 .article-text p {

@@ -23,6 +23,7 @@ final class ArticleFactory extends PersistentProxyObjectFactory
             'publishedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'slug' => self::faker()->text(255),
             'title' => self::faker()->text(255),
+            'category' => CategoryFactory::new(),
         ];
     }
 }
