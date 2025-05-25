@@ -21,11 +21,11 @@
                 <a href="{{ path('app_homepage') }}" class="font-semibold text-xl tracking-tight">
                     <img class="max-h-[45px]" src="{{ asset('images/spacebar-logo.png') }}" alt="Spacebar Logo">
                 </a>
-                <a href="#" class="block ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Local Asteroids</a>
-                <a href="#" class="block ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Weather</a>
-                <a href="#" class="block ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Journal</a>
+                <a href="#" class="hidden ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Local Asteroids</a>
+                <a href="#" class="hidden ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Weather</a>
+                <a href="#" class="hidden ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Journal</a>
             </div>
-            <div class="flex">
+            <div class="flex items-center">
                 <form class="max-w-md mx-auto mr-1.5">   
                     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                     <div class="relative">
@@ -37,16 +37,14 @@
                         <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 rounded-[40px] bg-white focus:ring-blue-500 focus:border-blue-500 " placeholder="Search" required />
                     </div>
                 </form>
-                <div class="block lg:hidden">
-                    <button class="flex items-center px-3 py-2">
+                <div class="hidden lg:inline-block">
+                    <button class="py-2">
                         <img class="h-14 w-14" src="{{ asset('images/profile-img.png') }}">
                     </button>
                 </div>
-                <div class="hidden w-full flex-grow lg:flex lg:items-center lg:w-auto">
-                    <div class="font-bold uppercase lg:flex-grow">
-                        <img class="h-14 w-14" src="{{ asset('images/profile-img.png') }}">
-                    </div>
-                </div>
+                
+                <a href="#" class="text-white hover:text-gray-300 inline-block lg:hidden"><i class="ml-2 fa-solid fa-bars text-4xl "></i></a>
+                
             </div>
         </nav>
         <div class="max-w-7xl px-5 mx-auto">
