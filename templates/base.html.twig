@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome to the SpaceBar{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <script src="https://kit.fontawesome.com/8065240ddb.js" crossorigin="anonymous"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap" rel="stylesheet">
@@ -51,9 +52,9 @@
         <div class="max-w-7xl px-5 mx-auto">
             {% block body %}{% endblock %}
         </div>
-        <footer class="footer">
-            <div class="container text-center">
-                <span class="text-muted">Made with <i class="fa fa-heart" style="color: red;"></i> by the guys and gals at <a href="https://symfonycasts.com">SymfonyCasts</a></span>
+        <footer class="py-8">
+            <div class="text-white text-center">
+                Made with <i class="fa fa-heart text-red-600"></i> by the guys and gals at <a class="underline text-[#0286C4]" href="https://symfonycasts.com">SymfonyCasts</a>
             </div>
         </footer>
     </body>

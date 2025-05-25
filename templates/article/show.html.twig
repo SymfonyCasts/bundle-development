@@ -4,69 +4,63 @@
 
 {% block body %}
 
-
-
-<div class="bg-white rounded-lg p-5 flex">
-    <img class="h-[412px] rounded-lg" src="{{ asset('images/%s.png'|format(article.slug)) }}">
-    <div class="pl-5">
-        <div class="text-[#E53384] font-bold mt-8">{{ article.publishedAt|date('F j, Y') }}</div>
+<div class="flex flex-col md:flex-row bg-white rounded-lg p-5">
+    <img class="h-[150px] rounded-lg" src="{{ asset('images/%s.png'|format(article.slug)) }}">
+    <div class="md:pl-5">
+        <div class="text-[#E53384] font-bold mt-3">{{ article.publishedAt|date('F j, Y') }}</div>
         <div class="text-4xl font-medium">{{ article.title }}</div>
-        <div class="flex">
+        <div class="flex items-center mt-3">
             <img class="rounded-full h-10 w-10" src="{{ asset('images/alien-profile.png') }}"> 
-            <div>{{ article.author }}</div>
-        </div>
-        
-        <div>
-            <div class="js-like-article-count">5</div>
-            <a href="#" class="fa fa-heart-o like-article js-like-article"></a>
+            <div class="ml-2 mr-9">{{ article.author }}</div>
+            <span class="flex text-red-600 font-semibold items-center">
+            <a href="#" class="fa-regular fa-heart js-like-article"></a>
+            <div class="js-like-article-count ml-1">5</div>
+        </span>
         </div>
     </div>
 </div>
 
 
-<div class="bg-white rounded-lg p-5 mt-5">
-    <div class="article-text">
+<div class="bg-white rounded-lg py-10 mt-5 px-5 lg:px-0">
+    <div class="article-text max-w-4xl mx-auto">
         {{ article.content|markdown_to_html }}
-    </div>
-
-
-
-    <div class="col-sm-12">
-        <p class="share-icons mb-5"><span class="pr-1">Share:</span> <i class="pr-1 fa fa-facebook-square"></i><i class="pr-1 fa fa-twitter-square"></i><i class="pr-1 fa fa-reddit-square"></i><i class="pr-1 fa fa-share-alt-square"></i></p>
-    </div>
-
-
+        
+        <div class="mt-12 text-lg font-medium">Share:
+            <i class="text-[#0286C4] pl-1 fa-brands fa-facebook"></i>
+            <i class="text-[#0286C4] pl-1 fa-brands fa-bluesky"></i>
+            <i class="text-[#0286C4] pl-1 fa-brands fa-reddit"></i>
+            <i class="text-[#0286C4] pl-1 fa-solid fa-share-nodes"></i>
+        </div>
     
-    <h3><i class="pr-3 fa fa-comment"></i>{{ comments|length }} Comments</h3>
+        <h3 class="my-6 text-2xl font-medium"><i class="pr-3 fa fa-comment"></i>{{ comments|length }} Comments</h3>
 
-
-    <div class="row mb-5">
-        <div class="col-sm-12">
-            <img class="comment-img rounded-circle" src="{{ asset('images/astronaut-profile.png') }}">
-            <div class="comment-container d-inline-block pl-3 align-top">
-                <span class="commenter-name">Amy Oort</span>
-                <div class="form-group">
-                    <textarea class="form-control comment-form" id="articleText" rows="1"></textarea>
+        <div class="flex items-center flex-shrink-0 mb-[40px]">
+            <img class="rounded-full h-10 w-10" src="{{ asset('images/profile-img.png') }}">
+            <div class="ml-3">
+                <div class="font-medium">Amy Oort</div>
+                <div class="flex">
+                    <textarea id="comment" name="comment" rows="1" class="border border-gray-300 rounded-lg md:w-[500px]"></textarea>
+                    <button type="submit" class="bg-black text-white py-2 px-3 ml-2 rounded-xl">Comment</button>
                 </div>
-                <button type="submit" class="btn btn-info">Comment</button>
+                
             </div>
         </div>
-    </div>
+        
 
-    {% for comment in comments %}
-    <div class="row">
-        <div class="col-sm-12">
-            <img class="comment-img rounded-circle" src="{{ asset('images/alien-profile.png') }}">
-            <div class="comment-container d-inline-block pl-3 align-top">
-                <span class="commenter-name">Mike Ferengi</span>
-                <br>
-                <span class="comment"> {{ comment }}</span>
-                <p><a href="#">Reply</a></p>
+        {% for comment in comments %}
+        <div class="flex flex-shrink-0 mt-6">
+            <img class="rounded-full h-10 w-10" src="{{ asset('images/alien-profile.png') }}">
+            <div class="ml-3">
+                <div class="font-medium">Mike Ferengi</div>
+                <div class="comment"> {{ comment }}</div>
+                <a href="#" class="text-[#0286C4] hover:text-blue-600">
+                    <i class="fa-regular fa-comment"></i>
+                    Reply
+                </a>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-
 </div>
 
 
