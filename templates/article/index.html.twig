@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    
+
     <div class="">
         <h1 class="text-4xl lg:text-7xl text-white mt-3 lg:mt-6 mb-12 text-center">Your source for the latest news and trends from around the galaxy</h1>
         <div>
@@ -13,9 +13,9 @@
                         <div class="article-title d-inline-block pl-3 align-middle">
                             <div class="text-[#E53384] font-bold mt-8"> {{ article.publishedAt|date('F j, Y') }}</div>
                             <div class="text-5xl font-medium mt-4">{{ article.title }}</div>
-                            <div class="line-clamp-3 my-5">{{ article.content }}</div>
+                            <div class="line-clamp-3 my-5">{{ article.content|markdown_to_html }}</div>
                             <div class="flex items-center">
-                                <img class="rounded-full mr-1.5 h-10 w-10" src="{{ asset('images/alien-profile.png') }}"> 
+                                <img class="rounded-full mr-1.5 h-10 w-10" src="{{ asset('images/alien-profile.png') }}">
                                 <div>{{ article.author }}</div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 {% endblock %}
