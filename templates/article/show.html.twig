@@ -12,12 +12,12 @@
                 <span class="text-[#E53384] font-bold">{{ article.publishedAt|date('F j, Y') }}</span>
             </div>
         
-            <div class="flex items-baseline bg-[#2792dc] text-white p-1.5 rounded text-sm">
+            <div class="flex items-baseline bg-[#2792dc] text-white p-1.5 rounded text-sm capitalize">
                 <i class="fa fa-rocket mr-1"></i>
                 {{ article.category.name }}
             </div>
             {% if article.tags %}
-                <div class="flex items-baseline bg-[#2792dc] text-white p-1.5 rounded text-sm mx-2">
+                <div class="flex items-baseline bg-[#2792dc] text-white p-1.5 rounded text-sm mx-2 capitalize">
                     <i class="fa fa-tag mr-1"></i>
                     <ul class="flex items-center">
                         {% for tag in article.tags %}
