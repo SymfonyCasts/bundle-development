@@ -26,12 +26,17 @@
                 <a href="#" class="hidden ml-4 mt-4 lg:inline-block lg:mt-0 hover:text-[#5BA8DC] mr-4">Journal</a>
             </div>
             <div class="flex items-center">
-                <span class="text-white mr-3">
-                    <i class="fa fa-language"></i>
-                    <a href="#" class="ml-3 uppercase">en</a>
-                    <a href="#" class="ml-3 uppercase">fr</a>
-                    <a href="#" class="ml-3 uppercase">es</a>
-                </span>
+                
+                <form class="max-w-sm mx-auto mr-2">
+                    <label for="language" class="sr-only">Select Language</label>
+                    <select id="language" class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option selected>Choose a language</option>
+                        <option value="US">EN</option>
+                        <option value="CA">ES</option>
+                        <option value="FR">FR</option>
+                    </select>
+                </form>
+                
                 <form class="max-w-md mx-auto mr-1.5">
                     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                     <div class="relative">
