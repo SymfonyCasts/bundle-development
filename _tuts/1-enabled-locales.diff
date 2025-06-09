@@ -1,0 +1,11 @@
+diff --git a/config/packages/translation.yaml b/config/packages/translation.yaml
+index 490bfc2..bc94359 100644
+--- a/config/packages/translation.yaml
++++ b/config/packages/translation.yaml
+@@ -1,5 +1,6 @@
+ framework:
+     default_locale: en
++    enabled_locales: ['en', 'fr', 'es']
+     translator:
+         default_path: '%kernel.project_dir%/translations'
+         providers:

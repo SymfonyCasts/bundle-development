@@ -1,0 +1,60 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "add-migrations",
+            "name": "Add migrations",
+            "description": null
+        },
+        {
+            "id": "1-add-symfony-translation",
+            "name": "1. Add symfony\/translation",
+            "description": null
+        },
+        {
+            "id": "1-enabled-locales",
+            "name": "1. enabled_locales",
+            "description": null
+        },
+        {
+            "id": "1-html-lang",
+            "name": "1. html-lang",
+            "description": null
+        },
+        {
+            "id": "2-route-attribute-lang-paths",
+            "name": "2. Route attribute lang paths",
+            "description": null
+        },
+        {
+            "id": "2-routes-prefix",
+            "name": "2. Routes prefix",
+            "description": null
+        },
+        {
+            "id": "2-unprefixed-default",
+            "name": "2. unprefixed default",
+            "description": null
+        },
+        {
+            "id": "2-disable-trailing-slash",
+            "name": "2. disable trailing slash",
+            "description": null
+        },
+        {
+            "id": "3-language-switcher",
+            "name": "3. language switcher",
+            "description": null
+        },
+        {
+            "id": "3-dynamic-language-switcher",
+            "name": "3. dynamic language switcher",
+            "description": null
+        }
+    ],
+    "sha": "a7878f9bf42df74657b0ba2cc382a814838dda41"
+}

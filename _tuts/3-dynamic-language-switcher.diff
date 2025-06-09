@@ -1,0 +1,30 @@
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index 48d5b9d..67237e6 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -36,7 +36,7 @@
+                         data-action="dropdown#toggle click@window->dropdown#hide keydown.esc@window->dropdown#hide"
+                     >
+                         <span class="text-gray-400">Language:</span>
+-                        <strong class="ml-1 uppercase">en</strong>
++                        <strong class="ml-1 uppercase">{{ app.locale }}</strong>
+                         <i class="ml-1 fa-solid fa-chevron-down text-gray-400"></i>
+                     </a>
+                     <ul
+@@ -44,9 +44,13 @@
+                         data-dropdown-target="content"
+                         class="absolute overflow-hidden z-10 right-0 mt-1 w-full text-gray-900 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                     >
+-                        <li class="uppercase hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm">
+-                            <a class="block" href="https://example.com">fr</a>
+-                        </li>
++                        {% for locale in app.enabled_locales %}
++                            {% if locale != app.locale %}
++                                <li class="uppercase hover:bg-gray-100 hover:text-gray-900 block px-4 py-2 text-sm">
++                                    <a class="block" href="{{ path(app.current_route, app.current_route_parameters|merge({_locale: locale})) }}">{{ locale }}</a>
++                                </li>
++                            {% endif %}
++                        {% endfor %}
+                     </ul>
+                 </div>
+ 
