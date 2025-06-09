@@ -16,12 +16,13 @@
     - Language switcher
     - Bulk translation tasks
 - in `base.html.twig`, add `<html lang="{{ app.locale }}">`
+  - inspect source
 
 ## "Localized" Routes
 
 - Different methods for determining the locale
   - User setting - in the db
-  - Request header
+  - Request header (`Request::getLanguages()`)
   - URLs
     - translate the entire path: `/about` & `/a-propos`
     - subdomain: `en.example.com/about` & `fr.example.com/about`
@@ -44,8 +45,6 @@
 
 ## Create a Language Switcher
 
-- Homepage trailing slash: `/es` => `/es/`
-  - `config/routes.yaml`: `trailing_slash_on_root: false`
 - `_locale` route parameter
   - "special" route parameter - not added as a query parameter
   - show in profiler
@@ -56,6 +55,8 @@
   - `{{ locale }}`
   - `path(app.current_route, app.current_route_parameters|merge({_locale: locale}))`
   - Demo! Both homepage and article page
+- Homepage trailing slash: `/es` => `/es/`
+    - `config/routes.yaml`: `trailing_slash_on_root: false`
 
 ## Translating Content
 
