@@ -1,7 +1,19 @@
 chapters:
-  - installation
-  - localized-routes
-  - language-switcher
-  - translating-content
-  - keys
-  - providers
+    installation:
+        tutsFirstStep: 1-add-symfony-translation
+        tutsLastStep: 1-html-lang
+    localized-routes:
+        tutsFirstStep: 2-route-attribute-lang-paths
+        tutsLastStep: 2-unprefixed-default
+    language-switcher:
+        tutsFirstStep: null
+        tutsLastStep: null
+    translating-content:
+        tutsFirstStep: null
+        tutsLastStep: null
+    keys:
+        tutsFirstStep: null
+        tutsLastStep: null
+    providers:
+        tutsFirstStep: null
+        tutsLastStep: null
