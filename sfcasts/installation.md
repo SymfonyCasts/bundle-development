@@ -3,7 +3,7 @@
 Hey friends! e alegro de que te hayas unido a mí en este curso de
 sobre las traducciones de Symfony! In this tutorial, we're celebrating
 one of the oldest components in Symfony, but for the first time here
-on Symfonycasts!
+on SymfonyCasts!
 
 Can it make my English site available in German? Ja! Can it translate my
 Canadian accent to American? Probably not eh?
