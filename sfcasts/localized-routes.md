@@ -1,32 +1,29 @@
 # Localized Routes
 
-We've successfully installed the translation component and our pages are now
-advertised as our default locale: English. But how do you identify the language
-of the users coming to your site and how do you translate it? Before we dive
-into translating content, it's crucial to determine the user's language. There
-are several ways to do this.
+We installed the translation component. Go us! Also our pages are 
+advertised via the `lang` attrubute as our default locale: `en`. But how can we figure, which
+language a user wants? There are several options.
 
 ## Identifying User's Language
 
-One method involves using a user object. If a user is logged in to our
-site, one of their account settings "language". But this
-doesn't cover non-logged in users. If your site has a non-authenticated
-area, what language do you use for that?
+One method involves using the `User` entity. If a user is logged in to our
+site, one of their account settings could be "language". But then, what about
+non-authenticated users? Ya know, the shy ones lurking around the edge of our site.
 
 Another method involves using a request header. Most browsers send an
-`Accept-Language` header with each request, indicating your preferred
-languages. This language preference is typically set when you install your operating
+`Accept-Language` header with each request, advertising which languages the user prefers.
+This is typically set when you install your operating
 system. Symfony even has a `Request::getLanguages()` method that you can
-use to fetch their preferred languages and adjust your content accordingly.
-However, this method isn't ideal since it imposes a language on a user and
-isn't great for SEO if you want all your pages to be indexed in multiple
-languages.
+use to fetch their preferred languages. Then you can translate into that.
+The trouble is, it's not great for SEO. Because a page will have the same URL
+whether it's in Italian, Spanish or Fremen, search engines can only index
+one of them. Boo!
 
 ## Localized Routing
 
-My preferred approach is localized, or translated,
-routing. You've likely seen it before, where the language code prefixes all
-the paths, like `/en/about` or `/fr/about`. An alternative is using subdomains, like
+A better approach is localized, or translated,
+routing. You've probably seen it before, where the language code prefixes every
+the path, like `/en/about` or `/fr/about`. Another method is using subdomains, like
 `en.example.com/about` or `fr.example.com/about`. You can also translate
 the path text, such as `/about` for English and `/a-propos` for French.
 
@@ -40,10 +37,10 @@ the `index()` method, replace the first argument with an array. Inside,
 use the locale code as the key, and the path as the value:
 `['en' => '/en', 'fr' => '/fr', 'es' => '/es']`.
 
-Now, return to our app and test it out by adding `/fr` to the URL.
+Go back to our app and test it out by adding `/fr` to the URL.
 Hmm, looks the same... That's because we haven't created any translations
 yet. But if you inspect the source of this page, the
-`<html>` tag's `lang` attribute is now `fr`. So it is working! You can
+`<html>` tag's `lang` attribute is now `fr`. It's working! You can
 also go to `/es` and `/en`.
 
 ## Localizing All Routes
@@ -51,7 +48,7 @@ also go to `/es` and `/en`.
 We have a little bug though. Let's say you're on the `/fr` version, and
 click and article link. We're on a non-locale-prefixed route now. If we
 inspect the source, we see that the `lang` attribute is back to `en`.
-This is not a great user experience. If you're on a French page and click
+Not a great user experience. If you're on a French page and click
 a link, you should stay on a French page, right?
 
 One solution is to duplicate our route locale map for every route... but...
@@ -60,8 +57,8 @@ that's a bummer. Luckily, there's an easier solution!
 Back in our code, revert the locale mapping we added. Open `config/routes.yaml`.
 This `controllers` entry is telling Symfony to load all methods marked
 with the `#[Route]` attribute in our `src/Controller` directory. We can
-add our locale prefix map here to apply it to all the routes loaded.
-Add `prefix:`, `en: /en`, `fr: /fr`, `es: /es`.
+add our locale prefix map here to apply it to all the routes loaded:
+`prefix:`, `en: /en`, `fr: /fr`, `es: /es`.
 
 In our app, go to the French homepage: `/fr` and click on an article.
 Boom! We're on the French article page! Swap to the `/es` version of
@@ -103,6 +100,6 @@ an article, and we are on the un-prefixed version of the article page. Go to
 the `/fr` homepage, click and article... nice, we're on the `/fr` version
 of the article.
 
-We can now navigate to our alternate language pages but... we have to
-manually manipulate the URL in the address bar... So next: let's create a
+We can now navigate to any language page but... we have to
+manually chang the URL in the address bar... lame! So next: let's create a
 language switcher widget!
