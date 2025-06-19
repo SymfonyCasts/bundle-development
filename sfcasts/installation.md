@@ -5,7 +5,7 @@ sobre las traducciones de Symfony! In this tutorial, we're celebrating
 one of the oldest components in Symfony, but for the first time here
 on Symfonycasts!
 
-Can it make my English site available in German? Ja! Can it translate my 
+Can it make my English site available in German? Ja! Can it translate my
 Canadian accent to American? Probably not eh?
 
 The plan is daring, but simple: take an existing English-only site and
@@ -14,7 +14,7 @@ and even integration with services that can handle the actual translating!
 To translate the most knowledge into your noggin, download the course code
 linked above.
 In the `start/` directory, you'll find files that look like
-this. Use the `README` to get set up, and when you're ready, run
+this. Use the `README` to get set up, and when you're ready, run:
 
 ```terminal
 symfony serve -d
@@ -24,7 +24,7 @@ symfony serve -d
 
 Welcome to the Space Bar, a fun space news blogging site. It has all the
 standard blog features: articles, categories, tags, and comments.
-Let's get this site translated! The Spanish-speakin section of the galaxy awaits!
+Let's get this site translated! The Spanish-speaking quadrant of the galaxy awaits!
 
 The Symfony translation component is designed for translating hard-coded text
 like menu items or something like this tagline.
@@ -34,8 +34,8 @@ But we'll talk about that later.
 
 A good rule of thumb is: if the text you want to translate is commited to your
 repository, like in a Twig template or controller, then the translation
-component is your friend. If the text is stored in a database, like
-article titles or bodies, you'll need something different.
+component is your friend. If the text is stored in a database, like an
+article title or body, you'll need something different.
 
 ## Installing the Translation Component
 
@@ -79,10 +79,10 @@ You might've seen five-digit codes like `en_US` or `en_CA`. These are
 locality-specific: `en_US` is US English, and `en_CA` is Canadian English.
 They're almost identical, but there are slight differences. For example, in
 Canada, we spell color correctly: `C-O-L-O-U-R`, while in the US,
-they invented their own it's `C-O-L-O-R`. Kidding!
+they invented their own spelling `C-O-L-O-R`. Just kidding, they're both correct.
 
 The five-digit codes can also be used to localize your site,
-accounting for country-specific differences in number, currency, and time
+accounting for country-specific differences in number, currency, and date
 formatting.
 
 For this course though, we're not getting into "localization" so we'll stick to the
@@ -93,18 +93,19 @@ two-digit language codes for our "locales".
 Let's configure the other languages our site will support.
 I was hoping to use Klingon and Romulan, but they don't have ISO codes... *yet*,
 so we'll stick to official codes. This is optional, but it's a best practice to
-add `enabled_locales` to`translation.yaml` config. We'll include English (`en`),
+add `enabled_locales` to the `translation.yaml` config. We'll include English (`en`),
 French (`fr`), and Spanish (`es`).
 
 This doesn't prevent you from using locales
 outside of this list, but there are benefits to setting it if you know the
 exact locales your site will use. There's a small performance boost as
-Symfony knows to cache translations only for those locales. More
+Symfony knows to pre-cache translations only for those locales. More
 importantly, it easily lets you *list* these locales in your code, like for a
 language switcher or bulk operations, like generating a sitemap for all
 pages in all supported languages.
 
 ## Add the `lang` Attribute
+
 Now that we have translations enabled, go to `templates/base.html.twig`.
 PhpStorm is giving us a warning about our `<html>` tag. It wants us to add a
 `lang` attribute to the current language. Get this dynamically with
@@ -113,5 +114,5 @@ PhpStorm is giving us a warning about our `<html>` tag. It wants us to add a
 Pop back over to our site... refresh... and view the "page source".
 Here we go: `lang="en"` - our default locale.
 
-Next, let's figure out how to figure out which language our user wants.
+Next, let's see how to figure out which language our user wants.
 Adelante!
