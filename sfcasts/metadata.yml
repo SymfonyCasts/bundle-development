@@ -6,8 +6,8 @@ chapters:
         tutsFirstStep: 2-route-attribute-lang-paths
         tutsLastStep: 2-unprefixed-default
     language-switcher:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 2-disable-trailing-slash
+        tutsLastStep: 3-dynamic-language-switcher
     translating-content:
         tutsFirstStep: null
         tutsLastStep: null
