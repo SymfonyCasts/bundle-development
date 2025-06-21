@@ -1,64 +1,82 @@
 # Create a Language Switcher
 
-Great job on getting your localized routing up and running! You've seen how
-you can manually update the URL with your prefixes, and it's working like a
-charm. But you're probably thinking there's a more efficient way to switch
-between languages. And you're right! Let's add a language switcher next to
-your search form. But before we dive into the code, let me introduce you to
-a special route parameter.
+We have localized routing up and running, but we can only switch locales
+by manually updating the URL. Let's make it easier for users to switch
+by adding a language switcher, up here, next to our search form. This will
+have links to each version of the current page, for all our supported
+locales. But hmm... how can we generate a link to a route for a different
+locale?
 
-If you take a peek into the web profiler, you'll notice a bunch of
-underscore request attributes. These are internal to Symfony, and the one
-that'll pique your interest is `_locale`. It's set to the locale of the
-current page (like `FR`), and we'll be using this to generate URLs for
-different locales.
+If you take a peek into the web profiler for this request, you'll notice a bunch of
+underscored request attributes. These are mostly internal to Symfony, but this
+`_locale` one is important. When using localized routes, Symfony sets this
+to the current locale of the request. What's cool, is that you can use this
+as a route parameter to generate URLs to different locales.
+
+For instance, to generate a URL for `app_homepage`, if you pass `_locale: 'fr'`
+as a route parameter, the generated URL will be `/fr`, regardless of your
+current locale.
+
+Onto the widget!
 
 ## Building the Language Switcher
 
-Alright, it's time to create your very own language switcher. Let's head
-back to the code. In your tutorial directory, grab the language switcher
-code, copy it, and paste it into `templates/base.html.twig`, just above the
-form tag. Now, if you head back to your app and refresh, you'll see a
-placeholder for the language switcher.
+In the `tutorial/` directory, select everything, and copy it. Now, in
+`templates/base.html.twig`, find the `<form>` tag, and just above it,
+paste.
 
-Let's breathe life into it. For the anchor tag's language, we need to make
-it dynamic. We'll use the current locale, which we know is `app.locale`. In
-the `UL` for these `li's`, we'll do a `for each` loop: `for locale in
-app.enabled_locales`.
+Head back to our app and refresh, and here it is! It's just a stub right now,
+but you can see how it should work. This button will show the current locale,
+and when you click it, there's a drop-down with links to the other locales.
 
-This is where you can leverage those enabled locales you set up earlier.
-After that, you'll do an `endfor`. Let's tidy up the code a bit by
-indenting this, and we'll also add an `if` statement `if locale !=
-app.locale`. Remember, `enabled_locales` includes all locales, so we only
-want to show the drop-down options for the locales that you can switch to.
-Then, you'll close the `if` statement with an `endif` and indent this.
+Let's wire this baby up!
 
-For the text, you'll insert `{{ locale }}`, and for the `href`, you'll use
-`path`. Then, you'll use `app.current_route` — a special feature to fetch
-the current route of the page. For the attributes, you'll use
-`app.current_route_parameters` and merge this with `locale: _locale:
-locale`. This will let you change the locale for this page.
+Back in `base.html.twig`, find the anchor tag with the text "Language:". This
+is the button. For this hard-coded text, `en`, we want the current locale,
+we know how to do this already, `{{ app.locale }}`.
+
+Down in the `ul`, which is the drop-down menu, before the `li` tag, add
+`{% for locale in app.enabled_locales %}`. I told you configuring `enabled_locales`
+would come in handy! Under the `li`, add `{% endfor %}` and indent the guts.
+
+This now loops though all the enabled locales, but *also* the *current* locale.
+We want to exclude this, so add a condition before the `li` tag:
+`{% if locale != app.locale %}`. Add `{% endif %}` below, and indent.
+
+For the link text inside the `li`, use `{{ locale }}`. For the `href`, we
+*could* send them to the homepage for that locale... but we can do
+better! I want them to stay on the same page, just with a different locale.
+
+Check this out:
+`{{ path(app.current_route, app.current_route_parameters|merge({_locale: locale})) }}`.
+`app.current_route` gives us the current page's route name, and
+`app.current_route_parameters` gives us the current page's route parameters.
+We're merging these with a new parameter, `_locale: locale`. This will
+generate a URL for the same page, but with a different locale.
 
 ## Testing the Language Switcher
 
-Let's put this to the test. If you're on the French page and refresh, you
-can now switch languages — and voila! Here are your other locales. Let's
-switch to `ES` and now you're on the `ES` version. Switching to English
-will take you to the unprefixed English homepage. And if you navigate to
-one of your articles, you should still be able to switch to the French
-version without leaving the page.
+Moment of truth! Head back to our app and refresh. We're on the French
+homepage and our widget shows "Language: FR". So far, so good! Click
+the button, and here's our other locales, but with "FR" excluded. Click
+"ES" - Spanish. Boom, we're on the Spanish homepage! Switch to
+"EN", yep, we're on the un-prefixed, English homepage.
 
-## Fixing a Minor Issue: Removing the Trailing Slash
+Click an article, and switch to "FR". Awesome! We're on the French version
+of the same article. Our widget works perfectly, and I think, creates an
+*awesome* user experience!
 
-One minor gripe you might have is the trailing slash when you go to the
-homepage of a prefixed locale. If you're not a fan of that (and I'm not
-either), let me show you a quick fix. Head back to your code, go to
-`config/routes.yaml`, and add this option: `trailing_slash_on_root: false`.
-A quick refresh later, and that pesky slash is gone. It's a small detail,
-but little things like these can make a big difference. And don't worry, it
-won't break anything if you decide to leave it as is.
+## Removing the Trailing Slash
 
-## Looking Ahead: Translating Content
+One *super* minor gripe of mine, is that when you're on a locale-prefixed
+homepage, like `/fr`, there's a trailing slash: `/fr/`. There is no real
+technical issue with this, I just dislike it. And it's super easy to
+remove.
 
-With all that prep work out of the way, you're in great shape! Next up,
-we're going to dive into the exciting world of content translation.
+Open `config/routes.yaml`, and under the `controllers` key, add the option
+`trailing_slash_on_root: false`. That's it!
+
+Go back to our app... refresh... and the trailing slash is gone! Phew!
+I can sleep easy tonight!
+
+Ok, enough prep work! Next, let's actually translate some content!
