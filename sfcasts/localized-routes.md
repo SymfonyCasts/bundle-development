@@ -1,8 +1,8 @@
 # Localized Routes
 
-We installed the translation component. Go us! Also our pages are 
-advertised via the `lang` attrubute as our default locale: `en`. But how can we figure, which
-language a user wants? There are several options.
+We installed the translation component. Go us! Also, our pages are
+advertised via the `lang` attribute as our default locale: `en`. But how can we figure out
+what language a user wants? There are several options.
 
 ## Identifying User's Language
 
@@ -10,20 +10,20 @@ One method involves using the `User` entity. If a user is logged in to our
 site, one of their account settings could be "language". But then, what about
 non-authenticated users? Ya know, the shy ones lurking around the edge of our site.
 
-Another method involves using a request header. Most browsers send an
+Another method is to use a request header. Most browsers send an
 `Accept-Language` header with each request, advertising which languages the user prefers.
-This is typically set when you install your operating
+This is typically configured when you install your operating
 system. Symfony even has a `Request::getLanguages()` method that you can
-use to fetch their preferred languages. Then you can translate into that.
+use to fetch their preferred languages. Then you can translate content into that.
 The trouble is, it's not great for SEO. Because a page will have the same URL
-whether it's in Italian, Spanish or Fremen, search engines can only index
+whether it's in Italian, Spanish or French, search engines can only index
 one of them. Boo!
 
 ## Localized Routing
 
 A better approach is localized, or translated,
 routing. You've probably seen it before, where the language code prefixes every
-the path, like `/en/about` or `/fr/about`. Another method is using subdomains, like
+path, like `/en/about` or `/fr/about`. Another method is using subdomains, like
 `en.example.com/about` or `fr.example.com/about`. You can also translate
 the path text, such as `/about` for English and `/a-propos` for French.
 
@@ -46,7 +46,7 @@ also go to `/es` and `/en`.
 ## Localizing All Routes
 
 We have a little bug though. Let's say you're on the `/fr` version, and
-click and article link. We're on a non-locale-prefixed route now. If we
+click an article link. We're on a non-locale-prefixed route now. If we
 inspect the source, we see that the `lang` attribute is back to `en`.
 Not a great user experience. If you're on a French page and click
 a link, you should stay on a French page, right?
