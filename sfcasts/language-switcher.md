@@ -14,7 +14,7 @@ to the current locale of the request. What's cool, is that you can use this
 as a route parameter to generate URLs to different locales.
 
 For instance, to generate a URL for `app_homepage`, if you pass `_locale: 'fr'`
-as a route parameter, the generated URL will be `/fr`, regardless of your
+as a route parameter, the generated URL will be `/fr`, regardless of the
 current locale.
 
 Onto the widget!
