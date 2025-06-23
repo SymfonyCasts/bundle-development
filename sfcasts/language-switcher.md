@@ -1,13 +1,10 @@
 # Create a Language Switcher
 
 We have localized routing up and running, but we can only switch locales
-by manually updating the URL. Let's make it easier for users to switch
-by adding a language switcher, up here, next to our search form. This will
-have links to each version of the current page, for all our supported
-locales. But hmm... how can we generate a link to a route for a different
+by manually updating the URL. That won't do! Instead, let's add a language switcher! Up here, next to our search form, we need a link to this page, but one for each of our supported locales. But hmm... how can we generate a link to a route for a different
 locale?
 
-If you take a peek into the web profiler for this request, you'll notice a bunch of
+Peek into the web profiler for this request, to notice a bunch of
 underscored request attributes. These are mostly internal to Symfony, but this
 `_locale` one is important. When using localized routes, Symfony sets this
 to the current locale of the request. What's cool, is that you can use this
@@ -51,7 +48,7 @@ Check this out:
 `{{ path(app.current_route, app.current_route_parameters|merge({_locale: locale})) }}`.
 `app.current_route` gives us the current page's route name, and
 `app.current_route_parameters` gives us the current page's route parameters.
-We're merging these with a new parameter, `_locale: locale`. This will
+Then we merge these with a new parameter, `_locale: locale`. This will
 generate a URL for the same page, but with a different locale.
 
 ## Testing the Language Switcher
@@ -63,8 +60,7 @@ the button, and here's our other locales, but with "FR" excluded. Click
 "EN", yep, we're on the un-prefixed, English homepage.
 
 Click an article, and switch to "FR". Awesome! We're on the French version
-of the same article. Our widget works perfectly, and I think, creates an
-*awesome* user experience!
+of the same article. Our widget works perfectly: no more late night customer support phone calls trying to walk a customer through changing the URL manually, and in German! Das ist ja verrückt!
 
 ## Removing the Trailing Slash
 
