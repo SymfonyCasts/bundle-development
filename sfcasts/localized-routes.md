@@ -17,7 +17,7 @@ system. Symfony even has a `Request::getLanguages()` method that you can
 use to fetch their preferred languages. Then you can translate content into that.
 The trouble is, it's not great for SEO. Because a page will have the same URL
 whether it's in Italian, Spanish or French, search engines can only index
-one of them. Boo!
+one of them. Dang!
 
 ## Localized Routing
 
@@ -54,10 +54,10 @@ a link, you should stay on a French page, right?
 One solution is to duplicate our route locale map for every route... but...
 that's a bummer. Luckily, there's an easier solution!
 
-Back in our code, revert the locale mapping we added. Open `config/routes.yaml`.
+Back in our code, revert the locale mapping we added, and open `config/routes.yaml`.
 This `controllers` entry is telling Symfony to load all methods marked
 with the `#[Route]` attribute in our `src/Controller` directory. We can
-add our locale prefix map here to apply it to all the routes loaded:
+add our locale prefix map *here* to apply it to all the routes loaded:
 `prefix:`, `en: /en`, `fr: /fr`, `es: /es`.
 
 In our app, go to the French homepage: `/fr` and click on an article.
@@ -90,16 +90,16 @@ this is actually a 404 error.
 What can we do here? Well, we could create a non-prefixed homepage route
 that allows the user to choose their language, or maybe, redirects them
 to the prefixed version for their browser's language. But let's make
-our default language, English, not prefixed by its locale code.
+our default language, English, *not* prefixed by its locale code.
 
 This is super simple to do. In `config/routes.yaml`, change the `/en` prefix
 to just an empty string.
 
 Now, go back to the *real* homepage and refresh. It works! Navigate to
 an article, and we are on the un-prefixed version of the article page. Go to
-the `/fr` homepage, click and article... nice, we're on the `/fr` version
+the `/fr` homepage, click an article... nice, we're on the `/fr` version
 of the article.
 
 We can now navigate to any language page but... we have to
-manually chang the URL in the address bar... lame! So next: let's create a
+manually change the URL in the address bar... lame! So next: let's create a
 language switcher widget!

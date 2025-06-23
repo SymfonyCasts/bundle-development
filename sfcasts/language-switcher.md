@@ -1,10 +1,12 @@
 # Create a Language Switcher
 
 We have localized routing up and running, but we can only switch locales
-by manually updating the URL. That won't do! Instead, let's add a language switcher! Up here, next to our search form, we need a link to this page, but one for each of our supported locales. But hmm... how can we generate a link to a route for a different
+by manually updating the URL. That won't do! Instead, let's add a language switcher!
+Up here, next to our search form, we need a link to this page, but one for each of
+our supported locales. But hmm... how can we generate a link to a route for a different
 locale?
 
-Peek into the web profiler for this request, to notice a bunch of
+Peek into the web profiler for this request, and notice a bunch of
 underscored request attributes. These are mostly internal to Symfony, but this
 `_locale` one is important. When using localized routes, Symfony sets this
 to the current locale of the request. What's cool, is that you can use this
@@ -18,8 +20,8 @@ Onto the widget!
 
 ## Building the Language Switcher
 
-In the `tutorial/` directory, select everything, and copy it. Now, in
-`templates/base.html.twig`, find the `<form>` tag, and just above it,
+In the `tutorial/` directory, open `language_switcher.html.twig`, select everything,
+and copy it. Now, in `templates/base.html.twig`, find the `<form>` tag, and just above it,
 paste.
 
 Head back to our app and refresh, and here it is! It's just a stub right now,
@@ -60,7 +62,9 @@ the button, and here's our other locales, but with "FR" excluded. Click
 "EN", yep, we're on the un-prefixed, English homepage.
 
 Click an article, and switch to "FR". Awesome! We're on the French version
-of the same article. Our widget works perfectly: no more late night customer support phone calls trying to walk a customer through changing the URL manually, and in German! Das ist ja verrückt!
+of the same article. Our widget works perfectly: no more late night customer support
+phone calls trying to walk a customer through changing the URL manually, and
+in German! Das ist ja verrückt!
 
 ## Removing the Trailing Slash
 
