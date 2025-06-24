@@ -1,0 +1,7 @@
+diff --git a/translations/messages.fr.yaml b/translations/messages.fr.yaml
+new file mode 100644
+index 0000000..6f4c5e3
+--- /dev/null
++++ b/translations/messages.fr.yaml
+@@ -0,0 +1 @@
++"Hello World!": "Bonjour le monde!"

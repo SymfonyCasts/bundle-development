@@ -1,0 +1,12 @@
+diff --git a/templates/article/index.html.twig b/templates/article/index.html.twig
+index b1fa5f1..b4c9db4 100644
+--- a/templates/article/index.html.twig
++++ b/templates/article/index.html.twig
+@@ -7,6 +7,7 @@
+         <div>
+             {% for article in articles %}
+             <div class="bg-white my-2 rounded-2xl p-5">
++                {{ 'Hello World!'|trans }}
+                 <a href="{{ path('app_article_show', {slug: article.slug}) }}">
+                     <div class="flex flex-col md:flex-row">
+                         <img class="h-[206px] md:h-[412px] rounded-2xl" src="{{ asset('images/%s.png'|format(article.slug)) }}">

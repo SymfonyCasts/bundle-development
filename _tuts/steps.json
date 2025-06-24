@@ -54,7 +54,27 @@
             "id": "3-dynamic-language-switcher",
             "name": "3. dynamic language switcher",
             "description": null
+        },
+        {
+            "id": "4-inject-translator",
+            "name": "4. inject translator",
+            "description": null
+        },
+        {
+            "id": "4-messages-fr-yaml",
+            "name": "4. messages.fr.yaml",
+            "description": null
+        },
+        {
+            "id": "4-twig-trans",
+            "name": "4. twig trans",
+            "description": null
+        },
+        {
+            "id": "4-cleanup-articlecontroller",
+            "name": "4. cleanup ArticleController",
+            "description": null
         }
     ],
-    "sha": "a7878f9bf42df74657b0ba2cc382a814838dda41"
+    "sha": "d68887798c4b99605a86b910f73ba63d9e67c9ac"
 }
