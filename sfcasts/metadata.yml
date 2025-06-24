@@ -9,8 +9,8 @@ chapters:
         tutsFirstStep: 2-disable-trailing-slash
         tutsLastStep: 3-dynamic-language-switcher
     translating-content:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 4-inject-translator
+        tutsLastStep: 4-cleanup-articlecontroller
     keys:
         tutsFirstStep: null
         tutsLastStep: null
