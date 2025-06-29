@@ -12,7 +12,7 @@ and in the `index()` method, autowire `TranslatorInterface $translator`. Below,
 `dump($translator->trans('Hello World!'))`.
 
 Back in our app, on the English homepage, refresh. Down in the debug toolbar, check
-our the dump: "Hello World!". Makes sense, we're on an English page, so it shows
+out the dump: "Hello World!". Makes sense, we're on an English page, so it shows
 the English version.
 
 Switch to the French version of this page and check the dump: "Hello World!"...
