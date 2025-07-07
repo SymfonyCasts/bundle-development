@@ -1,0 +1,24 @@
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index d5c4da7..d16dca5 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -80,7 +80,7 @@
+         </div>
+         <footer class="py-8">
+             <div class="text-white text-center">
+-                Made with <i class="fa fa-heart text-red-600"></i> by the guys and gals at <a class="underline text-[#0286C4]" href="https://symfonycasts.com">SymfonyCasts</a>
++                {{ 'base.footer'|trans }}
+             </div>
+         </footer>
+     </body>
+diff --git a/translations/messages.en.yaml b/translations/messages.en.yaml
+index 0d3d1c2..0360305 100644
+--- a/translations/messages.en.yaml
++++ b/translations/messages.en.yaml
+@@ -1,5 +1,6 @@
+ base:
+     local_asteroids: "Local Asteroids"
++    footer: 'Made with <i class="fa fa-heart text-red-600"></i> by the guys and gals at <a class="underline text-[#0286C4]" href="https://symfonycasts.com">SymfonyCasts</a>'
+ 
+ article:
+     show:

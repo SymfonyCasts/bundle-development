@@ -74,7 +74,57 @@
             "id": "4-cleanup-articlecontroller",
             "name": "4. cleanup ArticleController",
             "description": null
+        },
+        {
+            "id": "5-remove-exclaimation",
+            "name": "5. remove exclaimation",
+            "description": null
+        },
+        {
+            "id": "5-use-translation-key",
+            "name": "5. use translation key",
+            "description": null
+        },
+        {
+            "id": "5-cleanup",
+            "name": "5. cleanup",
+            "description": null
+        },
+        {
+            "id": "5-add-local-asteroids",
+            "name": "5. add local_asteroids",
+            "description": null
+        },
+        {
+            "id": "6-comment-count-placeholder",
+            "name": "6. comment count placeholder",
+            "description": null
+        },
+        {
+            "id": "6-comment-count-plural",
+            "name": "6. comment count plural",
+            "description": null
+        },
+        {
+            "id": "6-reset-manual-count",
+            "name": "6. reset manual count",
+            "description": null
+        },
+        {
+            "id": "7-html-in-translation",
+            "name": "7. html in translation",
+            "description": null
+        },
+        {
+            "id": "7-raw-filter",
+            "name": "7. raw filter",
+            "description": null
+        },
+        {
+            "id": "7-html-placeholders",
+            "name": "7. html placeholders",
+            "description": null
         }
     ],
-    "sha": "d68887798c4b99605a86b910f73ba63d9e67c9ac"
+    "sha": "f2d53fef4a4c8241f9bccadb4eecbe62d4c1ea45"
 }

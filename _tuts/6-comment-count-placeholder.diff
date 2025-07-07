@@ -1,0 +1,46 @@
+diff --git a/templates/article/show.html.twig b/templates/article/show.html.twig
+index 04bf25e..fa49c0a 100644
+--- a/templates/article/show.html.twig
++++ b/templates/article/show.html.twig
+@@ -11,7 +11,7 @@
+             <div class="mr-4 flex items-baseline">
+                 <span class="text-[#E53384] font-bold">{{ article.publishedAt|date('F j, Y') }}</span>
+             </div>
+-        
++
+             <div class="flex items-baseline bg-[#2792dc] text-white p-1.5 rounded text-sm capitalize">
+                 <i class="fa fa-rocket mr-1"></i>
+                 {{ article.category.name }}
+@@ -26,10 +26,10 @@
+                     </ul>
+                 </div>
+             {% endif %}
+-            
++
+         </div>
+         <div class="text-4xl font-medium my-3">{{ article.title }}</div>
+-        
++
+         <div class="flex items-center mt-3">
+             <img class="rounded-full h-10 w-10" src="{{ asset('images/alien-profile.png') }}">
+             <div class="ml-2 mr-9">{{ article.author }}</div>
+@@ -53,7 +53,7 @@
+             <i class="text-[#0286C4] pl-1 fa-solid fa-share-nodes"></i>
+         </div>
+ 
+-        <h3 class="my-6 text-2xl font-medium"><i class="pr-3 fa fa-comment"></i>{{ comments|length }} Comments</h3>
++        <h3 class="my-6 text-2xl font-medium"><i class="pr-3 fa fa-comment"></i>{{ 'article.show.comments'|trans({'%count%': comments|length}) }}</h3>
+ 
+         <div class="flex items-center flex-shrink-0 mb-[40px]">
+             <img class="rounded-full h-10 w-10" src="{{ asset('images/profile-img.png') }}">
+diff --git a/translations/messages.en.yaml b/translations/messages.en.yaml
+index 2a38379..16f3277 100644
+--- a/translations/messages.en.yaml
++++ b/translations/messages.en.yaml
+@@ -1,2 +1,6 @@
+ base:
+     local_asteroids: "Local Asteroids"
++
++article:
++    show:
++        comments: '%count% Comments'
