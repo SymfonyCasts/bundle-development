@@ -119,6 +119,44 @@
   - Refresh... escaped HTML??
   - use `|raw`
 
+## Debugging & Linting Translations
+
+- Web Debug Toolbar/Panel
+  - Navigate to English article page
+  - Note the "Translations" icon and popover
+  - Click
+  - Shows used translations and parameters
+  - Navigate to French article page
+  - "warning", click
+  - None defined, using fallback
+  - Back to English version
+  - In `base.html.twig`, add `{{ 'base.weather'|trans }}` (but don't add to `messages.en.yaml`)
+  - Refresh - error - missing translation
+- `symfony console debug:translation en` - shows missing but others are good
+- `symfony console debug:translation fr` - all missing
+- `translation:extract` command
+  - `symfony console translation:extract en --dump-messages`
+    - green are "new"
+  - `symfony console translation:extract en --force --format=yaml --as-tree=3`
+    - adds missing as key prefixed with `__` (can customize)
+  - Add "Weather" to `messages.en.yaml`
+- Can use this command to help with translation process, but I find it
+  hard as you kind of have to remember all the keys and their values...
+- `translation:extract` for a translator
+  - our translation service wants xliff....
+  - `symfony console translation:extract en --format=xliff --force`
+  - generates `messages.en.xliff`
+  - rename file to `messages.fr.xliff` and update `target-language` to `fr`
+  - (send to translator)
+  - Fudge `base.local_asteroids` to "(French) Local Asteroids"
+  - Delete `messages.fr.xliff`
+- `lint:translations`
+  - `symfony console lint:translations` - will fail if there are parsing issues
+  - Good for CI
+  - Doesn't fail for missing/fallback translations
+    - Use `symfony console debug:translation <locale>` (for each locale)
+    - Command fails on missing
+
 ## Translation Providers
 
 - Can create translations manually, but it's a lot of work
