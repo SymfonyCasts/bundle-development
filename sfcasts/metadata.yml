@@ -14,6 +14,15 @@ chapters:
     keys:
         tutsFirstStep: null
         tutsLastStep: null
+    placeholders-pluralization:
+      tutsFirstStep: null
+      tutsLastStep: null
+    html:
+      tutsFirstStep: null
+      tutsLastStep: null
+    debugging:
+      tutsFirstStep: null
+      tutsLastStep: null
     providers:
         tutsFirstStep: null
         tutsLastStep: null

@@ -1,3 +1,3 @@
-# Keys, HTML, Placeholders, and Pluralization
+# Translation "Keys"
 
 Coming soon!

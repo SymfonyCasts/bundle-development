@@ -83,35 +83,41 @@
     - `yaml`: format - easiest for developers
 - Cleanup `ArticleController::index()`
 
-## Keys, HTML, Placeholders, and Pluralization
+## Translation "Keys"
 
 - Problem with translating raw content
-  - In `base.html.twig`, remove `!` from `Hello world!`
-  - we broke all other translations `fr` - just because of punctuation...
+    - In `base.html.twig`, remove `!` from `Hello world!`
+    - we broke all other translations `fr` - just because of punctuation...
 - Translation keys:
-  - change to `hello_world|trans`
-  - ew, we even broke the English translation
-  - add `translations/messages.en.yaml` & `hello_world: "Hello World!"`
-  - update `messages.fr.yaml` to `hello_world: "Bonjour le monde!"`
+    - change to `hello_world|trans`
+    - ew, we even broke the English translation
+    - add `translations/messages.en.yaml` & `hello_world: "Hello World!"`
+    - update `messages.fr.yaml` to `hello_world: "Bonjour le monde!"`
 - Cleanup
 - Translate our site!
 - `base.html.twig`:
-  - Start with "Local Asteroids"
-    - Copy text
-    - "keys" can have separators - prefix with the template
-      `{{ 'base.local_asteroids'|trans }}`
-    - inside `messages.en.yaml`: `base`, `local_asteroids: "<paste>"`
-  - Jump to footer html...
-    - Tricky but a translation value can contain HTML
-    - Pase inside single quotes
-    - Refresh... escaped HTML??
-    - use `|raw`
+    - Start with "Local Asteroids"
+        - Copy text
+        - "keys" can have separators - prefix with the template
+          `{{ 'base.local_asteroids'|trans }}`
+        - inside `messages.en.yaml`: `base`, `local_asteroids: "<paste>"`
+
+## Placeholders and Pluralization
+
 - `show.html.twig`: "x Comments"
-  - `'article.show.comments'|trans({'%count%': comments|length})`
-  - `messages.en.yaml`: `article.show.comments: "%count% Comments"`
-  - What if we have 1 comment: "1 Comments"
-  - `messages.en.yaml`: `article.show.comments: "1 Comment|%count% Comments"`
-  - More complex placeholders and pluralization: https://symfony.com/doc/current/reference/formats/message_format.html
+    - `'article.show.comments'|trans({'%count%': comments|length})`
+    - `messages.en.yaml`: `article.show.comments: "%count% Comments"`
+    - What if we have 1 comment: "1 Comments"
+    - `messages.en.yaml`: `article.show.comments: "1 Comment|%count% Comments"`
+    - More complex placeholders and pluralization: https://symfony.com/doc/current/reference/formats/message_format.html
+
+## HTML in Translations
+
+- Jump to footer html...
+  - Tricky but a translation value can contain HTML
+  - Pase inside single quotes
+  - Refresh... escaped HTML??
+  - use `|raw`
 
 ## Translation Providers
 
