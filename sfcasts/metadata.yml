@@ -12,17 +12,17 @@ chapters:
         tutsFirstStep: 4-inject-translator
         tutsLastStep: 4-cleanup-articlecontroller
     keys:
+        tutsFirstStep: 5-remove-exclaimation
+        tutsLastStep: 5-add-local-asteroids
+    placeholders-pluralization:
+        tutsFirstStep: 6-comment-count-placeholder
+        tutsLastStep: 6-reset-manual-count
+    html:
+        tutsFirstStep: 7-html-in-translation
+        tutsLastStep: 7-html-placeholders
+    debugging:
         tutsFirstStep: null
         tutsLastStep: null
-    placeholders-pluralization:
-      tutsFirstStep: null
-      tutsLastStep: null
-    html:
-      tutsFirstStep: null
-      tutsLastStep: null
-    debugging:
-      tutsFirstStep: null
-      tutsLastStep: null
     providers:
         tutsFirstStep: null
         tutsLastStep: null
