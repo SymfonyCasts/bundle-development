@@ -21,8 +21,8 @@ chapters:
         tutsFirstStep: 7-html-in-translation
         tutsLastStep: 7-html-placeholders
     debugging:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 7-html-placeholders
+        tutsLastStep: 7-html-placeholders
     extract-command:
         tutsFirstStep: null
         tutsLastStep: null
