@@ -23,6 +23,12 @@ chapters:
     debugging:
         tutsFirstStep: null
         tutsLastStep: null
+    extract-command:
+        tutsFirstStep: null
+        tutsLastStep: null
     providers:
+        tutsFirstStep: null
+        tutsLastStep: null
+    push-pull-translations:
         tutsFirstStep: null
         tutsLastStep: null
