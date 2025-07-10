@@ -94,7 +94,9 @@ Let's configure the other languages our site will support.
 I was hoping to use Klingon and Romulan, but they don't have ISO codes... *yet*,
 so we'll stick to official codes. This is optional, but it's a best practice to
 add `enabled_locales` to the `translation.yaml` config. We'll include English (`en`),
-French (`fr`), and Spanish (`es`).
+French (`fr`), and Spanish (`es`):
+
+[[[ code('d5da149201') ]]]
 
 This doesn't prevent you from using locales
 outside of this list, but there are benefits to setting it if you know the
@@ -109,7 +111,11 @@ pages in all supported languages.
 Now that we have translations enabled, go to `templates/base.html.twig`.
 PhpStorm is giving us a warning about our `<html>` tag. It wants us to add a
 `lang` attribute to the current language. Get this dynamically with
-`lang="{{ app.locale }}"`. This is helpful for SEO.
+`lang="{{ app.locale }}"`.
+
+[[[ code('63df257fde') ]]]
+
+This is helpful for SEO.
 
 Pop back over to our site... refresh... and view the "page source".
 Here we go: `lang="en"` - our default locale.
