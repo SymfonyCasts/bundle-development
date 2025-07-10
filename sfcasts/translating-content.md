@@ -8,8 +8,13 @@ of your translating.
 ## Translator Service
 
 Let's get started with PHP translations. Open `src/Controller/ArticleController.php`,
-and in the `index()` method, autowire `TranslatorInterface $translator`. Below,
-`dump($translator->trans('Hello World!'))`.
+and in the `index()` method, autowire `TranslatorInterface $translator`:
+
+[[[ code('89f6686477') ]]]
+
+Below, `dump($translator->trans('Hello World!'))`:
+
+[[[ code('8aa9d4a3e7') ]]]
 
 Back in our app, on the English homepage, refresh. Down in the debug toolbar, check
 out the dump: "Hello World!". Makes sense, we're on an English page, so it shows
@@ -29,7 +34,9 @@ This is a key-value list, where the key is, in our case, the English
 version of the text we want to translate - the string we passed to `trans()`,
 and the value is the French version.
 
-Add `"Hello World!": "Bonjour le monde!"`.
+Add `"Hello World!": "Bonjour le monde!"`:
+
+[[[ code('d890083fcc') ]]]
 
 Go back to the app, refresh the page... and voilà, `Bonjour le monde!` is dumped!
 
@@ -40,8 +47,11 @@ locale is English, *it's* text is used as the fallback.
 ## Translating Content with Twig
 
 Now, let's translate the same text, but in Twig. Open `templates/article/index.html.twig`,
-and in this `<div>`, write `{{ 'Hello World!'|trans }}`. Behind the scenes,
-the `trans` filter uses the `TranslatorInterface` service.
+and in this `<div>`, write `{{ 'Hello World!'|trans }}`:
+
+[[[ code('66a14c500f') ]]]
+
+Behind the scenes, the `trans` filter uses the `TranslatorInterface` service.
 
 Refresh our app... we see `Hello World!` because we're on the Spanish page.
 So switch to French, and now it's `Bonjour le monde!`.

@@ -22,7 +22,9 @@ Onto the widget!
 
 In the `tutorial/` directory, open `language_switcher.html.twig`, select everything,
 and copy it. Now, in `templates/base.html.twig`, find the `<form>` tag, and just above it,
-paste.
+paste:
+
+[[[ code('34df3b8f22') ]]]
 
 Head back to our app and refresh, and here it is! It's just a stub right now,
 but you can see how it should work. This button will show the current locale,
@@ -32,7 +34,9 @@ Let's wire this baby up!
 
 Back in `base.html.twig`, find the anchor tag with the text "Language:". This
 is the button. For this hard-coded text, `en`, we want the current locale,
-we know how to do this already, `{{ app.locale }}`.
+we know how to do this already, `{{ app.locale }}`:
+
+[[[ code('bd98a807a4') ]]]
 
 Down in the `ul`, which is the drop-down menu, before the `li` tag, add
 `{% for locale in app.enabled_locales %}`. I told you configuring `enabled_locales`
@@ -40,7 +44,9 @@ would come in handy! Under the `li`, add `{% endfor %}` and indent the guts.
 
 This now loops though all the enabled locales, but *also* the *current* locale.
 We want to exclude this, so add a condition before the `li` tag:
-`{% if locale != app.locale %}`. Add `{% endif %}` below, and indent.
+`{% if locale != app.locale %}`. Add `{% endif %}` below, and indent:
+
+[[[ code('ac5ac9c06c') ]]]
 
 For the link text inside the `li`, use `{{ locale }}`. For the `href`, we
 *could* send them to the homepage for that locale... but we can do
@@ -51,7 +57,9 @@ Check this out:
 `app.current_route` gives us the current page's route name, and
 `app.current_route_parameters` gives us the current page's route parameters.
 Then we merge these with a new parameter, `_locale: locale`. This will
-generate a URL for the same page, but with a different locale.
+generate a URL for the same page, but with a different locale:
+
+[[[ code('9aa3e219f4') ]]]
 
 ## Testing the Language Switcher
 
@@ -74,7 +82,11 @@ technical issue with this, I just dislike it. And it's super easy to
 remove.
 
 Open `config/routes.yaml`, and under the `controllers` key, add the option
-`trailing_slash_on_root: false`. That's it!
+`trailing_slash_on_root: false`:
+
+[[[ code('89f6686477') ]]]
+
+That's it!
 
 Go back to our app... refresh... and the trailing slash is gone! Phew!
 I can sleep easy tonight!

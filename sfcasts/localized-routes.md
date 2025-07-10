@@ -35,7 +35,9 @@ We can configure this on a per-route basis.
 In `src/Controller/ArticleController.php`. In the `#[Route]` attribute for
 the `index()` method, replace the first argument with an array. Inside,
 use the locale code as the key, and the path as the value:
-`['en' => '/en', 'fr' => '/fr', 'es' => '/es']`.
+`['en' => '/en', 'fr' => '/fr', 'es' => '/es']`:
+
+[[[ code('c984ff862f') ]]]
 
 Go back to our app and test it out by adding `/fr` to the URL.
 Hmm, looks the same... That's because we haven't created any translations
@@ -58,7 +60,9 @@ Back in our code, revert the locale mapping we added, and open `config/routes.ya
 This `controllers` entry is telling Symfony to load all methods marked
 with the `#[Route]` attribute in our `src/Controller` directory. We can
 add our locale prefix map *here* to apply it to all the routes loaded:
-`prefix:`, `en: /en`, `fr: /fr`, `es: /es`.
+`prefix:`, `en: /en`, `fr: /fr`, `es: /es`:
+
+[[[ code('c5adfb5f2e') ]]]
 
 In our app, go to the French homepage: `/fr` and click on an article.
 Boom! We're on the French article page! Swap to the `/es` version of
@@ -93,7 +97,9 @@ to the prefixed version for their browser's language. But let's make
 our default language, English, *not* prefixed by its locale code.
 
 This is super simple to do. In `config/routes.yaml`, change the `/en` prefix
-to just an empty string.
+to just an empty string:
+
+[[[ code('73d9abd447') ]]]
 
 Now, go back to the *real* homepage and refresh. It works! Navigate to
 an article, and we are on the un-prefixed version of the article page. Go to
