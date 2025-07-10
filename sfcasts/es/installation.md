@@ -14,7 +14,7 @@ symfony serve -d
 
 Bienvenido a la Barra Espacial, un divertido sitio de blogs de noticias espaciales. Tiene todas las características estándar de los blogs: artículos, categorías, etiquetas y comentarios. ¡Vamos a traducir este sitio! ¡El cuadrante hispanohablante de la galaxia te espera!
 
-El componente de traducción de Symfony está diseñado para traducir texto codificado, como elementos de menú o algo como este eslogan. Verás que nuestro blog está controlado por una base de datos. El componente de traducción no está pensado para traducir este tipo de datos dinámicos, pero hablaremos de ello más adelante.
+El componente de traducción de Symfony está diseñado para traducir texto codificado, como elementos de menú o algo como este eslogan. Verás que nuestro blog está controlado por una base de datos. El componente de traducción no está diseñado para traducir este tipo de datos dinámicos, pero hablaremos de ello más adelante.
 
 Una buena regla general es: si el texto que quieres traducir está consignado en tu repositorio, como en una plantilla o controlador Twig, entonces el componente de traducción es tu amigo. Si el texto está almacenado en una base de datos, como el título o el cuerpo de un artículo, necesitarás algo diferente.
 
@@ -42,7 +42,7 @@ Entra en PhpStorm y compruébalo. La carpeta `translations/` es donde vivirán n
 
 El `default_locale` es súper importante. Si una configuración regional no está configurada o si no existe una traducción para una determinada configuración regional, recurrirá a esto. Cuando tomes por primera vez un sitio existente y lo traduzcas, utiliza aquí el idioma original del sitio. En nuestro caso, lo que queremos es el predeterminado, `en` para el inglés.
 
-Una nota rápida sobre estos códigos: son códigos ISO únicos para los idiomas. El inglés es `en`, el árabe es `ar`, el armenio es `hy`, y así sucesivamente. Busca "códigos de idioma ISO" para encontrar la lista completa.
+Una nota rápida sobre estos códigos: son códigos ISO únicos para los idiomas. El inglés es `en`, el árabe es `ar`, el armenio es `hy`, etc. Busca "códigos de idioma ISO" para encontrar la lista completa.
 
 Puede que hayas visto códigos de cinco dígitos como `en_US` o `en_CA`. Son específicos de cada localidad: `en_US` es inglés de EE.UU. y `en_CA` es inglés de Canadá. Son casi idénticos, pero hay ligeras diferencias. Por ejemplo, en Canadá escribimos correctamente color: `C-O-L-O-U-R`, mientras que en EE.UU. inventaron su propia ortografía `C-O-L-O-R`. Es broma, ambas son correctas.
 
