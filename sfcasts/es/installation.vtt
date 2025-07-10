@@ -1,0 +1,306 @@
+WEBVTT
+
+00:00:00.036 --> 00:00:03.246 align:middle
+¡Hola amigos!
+
+00:00:03.246 --> 00:00:11.296 align:middle
+¡e alegro de que te hayas unido a mí en este
+curso de sobre las traducciones de Symfony!
+
+00:00:11.686 --> 00:00:15.056 align:middle
+En este tutorial, estamos celebrando uno
+de los componentes más antiguos de Symfony
+
+00:00:15.306 --> 00:00:17.946 align:middle
+, ¡pero por primera vez aquí en SymfonyCasts!
+
+00:00:17.946 --> 00:00:20.236 align:middle
+¿Puede hacer que mi sitio en
+inglés esté disponible en alemán?
+
+00:00:20.366 --> 00:00:23.566 align:middle
+¡Sí! ¿Puede traducir mi
+acento canadiense al americano?
+
+00:00:23.806 --> 00:00:24.616 align:middle
+Probablemente no, ¿eh?
+
+00:00:25.206 --> 00:00:28.976 align:middle
+El plan es atrevido, pero sencillo:
+tomar un sitio existente sólo en inglés
+
+00:00:28.976 --> 00:00:31.166 align:middle
+y traducirlo a varios idiomas.
+
+00:00:31.466 --> 00:00:34.416 align:middle
+incluye un conmutador de idiomas e
+incluso la integración con servicios
+
+00:00:34.416 --> 00:00:36.406 align:middle
+que puedan encargarse de la traducción en sí
+
+00:00:36.956 --> 00:00:40.936 align:middle
+Para traducir la mayor cantidad de conocimientos a tu
+cerebro, descarga el código del curso enlazado más arriba.
+
+00:00:41.506 --> 00:00:44.336 align:middle
+En el directorio start/, encontrarás
+archivos con este aspecto.
+
+00:00:44.676 --> 00:00:49.936 align:middle
+Utiliza README para configurarlos y, cuando
+estés listo, ejecútalos: symfony serve -d
+
+00:00:49.936 --> 00:00:53.276 align:middle
+Bienvenido a la Barra Espacial, un divertido
+sitio de blogs de noticias espaciales.
+
+00:00:53.656 --> 00:00:58.836 align:middle
+Tiene todas las características estándar de un blog:
+artículos, categorías, etiquetas y comentarios.
+
+00:00:58.836 --> 00:01:00.306 align:middle
+¡Vamos a traducir este sitio!
+
+00:01:00.626 --> 00:01:03.176 align:middle
+¡El cuadrante hispanohablante
+de la galaxia te espera!
+
+00:01:03.646 --> 00:01:07.516 align:middle
+El componente de traducción de Symfony está
+diseñado para traducir texto codificado
+
+00:01:07.516 --> 00:01:10.266 align:middle
+, como elementos de menú
+o algo como este eslogan.
+
+00:01:10.866 --> 00:01:13.476 align:middle
+Verás que nuestro blog está
+controlado por una base de datos.
+
+00:01:13.826 --> 00:01:17.686 align:middle
+El componente de traducción no está pensado
+para traducir este tipo de datos dinámicos.
+
+00:01:17.686 --> 00:01:19.536 align:middle
+Pero hablaremos de ello más adelante.
+
+00:01:20.096 --> 00:01:24.386 align:middle
+Una buena regla general es: si el texto que
+quieres traducir está consignado en tu repositorio
+
+00:01:24.636 --> 00:01:28.626 align:middle
+, como en una plantilla o controlador Twig,
+entonces el componente de traducción es tu amigo.
+
+00:01:28.626 --> 00:01:31.946 align:middle
+Si el texto está almacenado en una base de
+datos, como el título o el cuerpo de un artículo
+
+00:01:31.946 --> 00:01:33.776 align:middle
+, necesitarás algo diferente.
+
+00:01:33.776 --> 00:01:36.916 align:middle
+En primer lugar, tenemos que instalar
+el componente de traducción.
+
+00:01:37.346 --> 00:01:42.106 align:middle
+Salta a tu terminal y ejecuta:
+symfony composer require translation
+
+00:01:42.106 --> 00:01:46.016 align:middle
+Después de instalar el paquete,
+comprueba lo que tenemos ejecutando:
+
+00:01:46.016 --> 00:01:51.936 align:middle
+git status Aparte de las cosas estándar, la
+receta añadió este archivo translation.yaml,
+
+00:01:51.966 --> 00:01:54.716 align:middle
+y una carpeta translations/ en
+la raíz de nuestro proyecto.
+
+00:01:55.246 --> 00:01:57.276 align:middle
+Entra en PhpStorm y compruébalo.
+
+00:01:57.556 --> 00:02:00.276 align:middle
+La carpeta translations/ es donde
+vivirán nuestras traducciones -
+
+00:02:00.726 --> 00:02:02.736 align:middle
+por ahora está vacía, pero
+la utilizaremos más adelante.
+
+00:02:03.256 --> 00:02:08.376 align:middle
+config/packages/translation.yaml es donde
+configuramos el componente de traducción.
+
+00:02:08.876 --> 00:02:12.836 align:middle
+Este default_path le dice a Symfony dónde
+buscar nuestros archivos de traducción, y sí,
+
+00:02:12.836 --> 00:02:14.926 align:middle
+está configurado en ese
+directorio translations/.
+
+00:02:15.636 --> 00:02:17.546 align:middle
+El default_locale es super importante.
+
+00:02:17.786 --> 00:02:20.956 align:middle
+Si una configuración regional no está
+configurada o si no existe una traducción
+
+00:02:20.956 --> 00:02:23.676 align:middle
+para una determinada configuración
+regional, recurrirá a esto.
+
+00:02:24.266 --> 00:02:26.816 align:middle
+Cuando tomes por primera vez un
+sitio existente y lo traduzcas,
+
+00:02:27.016 --> 00:02:29.006 align:middle
+utiliza aquí el idioma original del sitio.
+
+00:02:29.326 --> 00:02:33.166 align:middle
+En nuestro caso, lo que queremos es
+el predeterminado, en para el inglés.
+
+00:02:33.926 --> 00:02:38.236 align:middle
+Una nota rápida sobre estos códigos:
+son códigos ISO únicos para los idiomas.
+
+00:02:38.606 --> 00:02:43.326 align:middle
+El inglés es en, el árabe es ar, el
+armenio es hy, y así sucesivamente.
+
+00:02:43.326 --> 00:02:46.876 align:middle
+Busca "códigos de idioma ISO"
+para encontrar la lista completa.
+
+00:02:47.556 --> 00:02:52.666 align:middle
+Puede que hayas visto códigos de
+cinco dígitos como en_US o en_CA.
+
+00:02:53.186 --> 00:03:00.746 align:middle
+Son específicos de cada localidad: en_US es
+inglés de EE.UU., y en_CA es inglés de Canadá.
+
+00:03:01.096 --> 00:03:03.716 align:middle
+Son casi idénticos, pero
+hay ligeras diferencias.
+
+00:03:03.716 --> 00:03:10.076 align:middle
+Por ejemplo, en Canadá escribimos correctamente
+color: C-O-L-O-U-R, mientras que en EE.UU.
+
+00:03:10.286 --> 00:03:13.176 align:middle
+inventaron su propia ortografía C-O-L-O-R.
+
+00:03:13.716 --> 00:03:15.116 align:middle
+Es broma, ambas son correctas.
+
+00:03:15.116 --> 00:03:18.846 align:middle
+Los códigos de cinco dígitos también se
+pueden utilizar para localizar tu sitio,
+
+00:03:19.156 --> 00:03:23.656 align:middle
+teniendo en cuenta las diferencias específicas de cada
+país en el formato de los números, la moneda y la fecha.
+
+00:03:23.656 --> 00:03:27.536 align:middle
+Para este curso, sin embargo, no vamos a entrar
+en la "localización", así que nos ceñiremos
+
+00:03:27.536 --> 00:03:30.116 align:middle
+a los códigos de idioma de dos
+dígitos para nuestras "locales".
+
+00:03:30.116 --> 00:03:33.236 align:middle
+Vamos a configurar los otros idiomas
+que soportará nuestro sitio.
+
+00:03:33.656 --> 00:03:37.266 align:middle
+Esperaba utilizar el klingon y el
+romulano, pero no tienen códigos ISO...
+
+00:03:37.426 --> 00:03:39.986 align:middle
+todavía, así que nos ceñiremos
+a los códigos oficiales.
+
+00:03:40.446 --> 00:03:42.586 align:middle
+Esto es opcional, pero es una buena práctica
+
+00:03:42.586 --> 00:03:46.146 align:middle
+añadir enabled_locales a la
+configuración de translation.yaml.
+
+00:03:46.686 --> 00:03:53.526 align:middle
+Incluiremos inglés (en), francés
+(fr) y español (es): Esto no impide
+
+00:03:53.526 --> 00:03:57.226 align:middle
+que utilices configuraciones regionales fuera
+de esta lista, pero es beneficioso configurarlo
+
+00:03:57.226 --> 00:03:59.726 align:middle
+si conoces las configuraciones regionales
+exactas que utilizará tu sitio.
+
+00:04:00.166 --> 00:04:02.306 align:middle
+Hay una pequeña mejora en el
+rendimiento, ya que Symfony sabe
+
+00:04:02.306 --> 00:04:05.296 align:middle
+que debe pre-cachear las traducciones
+sólo para esas localizaciones.
+
+00:04:05.686 --> 00:04:09.346 align:middle
+Y lo que es más importante, te permite listar fácilmente
+estas configuraciones regionales en tu código,
+
+00:04:09.596 --> 00:04:13.756 align:middle
+por ejemplo para un conmutador de idioma o para
+operaciones masivas, como generar un mapa del sitio
+
+00:04:13.756 --> 00:04:16.226 align:middle
+para todas las páginas en
+todos los idiomas soportados.
+
+00:04:16.226 --> 00:04:21.526 align:middle
+Ahora que tenemos las traducciones
+activadas, ve a templates/base.html.twig.
+
+00:04:21.526 --> 00:04:25.436 align:middle
+PhpStorm nos da un aviso sobre
+nuestra etiqueta <html>.
+
+00:04:25.826 --> 00:04:28.756 align:middle
+Quiere que añadamos un
+atributo lang al idioma actual.
+
+00:04:29.246 --> 00:04:33.036 align:middle
+Consíguelo dinámicamente
+con lang="{{ app.locale }}".
+
+00:04:33.606 --> 00:04:34.906 align:middle
+Esto es útil para el SEO.
+
+00:04:35.426 --> 00:04:36.676 align:middle
+Vuelve a nuestro sitio...
+
+00:04:36.866 --> 00:04:37.536 align:middle
+actualiza...
+
+00:04:37.646 --> 00:04:39.106 align:middle
+y visualiza la "fuente de la página".
+
+00:04:40.546 --> 00:04:43.736 align:middle
+Ya está: lang="en" - nuestra
+configuración regional por defecto.
+
+00:04:44.556 --> 00:04:47.736 align:middle
+A continuación, vamos a ver cómo averiguar
+qué idioma quiere nuestro usuario.
+
+00:04:47.896 --> 00:04:48.516 align:middle
+¡Adelante!
