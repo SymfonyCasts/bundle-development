@@ -42,6 +42,8 @@ Este enfoque es mucho más limpio, pero también tiene un inconveniente. ¿Qué 
 
 ## Flujo de trabajo de traducción
 
-Esto cubre todas las situaciones habituales. No voy a hacer que me veas traducir el resto del sitio porque sería más de lo mismo, aburrido, Kevin bla bla bla. Así que lo dejaré como tarea para casa: ¡Vous pouvez l'envoyer vers `/dev/null` une fois que c'est fait !
+Esto cubre todas las situaciones habituales. No voy a hacer que me veas traducir el resto del sitio porque sería más de lo mismo, aburrido, Kevin bla bla bla. Así que lo dejaré como tarea para casa: ¡Vous pouvez l'envoyer vers `/dev/null` une fois que c'est fait!
 
-¡A continuación, veremos las herramientas de depuración de traducciones que proporciona Symfony!
+Oh, tío... ¡eso ha estado mal!
+
+A continuación, veremos las herramientas de depuración de traducciones que proporciona Symfony
