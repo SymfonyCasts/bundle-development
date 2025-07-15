@@ -50,7 +50,7 @@ También hay un comando para "limpiar" nuestras traducciones:
 symfony console lint:translations
 ```
 
-Todo lo que hace realmente es comprobar si todos nuestros archivos de traducción son válidos, es decir, si se pueden cargar y analizar correctamente. Creo que si un archivo no fuera válido, lo descubrirías bastante rápido durante el desarrollo local. Pero puede ser útil en una canalización de Integración Continua (o CI), como las Acciones de GitHub. Si hay un problema, este comando fallará, y por tanto fallará tu trabajo.
+Todo lo que hace realmente es comprobar si todos nuestros archivos de traducción son válidos, es decir, si se pueden cargar y analizar correctamente. Creo que si un archivo no fuera válido, lo descubrirías bastante rápido durante el desarrollo local. Pero puede ser útil en una canalización de Integración Continua (o CI), como las Acciones de GitHub. Si hay un problema, este comando fallará, y tu trabajo fallará.
 
 ## Integración Continua
 
