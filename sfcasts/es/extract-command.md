@@ -1,49 +1,61 @@
 # `translation:extract` Comando
 
-Hasta ahora, hemos estado creando manualmente claves de traducción y añadiendo sus entradas a nuestro archivo `messages.en.yaml`. ¿Pero sabías que también hay una forma automatizada de hacerlo? Vamos a comprobarlo utilizando el ejemplo de traducir dos elementos de menú.
+Hasta ahora, hemos estado creando claves de traducción y añadiéndolas manualmente junto con sus valores a `messages.en.yaml`. ¿Pero sabías que existe un método alternativo que automatiza parte de este proceso?
 
-Echa un vistazo a tu código en `templates`, `base.html.twig` y busca 'tiempo' y 'diario'. Creemos las claves como hacemos habitualmente, nombrándolas `base.weather` trans y `base.journal` trans.
+Vamos a traducir los dos elementos de menú que nos quedan: "Tiempo" y "Diario".
 
-Ahora, en lugar de añadir manualmente las entradas en nuestro archivo `messages.en.yaml`, voy a mostrarte un ingenioso comando. Ve a tu terminal y ejecútalo:
+Abre `templates/base.html.twig` y busca el texto de estos elementos de menú. Sigue nuestra rutina habitual de buscar una clave y utilizar el filtro `trans`. `{{ 'base.weather'|trans }}` y `{{ 'base.journal'|trans }}`.
+
+Bien, en lugar de añadir manualmente estas entradas a nuestro archivo `messages.en.yaml`, dirígete a tu terminal y ejecuta:
 
 ```terminal
 symfony console translation:extract en --dump-messages
 ```
 
-Este comando te mostrará que ha encontrado cinco mensajes. Los resaltados en verde son los nuevos, los que no existen actualmente en nuestro archivo `messages.en.yaml`.
+Este comando es similar a `debug:translation` en el sentido de que escanea tu código y encuentra claves de traducción. Estas claves en verde son las nuevas que hemos añadido y aún no tienen entradas en nuestro archivo `messages.en.yaml`.
 
 ## Añadir nuevas claves al archivo YAML
 
-Para añadir las nuevas claves al archivo YAML, vuelve a ejecutar el comando. Pero esta vez, sustituye `dump messages` por `force`. Incluye también `--format=yaml` y`--as-tree=3`. Así te asegurarás de que las claves tengan una sangría de tres niveles dentro del archivo YAML.
+Podemos utilizar el comando para añadir automáticamente estas nuevas claves a nuestro archivo YAML. Ejecuta de nuevo el comando, pero sustituye `--dump-messages` por `--force`. A continuación, añade `--format=yaml` para que escriba como YAML, y `--as-tree=3` para mantener las claves sangradas a tres niveles de profundidad en el archivo YAML.
 
-```terminal
+```terminal-silent
 symfony console translation:extract en --force --format=yaml --as-tree=3
 ```
 
-Vuelve a tu archivo `messages.yaml` y ¡voilà! Se han añadido las nuevas claves, prefijadas con dos guiones bajos. Este prefijo ayuda a identificar fácilmente las nuevas claves para encontrarlas y reemplazarlas rápidamente. Incluso puedes personalizarlo si quieres.
+¡Vuelve a `messages.en.yaml` y compruébalo! Aquí están nuestras nuevas claves! Los valores son los nombres de las claves prefijados con `__` (dos guiones bajos). Esto puede ayudarte a encontrarlas rápidamente si hay muchas. Este prefijo puede personalizarse si lo deseas.
 
-El siguiente paso es sustituir los guiones bajos por los valores adecuados: "tiempo" y "diario". Actualiza tu aplicación y listo: ¡funcionan a las mil maravillas!
+Sustitúyelos por el texto adecuado: "Tiempo" y "Diario".
 
-## Unas palabras de precaución
+Actualiza tu aplicación y listo... no ha cambiado nada, ¡pero sabemos que funciona!
 
-Este método funciona muy bien cuando estás desarrollando una nueva función y sólo añades unas pocas teclas. Sin embargo, cuando estás traduciendo un sitio grande y creando muchas claves a la vez, puede resultarte un poco engorroso. Yo suelo ceñirme al proceso manual para estos casos.
+Si estás traduciendo en masa un sitio existente como nosotros, creo que este método puede ser más engorroso que nuestro proceso anterior. Lo que acaba ocurriendo es que, al añadir claves en masa en tu código, una vez que las extraes, ¡te olvidas del texto original!
 
-## Convertir a diferentes formatos con `translation:extract`
+Pero! este método funciona muy bien cuando desarrollas una nueva función. Puedes añadir las claves para el texto en tu código, y averiguar el texto real más tarde.
 
-Aquí tienes otro truco genial. Supongamos que necesitas enviar todas las traducciones al inglés a un servicio de traducción para que las traduzcan al francés o al español. Sin embargo, tu traductor no está familiarizado con YAML. No te preocupes!`translation:extract` también puede convertir a otros formatos.
+## Convertir a diferentes formatos
 
-Prueba a ejecutar esta orden:
+Este comando tiene otra función genial, ¡quizás no intencionada!
+
+Supongamos que tienes un servicio de traducción que te pide que envíes tu archivo de traducción en inglés, y ellos te lo devolverán en francés. Fácil, ¿verdad? Sólo tienes que enviarles `messages.en.yaml`. Pero... ¡no saben qué demonios es YAML! Quieren el archivo en un formato compatible con su software: `XLIFF`.
+
+¡No te preocupes! ¡El comando `translation:extract` puede convertir a diferentes formatos!
+
+Ejecuta esto:
 
 ```terminal
 symfony console translation:extract en --force --format=xliff
 ```
 
-Esto crea un nuevo archivo, `messages.en.xlif`, en el directorio de traducciones. Puede que no sea super legible para nosotros, pero los servicios de traducción pueden cargarlo fácilmente en su sistema.
+En nuestro directorio `translations/`, tenemos un nuevo archivo: `messages.en.xliff`. Ábrelo.
 
-Imaginemos que recuperamos los mensajes traducidos. Lo único que tendríamos que hacer es cambiar el nombre de `en` por `fr` en el nombre del archivo. Después de actualizar las traducciones, cambia a la versión francesa en tu página, y voilá: ¡tu versión francesa está lista!
+¡Uf! ¡Qué asco! ¡XML!
 
-Ten en cuenta que no vamos a utilizar este archivo `XLIF`, así que siéntete libre de eliminarlo.
+No te preocupes, ¡les encanta! Sólo tienes que enviarles este archivo y decirles que cambien el texto de `<target>`, que es inglés, por las traducciones al francés.
 
-## Próximamente: Traducir a otros idiomas
+Cuando te lo devuelvan, cámbiale el nombre a `messages.fr.xliff` y vuelve a colocarlo en el directorio `translations/`. Sólo tienes que cambiar el primer `<target>`para que diga "(Francés) Asteroides Locales".
 
-Hasta ahora, hemos traducido principalmente desde nuestro idioma por defecto, el inglés. Pero, ¿qué te parece crear traducciones al francés y al español? Permanece atento, vamos a explorar otra función genial de Symfony para hacer precisamente eso.
+De vuelta en nuestra aplicación, cambia a la versión francesa de esta página y ¡boom! "(Francés) Asteroides Locales".
+
+Vale, ya está bien de XML por hoy - borra `messages.fr.xliff`.
+
+¿Y si no tienes un servicio de traducción al que puedas enviar estos archivos? No hay problema Hay soluciones basadas en la nube que pueden ayudarte, ¡y Symfony tiene integraciones para ellas! ¡Vamos a comprobarlo!
