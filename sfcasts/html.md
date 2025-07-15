@@ -65,7 +65,7 @@ like translate the placeholder. Hopefully, this problem doesn't come up too ofte
 ## Translation Workflow
 
 So that covers all the common scenarios. I won't have you watch me translate
-the rest of the site as it would be more of the same, and boring... I'll leave
-that as a homework assignment!
+the rest of the site as it would be more of the same, boring, Kevin blah blah blah. So I'll leave
+that as a homework assignment: Vous pouvez l'envoyer vers `/dev/null` une fois que c'est fait !
 
 Next, we'll look at the translation debugging tools Symfony provides!
