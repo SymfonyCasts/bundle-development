@@ -73,7 +73,7 @@ All this really does it check to see if all our translation files are valid -
 like they can be loaded and parsed correctly. I think if a file was invalid,
 you'd find out pretty quick during local development. But it can be useful
 in a Continuous Integration (or CI) pipeline, like GitHub Actions. If there's a
-problem, this command will fail, and therefore fail your job.
+problem, this command will fail, and your job will fail.
 
 ## Continuous Integration
 
