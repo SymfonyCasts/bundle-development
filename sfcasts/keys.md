@@ -1,7 +1,7 @@
 # Translation "Keys"
 
 We're *almost* ready to start translating this site! But before we get started,
-I want to show a little teensy tiny problem with ou setup so far.
+I want to show a little teensy tiny problem with our setup so far.
 
 We still have this "Hello World!" text so jump into `templates/article/index.html.twig`
 where we're translating it. Remember, we have the French translation for this setup
@@ -29,11 +29,11 @@ of `Hello World` in `index.html.twig`, use a
 just show this keyified text.
 
 We need a new translations file for English. In the `translations/` folder, create a new
-`messages.en.yaml` file and inside, add `hello_world: "Hello World"`. If
+`messages.en.yaml` file, and inside, add `hello_world: "Hello World"`. If
 you refresh the page now, it's working again.
 
-On the French page, it's currently falling back to English. Fix that by opening`messages.fr.yaml`, change
-the key to `hello_world`, go back to our app, and refresh. *Now we're in business.
+On the French page, it's currently falling back to English. Fix that by opening `messages.fr.yaml`, change
+the key to `hello_world`, go back to our app, and refresh. *Now* we're in business.
 
 Admittedly, using keys is a *bit* more work, but it pays off in the long run.
 
@@ -59,11 +59,11 @@ In this case, the text is in `base.html.twig`, so, use `base.local_asteroids`. D
 forget to add `|trans`.
 
 If this translation text was in a controller, you might use a shortened version of the
-controller class name or even the route name. It's best to find a good convention
-and stick to it throughout stick with it!
+controller class name or even the route name. It's best to find a good convention,
+and stick with it!
 
 What about multiple unique keys with the same text? Honestly, I don't worry too much about this.
-Most translation services don't charge extra for duplicate text and I find this
+Most translation services don't charge extra for duplicate text, and I find this
 convention more important than the uniqueness of the text.
 
 We have our key name, and the text in our clipboard, so let's add the translation
@@ -72,7 +72,7 @@ to `messages.en.yaml`, our English translation file for now.
 We *can* add the keys as a flat list, like with `base.` but...
 Because we're using YAML as the format, we can use indentation to create the
 namespaces as a way to visually group them! Most of the other translation file formats
-don't support this, this is why devs prefer YAML for translations.
+don't support this, so this is why devs prefer YAML for translations.
 
 Add `base:`, new line, indent, and add `local_asteroids:`. Then, in quotes,
 paste: "Local Asteroids".
@@ -85,6 +85,6 @@ the correct key! Fix that, refresh the page... and sweet, it's working!
 
 I really like this process of translating text: one-by-one, find the text you want to
 translate, cut it, come up with a key, add the `|trans` filter, then, in your
-default language translation file, add the key and paste the text.
+default language translation file, add the key, and paste the text.
 
 Next, let's look at how to handle translating text with *dynamic* content!
