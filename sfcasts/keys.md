@@ -1,7 +1,7 @@
 # Translation "Keys"
 
 We're *almost* ready to start translating this site! But before we get started,
-I want to show a little issue with how we're currently translating text.
+I want to show a little teensy tiny problem with ou setup so far.
 
 We still have this "Hello World!" text so jump into `templates/article/index.html.twig`
 where we're translating it. Remember, we have the French translation for this setup
@@ -32,9 +32,8 @@ We need a new translations file for English. In the `translations/` folder, crea
 `messages.en.yaml` file and inside, add `hello_world: "Hello World"`. If
 you refresh the page now, it's working again.
 
-On the French page, it's currently falling back to English because we haven't
-configured it yet. Fix that by going to `messages.fr.yaml`, change
-the key to `hello_world`, go back to our app, and refresh. Now it works as expected.
+On the French page, it's currently falling back to English. Fix that by opening`messages.fr.yaml`, change
+the key to `hello_world`, go back to our app, and refresh. *Now we're in business.
 
 Admittedly, using keys is a *bit* more work, but it pays off in the long run.
 
@@ -61,7 +60,7 @@ forget to add `|trans`.
 
 If this translation text was in a controller, you might use a shortened version of the
 controller class name or even the route name. It's best to find a good convention
-and stick to it throughout your project.
+and stick to it throughout stick with it!
 
 What about multiple unique keys with the same text? Honestly, I don't worry too much about this.
 Most translation services don't charge extra for duplicate text and I find this
