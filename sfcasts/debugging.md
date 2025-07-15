@@ -49,8 +49,17 @@ Jump over to your terminal and run:
 symfony console debug:translation en
 ```
 
-Cool, these are all the English translation messages for our entire site. The
-"State" column shows us the status. Empty means good!
+Cool, these are all the English translation messages for our entire site. So how
+does it work? It looks at all your PHP and Twig files, and finds all the places
+you're using the `TranslatorInterface` and `trans` filter. Then, it looks
+at the keys being used, and checks if they have a translation available for
+the given locale.
+
+One thing to note is this can't parse *dynamic* translations, like
+`$translator->trans($variable)`. It only works for static strings, like
+`$translator->trans('some.key')` or `{{ 'some.key'|trans }}`.
+
+The "State" column shows us the status. Empty means good!
 
 Run the same command, but for `fr`:
 
