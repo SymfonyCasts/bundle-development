@@ -26,11 +26,6 @@
             "description": null
         },
         {
-            "id": "delete-migrations",
-            "name": "delete migrations",
-            "description": null
-        },
-        {
             "id": "2-route-attribute-lang-paths",
             "name": "2. Route attribute lang paths",
             "description": null
