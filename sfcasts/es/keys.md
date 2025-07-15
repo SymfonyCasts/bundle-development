@@ -1,14 +1,14 @@
 # Traducción "Claves
 
-¡Ya casi estamos listos para empezar a traducir este sitio! Pero antes de empezar, quiero mostrar un pequeño problema sobre cómo estamos traduciendo el texto actualmente.
+¡Estamos casi listos para empezar a traducir este sitio! Pero antes de empezar, quiero mostrarte un pequeño problema con nuestra configuración hasta ahora.
 
-Todavía tenemos este texto "¡Hola Mundo!" así que salta a `templates/article/index.html.twig`donde lo estamos traduciendo. Recuerda que tenemos la traducción al francés de esta configuración en `messages.fr.yaml`...
+Todavía tenemos este texto "¡Hola Mundo!", así que salta a `templates/article/index.html.twig`donde lo estamos traduciendo. Recuerda que tenemos la traducción al francés de esta configuración en `messages.fr.yaml`...
 
 Supongamos que ya no queremos "gritar" esto, así que eliminamos el signo de exclamación. Yo prefiero gritar esto, pero a los mandamases no les gusta.
 
 ¿Ves el problema?
 
-Ve a la página principal en inglés y actualízala. Vale, vemos "Hello World" sin el signo de exclamación. Pero cambiamos al francés... ¡hemos roto la traducción, vuelve al inglés!
+Ve a la página principal en inglés y actualízala. Vale, vemos "Hello World" sin el signo de exclamación. Pero si pasamos al francés... ¡hemos roto la traducción, vuelve al inglés!
 
 Por supuesto, la solución podría ser actualizar la clave en `messages.fr.yaml` para que coincida con la versión inglesa... Pero, es un poco molesto que un pequeño cambio de puntuación pueda romper nuestras traducciones.
 
@@ -18,9 +18,9 @@ Una práctica habitual es utilizar claves de traducción en lugar del texto real
 
 Necesitamos un nuevo archivo de traducciones para el inglés. En la carpeta `translations/`, crea un nuevo archivo`messages.en.yaml` y dentro, añade `hello_world: "Hello World"`. Si ahora actualizas la página, vuelve a funcionar.
 
-En la página en francés, está volviendo al inglés porque aún no lo hemos configurado. Arréglalo yendo a `messages.fr.yaml`, cambia la clave a `hello_world`, vuelve a nuestra aplicación y actualiza. Ahora funciona como esperábamos.
+En la página en francés, está volviendo al inglés. Arréglalo abriendo`messages.fr.yaml`, cambia la clave a `hello_world`, vuelve a nuestra aplicación y actualiza. *Ahora ya funciona.
 
-Hay que admitir que utilizar claves supone un poco más de trabajo, pero a la larga compensa.
+Hay que reconocer que el uso de claves supone un poco más de trabajo, pero a la larga compensa.
 
 Limpia nuestro código de pruebas eliminando todo lo que haya en `messages.fr.yaml`y `messages.en.yaml`. En `index.html.twig`, elimina la traducción `hello_world`. Volvemos a nuestra página de inicio en inglés, ¡perfecto! Tenemos una pizarra limpia.
 
@@ -30,13 +30,13 @@ Ahora, por fin, ¡podemos empezar a traducir este sitio de verdad!
 
 Empieza por "Asteroides Locales". En `base.html.twig`, busca el elemento del menú con el texto "Asteroides Locales". Selecciona este texto y córtalo, para que esté en tu portapapeles.
 
-Tenemos que inventar una clave para esto... Las claves pueden ser cualquier cosa única, así que podríamos utilizar `local_asteroids`, pero una lista plana enorme puede resultar confusa y difícil de trabajar. Las claves pueden dividirse en espacios de nombres, separados por un punto. Así que podríamos utilizar quizás, `menu.local_asteroids`. Esto es mejor, pero sigue siendo un poco genérico.
+Tenemos que inventar una clave para esto... Las claves pueden ser cualquier cosa única, así que podríamos utilizar `local_asteroids`, pero una lista plana enorme puede resultar confusa y difícil de manejar. Las claves pueden dividirse en espacios de nombres, separados por un punto. Así que podríamos utilizar quizás, `menu.local_asteroids`. Esto es mejor, pero sigue siendo un poco genérico.
 
 A mí me gusta nombrar mis espacios de nombres en función del contexto en el que se utiliza el texto. En este caso, el texto está en `base.html.twig`, así que utiliza `base.local_asteroids`. No olvides añadir `|trans`.
 
-Si este texto traducido estuviera en un controlador, podrías utilizar una versión abreviada del nombre de la clase del controlador o incluso del nombre de la ruta. Lo mejor es encontrar una buena convención y ceñirse a ella en todo el proyecto.
+Si este texto traducido estuviera en un controlador, podrías utilizar una versión abreviada del nombre de la clase del controlador o incluso del nombre de la ruta. Lo mejor es encontrar una buena convención y ceñirse a ella durante todo el proceso
 
-¿Qué ocurre si hay varias claves únicas con el mismo texto? Sinceramente, no me preocupo demasiado por esto. La mayoría de los servicios de traducción no cobran extra por texto duplicado y considero que esta convención es más importante que la unicidad del texto.
+¿Qué pasa si hay varias claves únicas con el mismo texto? Sinceramente, yo no me preocupo demasiado por esto. La mayoría de los servicios de traducción no cobran extra por texto duplicado y considero que esta convención es más importante que la unicidad del texto.
 
 Tenemos el nombre de nuestra clave y el texto en el portapapeles, así que vamos a añadir la traducción a `messages.en.yaml`, nuestro archivo de traducción al inglés por ahora.
 
