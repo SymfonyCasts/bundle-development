@@ -124,7 +124,47 @@
             "id": "7-html-placeholders",
             "name": "7. html placeholders",
             "description": null
+        },
+        {
+            "id": "9-add-translation-keys",
+            "name": "9. add translation keys",
+            "description": null
+        },
+        {
+            "id": "9-extract-keys",
+            "name": "9. extract keys",
+            "description": null
+        },
+        {
+            "id": "9-add-translations",
+            "name": "9. add translations",
+            "description": null
+        },
+        {
+            "id": "9-convert-to-xliff",
+            "name": "9. convert to xliff",
+            "description": null
+        },
+        {
+            "id": "9-rename-xliff",
+            "name": "9. rename xliff",
+            "description": null
+        },
+        {
+            "id": "9-remove-xliff",
+            "name": "9. remove xliff",
+            "description": null
+        },
+        {
+            "id": "10-add-crowdin",
+            "name": "10. add crowdin",
+            "description": null
+        },
+        {
+            "id": "11-pull-translations",
+            "name": "11. pull translations",
+            "description": null
         }
     ],
-    "sha": "fa552e7dd8641d972c756d8d19f58de2f741c460"
+    "sha": "38661a8a32667f0f6b9fad8816618978f2049f37"
 }

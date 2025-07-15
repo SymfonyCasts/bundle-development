@@ -1,0 +1,147 @@
+diff --git a/.env b/.env
+index ac9c422..2abfd46 100644
+--- a/.env
++++ b/.env
+@@ -28,3 +28,7 @@ DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_%kernel.environment%.db"
+ # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
+ # DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
+ ###< doctrine/doctrine-bundle ###
++
++###> symfony/crowdin-translation-provider ###
++# CROWDIN_DSN=crowdin://PROJECT_ID:API_TOKEN@ORGANIZATION_DOMAIN.default
++###< symfony/crowdin-translation-provider ###
+diff --git a/composer.json b/composer.json
+index 4d46d94..b7481a4 100644
+--- a/composer.json
++++ b/composer.json
+@@ -15,6 +15,7 @@
+         "symfony/asset": "7.2.*",
+         "symfony/asset-mapper": "7.2.*",
+         "symfony/console": "7.2.*",
++        "symfony/crowdin-translation-provider": "7.2.*",
+         "symfony/dotenv": "7.2.*",
+         "symfony/flex": "^2.5.1",
+         "symfony/framework-bundle": "7.2.*",
+diff --git a/composer.lock b/composer.lock
+index 2259a4c..c05bd8c 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "39ebdf74cf71ef55ebeeff6f96092fd2",
++    "content-hash": "b7c81b77d84e0257a48d1a33c0d34e2a",
+     "packages": [
+         {
+             "name": "composer/semver",
+@@ -2408,6 +2408,79 @@
+             ],
+             "time": "2025-04-07T19:09:28+00:00"
+         },
++        {
++            "name": "symfony/crowdin-translation-provider",
++            "version": "v7.2.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/crowdin-translation-provider.git",
++                "reference": "66bff350f79ec2e660ab9eec06b7b69608d08951"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/crowdin-translation-provider/zipball/66bff350f79ec2e660ab9eec06b7b69608d08951",
++                "reference": "66bff350f79ec2e660ab9eec06b7b69608d08951",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=8.2",
++                "symfony/config": "^6.4|^7.0",
++                "symfony/http-client": "^6.4|^7.0",
++                "symfony/translation": "^7.2"
++            },
++            "type": "symfony-translation-bridge",
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Component\\Translation\\Bridge\\Crowdin\\": ""
++                },
++                "exclude-from-classmap": [
++                    "/Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Andrii Bodnar",
++                    "homepage": "https://github.com/andrii-bodnar"
++                },
++                {
++                    "name": "Mathieu Santostefano",
++                    "homepage": "https://github.com/welcomattic"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Symfony Crowdin Translation Provider Bridge",
++            "homepage": "https://symfony.com",
++            "keywords": [
++                "crowdin",
++                "provider",
++                "translation"
++            ],
++            "support": {
++                "source": "https://github.com/symfony/crowdin-translation-provider/tree/v7.2.0"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2024-09-27T08:48:42+00:00"
++        },
+         {
+             "name": "symfony/dependency-injection",
+             "version": "v7.2.6",
+diff --git a/config/packages/translation.yaml b/config/packages/translation.yaml
+index bc94359..defe5dd 100644
+--- a/config/packages/translation.yaml
++++ b/config/packages/translation.yaml
+@@ -4,3 +4,5 @@ framework:
+     translator:
+         default_path: '%kernel.project_dir%/translations'
+         providers:
++            crowdin:
++                dsn: '%env(CROWDIN_DSN)%'
+diff --git a/symfony.lock b/symfony.lock
+index 7daee7d..c463c96 100644
+--- a/symfony.lock
++++ b/symfony.lock
+@@ -88,6 +88,15 @@
+             "bin/console"
+         ]
+     },
++    "symfony/crowdin-translation-provider": {
++        "version": "7.2",
++        "recipe": {
++            "repo": "github.com/symfony/recipes",
++            "branch": "main",
++            "version": "5.3",
++            "ref": "15c55fd0c3c77c24346815387bdcd73a78305123"
++        }
++    },
+     "symfony/debug-bundle": {
+         "version": "7.2",
+         "recipe": {

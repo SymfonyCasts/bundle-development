@@ -1,0 +1,36 @@
+diff --git a/translations/messages.en.xliff b/translations/messages.en.xliff
+new file mode 100644
+index 0000000..f879267
+--- /dev/null
++++ b/translations/messages.en.xliff
+@@ -0,0 +1,30 @@
++<?xml version="1.0" encoding="utf-8"?>
++<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
++  <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
++    <header>
++      <tool tool-id="symfony" tool-name="Symfony"/>
++    </header>
++    <body>
++      <trans-unit id="SWPFW5B" resname="base.local_asteroids">
++        <source>base.local_asteroids</source>
++        <target>Local Asteroids</target>
++      </trans-unit>
++      <trans-unit id="mKAqmQl" resname="base.footer">
++        <source>base.footer</source>
++        <target>Made with %heart% by the guys and gals at %link%</target>
++      </trans-unit>
++      <trans-unit id="MnBdGL7" resname="base.weather">
++        <source>base.weather</source>
++        <target>Weather</target>
++      </trans-unit>
++      <trans-unit id="iGIIZgD" resname="base.journal">
++        <source>base.journal</source>
++        <target>Journal</target>
++      </trans-unit>
++      <trans-unit id="4cTZ1gy" resname="article.show.comments">
++        <source>article.show.comments</source>
++        <target>1 Comment|%count% Comments</target>
++      </trans-unit>
++    </body>
++  </file>
++</xliff>

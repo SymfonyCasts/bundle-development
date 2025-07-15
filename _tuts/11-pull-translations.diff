@@ -1,0 +1,27 @@
+diff --git a/translations/messages.es.yaml b/translations/messages.es.yaml
+new file mode 100644
+index 0000000..8db0845
+--- /dev/null
++++ b/translations/messages.es.yaml
+@@ -0,0 +1,8 @@
++base:
++    local_asteroids: 'Asteroides locales'
++    footer: 'Hecho con %heart% por los chicos y gales en %link%'
++    weather: Clima
++    journal: Diario
++article:
++    show:
++        comments: '1 comentario|%count% comentarios'
+diff --git a/translations/messages.fr.yaml b/translations/messages.fr.yaml
+index e69de29..b960264 100644
+--- a/translations/messages.fr.yaml
++++ b/translations/messages.fr.yaml
+@@ -0,0 +1,8 @@
++base:
++    local_asteroids: 'Astéroïdes locaux'
++    footer: 'Fabriqué à partir de %heart% par les gars et les gaux à %link%'
++    weather: Météo
++    journal: Quotidien
++article:
++    show:
++        comments: '1 commentaire| Commentaires %count%'

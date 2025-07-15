@@ -1,0 +1,15 @@
+diff --git a/translations/messages.en.yaml b/translations/messages.en.yaml
+index 4426f0e..b1206cc 100644
+--- a/translations/messages.en.yaml
++++ b/translations/messages.en.yaml
+@@ -1,7 +1,8 @@
+ base:
+-    local_asteroids: "Local Asteroids"
++    local_asteroids: 'Local Asteroids'
+     footer: 'Made with %heart% by the guys and gals at %link%'
+-
++    weather: __base.weather
++    journal: __base.journal
+ article:
+     show:
+         comments: '1 Comment|%count% Comments'
