@@ -1,78 +1,89 @@
 # `translation:extract` Command
 
-So far, we've been manually creating translation keys and adding their
-entries to our `messages.en.yaml` file. But did you know there's a somewhat
-automated way to do this too? Let's check it out using the example of
-translating two menu items.
+So far, we've been creating translation keys and manually adding them
+and their values to `messages.en.yaml`. But did you know there's an
+alternative method that automates part of this process?
 
-Take a look at your code in `templates`, `base.html.twig` and find
-'weather' and 'journal'. Let's create the keys like we usually do, naming
-them `base.weather` trans and `base.journal` trans.
+We'll translate these two remaining menu items: "Weather" and "Journal".
 
-Now, instead of manually adding the entries into our `messages.en.yaml`
-file, I'm going to show you a nifty command. Head over to your terminal and
-run:
+Open `templates/base.html.twig` and find the text for these menu items.
+Follow our usual routine of coming up with a key, and using the `trans`
+filter. `{{ 'base.weather'|trans }}` and `{{ 'base.journal'|trans }}`.
+
+Ok, instead of manually adding these entries to our `messages.en.yaml` file,
+head over to your terminal and run:
 
 ```terminal
 symfony console translation:extract en --dump-messages
 ```
 
-This command will show you that it found five messages. The ones
-highlighted in green are the new ones - those that don't currently exist in
-our `messages.en.yaml` file.
+This command is similar to `debug:translation` in that it scans your code
+and finds translation keys. These keys in green are those new ones we added
+and don't have entries in our `messages.en.yaml` file yet.
 
 ## Adding New Keys to YAML File
 
-To add the new keys to the YAML file, run the command again. But this time,
-replace `dump messages` with `force`. Also include `--format=yaml` and
-`--as-tree=3`. This ensures that the keys are indented three levels deep
-within the YAML file.
+We can use the command to auto-add these new keys to our YAML file. Run
+the command again, but replace `--dump-messages` with `--force`. Then,
+add `--format=yaml` so it writes as YAML, and `--as-tree=3` to keep
+the keys indented three levels deep in the YAML file.
 
-```terminal
+```terminal-silent
 symfony console translation:extract en --force --format=yaml --as-tree=3
 ```
 
-Hop back to your `messages.yaml` file and voilà! The new keys are added,
-prefixed with two underscores. This prefix helps in easily identifying new
-keys for a quick find and replace. You can even customize it if you want.
+Hop back to `messages.en.yaml` and check it out! Here's our new keys!
+The values are the key names prefixed with `__` (two underscores). This
+can help you quickly find them if there are a bunch. This prefix can be
+customized if desired.
 
-The next step is to replace the underscores with the appropriate values -
-'weather' and 'journal'. Refresh your app and presto - they work like a
-charm!
+Replace these with the proper text: "Weather" and "Journal".
 
-## A Word of Caution
+Refresh your app and presto... well nothing changed - but we know it's
+working!
 
-This method works great when you're developing a new feature and only
-adding a few keys. However, when you're translating a large site and
-creating many keys at once, you might find it a bit cumbersome. I usually
-stick to the manual process for such cases.
+If you're mass translating an existing site like we are, I find this method
+can be more cumbersome than our previous process. What ends up happening is,
+when mass adding keys in your code, once you extract them, you forget the
+original text!
 
-## Converting To Different Formats With `translation:extract`
+But! This method works great when developing a new feature. You can add the
+keys for text in your code, and figure out the actual text later.
 
-Here's another cool tip. Let's say you need to send all English
-translations to a translation service to be translated into French or
-Spanish. However, your translator is not familiar with YAML. No worries!
-`translation:extract` can convert to different formats too.
+## Converting To Different Formats
 
-Try running this command:
+This command has another cool, perhaps unintended, feature!
+
+Let's say you have a translation service who asks you to send your translations
+file in English, and they'll send it back in French. Easy, right? Just send
+them `messages.en.yaml`. But... they don't know what the *heck* YAML is! They
+want the file in a format their software supports: `XLIFF`.
+
+No worries! The `translation:extract` command can convert to different formats!
+
+Run this:
 
 ```terminal
 symfony console translation:extract en --force --format=xliff
 ```
 
-This creates a new file, `messages.en.xlif`, in the translations directory.
-This might not be super readable for us, but translation services can
-easily load it into their system.
+In our `translations/` directory, we have a new file: `messages.en.xliff`.
+Open that up.
 
-Let's pretend we got the translated messages back. All we would need to do
-is rename the `en` to `fr` in the filename. After updating the
-translations, switch to the French version on your page, and voila - your
-French version is ready!
+Ugh! Gross! XML!
 
-Note that we won't be using this `XLIF` file, so feel free to delete it.
+No worries - they love it! Just send them this file and tell them to swap
+the `<target>` text, which is English, with the French translations.
 
-## Upcoming: Translating to Other Languages
+When you get it back, just rename it to `messages.fr.xliff` and place it
+back in the `translations/` directory. Just fudge the first `<target>`
+to read "(French) Local Asteroids".
 
-So far, we've mainly translated from our default English language. But how
-about creating translations for French and Spanish? Stay tuned, we'll be
-exploring another cool Symfony feature to do just that.
+Back in our app, switch to the French version of this page and boom!
+"(French) Local Asteroids".
+
+Ok, that's enough XML for today - delete `messages.fr.xliff`.
+
+What if you don't have a translation service that you can just send these
+files to? No problem! There are cloud-based solutions that can help
+and Symfony has integrations for them! Let's check this out next!
