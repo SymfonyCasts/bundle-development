@@ -24,11 +24,11 @@ chapters:
         tutsFirstStep: 7-html-placeholders
         tutsLastStep: 7-html-placeholders
     extract-command:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 9-add-translation-keys
+        tutsLastStep: 9-remove-xliff
     providers:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 10-add-crowdin
+        tutsLastStep: 10-add-crowdin
     push-pull-translations:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 11-pull-translations
+        tutsLastStep: 11-pull-translations
