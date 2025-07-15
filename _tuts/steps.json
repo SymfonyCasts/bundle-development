@@ -26,6 +26,11 @@
             "description": null
         },
         {
+            "id": "delete-migrations",
+            "name": "delete migrations",
+            "description": null
+        },
+        {
             "id": "2-route-attribute-lang-paths",
             "name": "2. Route attribute lang paths",
             "description": null
@@ -166,5 +171,5 @@
             "description": null
         }
     ],
-    "sha": "38661a8a32667f0f6b9fad8816618978f2049f37"
+    "sha": "47be0b344b04f4a26f4370c2c77c9ad741d00571"
 }
