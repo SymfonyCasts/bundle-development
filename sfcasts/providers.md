@@ -1,91 +1,109 @@
 # Translation Providers
 
-So far, we've mostly focused on converting our site from English to
-translated English. Now, it's time to explore how we can get translations
-for other languages. One way to do that is by sending your
-`messages.en.yaml` file to a translation service that can provide you with
-the French or Spanish equivalent. You just need to rename the returned file
-and place it in the translations directory. But there's another option -
-Symfony's translation providers.
+So far, we've mostly focused on translating our site from English to...
+English... What about French and Spanish? We've talked a bit about
+how we can manually send our `messages.en.yaml` file to a translation
+service to make these translations. But there's another option: Symfony's
+Translation Providers.
 
 ## Understanding Symfony Translation Providers
 
-If you visit the Symfony translation documentation, you'll find a list of
-providers. These are essentially cloud services that can handle
-translations for you. They allow you to upload your English translations,
-and then translate them either by using their team of translators, or by
-using automatic translation tools. There are four to choose from, and for
-this tutorial, I'll be using Crowdin. There's no particular reason for
-that, other than the fact that they've sponsored the Symfony framework in
-the past.
+These are a set of cloud-based services that manage our translations.
+If we have a translation "team", they can login to these services and
+translate our messages. But many, if not all, can automatically create
+the translations for us.
 
-Now, let's start by installing the provider. Copy the `composer require`
+You "push" your default language translations to the provider, and, once
+translated, you "pull" the translated messages back down.
+
+The Symfony docs show the supported providers. I don't have a specific
+favourite and this course isn't sponsored by any of them, but I noticed
+Crowdin has sponsored Symfony in the past, so I'll use it.
+
+## Installing the Crowdin Provider
+
+Start by installing the Crowdin provider, so copy the `composer require`
 command, and paste it in your terminal:
 
-```terminal
+```terminal-silent
 composer require symfony/crowdin-translation-provider
 ```
 
-Once installed, it will also run a recipe. You can check what's been added
-by running `git status`. You'll notice a new `.env` entry and an addition
-to our translation config.
+This package included a recipe so run:
 
-## Updating the .env and Config Files
+```terminal
+git status
+```
 
-Firstly, if we open `.env` and scroll down to the bottom, we see that a dsn
-has been added.
+Looks like a new environment variable and some config.
 
-Next, let's look at `config/packages/translation.yaml`. Here, you'll find
-that the Crowdin provider has been added, along with its dsn:
+First, open `.env` and scroll down to the bottom, a commented out
+`CROWDIN_DSN` has been added.
 
-Given that this is a sensitive environment variable, we should create a new
-file at the root called `.env.local`. This file is ignored by git, so it
-won't be committed.
+Next, look at `config/packages/translation.yaml`. The Crowdin provider has been added,
+along with its DSN.
 
-Let's copy the dsn from `.env` and paste it into `.env.local`. We're not
-going to use `ORGANIZATION_DOMAIN`, so we can remove that part. We'll be
-using a personal account instead.
+Since the DSN is a sensitive environment variable, we don't want it committed.
+So add a `.env.local` file at our project's root. Copy the DSN from `.env`
+and paste it here. We'll just be using a personal Crowdin account, so remove
+the `ORGANIZATION_DOMAIN.` part.
 
 ## Setting Up the Crowdin Account
 
-For this setup, we need an API token and a project ID. Head over to the
-Crowdin homepage, sign up for a free tier (which includes a trial of some
-premium features) and once your account is set up, navigate to your
-dashboard or profile page.
+Time to create and configure a Crowdin account! Go to [crowdin.com](https://crowdin.com)
+and sign up for a free account. You start with a free trial of their premium
+features, but we'll only need the features that are part of their free tier.
 
-To get the API key, go to settings, then API, then `Personal Access Token >
-New Token`. We'll name this token `Space Bar`.
+Once registered and logged in, you'll be on this dashboard page. First, we
+need an API token. Click your avatar in the top right, and select "Settings".
+Click the "API" tab and then "New Token".
 
-For the scopes, select the project scope. Once you confirm your
-credentials, you'll get the key. Copy it and paste it into the `API_TOKEN`
-field in `.env.local`.
+For the "Token Name", use "Space Bar". For the scopes, select the "Projects"
+group. Click "Create"... You may need to confirm your credentials, but once done,
+you'll see your new token.
+
+Copy it, and in `.env.local`, paste over the `API_TOKEN` text in the DSN.
+Back on Crowdin, "Close" the dialog.
 
 ## Creating a Crowdin Project
 
-Next, we need to create a project. Head back to your Crowdin dashboard,
-click on `Create Project` and name it `Space Bar`. Make sure to keep it as
-a private project. Our source language is English, so leave that as
-default. For target languages, select French and Spanish.
+Now we need a project ID, so we need a project! On your dashboard, click
+"Create Project". Name it "Space Bar" and keep it as private. This is
+sensitive stuff!
 
-Keep the project type as file-based and click on 'Create Project'. Once the
-project has been created, you'll find the project ID under 'Details' on
-your dashboard. Copy this ID and paste it into the `PROJECT_ID` field in
-`.env.local`.
+Choose the "Source Language" - keep as "English" in our case.
+
+For "Target Languages", find "French" - the generic one, and select it.
+Now, "Spanish" - also the generic one, and select it too.
+
+Keep everything else as is, and click "Create Project".
+
+Ok, there is *a lot* to look at here... We'll only focus on a small set
+of these features.
+
+To get the "Project ID", click the "Dashboard" tab, then, in this "Details"
+section, copy the "Project ID".
+
+Back in our `.env.local` file, select `PROJECT_ID` and paste.
 
 ## Adjusting Language Mapping
 
-One last thing: If you click on the French link on your dashboard, you'll
-see `fr` in the URL, which matches our project's locale code. But for
-Spanish, the URL shows `es-ES`, which does not match our `es` locale code.
+Back on Crowdin, click on "French". Notice in your browser's URL, it shows
+`fr`. Cool, that matches our project's French locale code.
 
-To fix this, we need to create a custom mapping. Go to settings, then
-languages, and open the 'Language Mapping' section. Choose Spanish, use
-`locale` as the placeholder, and `es` as the custom code.
+Go back, and click "Spanish". Notice the URL shows `es-ES`. This isn't
+the same as our project. We're using just `es`.
 
-Great, that's it! This will help Symfony synchronize the translations.
+When syncing translations, this will cause an issue as Crowdin won't know
+that our `es` maps to their `es-ES`. Luckily, Crowdin has a way to help!
 
-## Up Next: Synchronization
+Back on the project dashboard, find and click the "Settings" tab. On the left,
+choose "Languages". At the bottom, under "Add custom language codes", click
+"Language Mapping".
 
-Next, we'll push our raw English translations up to Crowdin, do some
-translating, and pull the translated versions back down. Stay tuned for
-that!
+In this dialog, in the "Language" dropdown, select "Spanish". For "Placeholder",
+choose "locale", and for "Custom Code", enter "es". Click "Save". Locale code
+mapped!
+
+Next, we'll push our English translations up to Crowdin, do some translating, and
+pull the translated versions back down.
