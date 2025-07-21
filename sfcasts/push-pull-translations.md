@@ -1,70 +1,111 @@
 # Pushing & Pulling Translations
 
-So we've set up our blank Spacebar project on Crowdin, configured it for
-French and Spanish. Now let's go ahead and push those translations up. In
-your terminal, simply run:
+Our "Space Bar" project on Crowdin is all set up and configured for our
+app's locales. Let's push up our translations!
+
+At your terminal, run:
 
 ```terminal
 symfony console translation:push
 ```
 
-And voila! It looks like
-it has successfully sent new translations for EN, FR, ES — our enabled
-locales, specifically for the messages domain. Perfect.
+Ok, all our enabled locale's translations are pushed up, but of course, only English
+has any.
 
-## Refreshing Crowdin
+Jump back over to Crowdin and refresh... Doesn't look like anything changed,
+French and Spanish are still at 0% translated.
 
-Jumping back to Crowdin and hitting refresh, it may seem like nothing's
-changed. However, if you click on "View Strings", you'll find all our
-English versions neatly laid out. You can select the languages you want and
-start editing these translations on the go.
+## Automatic Translations
 
-Let's get started! You can do all the translations right here in this
-user-friendly interface.
+Click "View Strings". Here we can see all our English translations on the left.
+On the right, we have the French and Spanish versions, which are empty. If
+you don't see our alternate locales, click "Languages" at the top, select
+them, and click "Apply".
 
-Let's start with `local_asteroids`. Click on the French version, pick a
-translation suggestion, and hit "Save". As soon as you save, it'll
-automatically move on to the Spanish version. Pick the first suggestion for
-each one and keep going down the list.
+If you have a translation team, you can invite them to this project, and they
+can start filling in the missing translations!
+
+My translation team is off planet on leave... but we can automate the translations
+with Crowdin's suggestions feature. Then they can review when they return.
+
+Select the empty "French" input. This panel on the right shows suggestions
+from various translation engines. These all look pretty much the same, so
+hover over the first one and click this "Disk" button to apply it.
+
+Sweet! The French translation for "Local Asteroids" is now filled in and it
+auto-switched to the Spanish input. Do the same for this one.
+
+Now it jumped to the next French input - "Apply" this suggestion. Hmm, looks like
+Crowdin is telling us there's a spelling mistake... I'm going to just go
+with it as is. This is a good spot to note that with automatic translations,
+you should always have someone fluent in the language review them. Also, with
+translations, context matters, and these small text snippets often lack this.
+For instance, expressions like "A man on the moon" might be translated literally
+and not make sense in the target language.
+
+There's probably a way to bulk-apply these suggestions, but I think Crowdin
+is designed to encourage manual review. I'll quickly go through and apply
+the rest of the suggestions. Notice how it knows not to translate the placeholders?
 
 ## Saving and Pulling Translations
 
-Once you reach the end of the file, I believe it auto-saves. Now, heading
-back to our project dashboard, we can see that we have 100% French and 100%
-Spanish translations. Time to pull them.
+Looks like this is all auto-saved so just hit the "back arrow" to return to
+the project dashboard. Awesome, 100% for both languages! Time to pull them back to
+our project!
 
-These translations are now maintained and ready on Crowdin. But let's bring
-them back to our project. Head back to your terminal and run:
+Head back to your terminal and run:
 
 ```terminal
-symfony console translation:pull --domains=messages
---format=yaml --as-tree=3
+symfony console translation:pull --domains=messages --format=yaml --as-tree=3
 ```
 
-This command pulls down the translations for EN, FR, and ES. If you head
-back to your editor, you'll see brand new Spanish and French versions of
-`/translations/messages.yaml`. Pretty cool, huh?
+When we pushed, it knew to push all domains, but for pulling, you need to
+specify the domain to pull. We want them in the YAML format, and the "as-tree"
+option will indent the translations for us.
+
+Green means good! Let's check them out!
+
+Back in your IDE, in the `translations` directory, `messages.fr.yaml` was
+updated and a new `messages.es.yaml` was created. Open them up! Oh yeah,
+sweet, sweet translations!
 
 ## Testing Your Translations
 
-To make sure everything works, let's switch the language of our app to
-French. Perfect! The translations are correct, and even the footer is in
-proper French. Now switch to Spanish and you'll see the same thing.
-Everything is in Spanish, including the footer.
+Moment of truth! Switch back to our app and change the language to "French".
+Awesome! The menu is French, and if we scroll down, here's the French footer!
 
-## Wrapping Up
+Switch to Spanish, menu's Spanish, footer's Spanish, nice!
 
-And that's a wrap for the basics of translations with Symfony. You can
-certainly dive deeper. For instance, if you need translations in your
-JavaScript, there's a Symfony UX translator component that helps maintain
-your translations within the usual `Symfony messages.en.yaml` files. And
-when you build your JavaScript, it imports the ones you're using in
-JavaScript, making them available within your JavaScript. Neat stuff!
+You can repeat this push, translate on Crowdin, and pull process, over and
+over as you add more translations. Crowdin will keep track of what you've
+already translated, so you can just focus on the new strings.
 
-A question I often get is how to translate database entries. The most
-popular solution is the doctrine extensions package, which provides a
-translatable behavior for doctrine. It works great, but we'll be diving
-deeper into this in my next course, where we'll be creating a third-party
-bundle for a fresh, modern approach to translating doctrine entities.
+And that's a wrap for the basics of translations with Symfony! You can
+certainly dive deeper.
 
-Happy coding and happy translating, everyone!
+## UX Translator Component
+
+For instance, if you need translations in JavaScript, there's a
+[Symfony UX Translator](https://symfony.com/bundles/ux-translator/current/index.html)
+component. You manage your translation files the same way, but can also include the keys
+in your JavaScript files. Neat stuff!
+
+## Database Translations
+
+There's a big space cat in the room that we haven't addressed yet: Database
+translations... As mentioned earlier, Symfony's translation component
+doesn't handle database translations. We'll need to rely on a third-party
+solution for that. A popular one is this
+[Doctrine Extensions](https://github.com/doctrine-extensions/DoctrineExtensions) package.
+It has a ["Translatable" behavior](https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/translatable.md)
+that allows you to translate your entities. There's also a
+[Symfony Bundle](https://symfony.com/bundles/StofDoctrineExtensionsBundle/current/index.html)
+to wire it all up.
+
+It works just fine, but can be a bit heavy and complex. I've been thinking
+about creating a new, modern bundle for translating Doctrine entities. We also
+want to create a new course on creating a modern 3rd-party bundle...
+
+Hmm, sounds like a perfect match!
+
+Stay tuned for that, and... 'Til next time! Happy coding!
