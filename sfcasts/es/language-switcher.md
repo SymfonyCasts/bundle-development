@@ -1,6 +1,6 @@
 # Crear un conmutador de idiomas
 
-Ya tenemos el enrutamiento localizado, pero sólo podemos cambiar de idioma actualizando manualmente la URL. Eso no es suficiente Aquí arriba, junto a nuestro formulario de búsqueda, necesitamos un enlace a esta página, pero uno para cada uno de los idiomas admitidos. Pero... ¿cómo podemos generar un enlace a una ruta para una localización diferente?
+Ya tenemos el enrutamiento localizado, pero sólo podemos cambiar de idioma actualizando manualmente la URL. Eso no es suficiente Aquí arriba, junto a nuestro formulario de búsqueda, necesitamos un enlace a esta página, pero uno para cada una de las localizaciones admitidas. Pero... ¿cómo podemos generar un enlace a una ruta para una localización diferente?
 
 Echa un vistazo al perfil web de esta petición y observa un montón de atributos de petición subrayados. La mayoría son internos de Symfony, pero este`_locale` es importante. Cuando se utilizan rutas localizadas, Symfony establece la configuración regional actual de la petición. Lo bueno es que puedes utilizarlo como parámetro de ruta para generar URLs a diferentes configuraciones regionales.
 
