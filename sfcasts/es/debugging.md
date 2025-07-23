@@ -20,23 +20,27 @@ Todo ello en el contexto de la petición actual. Verás números diferentes para
 
 Haz clic en el botón para ver el "Panel del Perfil de Traducción". Esto nos muestra aún más detalles para cada una de las anteriores. El dominio, los mensajes, los tiempos utilizados y una vista previa. ¡Incluso los parámetros utilizados!
 
-Veamos qué aspecto tiene esto para la página de inicio en francés. Enseguida vemos que el botón se resalta en amarillo para indicar una "advertencia". Y efectivamente, no tenemos los 2 mensajes definidos para el francés, así que está utilizando el fallback en inglés. Haz clic en el perfilador. 0 mensajes definidos, salta a la pestaña Fallback para ver los mensajes en inglés que se están utilizando como fallback.
+Veamos qué aspecto tiene esto para la página de inicio en francés. Enseguida vemos que el icono se resalta en amarillo para indicar una "advertencia". Y efectivamente, no tenemos los 2 mensajes definidos para el francés, así que está utilizando el fallback en inglés. Haz clic en el perfil. 0 mensajes definidos, salta a la pestaña Fallback para ver los mensajes en inglés que se están utilizando como fallback.
 
-Esto está muy bien para depurar las traducciones de la petición actual, pero ¿qué pasa con la obtención del estado global de la traducción de todo nuestro sitio?
+Esto está bien para depurar las traducciones de la petición actual, pero ¿qué pasa con la obtención del estado global de la traducción de todo nuestro sitio?
 
 ## `debug:translation` Comando
 
 Salta a tu terminal y ejecuta:
 
-```bash
+```terminal
 symfony console debug:translation en
 ```
 
-Genial, estos son todos los mensajes de traducción al inglés de todo nuestro sitio. La columna "Estado" nos muestra el estado. ¡Vacío significa bueno!
+Genial, estos son todos los mensajes de traducción al inglés de todo nuestro sitio. ¿Cómo funciona? Busca en todos tus archivos PHP y Twig, y encuentra todos los lugares en los que utilizas el filtro `TranslatorInterface` y `trans`. A continuación, busca las claves que se están utilizando y comprueba si tienen una traducción disponible para la configuración regional en cuestión.
+
+Una cosa a tener en cuenta es que esto no puede analizar traducciones dinámicas, como`$translator->trans($variable)`. Sólo funciona con cadenas estáticas, como`$translator->trans('some.key')` o `{{ 'some.key'|trans }}`.
+
+La columna "Estado" nos muestra el estado. ¡Vacío significa bueno!
 
 Ejecuta el mismo comando, pero para `fr`:
 
-```bash
+```terminal
 symfony console debug:translation fr
 ```
 
@@ -46,15 +50,15 @@ Vaya, ¡muchos problemas! El "Estado" en este caso aparece como "missing", pero 
 
 También hay un comando para "limpiar" nuestras traducciones:
 
-```bash
+```terminal
 symfony console lint:translations
 ```
 
-Todo lo que hace realmente es comprobar si todos nuestros archivos de traducción son válidos, es decir, si se pueden cargar y analizar correctamente. Creo que si un archivo no fuera válido, lo descubrirías bastante rápido durante el desarrollo local. Pero puede ser útil en una canalización de Integración Continua (o CI), como las Acciones de GitHub. Si hay un problema, este comando fallará, y tu trabajo fallará.
+Lo único que hace es comprobar si todos nuestros archivos de traducción son válidos, es decir, si se pueden cargar y analizar correctamente. Creo que si un archivo no fuera válido, te darías cuenta bastante rápido durante el desarrollo local. Pero puede ser útil en una canalización de Integración Continua (o CI), como las Acciones de GitHub. Si hay un problema, este comando fallará, y tu trabajo fallará.
 
 ## Integración Continua
 
-Hablando de IC, un comando súper útil para incluir en tus trabajos es`debug:translation` para tu configuración regional predeterminada. Este comando fallará si falta alguna traducción. Esto podría ayudar a imponer la norma de que "cada Pull Request debe tener traducciones para la configuración regional por defecto".
+Hablando de IC, un comando superútil para incluir en tus trabajos es`debug:translation` para tu configuración regional predeterminada. Este comando fallará si falta alguna traducción. Esto podría ayudar a imponer la norma de que "cada Pull Request debe tener traducciones para la configuración regional por defecto".
 
 Dependiendo de lo estricto que quieras ser, podrías incluso ejecutar este comando para cada una de las configuraciones regionales admitidas. También fallará si se utilizan fallbacks.
 
