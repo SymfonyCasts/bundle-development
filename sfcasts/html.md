@@ -16,7 +16,7 @@ The simplest solution is to just straight up, add the text, HTML and
 all, as the translation value. So, select all the text and cut it. For the
 key, use `'base.footer'|trans`.
 
-Over in `messages.en.yaml`, add a new key called `base: footer:`, and
+Over in `messages.en.yaml`, under `base:`, add `footer:`, and
 inside single quotes, paste. We need to use single quotes here because
 the HTML contains double quotes.
 
