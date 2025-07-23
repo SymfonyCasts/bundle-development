@@ -38,7 +38,7 @@ Como el DSN es una variable de entorno sensible, no queremos que se confirme, as
 
 Una vez registrado y conectado, accederás a esta página del panel de control. En primer lugar, necesitamos un token de API. Haz clic en tu avatar en la parte superior derecha y selecciona "Configuración". Haz clic en la pestaña "API" y luego en "Nuevo token".
 
-Para el "Nombre del token", utiliza la "Barra espaciadora". Para los ámbitos, selecciona el grupo "Proyectos". Haz clic en "Crear"... Puede que tengas que confirmar tus credenciales, pero una vez hecho, verás tu nuevo token.
+Para el "Nombre del token", utiliza la "Barra espaciadora". Para los ámbitos, selecciona el grupo "Proyectos" y haz clic en "Crear"... Puede que tengas que confirmar tus credenciales, pero una vez hecho, verás tu nuevo token.
 
 Cópialo, y en `.env.local`, pégalo sobre el texto `API_TOKEN` en el DSN. De vuelta en Crowdin, "Cierra" el diálogo.
 
