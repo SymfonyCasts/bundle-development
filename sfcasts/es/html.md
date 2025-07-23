@@ -12,9 +12,9 @@ En `base.html.twig`, busca el texto del pie de página.
 
 La solución más sencilla es añadir directamente el texto, con HTML y todo, como valor de traducción. Para ello, selecciona todo el texto y córtalo. Para la clave, utiliza `'base.footer'|trans`.
 
-En `messages.en.yaml`, añade una nueva clave llamada `base: footer:`, y dentro de las comillas simples, pega. Necesitamos utilizar comillas simples aquí porque el HTML contiene comillas dobles.
+En `messages.en.yaml`, debajo de `base:`, añade `footer:`, y dentro de las comillas simples, pega. Necesitamos utilizar comillas simples aquí porque el HTML contiene comillas dobles.
 
-Vuelve a nuestra aplicación y actualiza... Vaya, esto no está bien. Twig hace esto por defecto para evitar ataques XSS a partir de datos enviados por el usuario. En este caso concreto, podemos desactivar este comportamiento con seguridad, ya que tenemos el control total del texto.
+Vuelve a nuestra aplicación y actualiza... Esto no está bien. Twig hace esto por defecto para evitar ataques XSS a partir de datos enviados por el usuario. En este caso concreto, podemos desactivar este comportamiento con seguridad, ya que tenemos el control total del texto.
 
 De vuelta en `base.html.twig`, añade `|raw` después de `trans` para desactivar el escape.
 
