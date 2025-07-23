@@ -1,6 +1,6 @@
 # `translation:extract` Command
 
-So far, we've been creating translation keys and manually adding them
+So far, we've been creating translation keys and manually adding them,
 and their values to `messages.en.yaml`. But did you know there's an
 alternative method that automates part of this process?
 
@@ -72,7 +72,7 @@ Open that up.
 
 Ugh! Gross! XML!
 
-No worries - they love it! Just send them this file and tell them to swap
+No worries - translation software loves it! Just send them this file and tell them to swap
 the `<target>` text, which is English, with the French translations.
 
 When you get it back, just rename it to `messages.fr.xliff` and place it
@@ -84,6 +84,6 @@ Back in our app, switch to the French version of this page and boom!
 
 Ok, that's enough XML for today - delete `messages.fr.xliff`.
 
-What if you don't have a translation service that you can just send these
-files to? No problem! There are cloud-based solutions that can help
+So what if you don't have a translation service that you can just send these
+files to? No problem! There are cloud-based solutions that can help,
 and Symfony has integrations for them! Let's check this out next!

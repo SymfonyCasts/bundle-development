@@ -59,7 +59,7 @@ need an API token. Click your avatar in the top right, and select "Settings".
 Click the "API" tab and then "New Token".
 
 For the "Token Name", use "Space Bar". For the scopes, select the "Projects"
-group. Click "Create"... You may need to confirm your credentials, but once done,
+group and click "Create"... You may need to confirm your credentials, but once done,
 you'll see your new token.
 
 Copy it, and in `.env.local`, paste over the `API_TOKEN` text in the DSN.

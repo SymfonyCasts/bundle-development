@@ -33,7 +33,7 @@ even more details for each of the above. The domain, messages,
 times used, and a preview. Even the parameters used!
 
 Let's see what this looks like for the French homepage. Right away, we can
-see the button is being highlighted yellow to indicate a "warning". And
+see the icon is being highlighted yellow to indicate a "warning". And
 indeed, we don't have the 2 messages defined for French, so it's using the
 English fallback. Click into the profiler. 0 messages defined, jump
 to the Fallback tab to see the English messages being used as the fallback.
@@ -45,7 +45,7 @@ getting the global translation status for our whole site?
 
 Jump over to your terminal and run:
 
-```bash
+```terminal
 symfony console debug:translation en
 ```
 
@@ -63,7 +63,7 @@ The "State" column shows us the status. Empty means good!
 
 Run the same command, but for `fr`:
 
-```bash
+```terminal
 symfony console debug:translation fr
 ```
 
@@ -72,9 +72,9 @@ really, it's using the English fallback, which we can see the preview of.
 
 ## `lint:translations` Command
 
-There's also command to "lint" our translations:
+There's also a command to "lint" our translations:
 
-```bash
+```terminal
 symfony console lint:translations
 ```
 
