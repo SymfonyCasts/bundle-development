@@ -1,6 +1,6 @@
 # `translation:extract` Comando
 
-Hasta ahora, hemos estado creando claves de traducción y añadiéndolas manualmente junto con sus valores a `messages.en.yaml`. ¿Pero sabías que existe un método alternativo que automatiza parte de este proceso?
+Hasta ahora, hemos estado creando claves de traducción y añadiéndolas manualmente, junto con sus valores, a `messages.en.yaml`. ¿Pero sabías que existe un método alternativo que automatiza parte de este proceso?
 
 Vamos a traducir los dos elementos de menú que nos quedan: "Tiempo" y "Diario".
 
@@ -50,7 +50,7 @@ En nuestro directorio `translations/`, tenemos un nuevo archivo: `messages.en.xl
 
 ¡Uf! ¡Qué asco! ¡XML!
 
-No te preocupes, ¡les encanta! Sólo tienes que enviarles este archivo y decirles que cambien el texto de `<target>`, que es inglés, por las traducciones al francés.
+No te preocupes: ¡a los programas de traducción les encanta! Sólo tienes que enviarles este archivo y decirles que intercambien el texto de `<target>`, que es inglés, con las traducciones al francés.
 
 Cuando te lo devuelvan, cámbiale el nombre a `messages.fr.xliff` y vuelve a colocarlo en el directorio `translations/`. Sólo tienes que cambiar el primer `<target>`para que diga "(Francés) Asteroides Locales".
 
