@@ -93,7 +93,7 @@ in your JavaScript files. Neat stuff!
 ## Database Translations
 
 There's a big space cat in the room that we haven't addressed yet: Database
-translations... As mentioned earlier, Symfony's translation component
+translations... As I said earlier, Symfony's translation component
 doesn't handle database translations. We'll need to rely on a third-party
 solution for that. A popular one is this
 [Doctrine Extensions](https://github.com/doctrine-extensions/DoctrineExtensions) package.
@@ -102,10 +102,8 @@ that allows you to translate your entities. There's also a
 [Symfony Bundle](https://symfony.com/bundles/StofDoctrineExtensionsBundle/current/index.html)
 to wire it all up.
 
-It works just fine, but can be a bit heavy and complex. I've been thinking
-about creating a new, modern bundle for translating Doctrine entities. We also
-want to create a new course on creating a modern 3rd-party bundle...
+It works just fine, but can be a bit heavy and complex. Thinking out loud, 
+creating a new, modern bundle for translating Doctrine entities would be an 
+awesome addition to the Symfony dev experience!
 
-Hmm, sounds like a perfect match!
-
-Stay tuned for that, and... 'Til next time! Happy coding!
+'Til next time! Happy coding!
