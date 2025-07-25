@@ -14,7 +14,7 @@ Vuelve a Crowdin y actualiza... No parece que haya cambiado nada, el francés y 
 
 ## Traducciones automáticas
 
-Haz clic en "Ver cadenas". Aquí podemos ver todas nuestras traducciones al inglés a la izquierda. A la derecha, tenemos las versiones en francés y español, que están vacías. Si no ves nuestras localizaciones alternativas, haz clic en "Idiomas" en la parte superior, selecciónalas y haz clic en "Aplicar".
+Haz clic en "Ver cadenas". Aquí podemos ver todas nuestras traducciones al inglés a la izquierda. A la derecha, tenemos las versiones en francés y español, que están vacías. Si no ves nuestros locales alternativos, haz clic en "Idiomas" en la parte superior, selecciónalos y haz clic en "Aplicar".
 
 Si tienes un equipo de traducción, puedes invitarles a este proyecto, ¡y podrán empezar a completar las traducciones que faltan!
 
@@ -30,7 +30,7 @@ Probablemente haya una forma de aplicar en bloque estas sugerencias, pero creo q
 
 ## Guardar y extraer traducciones
 
-Parece que todo esto se guarda automáticamente, así que sólo tienes que pulsar la "flecha atrás" para volver al panel de control del proyecto. Genial, ¡100% para los dos idiomas! ¡Es hora de volver a cargarlas en nuestro proyecto!
+Parece que todo esto se guarda automáticamente, así que sólo tienes que pulsar la "flecha atrás" para volver al panel de control del proyecto. Genial, ¡100% para los dos idiomas! Es hora de volver a cargarlas en nuestro proyecto
 
 Vuelve a tu terminal y ejecuta:
 
@@ -38,7 +38,7 @@ Vuelve a tu terminal y ejecuta:
 symfony console translation:pull --domains=messages --format=yaml --as-tree=3
 ```
 
-Cuando empujamos, supo empujar todos los dominios, pero para tirar, necesitas especificar el dominio a tirar. Las queremos en formato YAML, y la opción "as-tree" sangrará las traducciones por nosotros.
+Cuando empujamos, supo empujar todos los dominios, pero para tirar, necesitas especificar el dominio a tirar. Los queremos en formato YAML, y la opción "as-tree" sangrará las traducciones por nosotros.
 
 ¡Verde significa bien! ¡Vamos a comprobarlas!
 
@@ -50,7 +50,7 @@ De vuelta a tu IDE, en el directorio `translations`, se ha actualizado `messages
 
 Cambia a español, el menú es español, el pie de página es español, ¡bien!
 
-Puedes repetir este proceso de empujar, traducir en Crowdin, y tirar, una y otra vez a medida que añades más traducciones. Crowdin hará un seguimiento de lo que ya has traducido, para que tú sólo tengas que centrarte en las nuevas cadenas.
+Puedes repetir este proceso de empujar, traducir en Crowdin, y tirar, una y otra vez a medida que añades más traducciones. Crowdin hará un seguimiento de lo que ya has traducido, para que tú sólo tengas que centrarte en las cadenas nuevas.
 
 Y esto es todo sobre los aspectos básicos de las traducciones con Symfony Seguro que puedes profundizar más.
 
@@ -62,6 +62,6 @@ Por ejemplo, si necesitas traducciones en JavaScript, existe un componente [Symf
 
 Hay un gran gato espacial en la habitación que aún no hemos tratado: Las traducciones de bases de datos... Como he dicho antes, el componente de traducción de Symfony no gestiona las traducciones de bases de datos. Tendremos que recurrir a una solución de terceros para ello. Una muy popular es este paquete [Doctrine Extensions](https://github.com/doctrine-extensions/DoctrineExtensions). Tiene un comportamiento ["Translatable"](https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/translatable.md) que te permite traducir tus entidades. También hay un [Symfony Bundle](https://symfony.com/bundles/StofDoctrineExtensionsBundle/current/index.html) para conectarlo todo.
 
-Funciona bien, pero puede ser un poco pesado y complejo. Pensando en voz alta, ¡crear un bundle nuevo y moderno para traducir entidades Doctrine sería una gran adición a la experiencia de desarrollo de Symfony!
+Funciona bien, pero puede ser un poco pesado y complejo. Pensando en voz alta, ¡crear un bundle nuevo y moderno para traducir entidades Doctrine sería una adición impresionante al ecosistema Symfony!
 
 ¡Hasta la próxima! ¡Feliz programación!
