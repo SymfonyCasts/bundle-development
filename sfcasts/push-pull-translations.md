@@ -102,8 +102,8 @@ that allows you to translate your entities. There's also a
 [Symfony Bundle](https://symfony.com/bundles/StofDoctrineExtensionsBundle/current/index.html)
 to wire it all up.
 
-It works just fine, but can be a bit heavy and complex. Thinking out loud, 
-creating a new, modern bundle for translating Doctrine entities would be an 
-awesome addition to the Symfony dev experience!
+It works just fine, but can be a bit heavy and complex. Thinking out loud,
+creating a new, modern bundle for translating Doctrine entities would be an
+awesome addition to the Symfony ecosystem!
 
 'Til next time! Happy coding!
