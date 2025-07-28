@@ -7,7 +7,7 @@
     <body>
       <trans-unit id="SWPFW5B" resname="base.local_asteroids">
         <source>base.local_asteroids</source>
-        <target>Local Asteroids</target>
+        <target>(French) Local Asteroids</target>
       </trans-unit>
       <trans-unit id="mKAqmQl" resname="base.footer">
         <source>base.footer</source>
