@@ -64,6 +64,6 @@ Volvemos a nuestra aplicación, actualizamos... Y... ¡Bah! ¡Tenemos una errata
 
 En `base.html.twig`, el plugin Symfony de PhpStorm incluso resalta esta clave con una advertencia. Borra el texto después de `_` y ¡mira esto! ¡PhpStorm está auto-sugiriendo la clave correcta! Arréglalo, actualiza la página... ¡y ya funciona!
 
-Me gusta mucho este proceso de traducir texto: uno a uno, encuentra el texto que quieres traducir, córtalo, inventa una clave, añade el filtro `|trans`, y luego, en tu archivo de traducción del idioma por defecto, añade la clave y pega el texto.
+Me gusta mucho este proceso de traducción de texto: uno a uno, encuentra el texto que quieres traducir, córtalo, inventa una clave, añade el filtro `|trans`, y luego, en tu archivo de traducción del idioma por defecto, añade la clave y pega el texto.
 
 A continuación, ¡vamos a ver cómo manejar la traducción de texto con contenido dinámico!
