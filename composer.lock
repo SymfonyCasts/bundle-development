@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39ebdf74cf71ef55ebeeff6f96092fd2",
+    "content-hash": "b7c81b77d84e0257a48d1a33c0d34e2a",
     "packages": [
         {
             "name": "composer/semver",
@@ -2407,6 +2407,79 @@
                 }
             ],
             "time": "2025-04-07T19:09:28+00:00"
+        },
+        {
+            "name": "symfony/crowdin-translation-provider",
+            "version": "v7.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/crowdin-translation-provider.git",
+                "reference": "66bff350f79ec2e660ab9eec06b7b69608d08951"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/crowdin-translation-provider/zipball/66bff350f79ec2e660ab9eec06b7b69608d08951",
+                "reference": "66bff350f79ec2e660ab9eec06b7b69608d08951",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/config": "^6.4|^7.0",
+                "symfony/http-client": "^6.4|^7.0",
+                "symfony/translation": "^7.2"
+            },
+            "type": "symfony-translation-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Translation\\Bridge\\Crowdin\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrii Bodnar",
+                    "homepage": "https://github.com/andrii-bodnar"
+                },
+                {
+                    "name": "Mathieu Santostefano",
+                    "homepage": "https://github.com/welcomattic"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Crowdin Translation Provider Bridge",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "crowdin",
+                "provider",
+                "translation"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/crowdin-translation-provider/tree/v7.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-09-27T08:48:42+00:00"
         },
         {
             "name": "symfony/dependency-injection",
