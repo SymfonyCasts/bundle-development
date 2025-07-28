@@ -14,18 +14,24 @@ In `base.html.twig`, find the footer text.
 
 The simplest solution is to just straight up, add the text, HTML and
 all, as the translation value. So, select all the text and cut it. For the
-key, use `'base.footer'|trans`.
+key, use `'base.footer'|trans`:
+
+[[[ code('1546ad0f32') ]]]
 
 Over in `messages.en.yaml`, under `base:`, add `footer:`, and
 inside single quotes, paste. We need to use single quotes here because
-the HTML contains double quotes.
+the HTML contains double quotes:
+
+[[[ code('4a61f1ed0e') ]]]
 
 Go back to our app and refresh... Whoa, this ain't right. The HTML was escaped.
 Twig does this by default to prevent XSS attacks from user-submitted data. For
 this particular case, we can safely disable this behavior since we're in full
 control of the text.
 
-Back in `base.html.twig`, add `|raw` after `trans` to disable escaping.
+Back in `base.html.twig`, add `|raw` after `trans` to disable escaping:
+
+[[[ code('5ecb4ebf6b') ]]]
 
 Refresh... and Voila! It works!
 
@@ -43,12 +49,19 @@ below our footer translation, paste it temporarily.
 
 First, copy the icon HTML, and in the `trans` filter, add it as a placeholder:
 `'%heart%': ''`, and paste. Now, copy the link HTML and add it as another
-placeholder: `'%link%': ''`, paste. Because we're still rendering HTML,
-the `|raw` filter is still required.
+placeholder: `'%link%': ''`, paste:
+
+[[[ code('5ecb4ebf6b') ]]]
+
+Because we're still rendering HTML, the `|raw` filter is still required.
 
 Delete the temporary line we pasted and jump back to `messages.en.yaml`.
 Replace the icon's HTML with `'%heart%'` and the link's HTML with
-`'%link%'`. Right away, this looks a lot cleaner and easier to read.
+`'%link%'`:
+
+[[[ code('1e9ce5c320') ]]]
+
+Right away, this looks a lot cleaner and easier to read.
 
 Ok, back to the app and refresh... Oi! A syntax error!
 

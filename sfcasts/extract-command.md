@@ -8,7 +8,9 @@ We'll translate these two remaining menu items: "Weather" and "Journal".
 
 Open `templates/base.html.twig` and find the text for these menu items.
 Follow our usual routine of coming up with a key, and using the `trans`
-filter. `{{ 'base.weather'|trans }}` and `{{ 'base.journal'|trans }}`.
+filter. `{{ 'base.weather'|trans }}` and `{{ 'base.journal'|trans }}`:
+
+[[[ code('a2e445fc46') ]]]
 
 Ok, instead of manually adding these entries to our `messages.en.yaml` file,
 head over to your terminal and run:
@@ -33,11 +35,16 @@ symfony console translation:extract en --force --format=yaml --as-tree=3
 ```
 
 Hop back to `messages.en.yaml` and check it out! Here's our new keys!
+
+[[[ code('68b48a2e83') ]]]
+
 The values are the key names prefixed with `__` (two underscores). This
 can help you quickly find them if there are a bunch. This prefix can be
 customized if desired.
 
-Replace these with the proper text: "Weather" and "Journal".
+Replace these with the proper text: "Weather" and "Journal":
+
+[[[ code('1eccaf40db') ]]]
 
 Refresh your app and presto... well nothing changed - but we know it's
 working!

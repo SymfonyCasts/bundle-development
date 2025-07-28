@@ -7,7 +7,10 @@ We still have this "Hello World!" text so jump into `templates/article/index.htm
 where we're translating it. Remember, we have the French translation for this setup
 in `messages.fr.yaml`...
 
-Suppose we don't want to "yell" this anymore so remove the exclamation mark.
+Suppose we don't want to "yell" this anymore so remove the exclamation mark:
+
+[[[ code('04d63b07e7') ]]]
+
 I prefer yelling this but the top brass doesn't like it.
 
 Can you see the problem?
@@ -29,11 +32,18 @@ of `Hello World` in `index.html.twig`, use a
 just show this keyified text.
 
 We need a new translations file for English. In the `translations/` folder, create a new
-`messages.en.yaml` file, and inside, add `hello_world: "Hello World"`. If
-you refresh the page now, it's working again.
+`messages.en.yaml` file, and inside, add `hello_world: "Hello World"`:
+
+[[[ code('7700ddbf8f') ]]]
+
+If you refresh the page now, it's working again.
 
 On the French page, it's currently falling back to English. Fix that by opening `messages.fr.yaml`, change
-the key to `hello_world`, go back to our app, and refresh. *Now* we're in business.
+the key to `hello_world`:
+
+[[[ code('33d8ce5e38') ]]]
+
+Go back to our app, and refresh. *Now* we're in business.
 
 Admittedly, using keys is a *bit* more work, but it pays off in the long run.
 
@@ -56,7 +66,9 @@ maybe, `menu.local_asteroids`. This is better, but still a bit generic.
 
 What I like to do is name my namespaces based on the context of where the text is used.
 In this case, the text is in `base.html.twig`, so, use `base.local_asteroids`. Don't
-forget to add `|trans`.
+forget to add `|trans`:
+
+[[[ code('3a42d5066e') ]]]
 
 If this translation text was in a controller, you might use a shortened version of the
 controller class name or even the route name. It's best to find a good convention,
@@ -75,7 +87,9 @@ namespaces as a way to visually group them! Most of the other translation file f
 don't support this, so this is why devs prefer YAML for translations.
 
 Add `base:`, new line, indent, and add `local_asteroids:`. Then, in quotes,
-paste: "Local Asteroids".
+paste: "Local Asteroids":
+
+[[[ code('20d9d050a0') ]]]
 
 Back to our app, refresh... And... Bah! We have a typo in our key!
 

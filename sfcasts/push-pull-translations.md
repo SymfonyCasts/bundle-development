@@ -69,6 +69,10 @@ Back in your IDE, in the `translations` directory, `messages.fr.yaml` was
 updated and a new `messages.es.yaml` was created. Open them up! Oh yeah,
 sweet, sweet translations!
 
+[[[ code('880cb487a5') ]]]
+
+[[[ code('3240d9ac1f') ]]]
+
 ## Testing Your Translations
 
 Moment of truth! Switch back to our app and change the language to "French".
