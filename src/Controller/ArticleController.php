@@ -7,12 +7,17 @@ use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ArticleController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
-    public function index(ArticleRepository $articles): Response
-    {
+    public function index(
+        ArticleRepository $articles,
+        TranslatorInterface $translator,
+    ): Response {
+        dump($translator->trans('Hello World!'));
+
         return $this->render('article/index.html.twig', [
             'articles' => $articles->findBy([], orderBy: ['publishedAt' => 'DESC']),
         ]);
