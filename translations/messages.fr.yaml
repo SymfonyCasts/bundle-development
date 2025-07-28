@@ -1,0 +1,8 @@
+base:
+    local_asteroids: 'Astéroïdes locaux'
+    footer: 'Fabriqué à partir de %heart% par les gars et les gaux à %link%'
+    weather: Météo
+    journal: Quotidien
+article:
+    show:
+        comments: '1 commentaire| Commentaires %count%'
