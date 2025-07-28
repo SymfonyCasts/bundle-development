@@ -1,7 +1,7 @@
-# Going Global: Translate your Site
+# Symfony Bundle Development: Share the Love
 
 Well hi there! This repository holds the code and script for the
-[Going Global: Translate your Site](https://symfonycasts.com/screencast/translations)
+[Symfony Bundle Development: Share the Love](https://symfonycasts.com/screencast/bundle-development)
 course on SymfonyCasts.
 
 ## Setup
@@ -42,8 +42,8 @@ file first), then generate a migration, migrate, and load the fixtures:
 
 ```bash
 symfony console doctrine:database:create
-symfony console doctrine:migrations:migrate
-symfony console doctrine:fixtures:load
+symfony console make:migration
+symfony console foundry:load-stories
 ```
 
 **Build Tailwind CSS**
