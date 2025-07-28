@@ -8,21 +8,33 @@ Encuentra este texto en `templates/article/show.html.twig`. Aquí está el valor
 
 ## Marcadores de posición de traducción
 
-Borra todo este texto e inventa una clave: como estamos en `article/show.html.twig`, utiliza `article.show.comments`. Añade `|trans`, y como primer argumento del filtro, añade una matriz. Se trata de una matriz clave-valor, donde la clave es el marcador de posición y el valor es el valor dinámico. Para la clave, utiliza `%count%`. Las claves envueltas en `%`'s son una convención estándar de Symfony. Para el valor, utiliza `comments|length`.
+Borra todo este texto e inventa una clave: como estamos en `article/show.html.twig`, utiliza `article.show.comments`. Añade `|trans`, y como primer argumento del filtro, añade una matriz. Se trata de una matriz clave-valor, donde la clave es el marcador de posición y el valor es el valor dinámico. Para la clave, utiliza `%count%`. Las claves envueltas en `%`'s son una convención estándar de Symfony. Para el valor, utiliza `comments|length`:
 
-Ahora, abre nuestro archivo `messages.en.yaml` y añade la nueva clave, `article: show: comments:`. Para el valor, utiliza `%count% Comments`. La mayoría de los servicios de traducción saben ignorar el texto en `%`'s, por lo que no deberías preocuparte de que "count" se traduzca accidentalmente.
+[[[ code('e561aa39e4') ]]]
+
+Ahora, abre nuestro archivo `messages.en.yaml` y añade la nueva clave, `article: show: comments:`. Para el valor, utiliza `%count% Comments`:
+
+[[[ code('9c702b7b4a') ]]]
+
+La mayoría de los servicios de traducción saben ignorar el texto en `%`'s, por lo que no deberías preocuparte de que "count" se traduzca accidentalmente.
 
 Vuelve a la aplicación y actualízala. Nada muy emocionante, ¡pero funciona!
 
-Asegurémonos de que cambia dinámicamente. Vuelve a `show.html.twig`, sustituye temporalmente`comments|length` por sólo `1`.
+Asegurémonos de que cambia dinámicamente. De vuelta en `show.html.twig`, sustituye temporalmente`comments|length` por sólo `1`:
+
+[[[ code('64f98f0748') ]]]
 
 Actualiza la página, y ¡genial! "1 Comentario". Pero, hmm, tal vez no sea el fin del mundo, pero esto debería leerse realmente "1 Comentario" - sin la "s".
 
 ## Pluralización
 
-En `messages.en.yaml`, al principio del valor, añade `1 Comment|`.
+En `messages.en.yaml`, al principio del valor, añade `1 Comment|`:
 
-Esta tubería (`|`) indica a Symfony que tienes varias versiones para la pluralización. Vuelve atrás y actualiza la página, y ahora mostrará correctamente "1 Comentario". Asegúrate de que sigue funcionando con más de un comentario volviendo a `comments|length` en `show.html.twig`.
+[[[ code('e666bb3f8f') ]]]
+
+Esta tubería (`|`) indica a Symfony que tienes varias versiones para la pluralización. Vuelve atrás y actualiza la página, y ahora mostrará correctamente "1 Comentario". Asegúrate de que sigue funcionando con más de un comentario volviendo a `comments|length` en `show.html.twig`:
+
+[[[ code('da6c87dc47') ]]]
 
 Actualiza la aplicación, y sí, ¡la pluralización funciona! Symfony sabe que debe utilizar la versión`1 Comment` cuando el recuento es 1, y la versión `%count% Comments` cuando el recuento no es 1.
 
