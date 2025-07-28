@@ -4,7 +4,9 @@ Hasta ahora, hemos estado creando claves de traducción y añadiéndolas manualm
 
 Vamos a traducir los dos elementos de menú que nos quedan: "Tiempo" y "Diario".
 
-Abre `templates/base.html.twig` y busca el texto de estos elementos de menú. Sigue nuestra rutina habitual de buscar una clave y utilizar el filtro `trans`. `{{ 'base.weather'|trans }}` y `{{ 'base.journal'|trans }}`.
+Abre `templates/base.html.twig` y busca el texto de estos elementos de menú. Sigue nuestra rutina habitual de buscar una clave y utilizar el filtro `trans`. `{{ 'base.weather'|trans }}` y `{{ 'base.journal'|trans }}`:
+
+[[[ code('a2e445fc46') ]]]
 
 Bien, en lugar de añadir manualmente estas entradas a nuestro archivo `messages.en.yaml`, dirígete a tu terminal y ejecuta:
 
@@ -22,9 +24,15 @@ Podemos utilizar el comando para añadir automáticamente estas nuevas claves a 
 symfony console translation:extract en --force --format=yaml --as-tree=3
 ```
 
-¡Vuelve a `messages.en.yaml` y compruébalo! Aquí están nuestras nuevas claves! Los valores son los nombres de las claves prefijados con `__` (dos guiones bajos). Esto puede ayudarte a encontrarlas rápidamente si hay muchas. Este prefijo puede personalizarse si lo deseas.
+¡Vuelve a `messages.en.yaml` y compruébalo! ¡Aquí están nuestras nuevas claves!
 
-Sustitúyelos por el texto adecuado: "Tiempo" y "Diario".
+[[[ code('68b48a2e83') ]]]
+
+Los valores son los nombres de las claves prefijados con `__` (dos guiones bajos). Esto puede ayudarte a encontrarlas rápidamente si hay muchas. Este prefijo puede personalizarse si lo deseas.
+
+Sustitúyelos por el texto adecuado: "Tiempo" y "Diario":
+
+[[[ code('1eccaf40db') ]]]
 
 Actualiza tu aplicación y listo... no ha cambiado nada, ¡pero sabemos que funciona!
 
