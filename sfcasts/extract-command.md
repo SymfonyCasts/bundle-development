@@ -84,7 +84,9 @@ the `<target>` text, which is English, with the French translations.
 
 When you get it back, just rename it to `messages.fr.xliff` and place it
 back in the `translations/` directory. Just fudge the first `<target>`
-to read "(French) Local Asteroids".
+to read "(French) Local Asteroids":
+
+[[[ code('066833f235') ]]]
 
 Back in our app, switch to the French version of this page and boom!
 "(French) Local Asteroids".
