@@ -80,7 +80,7 @@
         </div>
         <footer class="py-8">
             <div class="text-white text-center">
-                {{ 'base.footer'|trans|raw }}
+                {{ 'base.footer'|trans({'%heart%': '<i class="fa fa-heart text-red-600"></i>', '%link%': '<a class="underline text-[#0286C4]" href="https://symfonycasts.com">SymfonyCasts</a>'})|raw }}
             </div>
         </footer>
     </body>

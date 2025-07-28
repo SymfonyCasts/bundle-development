@@ -1,6 +1,6 @@
 base:
     local_asteroids: "Local Asteroids"
-    footer: 'Made with <i class="fa fa-heart text-red-600"></i> by the guys and gals at <a class="underline text-[#0286C4]" href="https://symfonycasts.com">SymfonyCasts</a>'
+    footer: 'Made with %heart% by the guys and gals at %link%'
 
 article:
     show:
