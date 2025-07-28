@@ -1,0 +1,182 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:04.136 align:middle
+¡Adelante! Busquemos un
+escenario de traducción complejo.
+
+00:00:04.686 --> 00:00:07.826 align:middle
+En la página del artículo, desplázate hacia
+abajo y encuentra la sección de comentarios.
+
+00:00:08.276 --> 00:00:13.226 align:middle
+Esta cabecera "3 Comentarios" es dinámica, el
+número cambia en función del número de comentarios.
+
+00:00:13.846 --> 00:00:17.926 align:middle
+Busca este texto en
+templates/article/show.html.twig.
+
+00:00:18.926 --> 00:00:21.506 align:middle
+Aquí está el valor
+dinámico: comments|length.
+
+00:00:22.096 --> 00:00:25.676 align:middle
+Podrías pensar en traducir simplemente "Comentarios"
+y no preocuparte por la parte dinámica,
+
+00:00:25.946 --> 00:00:29.636 align:middle
+pero ciertos idiomas pueden tener variaciones
+alternativas en el orden de las palabras.
+
+00:00:29.766 --> 00:00:33.846 align:middle
+Como "3 Comments" en inglés frente
+a "Comments 3" en otro idioma.
+
+00:00:34.226 --> 00:00:37.326 align:middle
+Por tanto, necesitamos que el texto de
+traducción incluya la parte dinámica.
+
+00:00:37.856 --> 00:00:38.856 align:middle
+¿Cómo lo hacemos?
+
+00:00:39.086 --> 00:00:41.286 align:middle
+¡Marcadores de posición
+de traducción al rescate!
+
+00:00:41.806 --> 00:00:43.796 align:middle
+Borra todo este texto, e inventa una clave:
+
+00:00:44.136 --> 00:00:50.316 align:middle
+ya que estamos en article/show.html.twig,
+utiliza article.show.comments.
+
+00:00:50.726 --> 00:00:54.396 align:middle
+Añade |trans, y como primer argumento
+del filtro, añade una matriz.
+
+00:00:54.966 --> 00:01:00.196 align:middle
+Se trata de una matriz clave-valor, donde la clave es el
+marcador de posición y el valor es el valor dinámico.
+
+00:01:00.636 --> 00:01:03.266 align:middle
+Para la clave, utiliza %count%.
+
+00:01:03.766 --> 00:01:06.726 align:middle
+Las claves envueltas en %'s son una
+convención estándar de Symfony. Para
+
+00:01:07.186 --> 00:01:13.636 align:middle
+el valor, utiliza comments|length: Ahora,
+abre nuestro archivo messages.en.yaml
+
+00:01:13.636 --> 00:01:18.576 align:middle
+y añade la nueva clave,
+article: show: comments: . Para
+
+00:01:18.646 --> 00:01:27.026 align:middle
+el valor, utiliza %count% Comments: La mayoría de los
+servicios de traducción saben ignorar el texto en %'s,
+
+00:01:27.166 --> 00:01:30.396 align:middle
+por lo que no deberías preocuparte de
+que "count" se traduzca accidentalmente.
+
+00:01:31.006 --> 00:01:32.386 align:middle
+Vuelve a la aplicación y actualízala.
+
+00:01:33.606 --> 00:01:35.566 align:middle
+Nada muy emocionante, ¡pero funciona!
+
+00:01:36.086 --> 00:01:37.726 align:middle
+Asegurémonos de que cambia dinámicamente.
+
+00:01:38.066 --> 00:01:42.936 align:middle
+Vuelve a show.html.twig, sustituye
+temporalmente comments|length
+
+00:01:43.006 --> 00:01:46.956 align:middle
+por sólo 1: Actualiza la página, y ¡genial!
+
+00:01:47.186 --> 00:01:48.316 align:middle
+"1 Comentario".
+
+00:01:48.696 --> 00:01:51.356 align:middle
+Pero, hmm, quizás no sea el fin del mundo,
+
+00:01:51.356 --> 00:01:54.186 align:middle
+pero en realidad debería decir
+"1 Comentario" - sin la "s". De
+
+00:01:54.696 --> 00:02:01.926 align:middle
+vuelta en messages.en.yaml, al principio del
+valor, añade 1 Comment|: Esta tubería (|) indica
+
+00:02:01.926 --> 00:02:04.926 align:middle
+a Symfony que tienes varias
+versiones para la pluralización.
+
+00:02:05.486 --> 00:02:10.236 align:middle
+Vuelve atrás y actualiza la página, y
+ahora mostrará correctamente "1 Comentario".
+
+00:02:10.836 --> 00:02:15.326 align:middle
+Asegúrate de que sigue funcionando con más
+de un comentario volviendo a comments|length
+
+00:02:15.436 --> 00:02:21.596 align:middle
+en show.html.twig: ¡Refresca la aplicación,
+y sí, la pluralización funciona!
+
+00:02:22.126 --> 00:02:25.256 align:middle
+Symfony sabe que debe utilizar la versión
+1 Comment cuando el recuento es 1,
+
+00:02:25.426 --> 00:02:29.066 align:middle
+y la versión %count% Comments
+cuando el recuento no es 1.
+
+00:02:29.726 --> 00:02:33.666 align:middle
+Vale la pena señalar que Symfony es
+compatible con el MessageFormat oficial de ICU.
+
+00:02:34.066 --> 00:02:36.316 align:middle
+Para habilitarlo, tienes que
+ajustar los nombres de archivo
+
+00:02:36.316 --> 00:02:41.336 align:middle
+de tus archivos de traducción
+para añadir este texto +intl-icu.
+
+00:02:42.026 --> 00:02:43.696 align:middle
+Los marcadores de posición se
+manejan de forma un poco diferente.
+
+00:02:44.016 --> 00:02:47.776 align:middle
+En el texto de traducción, encierra la
+clave del marcador de posición entre llaves.
+
+00:02:48.046 --> 00:02:51.796 align:middle
+Luego, cuando pases la clave del marcador de
+posición, no necesitas envolverla en nada.
+
+00:02:52.426 --> 00:02:54.466 align:middle
+También hay un potente sistema de condiciones.
+
+00:02:55.416 --> 00:02:59.566 align:middle
+Este ejemplo muestra cómo puedes cambiar el mensaje
+basándote en un marcador de posición gender.
+
+00:03:00.156 --> 00:03:02.096 align:middle
+La pluralización también es más potente.
+
+00:03:02.486 --> 00:03:06.726 align:middle
+Puedes utilizar el sistema de condiciones para
+crear reglas de pluralización realmente precisas.
+
+00:03:07.286 --> 00:03:11.026 align:middle
+Es algo que debes comprobar si lo necesitas, pero
+por ahora nos quedaremos con el sistema básico.
+
+00:03:11.846 --> 00:03:15.836 align:middle
+A continuación, veremos cómo tratar el
+texto de traducción que contiene HTML.
