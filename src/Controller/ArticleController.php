@@ -10,7 +10,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ArticleController extends AbstractController
 {
-    #[Route('/', name: 'app_homepage')]
+    #[Route([
+        'en' => '/en',
+        'fr' => '/fr',
+        'es' => '/es',
+    ], name: 'app_homepage')]
     public function index(ArticleRepository $articles): Response
     {
         return $this->render('article/index.html.twig', [
