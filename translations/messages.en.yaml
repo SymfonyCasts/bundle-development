@@ -1,2 +1,6 @@
 base:
     local_asteroids: "Local Asteroids"
+
+article:
+    show:
+        comments: '%count% Comments'
