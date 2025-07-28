@@ -10,15 +10,21 @@ Así que necesitamos el HTML en el texto de traducción. Veamos dos enfoques dif
 
 En `base.html.twig`, busca el texto del pie de página.
 
-La solución más sencilla es añadir directamente el texto, con HTML y todo, como valor de traducción. Para ello, selecciona todo el texto y córtalo. Para la clave, utiliza `'base.footer'|trans`.
+La solución más sencilla es añadir directamente el texto, con HTML y todo, como valor de traducción. Para ello, selecciona todo el texto y córtalo. Para la clave, utiliza `'base.footer'|trans`:
 
-En `messages.en.yaml`, debajo de `base:`, añade `footer:`, y dentro de las comillas simples, pega. Necesitamos utilizar comillas simples aquí porque el HTML contiene comillas dobles.
+[[[ code('1546ad0f32') ]]]
+
+En `messages.en.yaml`, debajo de `base:`, añade `footer:`, y dentro de las comillas simples, pega. Necesitamos utilizar comillas simples aquí porque el HTML contiene comillas dobles:
+
+[[[ code('4a61f1ed0e') ]]]
 
 Vuelve a nuestra aplicación y actualiza... Esto no está bien. Twig hace esto por defecto para evitar ataques XSS a partir de datos enviados por el usuario. En este caso concreto, podemos desactivar este comportamiento con seguridad, ya que tenemos el control total del texto.
 
-De vuelta en `base.html.twig`, añade `|raw` después de `trans` para desactivar el escape.
+De vuelta en `base.html.twig`, añade `|raw` después de `trans` para desactivar el escape:
 
-Actualiza... y ¡Voilà! ¡Funciona!
+[[[ code('5ecb4ebf6b') ]]]
+
+Actualizar... y ¡Voilà! ¡Funciona!
 
 Esto es rápido y fácil, pero tiene algunos inconvenientes. En primer lugar, mezcla HTML en nuestro texto de traducción, lo que puede dificultar su lectura y mantenimiento. En segundo lugar, duplica el HTML en cada archivo de traducción, lo que puede dificultar la actualización del HTML más adelante.
 
@@ -28,13 +34,21 @@ Probemos un enfoque diferente: añadir el HTML como marcadores de posición.
 
 En `messages.en.yaml`, copia el texto completo, y en `base.html.twig`, debajo de nuestra traducción del pie de página, pégalo temporalmente.
 
-Primero, copia el HTML del icono, y en el filtro `trans`, añádelo como marcador de posición:`'%heart%': ''`, y pégalo. Ahora, copia el HTML del enlace y añádelo como otro marcador de posición: `'%link%': ''` y pega. Como todavía estamos renderizando HTML, el filtro `|raw` sigue siendo necesario.
+Primero, copia el HTML del icono, y en el filtro `trans`, añádelo como marcador de posición:`'%heart%': ''`, y pégalo. Ahora, copia el HTML del enlace y añádelo como otro marcador de posición: `'%link%': ''`, pega:
 
-Borra la línea temporal que hemos pegado y vuelve a `messages.en.yaml`. Sustituye el HTML del icono por `'%heart%'` y el HTML del enlace por`'%link%'`. De inmediato, esto parece mucho más limpio y fácil de leer.
+[[[ code('5ecb4ebf6b') ]]]
+
+Como todavía estamos renderizando HTML, el filtro `|raw` sigue siendo necesario.
+
+Elimina la línea temporal que hemos pegado y vuelve a `messages.en.yaml`. Sustituye el HTML del icono por `'%heart%'` y el HTML del enlace por`'%link%'`:
+
+[[[ code('1e9ce5c320') ]]]
+
+De inmediato, esto parece mucho más limpio y fácil de leer.
 
 Vale, vuelve a la aplicación y actualiza... ¡Eh! ¡Un error de sintaxis!
 
-Ahh, los marcadores de posición de `trans` deben envolverse en una matriz. En `base.html.twig`, envuélvelos entre llaves.
+Ahh, los marcadores de posición `trans` tienen que estar envueltos en una matriz. En `base.html.twig`, envuélvelos entre llaves.
 
 Actualiza... desplázate hacia abajo... ¡ya está!
 
