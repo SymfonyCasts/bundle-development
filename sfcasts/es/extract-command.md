@@ -60,10 +60,12 @@ En nuestro directorio `translations/`, tenemos un nuevo archivo: `messages.en.xl
 
 No te preocupes: ¡a los programas de traducción les encanta! Sólo tienes que enviarles este archivo y decirles que intercambien el texto de `<target>`, que es inglés, con las traducciones al francés.
 
-Cuando te lo devuelvan, cámbiale el nombre a `messages.fr.xliff` y vuelve a colocarlo en el directorio `translations/`. Sólo tienes que cambiar el primer `<target>`para que diga "(Francés) Asteroides Locales".
+Cuando te lo devuelvan, cámbiale el nombre a `messages.fr.xliff` y vuelve a colocarlo en el directorio `translations/`. Sólo tienes que cambiar el primer `<target>`para que diga "(Francés) Asteroides Locales":
 
-De vuelta en nuestra aplicación, cambia a la versión francesa de esta página y ¡boom! "(Francés) Asteroides Locales".
+[[[ code('066833f235') ]]]
 
-Vale, ya está bien de XML por hoy - borra `messages.fr.xliff`.
+De vuelta en nuestra aplicación, cambia a la versión francesa de esta página y ¡bum! "(Francés) Asteroides Locales".
+
+Vale, ya está bien de XML por hoy: borra `messages.fr.xliff`.
 
 ¿Y si no tienes un servicio de traducción al que puedas enviar estos archivos? No hay problema Hay soluciones basadas en la nube que pueden ayudarte, ¡y Symfony tiene integraciones para ellas! ¡Vamos a comprobarlo!
