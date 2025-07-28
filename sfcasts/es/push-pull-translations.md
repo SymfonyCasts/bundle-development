@@ -30,7 +30,7 @@ Probablemente haya una forma de aplicar en bloque estas sugerencias, pero creo q
 
 ## Guardar y extraer traducciones
 
-Parece que todo esto se guarda automáticamente, así que sólo tienes que pulsar la "flecha atrás" para volver al panel de control del proyecto. Genial, ¡100% para los dos idiomas! Es hora de volver a cargarlas en nuestro proyecto
+Parece que todo esto se guarda automáticamente, así que sólo tienes que pulsar la "flecha atrás" para volver al panel de control del proyecto. Genial, ¡100% para los dos idiomas! ¡Es hora de volver a cargarlas en nuestro proyecto!
 
 Vuelve a tu terminal y ejecuta:
 
@@ -44,13 +44,17 @@ Cuando empujamos, supo empujar todos los dominios, pero para tirar, necesitas es
 
 De vuelta a tu IDE, en el directorio `translations`, se ha actualizado `messages.fr.yaml` y se ha creado un nuevo `messages.es.yaml`. ¡Ábrelos! Oh sí, ¡dulces, dulces traducciones!
 
+[[[ code('880cb487a5') ]]]
+
+[[[ code('3240d9ac1f') ]]]
+
 ## Probando tus traducciones
 
-¡El momento de la verdad! Volvamos a nuestra aplicación y cambiemos el idioma a "Francés" ¡Impresionante! El menú es francés, y si nos desplazamos hacia abajo, ¡aquí está el pie de página en francés!
+¡El momento de la verdad! Volvemos a nuestra aplicación y cambiamos el idioma a "francés" ¡Impresionante! El menú es francés, y si nos desplazamos hacia abajo, ¡aquí está el pie de página en francés!
 
 Cambia a español, el menú es español, el pie de página es español, ¡bien!
 
-Puedes repetir este proceso de empujar, traducir en Crowdin, y tirar, una y otra vez a medida que añades más traducciones. Crowdin hará un seguimiento de lo que ya has traducido, para que tú sólo tengas que centrarte en las cadenas nuevas.
+Puedes repetir este proceso de empujar, traducir en Crowdin, y tirar, una y otra vez a medida que añades más traducciones. Crowdin hará un seguimiento de lo que ya has traducido, para que tú sólo tengas que centrarte en las nuevas cadenas.
 
 Y esto es todo sobre los aspectos básicos de las traducciones con Symfony Seguro que puedes profundizar más.
 
