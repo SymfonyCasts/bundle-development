@@ -42,7 +42,6 @@ file first), then generate a migration, migrate, and load the fixtures:
 
 ```bash
 symfony console doctrine:database:create
-symfony console make:migration
 symfony console doctrine:migrations:migrate
 symfony console doctrine:fixtures:load
 ```
