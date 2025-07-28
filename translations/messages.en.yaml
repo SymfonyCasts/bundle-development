@@ -3,4 +3,4 @@ base:
 
 article:
     show:
-        comments: '%count% Comments'
+        comments: '1 Comment|%count% Comments'
