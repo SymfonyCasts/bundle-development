@@ -4,6 +4,6 @@ controllers:
         namespace: App\Controller
     type: attribute
     prefix:
-        en: /en
+        en: ''
         fr: /fr
         es: /es
