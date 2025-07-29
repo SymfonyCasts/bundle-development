@@ -1,0 +1,231 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:02.056 align:middle
+¿Has terminado los deberes?
+
+00:00:02.376 --> 00:00:03.516 align:middle
+No te preocupes, ¡yo tampoco!
+
+00:00:03.966 --> 00:00:07.256 align:middle
+Dejemos eso de lado por ahora y
+veamos cómo depurar traducciones.
+
+00:00:07.486 --> 00:00:09.296 align:middle
+De todas formas, ¡esto te
+será útil para los deberes!
+
+00:00:09.876 --> 00:00:14.296 align:middle
+En la página principal en inglés, puede que ya hayas notado
+este nuevo icono en la barra de herramientas de depuración web.
+
+00:00:14.706 --> 00:00:16.016 align:middle
+Es para las traducciones.
+
+00:00:16.346 --> 00:00:18.116 align:middle
+Pasa el ratón por encima
+para ver lo que nos da.
+
+00:00:18.606 --> 00:00:24.026 align:middle
+"Configuración regional predeterminada: ES" - se trata de un error,
+no es la configuración regional por defecto de nuestra aplicación,
+
+00:00:24.186 --> 00:00:26.426 align:middle
+sino la configuración regional
+utilizada para esta petición.
+
+00:00:27.006 --> 00:00:29.886 align:middle
+"Mensajes perdidos: 0" - el
+número de mensajes que estamos
+
+00:00:29.886 --> 00:00:34.196 align:middle
+intentando traducir (utilizando el filtro Twig
+de trans o el servicio TranslatorInterface )
+
+00:00:34.366 --> 00:00:37.906 align:middle
+que no tienen una entrada en
+nuestro archivo messages.en.yaml.
+
+00:00:38.556 --> 00:00:42.276 align:middle
+"Mensajes fallidos: 0" - el número
+de mensajes que tienen una traducción
+
+00:00:42.276 --> 00:00:48.156 align:middle
+en la configuración regional por defecto de nuestra aplicación, Inglés,
+pero no en la configuración regional actual, "Mensajes definidos: 2" -
+
+00:00:48.486 --> 00:00:52.626 align:middle
+el número de mensajes que se han encontrado y utilizado
+con éxito para la configuración regional actual.
+
+00:00:53.426 --> 00:00:56.036 align:middle
+Todo ello en el contexto
+de la petición actual.
+
+00:00:56.306 --> 00:00:58.726 align:middle
+Verás números distintos
+para peticiones diferentes.
+
+00:00:59.266 --> 00:01:02.036 align:middle
+Haz clic en el botón para ver el
+"Panel del Perfil de Traducción".
+
+00:01:02.586 --> 00:01:05.096 align:middle
+Esto nos muestra aún más detalles
+para cada una de las anteriores.
+
+00:01:05.496 --> 00:01:09.086 align:middle
+El dominio, los mensajes, los tiempos
+utilizados y una vista previa.
+
+00:01:09.396 --> 00:01:10.636 align:middle
+¡Incluso los parámetros utilizados!
+
+00:01:11.266 --> 00:01:13.486 align:middle
+Veamos qué aspecto tiene esto para
+la página de inicio en francés.
+
+00:01:14.256 --> 00:01:18.136 align:middle
+Enseguida vemos que el icono se resalta en
+amarillo para indicar una "advertencia".
+
+00:01:18.486 --> 00:01:23.896 align:middle
+Y efectivamente, no tenemos los 2 mensajes definidos para el
+francés, así que está utilizando el fallback en inglés.
+
+00:01:24.466 --> 00:01:25.596 align:middle
+Haz clic en el perfil.
+
+00:01:25.936 --> 00:01:28.946 align:middle
+0 mensajes definidos, salta
+a la pestaña Fallback
+
+00:01:28.946 --> 00:01:31.536 align:middle
+para ver los mensajes en inglés que
+se están utilizando como fallback.
+
+00:01:32.156 --> 00:01:35.306 align:middle
+Esto está muy bien para depurar las
+traducciones de la petición actual,
+
+00:01:35.486 --> 00:01:38.996 align:middle
+pero ¿y para obtener el estado global
+de la traducción de todo nuestro sitio?
+
+00:01:39.586 --> 00:01:45.926 align:middle
+Ve a tu terminal y ejecuta: symfony
+console debug:translation en Genial,
+
+00:01:46.126 --> 00:01:49.496 align:middle
+estos son todos los mensajes de traducción
+al inglés de todo nuestro sitio.
+
+00:01:49.816 --> 00:01:50.656 align:middle
+¿Cómo funciona?
+
+00:01:51.116 --> 00:01:53.296 align:middle
+Busca en todos tus archivos PHP y Twig
+
+00:01:53.296 --> 00:01:57.166 align:middle
+, y encuentra todos los lugares en los que
+utilizas el filtro TranslatorInterface y trans.
+
+00:01:57.566 --> 00:01:59.426 align:middle
+A continuación, busca las
+claves que se están utilizando
+
+00:01:59.636 --> 00:02:02.636 align:middle
+y comprueba si tienen una traducción disponible
+para la configuración regional en cuestión.
+
+00:02:03.386 --> 00:02:06.756 align:middle
+Una cosa a tener en cuenta es que esto no
+puede analizar traducciones dinámicas,
+
+00:02:06.906 --> 00:02:09.496 align:middle
+como $translator->trans($variable).
+
+00:02:10.056 --> 00:02:11.856 align:middle
+Sólo funciona con cadenas estáticas
+
+00:02:12.006 --> 00:02:18.336 align:middle
+, como $translator->trans('some.key')
+o {{ 'some.key'|trans }}.
+
+00:02:18.916 --> 00:02:20.816 align:middle
+La columna "Estado" nos muestra el estado.
+
+00:02:20.956 --> 00:02:22.166 align:middle
+¡Vacío significa bueno!
+
+00:02:22.946 --> 00:02:25.396 align:middle
+Ejecuta el mismo comando, pero para fr:
+
+00:02:25.396 --> 00:02:30.766 align:middle
+symfony console debug:translation
+fr Vaya, ¡muchos problemas!
+
+00:02:31.246 --> 00:02:34.256 align:middle
+El "Estado" en este caso se muestra
+como "ausente", pero en realidad,
+
+00:02:34.396 --> 00:02:37.376 align:middle
+está utilizando el fallback inglés,
+del que podemos ver la vista previa.
+
+00:02:38.116 --> 00:02:40.616 align:middle
+También hay un comando para
+"limpiar" nuestras traducciones:
+
+00:02:40.816 --> 00:02:46.056 align:middle
+symfony console lint:translations
+Lo único que hace es comprobar
+
+00:02:46.056 --> 00:02:50.256 align:middle
+si todos nuestros archivos de traducción son válidos,
+es decir, si se pueden cargar y analizar correctamente.
+
+00:02:50.786 --> 00:02:54.666 align:middle
+Creo que si un archivo no fuera válido, te darías
+cuenta bastante rápido durante el desarrollo local.
+
+00:02:55.016 --> 00:03:00.226 align:middle
+Pero puede ser útil en una canalización de Integración
+Continua (o CI), como las Acciones de GitHub.
+
+00:03:00.636 --> 00:03:03.766 align:middle
+Si hay un problema, este comando
+fallará, y tu trabajo fallará.
+
+00:03:04.446 --> 00:03:07.446 align:middle
+Hablando de CI, un comando
+súper útil para incluir
+
+00:03:07.446 --> 00:03:10.966 align:middle
+en tus trabajos es para tu configuración
+regional predeterminada. debug:translation
+
+00:03:11.456 --> 00:03:14.626 align:middle
+Este comando fallará si
+falta alguna traducción.
+
+00:03:15.036 --> 00:03:18.816 align:middle
+Esto podría ayudar a imponer la norma de que
+"cada Pull Request debe tener traducciones
+
+00:03:18.816 --> 00:03:19.896 align:middle
+para la configuración regional por defecto".
+
+00:03:20.526 --> 00:03:23.336 align:middle
+Dependiendo de lo estricto que quieras
+ser, podrías incluso ejecutar este comando
+
+00:03:23.336 --> 00:03:25.116 align:middle
+para cada una de las configuraciones
+regionales admitidas.
+
+00:03:25.576 --> 00:03:28.266 align:middle
+También fallará si se utilizan fallbacks.
+
+00:03:28.996 --> 00:03:33.516 align:middle
+A continuación, vamos a añadir algunas "traducciones
+que faltan" y a comprobar otro comando para "extraerlas".
