@@ -1,0 +1,206 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:02.636 align:middle
+He aquí otro escenario complejo.
+
+00:00:03.026 --> 00:00:05.046 align:middle
+En nuestra página de inicio,
+desplázate hasta el pie de página.
+
+00:00:05.516 --> 00:00:07.116 align:middle
+Quiero traducir este texto...
+
+00:00:07.146 --> 00:00:09.936 align:middle
+pero, contiene un icono y un enlace HTML...
+
+00:00:10.406 --> 00:00:14.036 align:middle
+Podrías pensar en traducir simplemente las dos
+partes de texto por separado, pero de nuevo,
+
+00:00:14.036 --> 00:00:17.106 align:middle
+en idiomas diferentes, puede que
+deban ordenarse de forma diferente.
+
+00:00:17.106 --> 00:00:21.066 align:middle
+Así que necesitamos el HTML
+en el texto de traducción.
+
+00:00:21.066 --> 00:00:22.666 align:middle
+Veamos dos enfoques diferentes.
+
+00:00:23.036 --> 00:00:26.076 align:middle
+En base.html.twig, busca el
+texto del pie de página.
+
+00:00:26.596 --> 00:00:29.516 align:middle
+La solución más sencilla es
+añadir directamente el texto,
+
+00:00:29.516 --> 00:00:31.926 align:middle
+con HTML y todo, como valor de traducción.
+
+00:00:31.926 --> 00:00:34.516 align:middle
+Para ello, selecciona todo el texto y córtalo.
+
+00:00:34.516 --> 00:00:42.026 align:middle
+Para la clave, utiliza 'base.footer'|trans:
+Encima de messages.en.yaml, debajo de base:,
+
+00:00:42.496 --> 00:00:45.746 align:middle
+añade footer:, y dentro
+de comillas simples, pega.
+
+00:00:46.606 --> 00:00:50.456 align:middle
+Necesitamos utilizar comillas simples aquí
+porque el HTML contiene comillas dobles:
+
+00:00:50.966 --> 00:00:52.506 align:middle
+Vuelve a nuestra aplicación y actualiza...
+
+00:00:53.436 --> 00:00:54.846 align:middle
+Esto no está bien.
+
+00:00:55.206 --> 00:00:56.726 align:middle
+El HTML ha sido escapado.
+
+00:00:57.326 --> 00:01:01.536 align:middle
+Twig hace esto por defecto para evitar ataques
+XSS a partir de datos enviados por el usuario.
+
+00:01:01.536 --> 00:01:04.986 align:middle
+En este caso concreto, podemos desactivar
+este comportamiento con seguridad
+
+00:01:04.986 --> 00:01:06.966 align:middle
+, ya que tenemos el control total del texto.
+
+00:01:07.416 --> 00:01:14.306 align:middle
+De vuelta en base.html.twig, añade |raw después
+de trans para desactivar el escape: Actualizar...
+
+00:01:14.346 --> 00:01:16.276 align:middle
+y ¡Voilà!
+
+00:01:16.356 --> 00:01:19.916 align:middle
+¡Funciona! Esto es rápido y fácil,
+pero tiene algunos inconvenientes.
+
+00:01:19.916 --> 00:01:25.686 align:middle
+En primer lugar, mezcla HTML en nuestro texto de traducción,
+lo que puede dificultar su lectura y mantenimiento.
+
+00:01:25.686 --> 00:01:30.966 align:middle
+En segundo lugar, duplica el HTML en cada
+archivo de traducción, lo que puede dificultar
+
+00:01:30.966 --> 00:01:32.846 align:middle
+su actualización posterior.
+
+00:01:33.276 --> 00:01:37.096 align:middle
+Probemos un enfoque diferente: añadir
+el HTML como marcadores de posición.
+
+00:01:37.666 --> 00:01:43.066 align:middle
+En messages.en.yaml, copia el texto
+completo, y en base.html.twig,
+
+00:01:43.226 --> 00:01:45.836 align:middle
+debajo de nuestra traducción del pie
+de página, pégalo temporalmente.
+
+00:01:45.836 --> 00:01:50.136 align:middle
+Primero, copia el HTML del
+icono, y en el filtro trans
+
+00:01:50.236 --> 00:01:55.706 align:middle
+, añádelo como marcador de
+posición: '%heart%': '', y pégalo.
+
+00:01:56.196 --> 00:02:05.876 align:middle
+Ahora, copia el HTML del enlace y añádelo como
+otro marcador de posición: '%link%': '', y pégalo:
+
+00:02:06.526 --> 00:02:10.126 align:middle
+Como todavía estamos renderizando HTML,
+el filtro |raw sigue siendo necesario.
+
+00:02:10.816 --> 00:02:14.596 align:middle
+Borra la línea temporal que hemos
+pegado y vuelve a messages.en.yaml.
+
+00:02:14.596 --> 00:02:23.396 align:middle
+Sustituye el HTML del icono por '%heart%' y
+el HTML del enlace por '%link%': De inmediato,
+
+00:02:23.396 --> 00:02:25.426 align:middle
+esto parece mucho más limpio y fácil de leer.
+
+00:02:26.056 --> 00:02:28.056 align:middle
+Vale, vuelve a la aplicación y actualiza...
+
+00:02:28.726 --> 00:02:30.346 align:middle
+¡Eh! ¡Un error de sintaxis!
+
+00:02:30.956 --> 00:02:33.866 align:middle
+Ahh, los marcadores de posición de
+trans deben envolverse en una matriz.
+
+00:02:34.376 --> 00:02:37.846 align:middle
+En base.html.twig, envuélvelos entre llaves.
+
+00:02:40.886 --> 00:02:41.466 align:middle
+Actualiza...
+
+00:02:41.916 --> 00:02:42.666 align:middle
+desplázate hacia abajo...
+
+00:02:43.016 --> 00:02:43.636 align:middle
+¡ya está!
+
+00:02:44.126 --> 00:02:46.956 align:middle
+Este enfoque es mucho más limpio,
+pero también tiene un inconveniente.
+
+00:02:47.396 --> 00:02:51.536 align:middle
+¿Qué pasaría si el HTML de nuestro enlace tuviera
+texto o un atributo que hubiera que traducir?
+
+00:02:52.076 --> 00:02:53.816 align:middle
+No hay una forma sencilla de manejar esto.
+
+00:02:53.996 --> 00:02:56.296 align:middle
+Tendrías que traducir
+los elementos por separado
+
+00:02:56.456 --> 00:02:59.936 align:middle
+o hacer algunas traducciones anidadas:
+como traducir el marcador de posición.
+
+00:03:00.586 --> 00:03:02.756 align:middle
+Esperemos que este problema
+no surja demasiado a menudo.
+
+00:03:02.756 --> 00:03:05.536 align:middle
+Con esto hemos cubierto todas
+las situaciones habituales.
+
+00:03:05.886 --> 00:03:08.826 align:middle
+No voy a hacer que me veas traducir
+el resto del sitio porque sería más
+
+00:03:08.826 --> 00:03:11.166 align:middle
+de lo mismo, aburrido, Kevin bla bla bla.
+
+00:03:11.166 --> 00:03:13.356 align:middle
+Así que lo dejaré como tarea para casa:
+
+00:03:13.616 --> 00:03:18.046 align:middle
+¡Vous pouvez l'envoyer vers
+/dev/null une fois que c'est fait!
+
+00:03:18.386 --> 00:03:19.556 align:middle
+Oh, tío... ¡eso ha estado mal!
+
+00:03:20.246 --> 00:03:23.486 align:middle
+A continuación, veremos las herramientas de
+depuración de traducciones que proporciona Symfony
