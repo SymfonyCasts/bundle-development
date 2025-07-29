@@ -18,9 +18,9 @@ Haz clic en "Ver cadenas". Aquí podemos ver todas nuestras traducciones al ingl
 
 Si tienes un equipo de traducción, puedes invitarles a este proyecto, ¡y podrán empezar a completar las traducciones que faltan!
 
-Mi equipo de traducción está fuera del planeta de permiso... pero podemos automatizar las traducciones con la función de sugerencias de Crowdin. Así podrán revisarlas cuando vuelvan.
+Mi equipo de traducción está fuera del planeta de permiso... pero podemos automatizar las traducciones con la función de sugerencias de Crowdin. Así mi equipo podrá revisarlas cuando vuelva.
 
-Selecciona la entrada vacía "Francés". Este panel de la derecha muestra sugerencias de varios motores de traducción. Todas se parecen bastante, así que pasa el ratón por encima de la primera y haz clic en este botón "Disk" para aplicarla.
+Selecciona la entrada vacía "Francés" para la primera cadena. Este panel de la derecha muestra sugerencias de varios motores de traducción. Todas se parecen bastante, así que pasa el ratón por encima de la primera y haz clic en este botón "Disco" para aplicarla.
 
 ¡Genial! La traducción al francés de "Asteroides locales" ya está rellenada y ha cambiado automáticamente a la entrada en español. Haz lo mismo con ésta.
 
@@ -38,7 +38,7 @@ Vuelve a tu terminal y ejecuta:
 symfony console translation:pull --domains=messages --format=yaml --as-tree=3
 ```
 
-Cuando empujamos, supo empujar todos los dominios, pero para tirar, necesitas especificar el dominio a tirar. Los queremos en formato YAML, y la opción "as-tree" sangrará las traducciones por nosotros.
+Cuando empujamos, supo empujar todos los dominios, pero para tirar, necesitas especificar el dominio. Las queremos en formato YAML, y la opción "as-tree" sangrará las traducciones por nosotros.
 
 ¡Verde significa bien! ¡Vamos a comprobarlas!
 
@@ -56,16 +56,16 @@ Cambia a español, el menú es español, el pie de página es español, ¡bien!
 
 Puedes repetir este proceso de empujar, traducir en Crowdin, y tirar, una y otra vez a medida que añades más traducciones. Crowdin hará un seguimiento de lo que ya has traducido, para que tú sólo tengas que centrarte en las nuevas cadenas.
 
-Y esto es todo sobre los aspectos básicos de las traducciones con Symfony Seguro que puedes profundizar más.
+Y esto es todo sobre los aspectos básicos de las traducciones con Symfony, pero sin duda puedes profundizar más.
 
 ## Componente Traductor UX
 
-Por ejemplo, si necesitas traducciones en JavaScript, existe un componente [Symfony UX Translator](https://symfony.com/bundles/ux-translator/current/index.html). Gestionas tus archivos de traducción del mismo modo, pero también puedes incluir las claves en tus archivos JavaScript. ¡Muy útil!
+Por ejemplo, si necesitas traducciones en JavaScript, existe un componente [Symfony UX Translator](https://symfony.com/bundles/ux-translator/current/index.html). Gestiona tus archivos de traducción como hemos mostrado aquí, pero también puedes incluir las claves en tus archivos JavaScript. ¡Muy útil!
 
 ## Traducciones de bases de datos
 
-Hay un gran gato espacial en la habitación que aún no hemos tratado: Las traducciones de bases de datos... Como he dicho antes, el componente de traducción de Symfony no gestiona las traducciones de bases de datos. Tendremos que recurrir a una solución de terceros para ello. Una muy popular es este paquete [Doctrine Extensions](https://github.com/doctrine-extensions/DoctrineExtensions). Tiene un comportamiento ["Translatable"](https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/translatable.md) que te permite traducir tus entidades. También hay un [Symfony Bundle](https://symfony.com/bundles/StofDoctrineExtensionsBundle/current/index.html) para conectarlo todo.
+Hay un gran gato espacial en la habitación que aún no hemos abordado: Las traducciones de bases de datos... Como he dicho antes, el componente de traducción de Symfony no gestiona las traducciones de bases de datos. Tendremos que recurrir a una solución de terceros para ello. Una muy popular es este paquete [Doctrine Extensions](https://github.com/doctrine-extensions/DoctrineExtensions). Tiene un comportamiento ["Translatable"](https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/translatable.md) que te permite traducir tus entidades. También hay un [Symfony Bundle](https://symfony.com/bundles/StofDoctrineExtensionsBundle/current/index.html) para conectarlo todo.
 
-Funciona bien, pero puede ser un poco pesado y complejo. Pensando en voz alta, ¡crear un bundle nuevo y moderno para traducir entidades Doctrine sería una adición impresionante al ecosistema Symfony!
+Funciona bien, pero puede ser un poco pesado y complejo. Pensando en voz alta, ¡crear un bundle nuevo y moderno para traducir entidades Doctrine sería una gran adición al ecosistema Symfony!
 
-¡Hasta la próxima! ¡Feliz programación!
+Bueno, ¡hasta la próxima! ¡Feliz programación!
