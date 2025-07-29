@@ -26,9 +26,9 @@ If you have a translation team, you can invite them to this project, and they
 can start filling in the missing translations!
 
 My translation team is off planet on leave... but we can automate the translations
-with Crowdin's suggestions feature. Then they can review when they return.
+with Crowdin's suggestions feature. Then my team can review when they return.
 
-Select the empty "French" input. This panel on the right shows suggestions
+Select the empty "French" input for the first string. This panel on the right shows suggestions
 from various translation engines. These all look pretty much the same, so
 hover over the first one and click this "Disk" button to apply it.
 
@@ -60,7 +60,7 @@ symfony console translation:pull --domains=messages --format=yaml --as-tree=3
 ```
 
 When we pushed, it knew to push all domains, but for pulling, you need to
-specify the domain to pull. We want them in the YAML format, and the "as-tree"
+specify the domain. We want them in the YAML format, and the "as-tree"
 option will indent the translations for us.
 
 Green means good! Let's check them out!
@@ -84,19 +84,19 @@ You can repeat this push, translate on Crowdin, and pull process, over and
 over as you add more translations. Crowdin will keep track of what you've
 already translated, so you can just focus on the new strings.
 
-And that's a wrap for the basics of translations with Symfony! You can
+And that's a wrap for the basics of translations with Symfony, but you can
 certainly dive deeper.
 
 ## UX Translator Component
 
 For instance, if you need translations in JavaScript, there's a
 [Symfony UX Translator](https://symfony.com/bundles/ux-translator/current/index.html)
-component. You manage your translation files the same way, but can also include the keys
+component. You manage your translation files like we've shown here, but can also include the keys
 in your JavaScript files. Neat stuff!
 
 ## Database Translations
 
-There's a big space cat in the room that we haven't addressed yet: Database
+There's a big space cat in the room that we haven't really addressed yet: Database
 translations... As I said earlier, Symfony's translation component
 doesn't handle database translations. We'll need to rely on a third-party
 solution for that. A popular one is this
@@ -110,4 +110,4 @@ It works just fine, but can be a bit heavy and complex. Thinking out loud,
 creating a new, modern bundle for translating Doctrine entities would be an
 awesome addition to the Symfony ecosystem!
 
-'Til next time! Happy coding!
+Alright, 'til next time! Happy coding!
