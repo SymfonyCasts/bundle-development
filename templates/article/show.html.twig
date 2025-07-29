@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Read: {{ article.title }}{% endblock %}
+{% block title %}{{ 'article.show.title'|trans({'%title%': article.title}) }}{% endblock %}
 
 {% block body %}
 
@@ -46,7 +46,7 @@
     <div class="article-text max-w-4xl mx-auto">
         {{ article.content|markdown_to_html }}
 
-        <div class="mt-12 text-lg font-medium">Share:
+        <div class="mt-12 text-lg font-medium">{{ 'article.show.share'|trans }}:
             <i class="text-[#0286C4] pl-1 fa-brands fa-facebook"></i>
             <i class="text-[#0286C4] pl-1 fa-brands fa-bluesky"></i>
             <i class="text-[#0286C4] pl-1 fa-brands fa-reddit"></i>
@@ -83,12 +83,4 @@
         {% endfor %}
     </div>
 </div>
-
-
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-
-    <script src="{{ asset('js/article_show.js') }}"></script>
 {% endblock %}

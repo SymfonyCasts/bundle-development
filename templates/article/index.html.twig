@@ -3,7 +3,7 @@
 {% block body %}
 
     <div class="">
-        <h1 class="text-4xl lg:text-7xl text-white mt-3 lg:mt-6 mb-12 text-center">Your source for the latest news and trends from around the galaxy</h1>
+        <h1 class="text-4xl lg:text-7xl text-white mt-3 lg:mt-6 mb-12 text-center">{{ 'article.index.slogan'|trans }}</h1>
         <div>
             {% for article in articles %}
             <div class="bg-white my-2 rounded-2xl p-5">
@@ -29,17 +29,17 @@
             <div class="relative bg-[#FFE941] rounded-4xl lg:flex lg:justify-between p-4.5 w-[600px]">
                 <img class="absolute bottom-0 left-4 h-[180px] lg:h-[140px]" src="{{ asset('images/icecream.png') }}">
                 <div class="lg:ml-[80px] text-center lg:text-left">
-                    <div class="capitalize font-bold opacity-75">New Flavor</div>
-                    <div class="text-2xl lg:text-[42px]">Space Ice Cream</div>
+                    <div class="capitalize font-bold opacity-75">{{ 'article.index.ad.ice_cream.tag'|trans }}</div>
+                    <div class="text-2xl lg:text-[42px]">{{ 'article.index.ad.ice_cream.title'|trans }}</div>
                 </div>
                 <div class="flex justify-center mt-2">
-                    <button class="rounded-lg p-2.5 text-white bg-black font-bold capitalize self-center">Buy Now</button>
+                    <button class="rounded-lg p-2.5 text-white bg-black font-bold capitalize self-center">{{ 'article.index.ad.buy'|trans }}</button>
                 </div>
             </div>
         </div>
 
         <div class="bg-white rounded-2xl p-7 mt-[80px]">
-            <h3 class="text-6xl font-bold">Trending Quotes</h3>
+            <h3 class="text-6xl font-bold">{{ 'article.index.trending_quotes'|trans }}</h3>
 
             <div class="flex flex-col md:flex-row my-9">
                 <img class="rounded-full h-[75px] w-[75px] outline-8 outline-[#219AD3] outline-offset-4" src="{{ asset('images/suni-williams.png') }}" alt="">

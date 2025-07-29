@@ -2,7 +2,7 @@
 <html lang="{{ app.locale }}">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome to the SpaceBar{% endblock %}</title>
+        <title>{% block title %}{{ 'base.title'|trans }}{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         <script src="https://kit.fontawesome.com/8065240ddb.js" crossorigin="anonymous"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +35,7 @@
                         class="block w-full py-2 px-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         data-action="dropdown#toggle click@window->dropdown#hide keydown.esc@window->dropdown#hide"
                     >
-                        <span class="text-gray-400">Language:</span>
+                        <span class="text-gray-400">{{ 'base.language'|trans }}</span>
                         <strong class="ml-1 uppercase">{{ app.locale }}</strong>
                         <i class="ml-1 fa-solid fa-chevron-down text-gray-400"></i>
                     </a>
@@ -55,14 +55,14 @@
                 </div>
 
                 <form class="max-w-md mx-auto mr-1.5">
-                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">{{ 'base.search_label'|trans }}</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                             </svg>
                         </div>
-                        <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 rounded-[40px] bg-white focus:ring-blue-500 focus:border-blue-500 " placeholder="Search" required />
+                        <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 rounded-[40px] bg-white focus:ring-blue-500 focus:border-blue-500 " placeholder="{{ 'base.search_placeholder'|trans }}" required />
                     </div>
                 </form>
                 <div class="hidden lg:inline-block">
