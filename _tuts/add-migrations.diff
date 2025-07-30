@@ -1,5 +1,5 @@
 diff --git a/README.md b/README.md
-index 64233c0..d177058 100644
+index f214eb0..b31143d 100644
 --- a/README.md
 +++ b/README.md
 @@ -36,13 +36,10 @@ symfony composer install
@@ -15,7 +15,7 @@ index 64233c0..d177058 100644
  ```bash
 -symfony console doctrine:database:create
 -symfony console make:migration
- symfony console foundry:load-stories
+ symfony console foundry:load-fixtures
  ```
  
 diff --git a/migrations/Version20250728205442.php b/migrations/Version20250728205442.php
