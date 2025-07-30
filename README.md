@@ -43,7 +43,7 @@ file first), then generate a migration, migrate, and load the fixtures:
 ```bash
 symfony console doctrine:database:create
 symfony console make:migration
-symfony console foundry:load-stories
+symfony console foundry:load-fixtures
 ```
 
 **Build Tailwind CSS**
