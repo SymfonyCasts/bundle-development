@@ -30,7 +30,7 @@ with Crowdin's suggestions feature. Then my team can review when they return.
 
 Select the empty "French" input for the first string. This panel on the right shows suggestions
 from various translation engines. These all look pretty much the same, so
-hover over the first one and click this "Disk" button to apply it.
+hover over this one and click this "Disk" button to apply it.
 
 Sweet! The French translation for "Local Asteroids" is now filled in and it
 auto-switched to the Spanish input. Do the same for this one.
@@ -40,7 +40,7 @@ Crowdin is telling us there's a spelling mistake... I'm going to just go
 with it as is. This is a good spot to note that with automatic translations,
 you should always have someone fluent in the language review them. Also, with
 translations, context matters, and these small text snippets often lack this.
-For instance, expressions like "A man on the moon" might be translated literally
+For instance, expressions like "The man on the moon" might be translated literally
 and not make sense in the target language.
 
 There's probably a way to bulk-apply these suggestions, but I think Crowdin
