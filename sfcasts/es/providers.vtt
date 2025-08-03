@@ -1,0 +1,259 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.626 align:middle
+Hasta ahora, nos hemos centrado sobre todo
+en traducir nuestro sitio del inglés al...
+
+00:00:05.046 --> 00:00:05.686 align:middle
+Inglés...
+
+00:00:06.046 --> 00:00:07.496 align:middle
+¿Y al francés y al español?
+
+00:00:07.986 --> 00:00:12.196 align:middle
+Hemos hablado un poco de cómo podemos enviar
+manualmente nuestro archivo messages.en.yaml
+
+00:00:12.196 --> 00:00:14.946 align:middle
+a un servicio de traducción para
+que realice estas traducciones.
+
+00:00:15.236 --> 00:00:18.466 align:middle
+Pero hay otra opción: Los
+Proveedores de Traducción de Symfony.
+
+00:00:18.976 --> 00:00:22.346 align:middle
+Se trata de un conjunto de servicios basados
+en la nube que gestionan nuestras traducciones.
+
+00:00:22.796 --> 00:00:27.736 align:middle
+Si tenemos un "equipo" de traducción, pueden acceder
+a estos servicios y traducir nuestros mensajes.
+
+00:00:28.036 --> 00:00:31.976 align:middle
+Pero muchos, si no todos, pueden crear
+automáticamente las traducciones por nosotros.
+
+00:00:32.496 --> 00:00:37.206 align:middle
+Tú "empujas" las traducciones de tu idioma
+predeterminado al proveedor y, una vez traducidas,
+
+00:00:37.366 --> 00:00:39.626 align:middle
+"tiras" de los mensajes traducidos hacia abajo.
+
+00:00:40.216 --> 00:00:42.576 align:middle
+Los documentos de Symfony muestran
+los proveedores compatibles.
+
+00:00:42.936 --> 00:00:46.466 align:middle
+No tengo un favorito concreto y este curso
+no está patrocinado por ninguno de ellos,
+
+00:00:46.716 --> 00:00:50.666 align:middle
+pero me he dado cuenta de que Crowdin ha patrocinado
+a Symfony en el pasado, así que lo utilizaré.
+
+00:00:51.246 --> 00:00:55.366 align:middle
+Empieza instalando el proveedor Crowdin,
+así que copia el comando composer require
+
+00:00:55.566 --> 00:01:01.996 align:middle
+y pégalo en tu terminal: Este paquete
+incluye una receta, así que ejecútala:
+
+00:01:01.996 --> 00:01:06.266 align:middle
+git status Parece una nueva variable
+de entorno y algo de configuración.
+
+00:01:06.996 --> 00:01:13.046 align:middle
+Primero, abre .env y desplázate hasta el
+final, se ha añadido un CROWDIN_DSN comentado.
+
+00:01:13.676 --> 00:01:17.336 align:middle
+A continuación, mira
+config/packages/translation.yaml.
+
+00:01:17.906 --> 00:01:20.666 align:middle
+Se ha añadido el proveedor
+Crowdin, junto con su DSN.
+
+00:01:21.256 --> 00:01:25.106 align:middle
+Como el DSN es una variable de entorno
+sensible, no queremos que se confirme.
+
+00:01:25.376 --> 00:01:28.856 align:middle
+Así que añade un archivo .env.local
+en la raíz de nuestro proyecto.
+
+00:01:30.776 --> 00:01:33.506 align:middle
+Copia el DSN de .env y pégalo aquí.
+
+00:01:34.236 --> 00:01:38.726 align:middle
+Sólo utilizaremos una cuenta personal de Crowdin,
+así que elimina la parte ORGANIZATION_DOMAIN.
+
+00:01:38.726 --> 00:01:42.596 align:middle
+. ¡Es hora de crear y
+configurar una cuenta Crowdin!
+
+00:01:43.056 --> 00:01:45.836 align:middle
+Ve a crowdin.com y regístrate
+para obtener una cuenta gratuita.
+
+00:01:46.336 --> 00:01:50.136 align:middle
+Empiezas con una prueba gratuita de sus funciones
+premium, pero sólo necesitaremos las funciones
+
+00:01:50.136 --> 00:01:51.536 align:middle
+que forman parte de su nivel gratuito.
+
+00:01:52.216 --> 00:01:55.256 align:middle
+Una vez registrado y conectado, accederás
+a esta página del panel de control.
+
+00:01:55.796 --> 00:01:57.566 align:middle
+En primer lugar, necesitamos un token de API.
+
+00:01:57.906 --> 00:02:00.846 align:middle
+Haz clic en tu avatar en la parte superior
+derecha y selecciona "Configuración".
+
+00:02:02.496 --> 00:02:04.866 align:middle
+Haz clic en la pestaña "API"
+y luego en "Nuevo token".
+
+00:02:05.556 --> 00:02:07.606 align:middle
+Para el "Nombre del token",
+utiliza la "Barra espaciadora".
+
+00:02:08.126 --> 00:02:11.606 align:middle
+Para los ámbitos, selecciona el grupo
+"Proyectos" y haz clic en "Crear"...
+
+00:02:12.286 --> 00:02:16.096 align:middle
+Puede que tengas que confirmar tus credenciales,
+pero una vez hecho, verás tu nuevo token.
+
+00:02:16.716 --> 00:02:22.096 align:middle
+Cópialo, y en .env.local, pégalo
+sobre el texto API_TOKEN del DSN.
+
+00:02:22.876 --> 00:02:24.806 align:middle
+De vuelta en Crowdin, "Cierra" el diálogo.
+
+00:02:25.436 --> 00:02:28.206 align:middle
+Ahora necesitamos un ID de proyecto,
+¡así que necesitamos un proyecto!
+
+00:02:28.666 --> 00:02:30.796 align:middle
+En tu panel de control, haz
+clic en "Crear proyecto".
+
+00:02:31.316 --> 00:02:33.596 align:middle
+Nómbralo "Barra Espaciadora"
+y mantenlo como privado.
+
+00:02:33.766 --> 00:02:34.996 align:middle
+¡Esto es algo delicado!
+
+00:02:35.676 --> 00:02:38.666 align:middle
+Elige el "Idioma de origen" - en
+nuestro caso, mantenlo como "Inglés".
+
+00:02:38.976 --> 00:02:43.036 align:middle
+En "Idiomas de destino", busca
+"Francés", el genérico, y selecciónalo.
+
+00:02:43.796 --> 00:02:47.366 align:middle
+Ahora, "Español" - también la
+genérica, y selecciónala también.
+
+00:02:48.126 --> 00:02:50.886 align:middle
+Deja todo lo demás como está
+y haz clic en "Crear proyecto".
+
+00:02:53.666 --> 00:02:55.736 align:middle
+Vale, hay mucho que ver aquí...
+
+00:02:56.076 --> 00:02:58.546 align:middle
+Sólo nos centraremos en un pequeño
+conjunto de estas características.
+
+00:02:59.186 --> 00:03:02.766 align:middle
+Para obtener el " ID del proyecto ", haz
+clic en la pestaña "Panel de control" y,
+
+00:03:02.766 --> 00:03:05.666 align:middle
+en la sección "Detalles",
+copia el "ID del proyecto".
+
+00:03:06.396 --> 00:03:10.636 align:middle
+De vuelta en nuestro archivo .env.local,
+selecciona PROJECT_ID y pégalo.
+
+00:03:11.436 --> 00:03:13.296 align:middle
+De vuelta en Crowdin, haz clic en "Francés".
+
+00:03:13.886 --> 00:03:16.586 align:middle
+Observa que en la URL de
+tu navegador aparece fr.
+
+00:03:17.056 --> 00:03:20.076 align:middle
+Genial, coincide con el código
+regional francés de nuestro proyecto.
+
+00:03:20.656 --> 00:03:22.156 align:middle
+Vuelve atrás y haz clic en "Español".
+
+00:03:22.766 --> 00:03:24.956 align:middle
+Observa que la URL muestra es-ES.
+
+00:03:24.956 --> 00:03:27.616 align:middle
+Esto no coincide con nuestro proyecto.
+
+00:03:27.716 --> 00:03:29.186 align:middle
+Sólo estamos utilizando es.
+
+00:03:29.696 --> 00:03:32.126 align:middle
+Al sincronizar las traducciones,
+esto causará un problema
+
+00:03:32.126 --> 00:03:36.736 align:middle
+, ya que Crowdin no sabrá que nuestro
+es se corresponde con su es-ES.
+
+00:03:37.126 --> 00:03:38.796 align:middle
+Por suerte, Crowdin tiene
+una forma de ayudarnos
+
+00:03:39.436 --> 00:03:42.476 align:middle
+De vuelta al panel de control del proyecto,
+busca y haz clic en la pestaña "Configuración".
+
+00:03:42.996 --> 00:03:44.626 align:middle
+A la izquierda, elige "Idiomas".
+
+00:03:45.056 --> 00:03:49.396 align:middle
+En la parte inferior, en "Añadir códigos de idioma
+personalizados", haz clic en "Mapeo de idioma".
+
+00:03:49.996 --> 00:03:53.236 align:middle
+En este diálogo, en el desplegable
+"Idioma", selecciona "Español".
+
+00:03:53.676 --> 00:03:57.946 align:middle
+En "Marcador de posición", elige "locale",
+y en "Código personalizado", introduce "es".
+
+00:03:58.486 --> 00:03:59.156 align:middle
+Haz clic en "Guardar".
+
+00:03:59.806 --> 00:04:01.106 align:middle
+¡Código de configuración regional asignado!
+
+00:04:01.866 --> 00:04:05.896 align:middle
+A continuación, subiremos nuestras traducciones
+al inglés a Crowdin, haremos algunas traducciones
+
+00:04:06.026 --> 00:04:08.166 align:middle
+y volveremos a bajar las versiones traducidas.
