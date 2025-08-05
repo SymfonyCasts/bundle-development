@@ -1,0 +1,281 @@
+WEBVTT
+
+00:00:01.016 --> 00:00:05.456 align:middle
+Nuestro proyecto "Barra Espacial" en Crowdin está listo y
+configurado para las localizaciones de nuestra aplicación.
+
+00:00:05.736 --> 00:00:07.366 align:middle
+¡Vamos a subir nuestras traducciones!
+
+00:00:07.806 --> 00:00:13.506 align:middle
+En tu terminal, ejecuta: symfony
+console translation:push Vale,
+
+00:00:13.556 --> 00:00:18.176 align:middle
+todas las traducciones de nuestras localizaciones activadas se
+han subido, pero, por supuesto, sólo el inglés tiene alguna.
+
+00:00:18.836 --> 00:00:20.646 align:middle
+Vuelve a Crowdin y actualiza...
+
+00:00:22.586 --> 00:00:26.976 align:middle
+No parece que haya cambiado nada, el francés
+y el español siguen al 0% de traducción.
+
+00:00:27.466 --> 00:00:28.696 align:middle
+Haz clic en "Ver cadenas".
+
+00:00:29.586 --> 00:00:32.306 align:middle
+Aquí podemos ver todas nuestras
+traducciones al inglés a la izquierda.
+
+00:00:32.616 --> 00:00:36.066 align:middle
+A la derecha, tenemos las versiones en
+francés y español, que están vacías.
+
+00:00:36.666 --> 00:00:38.456 align:middle
+Si no ves nuestros locales alternativos,
+
+00:00:38.456 --> 00:00:41.636 align:middle
+haz clic en "Idiomas" en la parte superior,
+selecciónalos y haz clic en "Aplicar".
+
+00:00:41.636 --> 00:00:45.606 align:middle
+Si tienes un equipo de traducción,
+puedes invitarles a este proyecto, ¡y
+
+00:00:45.606 --> 00:00:48.196 align:middle
+podrán empezar a completar
+las traducciones que faltan!
+
+00:00:48.626 --> 00:00:51.016 align:middle
+Mi equipo de traducción está
+fuera del planeta de permiso...
+
+00:00:51.016 --> 00:00:55.106 align:middle
+pero podemos automatizar las traducciones
+con la función de sugerencias de Crowdin.
+
+00:00:55.616 --> 00:00:57.476 align:middle
+Así mi equipo podrá revisarlas cuando vuelva.
+
+00:00:57.476 --> 00:01:00.466 align:middle
+Selecciona la entrada vacía
+"Francés" para la primera cadena.
+
+00:01:01.066 --> 00:01:04.996 align:middle
+Este panel de la derecha muestra sugerencias
+de varios motores de traducción.
+
+00:01:05.446 --> 00:01:07.776 align:middle
+Todas son muy parecidas, así que
+pasa el ratón por encima de esta
+
+00:01:07.776 --> 00:01:09.686 align:middle
+y haz clic en el botón "Disco" para aplicarla.
+
+00:01:09.766 --> 00:01:14.696 align:middle
+¡Genial! La traducción al francés de
+"Asteroides locales" ya está rellenada
+
+00:01:14.756 --> 00:01:17.016 align:middle
+y ha cambiado automáticamente
+a la entrada en español.
+
+00:01:17.466 --> 00:01:18.546 align:middle
+Haz lo mismo con ésta.
+
+00:01:19.166 --> 00:01:22.596 align:middle
+Ahora salta a la siguiente entrada en
+francés: "Aplicar" esta sugerencia.
+
+00:01:23.096 --> 00:01:26.476 align:middle
+Hmm, parece que Crowdin nos está
+diciendo que hay un error ortográfico...
+
+00:01:26.806 --> 00:01:28.516 align:middle
+Voy a dejarlo como está.
+
+00:01:28.926 --> 00:01:32.086 align:middle
+Este es un buen momento para señalar
+que, con las traducciones automáticas
+
+00:01:32.086 --> 00:01:34.966 align:middle
+, siempre debes contar con alguien que
+domine el idioma para que las revise.
+
+00:01:35.536 --> 00:01:41.406 align:middle
+Además, en las traducciones, el contexto es importante, y
+estos pequeños fragmentos de texto a menudo carecen de él.
+
+00:01:41.406 --> 00:01:45.866 align:middle
+Por ejemplo, expresiones como "El hombre
+en la luna" pueden traducirse literalmente
+
+00:01:45.866 --> 00:01:47.966 align:middle
+y no tener sentido en la lengua de destino.
+
+00:01:47.966 --> 00:01:51.366 align:middle
+Probablemente haya una forma de
+aplicar en bloque estas sugerencias,
+
+00:01:51.366 --> 00:01:54.466 align:middle
+pero creo que Crowdin está diseñado
+para fomentar la revisión manual.
+
+00:01:55.006 --> 00:01:57.636 align:middle
+Voy a repasar y aplicar rápidamente
+el resto de las sugerencias.
+
+00:01:58.246 --> 00:02:00.736 align:middle
+¿Notas cómo sabe que no debe
+traducir los marcadores de posición?
+
+00:02:00.736 --> 00:02:04.216 align:middle
+Parece que todo esto se guarda automáticamente,
+así que sólo tienes que pulsar la "flecha atrás"
+
+00:02:04.216 --> 00:02:05.926 align:middle
+para volver al panel de control del proyecto.
+
+00:02:06.616 --> 00:02:09.256 align:middle
+Genial, ¡100% para ambos idiomas!
+
+00:02:09.596 --> 00:02:11.446 align:middle
+¡Es hora de devolverlos a nuestro proyecto!
+
+00:02:11.906 --> 00:02:19.896 align:middle
+Vuelve a tu terminal y ejecuta: symfony
+console translation:pull --domains=messages
+
+00:02:20.246 --> 00:02:28.756 align:middle
+--format=yaml --as-tree=3 Cuando
+empujamos, supo empujar todos los dominios,
+
+00:02:28.896 --> 00:02:31.366 align:middle
+pero para tirar, necesitas
+especificar el dominio.
+
+00:02:32.046 --> 00:02:33.606 align:middle
+Las queremos en formato YAML
+
+00:02:33.606 --> 00:02:36.686 align:middle
+, y la opción "as-tree" sangrará
+las traducciones por nosotros.
+
+00:02:37.286 --> 00:02:38.296 align:middle
+¡Verde significa bien!
+
+00:02:38.736 --> 00:02:39.646 align:middle
+¡Vamos a comprobarlas!
+
+00:02:40.166 --> 00:02:45.776 align:middle
+De vuelta a tu IDE, en el directorio
+translations, se ha actualizado messages.fr.yaml
+
+00:02:45.996 --> 00:02:48.976 align:middle
+y se ha creado un nuevo messages.es.yaml.
+
+00:02:49.396 --> 00:02:50.076 align:middle
+¡Ábrelos!
+
+00:02:50.686 --> 00:02:53.566 align:middle
+Oh sí, ¡dulces, dulces traducciones!
+
+00:02:54.346 --> 00:02:55.366 align:middle
+¡El momento de la verdad!
+
+00:02:55.366 --> 00:02:57.946 align:middle
+Vuelve a nuestra aplicación y
+cambia el idioma a "francés".
+
+00:02:59.316 --> 00:03:03.326 align:middle
+¡Alucinante! El menú es francés, y si nos desplazamos
+hacia abajo, ¡aquí está el pie de página en francés!
+
+00:03:03.326 --> 00:03:09.766 align:middle
+Cambia a español, el menú es español,
+el pie de página es español, ¡genial!
+
+00:03:10.376 --> 00:03:14.336 align:middle
+Puedes repetir este proceso de
+empujar, traducir en Crowdin, y tirar,
+
+00:03:14.336 --> 00:03:16.586 align:middle
+una y otra vez a medida que
+añades más traducciones.
+
+00:03:16.896 --> 00:03:19.496 align:middle
+Crowdin hará un seguimiento
+de lo que ya has traducido
+
+00:03:19.496 --> 00:03:21.846 align:middle
+, para que tú sólo tengas que
+centrarte en las nuevas cadenas.
+
+00:03:22.256 --> 00:03:27.036 align:middle
+Y esto es todo sobre los aspectos básicos de las traducciones
+con Symfony, pero sin duda puedes profundizar más.
+
+00:03:27.036 --> 00:03:30.106 align:middle
+Por ejemplo, si necesitas
+traducciones en JavaScript, existe
+
+00:03:30.226 --> 00:03:32.806 align:middle
+el componente Symfony UX Translator.
+
+00:03:33.216 --> 00:03:35.696 align:middle
+Gestionas tus archivos de traducción
+como hemos mostrado aquí,
+
+00:03:35.986 --> 00:03:39.006 align:middle
+pero también puedes incluir las
+claves en tus archivos JavaScript.
+
+00:03:39.126 --> 00:03:40.656 align:middle
+¡Genial!
+
+00:03:40.656 --> 00:03:42.866 align:middle
+Hay un gran gato espacial en la habitación del
+
+00:03:42.866 --> 00:03:46.096 align:middle
+que aún no nos hemos ocupado: Las
+traducciones de bases de datos...
+
+00:03:46.456 --> 00:03:51.136 align:middle
+Como he dicho antes, el componente de traducción de
+Symfony no gestiona las traducciones de bases de datos.
+
+00:03:51.426 --> 00:03:54.006 align:middle
+Tendremos que recurrir a una
+solución de terceros para ello.
+
+00:03:54.396 --> 00:03:57.546 align:middle
+Una muy popular es el
+paquete Doctrine Extensions.
+
+00:03:57.916 --> 00:04:02.076 align:middle
+Tiene un comportamiento "Traducible"
+que te permite traducir tus entidades.
+
+00:04:02.426 --> 00:04:04.876 align:middle
+También hay un bundle de
+Symfony para conectarlo todo.
+
+00:04:05.316 --> 00:04:08.396 align:middle
+Funciona bien, pero puede ser
+un poco pesado y complejo.
+
+00:04:08.816 --> 00:04:11.866 align:middle
+Pensando en voz alta, ¡crear
+un bundle nuevo y moderno
+
+00:04:11.866 --> 00:04:16.296 align:middle
+para traducir entidades Doctrine sería una
+adición impresionante al ecosistema Symfony!
+
+00:04:17.016 --> 00:04:18.516 align:middle
+Bueno, ¡hasta la próxima!
+
+00:04:18.656 --> 00:04:19.606 align:middle
+¡Feliz programación!
