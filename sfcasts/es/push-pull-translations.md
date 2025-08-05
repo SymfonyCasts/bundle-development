@@ -20,11 +20,11 @@ Si tienes un equipo de traducción, puedes invitarles a este proyecto, ¡y podr�
 
 Mi equipo de traducción está fuera del planeta de permiso... pero podemos automatizar las traducciones con la función de sugerencias de Crowdin. Así mi equipo podrá revisarlas cuando vuelva.
 
-Selecciona la entrada vacía "Francés" para la primera cadena. Este panel de la derecha muestra sugerencias de varios motores de traducción. Todas se parecen bastante, así que pasa el ratón por encima de la primera y haz clic en este botón "Disco" para aplicarla.
+Selecciona la entrada vacía "Francés" para la primera cadena. Este panel de la derecha muestra sugerencias de varios motores de traducción. Todas son muy parecidas, así que pasa el ratón por encima de esta y haz clic en el botón "Disco" para aplicarla.
 
 ¡Genial! La traducción al francés de "Asteroides locales" ya está rellenada y ha cambiado automáticamente a la entrada en español. Haz lo mismo con ésta.
 
-Ahora salta a la siguiente entrada en francés: "Aplicar" esta sugerencia. Hmm, parece que Crowdin nos está diciendo que hay un error ortográfico... Voy a dejarlo como está. Este es un buen momento para señalar que, con las traducciones automáticas, siempre debes contar con alguien que domine el idioma para que las revise. Además, con las traducciones, el contexto importa, y estos pequeños fragmentos de texto a menudo carecen de él. Por ejemplo, expresiones como "Un hombre en la luna" pueden traducirse literalmente y no tener sentido en la lengua de destino.
+Ahora salta a la siguiente entrada en francés: "Aplicar" esta sugerencia. Hmm, parece que Crowdin nos está diciendo que hay un error ortográfico... Voy a dejarlo como está. Este es un buen momento para señalar que, con las traducciones automáticas, siempre debes contar con alguien que domine el idioma para que las revise. Además, con las traducciones, el contexto importa, y estos pequeños fragmentos de texto a menudo carecen de él. Por ejemplo, expresiones como "El hombre en la luna" pueden traducirse literalmente y no tener sentido en la lengua de destino.
 
 Probablemente haya una forma de aplicar en bloque estas sugerencias, pero creo que Crowdin está diseñado para fomentar la revisión manual. Voy a repasar y aplicar rápidamente el resto de las sugerencias. ¿Notas cómo sabe que no debe traducir los marcadores de posición?
 
