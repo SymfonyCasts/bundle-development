@@ -59,13 +59,14 @@
   - `private string $defaultLocale`
 - in translate():
   - `$locale = $this->localeAware->getLocale()`
-  - `if ($this->defaultLocale = $locale) { return $object; }` (nothing to do)
+  - `if ($this->defaultLocale === $locale) { return $object; }` (nothing to do)
   - `// translate object`
   - `return $object;` (for now)
+- In `ArticleController::show()` inject `ObjectTranslator $translator`
+  - demo wrapping article object to show autocompletion
 
 ## "Wiring Up" our Bundle Service
 
-- In `ArticleController::show()` inject `ObjectTranslator $translator`
 - Visit an article page - error!
 - Doesn't work like you're used to - no autowiring in a bundle
 - Create `config/services.php` in the bundle
@@ -167,6 +168,18 @@
 - Re-run the command, we see the proper alias now
 - Run `symfony console config:dump-reference symfonycasts_object_translation`
   - We see our `translation_class` option
+- We can improve the output of this command by adding a description/example
+- In `ObjectTranslationBundle::configure()`
+  ```php
+  $definition->rootNode()
+      ->children()
+          ->stringNode('translation_class')
+              ->info('The class name of your translation entity.')
+              ->example('App\Entity\Translation')
+          ->end()
+      ->end()
+  ;
+  ```
 
 ## Bundle Configuration Validation
 
@@ -207,6 +220,7 @@
 - Homework: make sure it isn't the `Translation` class from the bundle!
 
 ## Using Bundle Configuration
+
 - We need the class name in `ObjectTranslator` so add as a property
   - `private string $translationClass`
 - Go to an article page - error!
@@ -228,6 +242,104 @@
   - refresh
   - looks right!
   - remove `dd()`
+
+## Translated Object Wrapper
+
+- In `ObjectTranslator::translate()` we need to "translate" this object
+  - Find fields in the db and set them on the object
+  - Can't just update fields on this object because it could be flushed() and updated in the db
+  - Cloning could work... but brings up object identity issues...
+- Let's create a "wrapper" or "view" object
+- Create `src/TranslatedObject.php` - final
+  - this will pass all property and method calls to the wrapped object
+  - `public function __construct(private object $_inner)`
+    - We use `_` to avoid any potential conflicts with the wrapped object
+  - add `@template T of object` - "generics" in PHP
+  - add `@mixin T` - this tells IDEs that this class is a "mixin"
+  - add `@param T $_inner` to note that this is the wrapped object
+  - override `__call()`, `__get()` and `__isset()` magic methods
+    - __call():mixed - `return $this->_inner->$name(...$arguments);`
+    - __get():mixed - `return $this->_inner->$name;`
+    - __isset():bool - `return isset($this->_inner->$name);`
+- In `TranslatedObject`, return `new TranslatedObject($object)` in `translate()`
+- In `ArticleController::show()`, translate the article
+- Visit english article page - works... but look at `ObjectTranslator::translate()`
+- When on the default locale, we return the original object
+- Switch to the `fr` article page - error!
+- Let's fix this by building via a Unit Test
+
+## Unit Testing `TranslatedObject`
+
+- This error is because of how Twig works with magic methods
+  - In our template, we're using `{{ article.title }}` but the actual method is `getTitle()`
+  - When using the real object, Twig knows to call `getTitle()`
+  - But it doesn't know to call `getTitle()` on our `TranslatedObject`
+  - So let's help it out!
+- We'll create a unit test
+- In our bundle's `composer.json`, add
+    ```json
+    "autoload-dev": {
+        "psr-4": {
+            "SymfonyCasts\\ObjectTranslationBundle\\Tests\\": "tests/"
+        }
+    },
+    ```
+- In PhpStorm settings... directories
+  - add `object-translation-bundle/tests` as "Tests"
+  - edit and set prefix to `SymfonyCasts\ObjectTranslationBundle\Tests\`
+- create `tests/Unit` directory
+- create `TranslatedObjectTest.php` - extends `TestCase`
+- First, let's make sure the default wrapping works as expected
+- `testCanAccessUnderlyingObject`
+  - Create a dummy object
+    ```php
+    class ObjectForTranslationStub
+    {
+        public string $prop1 = 'value1';
+        private string $prop2 = 'value2';
+        private string $prop3 = 'value3';
+    
+        public function prop2(): string
+        {
+            return $this->prop2;
+        }
+    
+        public function getProp3(): string
+        {
+            return $this->prop3;
+        }
+    }
+    ```
+    ```php
+    $object = new TranslatedObject(new ObjectForTranslationStub());
+
+    $this->assertSame('value1', $object->prop1);
+    $this->assertTrue(isset($object->prop1), 'Public property should be accessible');
+    $this->assertFalse(isset($object->prop2), 'Private property should not be accessible');
+    $this->assertSame('value2', $object->prop2());
+    $this->assertSame('value3', $object->getProp3());
+    ```
+- Run our tests with `vendor/bin/phpunit object-translation-bundle/tests`
+  - This is using our application's phpunit config, but it's fine for now
+
+## TDD Getter Behaviour
+
+- `testCallUsesGetterIfAvailable`
+  ```php
+    $object = new TranslatedObject(new ObjectForTranslationStub());
+    
+    $this->assertSame('value3', $object->prop3());
+        ```
+  ```
+- Run tests - error!
+- In `TranslatedObject::__call()`
+  - `$method = $name;`
+  - `if (!method_exists($this->_inner, $method)`
+  - `$method = 'get'.ucfirst($name);`
+  - `return $this->_inner->$method(...$arguments);`
+- Run tests - passes!
+- Check the french article page - works!!
+- Probably more edge cases, but now we have a unit test to add them to!
 
 ## Translatable Entity Mapping
 
