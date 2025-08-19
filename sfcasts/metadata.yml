@@ -1,1 +1,6 @@
-chapters: []
+chapters:
+    - initialize-bundle
+    - bundle-class
+    - install-locally
+    - bundle-service-class
+    - wiring-bundle-services
