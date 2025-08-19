@@ -1,0 +1,117 @@
+diff --git a/composer.json b/composer.json
+index 771990b..16c6559 100644
+--- a/composer.json
++++ b/composer.json
+@@ -24,6 +24,7 @@
+         "symfony/translation": "7.3.*",
+         "symfony/twig-bundle": "7.3.*",
+         "symfony/yaml": "7.3.*",
++        "symfonycasts/object-translation-bundle": "@dev",
+         "symfonycasts/tailwind-bundle": "^0.10.1",
+         "twig/extra-bundle": "^2.12|^3.21",
+         "twig/markdown-extra": "^3.21",
+@@ -43,6 +44,12 @@
+         "zenstruck/browser": "^1.9.1",
+         "zenstruck/foundry": "^2.6.1"
+     },
++    "repositories": [
++        {
++            "type": "path",
++            "url": "object-translation-bundle"
++        }
++    ],
+     "config": {
+         "allow-plugins": {
+             "php-http/discovery": true,
+diff --git a/composer.lock b/composer.lock
+index 4ffac1b..7eaae66 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "9d660bdb6b6dc25780f5f1dcc6d2961d",
++    "content-hash": "08ef1e63f131fe3b7f5d56a72fd3cdd4",
+     "packages": [
+         {
+             "name": "composer/semver",
+@@ -5190,6 +5190,34 @@
+             ],
+             "time": "2025-06-03T06:57:57+00:00"
+         },
++        {
++            "name": "symfonycasts/object-translation-bundle",
++            "version": "dev-_tuts/bundle/3-install-our-bundle",
++            "dist": {
++                "type": "path",
++                "url": "object-translation-bundle",
++                "reference": "83adceff6e718d7a63d42fd421b50e099bfec906"
++            },
++            "type": "symfony-bundle",
++            "autoload": {
++                "psr-4": {
++                    "SymfonyCasts\\ObjectTranslationBundle\\": "src/"
++                }
++            },
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Kevin Bond",
++                    "email": "kevinbond@gmail.com"
++                }
++            ],
++            "description": "Translate your entities!",
++            "transport-options": {
++                "relative": true
++            }
++        },
+         {
+             "name": "symfonycasts/tailwind-bundle",
+             "version": "v0.10.1",
+@@ -8759,7 +8787,9 @@
+     ],
+     "aliases": [],
+     "minimum-stability": "stable",
+-    "stability-flags": [],
++    "stability-flags": {
++        "symfonycasts/object-translation-bundle": 20
++    },
+     "prefer-stable": true,
+     "prefer-lowest": false,
+     "platform": {
+@@ -8767,7 +8797,7 @@
+         "ext-ctype": "*",
+         "ext-iconv": "*"
+     },
+-    "platform-dev": [],
++    "platform-dev": {},
+     "platform-overrides": {
+         "php": "8.2"
+     },
+diff --git a/config/bundles.php b/config/bundles.php
+index 738017b..42333d4 100644
+--- a/config/bundles.php
++++ b/config/bundles.php
+@@ -13,4 +13,5 @@ return [
+     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
+     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true],
+     Symfony\UX\StimulusBundle\StimulusBundle::class => ['all' => true],
++    SymfonyCasts\ObjectTranslationBundle\ObjectTranslationBundle::class => ['all' => true],
+ ];
+diff --git a/symfony.lock b/symfony.lock
+index 33ce17c..3bc4e7b 100644
+--- a/symfony.lock
++++ b/symfony.lock
+@@ -245,6 +245,9 @@
+             "config/routes/web_profiler.yaml"
+         ]
+     },
++    "symfonycasts/object-translation-bundle": {
++        "version": "dev-_tuts/bundle/3-install-our-bundle"
++    },
+     "symfonycasts/tailwind-bundle": {
+         "version": "0.10",
+         "recipe": {

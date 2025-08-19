@@ -9,7 +9,62 @@
             "id": "add-migrations",
             "name": "add migrations",
             "description": null
+        },
+        {
+            "id": "1-add-composer-json",
+            "name": "1. add composer.json",
+            "description": null
+        },
+        {
+            "id": "2-bundle-class",
+            "name": "2. Bundle class",
+            "description": null
+        },
+        {
+            "id": "3-install-our-bundle",
+            "name": "3. install our bundle",
+            "description": null
+        },
+        {
+            "id": "4-bundle-service-class",
+            "name": "4. bundle service class",
+            "description": null
+        },
+        {
+            "id": "4-object-translator-constructor",
+            "name": "4. object translator constructor",
+            "description": null
+        },
+        {
+            "id": "4-inject-object-translator",
+            "name": "4. inject object translator",
+            "description": null
+        },
+        {
+            "id": "5-services-php",
+            "name": "5. services.php",
+            "description": null
+        },
+        {
+            "id": "5-set-object-translator-service",
+            "name": "5. set object translator service",
+            "description": null
+        },
+        {
+            "id": "5-load-services-php",
+            "name": "5. load services.php",
+            "description": null
+        },
+        {
+            "id": "5-autowire-service",
+            "name": "5. autowire service",
+            "description": null
+        },
+        {
+            "id": "5-configure-service-args",
+            "name": "5. configure service args",
+            "description": null
         }
     ],
-    "sha": "bf7ac04b12a3e25aa8ebde598231929d0e12f1d3"
+    "sha": "10d409802ce20b6b00d70fcc9ba56ac6e685ca38"
 }

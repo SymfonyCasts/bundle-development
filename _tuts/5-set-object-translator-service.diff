@@ -1,0 +1,16 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index d7a99f8..fe972f8 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -2,6 +2,10 @@
+ 
+ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+ 
++use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
++
+ return static function (ContainerConfigurator $container): void {
+-    
++    $container->services()
++        ->set('symfonycasts.object_translator', ObjectTranslator::class)
++    ;
+ };

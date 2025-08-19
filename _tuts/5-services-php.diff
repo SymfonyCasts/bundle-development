@@ -1,0 +1,13 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+new file mode 100644
+index 0000000..d7a99f8
+--- /dev/null
++++ b/object-translation-bundle/config/services.php
+@@ -0,0 +1,7 @@
++<?php
++
++namespace Symfony\Component\DependencyInjection\Loader\Configurator;
++
++return static function (ContainerConfigurator $container): void {
++    
++};

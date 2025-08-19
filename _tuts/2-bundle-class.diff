@@ -1,0 +1,15 @@
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+new file mode 100644
+index 0000000..d14a29d
+--- /dev/null
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -0,0 +1,9 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle;
++
++use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
++
++final class ObjectTranslationBundle extends AbstractBundle
++{
++}

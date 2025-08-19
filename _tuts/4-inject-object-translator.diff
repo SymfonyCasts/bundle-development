@@ -1,0 +1,24 @@
+diff --git a/src/Controller/ArticleController.php b/src/Controller/ArticleController.php
+index 53336ea..daee9dd 100644
+--- a/src/Controller/ArticleController.php
++++ b/src/Controller/ArticleController.php
+@@ -7,6 +7,7 @@ use App\Repository\ArticleRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
++use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
+ 
+ final class ArticleController extends AbstractController
+ {
+@@ -20,8 +21,10 @@ final class ArticleController extends AbstractController
+     }
+ 
+     #[Route('/news/{slug:article}', name: 'app_article_show')]
+-    public function show(Article $article): Response
++    public function show(Article $article, ObjectTranslator $translator): Response
+     {
++        $article = $translator->translate($article);
++
+         return $this->render('article/show.html.twig', [
+             'article' => $article,
+             'comments' => [

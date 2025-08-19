@@ -1,0 +1,36 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 94240e4..2bb444e 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -2,8 +2,16 @@
+ 
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
++use Symfony\Contracts\Translation\LocaleAwareInterface;
++
+ final class ObjectTranslator
+ {
++    public function __construct(
++        private LocaleAwareInterface $localeAware,
++        private string $defaultLocale,
++    ) {
++    }
++
+     /**
+      * @template T of object
+      *
+@@ -13,6 +21,14 @@ final class ObjectTranslator
+      */
+     public function translate(object $object): object
+     {
++        $locale = $this->localeAware->getLocale();
++
++        if ($this->defaultLocale === $locale) {
++            return $object;
++        }
++
++        // todo translate object
++
+         return $object;
+     }
+ }

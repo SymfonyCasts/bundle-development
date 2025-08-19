@@ -1,0 +1,24 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+new file mode 100644
+index 0000000..94240e4
+--- /dev/null
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle;
++
++final class ObjectTranslator
++{
++    /**
++     * @template T of object
++     *
++     * @param T $object
++     *
++     * @return T
++     */
++    public function translate(object $object): object
++    {
++        return $object;
++    }
++}

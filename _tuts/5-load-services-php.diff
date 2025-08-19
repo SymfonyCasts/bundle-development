@@ -1,0 +1,19 @@
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index d14a29d..e10be18 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -2,8 +2,14 @@
+ 
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
++use Symfony\Component\DependencyInjection\ContainerBuilder;
++use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+ 
+ final class ObjectTranslationBundle extends AbstractBundle
+ {
++    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
++    {
++        $container->import('../config/services.php');
++    }
+ }
