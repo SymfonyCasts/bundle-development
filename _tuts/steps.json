@@ -64,7 +64,22 @@
             "id": "5-configure-service-args",
             "name": "5. configure service args",
             "description": null
+        },
+        {
+            "id": "6-translation-base-entity",
+            "name": "6. translation base entity",
+            "description": null
+        },
+        {
+            "id": "7-base-entity-mapping",
+            "name": "7. base entity mapping",
+            "description": null
+        },
+        {
+            "id": "8-app-translation-entity",
+            "name": "8. app translation entity",
+            "description": null
         }
     ],
-    "sha": "10d409802ce20b6b00d70fcc9ba56ac6e685ca38"
+    "sha": "f495b1f757e16ae43e132b201038132bc07d8924"
 }

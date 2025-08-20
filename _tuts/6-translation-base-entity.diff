@@ -1,0 +1,18 @@
+diff --git a/object-translation-bundle/src/Model/Translation.php b/object-translation-bundle/src/Model/Translation.php
+new file mode 100644
+index 0000000..97c104f
+--- /dev/null
++++ b/object-translation-bundle/src/Model/Translation.php
+@@ -0,0 +1,12 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Model;
++
++abstract class Translation
++{
++    public string $objectType;
++    public string $objectId;
++    public string $locale;
++    public string $field;
++    public string $value;
++}

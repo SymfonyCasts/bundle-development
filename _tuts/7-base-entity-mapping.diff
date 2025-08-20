@@ -1,0 +1,44 @@
+diff --git a/object-translation-bundle/config/doctrine/mapping/Translation.orm.xml b/object-translation-bundle/config/doctrine/mapping/Translation.orm.xml
+new file mode 100644
+index 0000000..a361425
+--- /dev/null
++++ b/object-translation-bundle/config/doctrine/mapping/Translation.orm.xml
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
++                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
++                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
++    <mapped-superclass name="SymfonyCasts\ObjectTranslationBundle\Model\Translation">
++        <field name="objectType" column="object_type" type="string" />
++        <field name="objectId" column="object_id" type="string" />
++        <field name="locale" type="string" />
++        <field name="field" type="string" />
++        <field name="value" type="text" />
++    </mapped-superclass>
++</doctrine-mapping>
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index e10be18..0f5c182 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -2,12 +2,20 @@
+ 
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
++use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+ 
+ final class ObjectTranslationBundle extends AbstractBundle
+ {
++    public function build(ContainerBuilder $container): void
++    {
++        $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver(
++            [__DIR__.'/../config/doctrine/mapping' => 'SymfonyCasts\ObjectTranslationBundle\Model'],
++        ));
++    }
++
+     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+     {
+         $container->import('../config/services.php');
