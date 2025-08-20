@@ -1,6 +1,6 @@
 # Symfony Bundle Development: Share the Love
 
-## Initial Bundle Files
+## Initialize the Bundle
 
 - https://symfony.com/doc/current/bundles.html
 - "package" vs "bundle"
@@ -8,143 +8,143 @@
 - `cd object-translation-bundle`
 - `mkdir src tests config`
 - `composer init`
-    - `symfonycasts/object-translation-bundle`
-    - `Translate your entities!`
-    - type: `symfony-bundle`
-    - license: `MIT`
+  - `symfonycasts/object-translation-bundle`
+  - `Translate your entities!`
+  - type: `symfony-bundle`
+  - license: `MIT`
 - delete `composer` dir ??
 - add `.gitignore`
-    - `vendor/`
-    - `composer.lock` (don't commit for bundles)
+  - `vendor/`
+  - `composer.lock` (don't commit for bundles)
 - `composer.json`
-    - rename psr-4 to `SymfonyCasts\\ObjectTranslationBundle\\` (uppercase C)
+  - rename psr-4 to `SymfonyCasts\\ObjectTranslationBundle\\` (uppercase C)
 
-## Create Bundle Class
+## Create the Bundle Class
 
 - in `src/`, create new class... namespace isn't detected
 - PhpStorm settings... directories
-    - set `object-translation-bundle/src` as "Sources"
-    - edit prefix, use `SymfonyCasts\ObjectTranslationBundle\`
+  - set `object-translation-bundle/src` as "Sources"
+  - edit prefix, use `SymfonyCasts\ObjectTranslationBundle\`
 - now, create new class: `ObjectTranslationBundle`
 - proper namespace!
 - `final`, `extends AbstractBundle`
 - https://symfony.com/blog/new-in-symfony-6-1-simpler-bundle-extension-and-configuration
-    - Symfony 6.1+ "new" bundle format
+  - Symfony 6.1+ "new" bundle format
 
 ## Install our Bundle Locally
 
 - In our app's `composer.json`, add:
-    - `"repositories": [ { "type": "path", "url": "object-translation-bundle" } ]`
+  - `"repositories": [ { "type": "path", "url": "object-translation-bundle" } ]`
 - In app root, `composer require symfonycasts/object-translation-bundle`
-    - Error about stability
+  - Error about stability
 - `composer require symfonycasts/object-translation-bundle:@dev`
-    - "symlinked" in vendor
-    - Flex automatically added to `config/bundles.php`
-        - composer type is `symfony-bundle`
-        - our bundle class follows a naming convention flex so flex can detect it
+  - "symlinked" in vendor
+  - Flex automatically added to `config/bundles.php`
+    - composer type is `symfony-bundle`
+    - our bundle class follows a naming convention flex so flex can detect it
 
 ## Bundle Service Class
 
 - in `src/`, create `ObjectTranslator.php`
 - mark as `final` - using final in packages is important
-    - marks to end-users that this is not meant to be extended
-    - allows us to easily keep backwards compatibility
+  - marks to end-users that this is not meant to be extended
+  - allows us to easily keep backwards compatibility
 - add method: `translate(object $object): object`
-    - docblock:
-        - `@template T of object`
-        - `@param T $object`
-        - `@return T`
+  - docblock:
+    - `@template T of object`
+    - `@param T $object`
+    - `@return T`
 - add constructor
-    - `private LocaleAwareInterface $localeAware`
-    - `private string $defaultLocale`
+  - `private LocaleAwareInterface $localeAware`
+  - `private string $defaultLocale`
 - in translate():
-    - `$locale = $this->localeAware->getLocale()`
-    - `if ($this->defaultLocale === $locale) { return $object; }` (nothing to do)
-    - `// translate object`
-    - `return $object;` (for now)
+  - `$locale = $this->localeAware->getLocale()`
+  - `if ($this->defaultLocale === $locale) { return $object; }` (nothing to do)
+  - `// translate object`
+  - `return $object;` (for now)
 - In `ArticleController::show()` inject `ObjectTranslator $translator`
-    - demo wrapping article object to show autocompletion
+  - demo wrapping article object to show autocompletion
 
 ## "Wiring Up" our Bundle Service
 
 - Visit an article page - error!
 - Doesn't work like you're used to - no autowiring in a bundle
 - Create `config/services.php` in the bundle
-    - `namespace Symfony\Component\DependencyInjection\Loader\Configurator;`
-    - `return static function (ContainerConfigurator $container): void {`
-    - `$container->services()`
-    - `->set('symfonycasts.object_translator', ObjectTranslator::class)`
+  - `namespace Symfony\Component\DependencyInjection\Loader\Configurator;`
+  - `return static function (ContainerConfigurator $container): void {`
+  - `$container->services()`
+  - `->set('symfonycasts.object_translator', ObjectTranslator::class)`
 - We need to tell Symfony about this file
 - In `ObejctTranslationBundle`
-    - override `loadExtension()`
-    - `$container->import('../config/services.php');`
+  - override `loadExtension()`
+  - `$container->import('../config/services.php');`
 - Refresh page - error but with more details - we need to allow autowiring
 - In `services.php`
-    - `->alias(ObjectTranslator::class, 'symfonycasts.object_translator')`
+  - `->alias(ObjectTranslator::class, 'symfonycasts.object_translator')`
 - Refresh again - a different error - we need to wire arguments
 - Look at `ObjectTranslator`
-    - we need to inject `LocaleAwareInterface` - a service
-    - and `defaultLocale` - a parameter
+  - we need to inject `LocaleAwareInterface` - a service
+  - and `defaultLocale` - a parameter
 - In the terminal
-    - `symfony console debug:autowiring LocaleAware` - get the service id
-    - `symfony console debug:container --parameters |grep locale` - get `kernel.default_locale`
+  - `symfony console debug:autowiring LocaleAware` - get the service id
+  - `symfony console debug:container --parameters |grep locale` - get `kernel.default_locale`
 - In `services.php`
-    - `->args([service('translation.locale_switcher'), param('kernel.default_locale')])`
+  - `->args([service('translation.locale_switcher'), param('kernel.default_locale')])`
 - Refresh - works!
 
 ## Entities in a Bundle
 
 - Since we're translating entities, let's store the translations in the database
-    - Single entity for all translations
-    - Entity–Attribute–Value (EAV) model
-    - Each row will have:
-        - `object_type` - name that represents the entity type (like `article`)
-            - we could use the class name, but this way it is resilient to refactoring
-        - `object_id` - the id
-        - `locale` - the locale for this "row"
-        - `field` - the entity property name (like `title`)
-        - `value` - the translated value
+  - Single entity for all translations
+  - Entity–Attribute–Value (EAV) model
+  - Each row will have:
+    - `object_type` - name that represents the entity type (like `article`)
+      - we could use the class name, but this way it is resilient to refactoring
+    - `object_id` - the id
+    - `locale` - the locale for this "row"
+    - `field` - the entity property name (like `title`)
+    - `value` - the translated value
 - Create `Model` directory
-    - Not `Entity` - we might enable using other storage laters - like Mongo later
-    - Create `Translation.php`
-    - make abstract - the real entity will extend this and live in our project
-        - this allows maximum flexibility
-    - `public string $objectType`
-    - `public string $objectId` (not int to we can support uuids)
-    - `public string $locale`
-    - `public string $field`
-    - `public string $value`
+  - Not `Entity` - we might enable using other storage laters - like Mongo later
+  - Create `Translation.php`
+  - make abstract - the real entity will extend this and live in our project
+    - this allows maximum flexibility
+  - `public string $objectType`
+  - `public string $objectId` (not int to we can support uuids)
+  - `public string $locale`
+  - `public string $field`
+  - `public string $value`
 
 ## Configuring our Bundle's Entity
 
 - No attributes - use xml - this is recommended for bundles
 - In `config`, create `doctrine/mapping`
 - Copy `Translation.orm.xml` from the tutorial
-    - "MappedSuperclass" - real entities extend
+  - "MappedSuperclass" - real entities extend
 - In the terminal, run: `symfony console doctrine:mapping:info`
-    - This shows us all the entities and mapped superclasses doctrine knows about
+  - This shows us all the entities and mapped superclasses doctrine knows about
 - We need to tell Symfony/Doctrine about this mapped superclass
 - In `ObjectTranslationBundle` - override `build()`
-    - `$container->addCompilerPass()` - compiler pass is a way to modify the container
-    - `DoctrineOrmMappingsPass::createXmlMappingDriver()`
-        - Doctrine provides a compiler pass to register mappings
-    - `[__DIR__.'/../config/doctrine/mapping' => 'SymfonyCasts\ObjectTranslationBundle\Model'],`
-        - mapping directory -> namespace
+  - `$container->addCompilerPass()` - compiler pass is a way to modify the container
+  - `DoctrineOrmMappingsPass::createXmlMappingDriver()`
+    - Doctrine provides a compiler pass to register mappings
+  - `[__DIR__.'/../config/doctrine/mapping' => 'SymfonyCasts\ObjectTranslationBundle\Model'],`
+    - mapping directory -> namespace
 - Run command again
 - Sweet! We see our `Translation` mapped superclass!
 
 ## Extending our Bundle's Entity
 
 - In the terminal run: `symfony console make:entity`
-    - `Translation`
-    - exit immediately - we don't need any fields other than id
+  - `Translation`
+  - exit immediately - we don't need any fields other than id
 - In `Entity\Translation`
-    - `use SymfonyCasts\ObjectTranslationBundle\Model\Translation as BaseTranslation`
-    - `extends BaseTranslation`
+  - `use SymfonyCasts\ObjectTranslationBundle\Model\Translation as BaseTranslation`
+  - `extends BaseTranslation`
 - `symfony console make:migration`
 - Check it out
-    - Adjust description to "Add Translation entity"
-    - Note the properties from the mapped superclass
+  - Adjust description to "Add Translation entity"
+  - Note the properties from the mapped superclass
 - `symfony console doctrine:migrations:migrate`
 
 ## Bundle Configuration
@@ -160,14 +160,14 @@
   ;
   ```
 - In your terminal run: `symfony console config:dump-reference` (no args)
-    - Lists available bundle configurations (and their aliases)
-    - Ours is `object_translation`
-    - This should be prefixed by the `symfonycasts` namespace
+  - Lists available bundle configurations (and their aliases)
+  - Ours is `object_translation`
+  - This should be prefixed by the `symfonycasts` namespace
 - In `ObjectTranslationBundle` - customize the "alias" name
-    - `protected string $extensionAlias = 'symfonycasts_object_translation'`
+  - `protected string $extensionAlias = 'symfonycasts_object_translation'`
 - Re-run the command, we see the proper alias now
 - Run `symfony console config:dump-reference symfonycasts_object_translation`
-    - We see our `translation_class` option
+  - We see our `translation_class` option
 - We can improve the output of this command by adding a description/example
 - In `ObjectTranslationBundle::configure()`
   ```php
@@ -185,10 +185,10 @@
 
 - `translation_class` is required
 - In `ObjectTranslationBundle::configure()`
-    - add `->isRequired()` to mark as required
-    - add `->cannotBeEmpty()` to ensure not empty string
+  - add `->isRequired()` to mark as required
+  - add `->cannotBeEmpty()` to ensure not empty string
 - Run `symfony console config:dump-reference symfonycasts_object_translation`
-    - error!
+  - error!
 - In our app, create `config/packages/symfonycasts_object_translation.yaml`
   ```yaml
   symfonycasts_object_translation:
@@ -198,7 +198,7 @@
 - Set to `Translation`
 - Run command again - works...
 - Check our current config with
-    - `symfony console debug:config symfonycasts_object_translation`
+  - `symfony console debug:config symfonycasts_object_translation`
 - This needs to be the full class name... so let's validate that
 - In `ObjectTranslationBundle::configure()`
   ```php
@@ -211,10 +211,10 @@
 - Be cheeky and set to `App\Entity\Article`
 - Run command again - no error but isn't correct... needs to be our Translation entity
 - We can chain more validation but change `class_exists` to:
-    - `is_a($v, Translation::class, true)`
-        - ensure `Translation` is from our bundle namespace
-        - true allows this method to check class names as strings
-    - Change error message to `The translation_class %s must extend SymfonyCasts\ObjectTranslationBundle\Model\Translation.`
+  - `is_a($v, Translation::class, true)`
+    - ensure `Translation` is from our bundle namespace
+    - true allows this method to check class names as strings
+  - Change error message to `The translation_class %s must extend SymfonyCasts\ObjectTranslationBundle\Model\Translation.`
 - Run command again - error!
 - Change to `App\Entity\Translation`
 - Homework: make sure it isn't the `Translation` class from the bundle!
@@ -222,45 +222,45 @@
 ## Using Bundle Configuration
 
 - We need the class name in `ObjectTranslator` so add as a property
-    - `private string $translationClass`
+  - `private string $translationClass`
 - Go to an article page - error!
 - In `config/services.php` - we need to wire the argument
-    - But what do we use here? We can't access bundle config here.
-    - add `abstract_arg('translation class')`
-    - marks this argument as required
+  - But what do we use here? We can't access bundle config here.
+  - add `abstract_arg('translation class')`
+  - marks this argument as required
 - Refresh page - error about this missing argument
 - In `ObjectTranslationBundle::loadExtension()`
-    - `dd($config)` and refresh page - there's our config!
-    - remove `dd()`
-    - `$builder->getDefinition('symfonycasts.object_translator')`
-        - This gets our service "definition" - not the "real" service
-    - `->setArgument(2, $config['translation_class'])`
-        - 2 - third argument (0-based)
+  - `dd($config)` and refresh page - there's our config!
+  - remove `dd()`
+  - `$builder->getDefinition('symfonycasts.object_translator')`
+    - This gets our service "definition" - not the "real" service
+  - `->setArgument(2, $config['translation_class'])`
+    - 2 - third argument (0-based)
 - Refresh page - works!
 - In `ArticleController::show()`
-    - `dd($translator)`
-    - refresh
-    - looks right!
-    - remove `dd()`
+  - `dd($translator)`
+  - refresh
+  - looks right!
+  - remove `dd()`
 
 ## Translated Object Wrapper
 
 - In `ObjectTranslator::translate()` we need to "translate" this object
-    - Find fields in the db and set them on the object
-    - Can't just update fields on this object because it could be flushed() and updated in the db
-    - Cloning could work... but brings up object identity issues...
+  - Find fields in the db and set them on the object
+  - Can't just update fields on this object because it could be flushed() and updated in the db
+  - Cloning could work... but brings up object identity issues...
 - Let's create a "wrapper" or "view" object
 - Create `src/TranslatedObject.php` - final
-    - this will pass all property and method calls to the wrapped object
-    - `public function __construct(private object $_inner)`
-        - We use `_` to avoid any potential conflicts with the wrapped object
-    - add `@template T of object` - "generics" in PHP
-    - add `@mixin T` - this tells IDEs that this class is a "mixin"
-    - add `@param T $_inner` to note that this is the wrapped object
-    - override `__call()`, `__get()` and `__isset()` magic methods
-        - __call():mixed - `return $this->_inner->$name(...$arguments);`
-        - __get():mixed - `return $this->_inner->$name;`
-        - __isset():bool - `return isset($this->_inner->$name);`
+  - this will pass all property and method calls to the wrapped object
+  - `public function __construct(private object $_inner)`
+    - We use `_` to avoid any potential conflicts with the wrapped object
+  - add `@template T of object` - "generics" in PHP
+  - add `@mixin T` - this tells IDEs that this class is a "mixin"
+  - add `@param T $_inner` to note that this is the wrapped object
+  - override `__call()`, `__get()` and `__isset()` magic methods
+    - __call():mixed - `return $this->_inner->$name(...$arguments);`
+    - __get():mixed - `return $this->_inner->$name;`
+    - __isset():bool - `return isset($this->_inner->$name);`
 - In `TranslatedObject`, return `new TranslatedObject($object)` in `translate()`
 - In `ArticleController::show()`, translate the article
 - Visit english article page - works... but look at `ObjectTranslator::translate()`
@@ -271,10 +271,10 @@
 ## Unit Testing `TranslatedObject`
 
 - This error is because of how Twig works with magic methods
-    - In our template, we're using `{{ article.title }}` but the actual method is `getTitle()`
-    - When using the real object, Twig knows to call `getTitle()`
-    - But it doesn't know to call `getTitle()` on our `TranslatedObject`
-    - So let's help it out!
+  - In our template, we're using `{{ article.title }}` but the actual method is `getTitle()`
+  - When using the real object, Twig knows to call `getTitle()`
+  - But it doesn't know to call `getTitle()` on our `TranslatedObject`
+  - So let's help it out!
 - We'll create a unit test
 - In our bundle's `composer.json`, add
     ```json
@@ -285,42 +285,42 @@
     },
     ```
 - In PhpStorm settings... directories
-    - add `object-translation-bundle/tests` as "Tests"
-    - edit and set prefix to `SymfonyCasts\ObjectTranslationBundle\Tests\`
+  - add `object-translation-bundle/tests` as "Tests"
+  - edit and set prefix to `SymfonyCasts\ObjectTranslationBundle\Tests\`
 - create `tests/Unit` directory
 - create `TranslatedObjectTest.php` - extends `TestCase`
 - First, let's make sure the default wrapping works as expected
 - `testCanAccessUnderlyingObject`
-    - Create a dummy object
-      ```php
-      class ObjectForTranslationStub
-      {
-          public string $prop1 = 'value1';
-          private string $prop2 = 'value2';
-          private string $prop3 = 'value3';
-      
-          public function prop2(): string
-          {
-              return $this->prop2;
-          }
-      
-          public function getProp3(): string
-          {
-              return $this->prop3;
-          }
-      }
-      ```
-      ```php
-      $object = new TranslatedObject(new ObjectForTranslationStub());
-  
-      $this->assertSame('value1', $object->prop1);
-      $this->assertTrue(isset($object->prop1), 'Public property should be accessible');
-      $this->assertFalse(isset($object->prop2), 'Private property should not be accessible');
-      $this->assertSame('value2', $object->prop2());
-      $this->assertSame('value3', $object->getProp3());
-      ```
+  - Create a dummy object
+    ```php
+    class ObjectForTranslationStub
+    {
+        public string $prop1 = 'value1';
+        private string $prop2 = 'value2';
+        private string $prop3 = 'value3';
+    
+        public function prop2(): string
+        {
+            return $this->prop2;
+        }
+    
+        public function getProp3(): string
+        {
+            return $this->prop3;
+        }
+    }
+    ```
+    ```php
+    $object = new TranslatedObject(new ObjectForTranslationStub());
+
+    $this->assertSame('value1', $object->prop1);
+    $this->assertTrue(isset($object->prop1), 'Public property should be accessible');
+    $this->assertFalse(isset($object->prop2), 'Private property should not be accessible');
+    $this->assertSame('value2', $object->prop2());
+    $this->assertSame('value3', $object->getProp3());
+    ```
 - Run our tests with `vendor/bin/phpunit object-translation-bundle/tests`
-    - This is using our application's phpunit config, but it's fine for now
+  - This is using our application's phpunit config, but it's fine for now
 
 ## TDD Getter Behaviour
 
@@ -333,10 +333,10 @@
   ```
 - Run tests - error!
 - In `TranslatedObject::__call()`
-    - `$method = $name;`
-    - `if (!method_exists($this->_inner, $method)`
-    - `$method = 'get'.ucfirst($name);`
-    - `return $this->_inner->$method(...$arguments);`
+  - `$method = $name;`
+  - `if (!method_exists($this->_inner, $method)`
+  - `$method = 'get'.ucfirst($name);`
+  - `return $this->_inner->$method(...$arguments);`
 - Run tests - passes!
 - Check the french article page - works!!
 - Probably more edge cases, but now we have a unit test to add them to!
@@ -344,33 +344,33 @@
 ## TDD `TranslatedObject` Translations
 
 - How are we going to pass translations to this object?
-    - an array: keyed by field name, values are the translated values
+  - an array: keyed by field name, values are the translated values
 - Add a test: `testCanTranslateProperties`
-    - `$object = new TranslatedObject(new ObjectForTranslationStub(), [
+  - `$object = new TranslatedObject(new ObjectForTranslationStub(), [
             'prop1' => 'translated1',
             'prop2' => 'translated2',
             'prop3' => 'translated3',
         ]);`
-    - Copy assertions from `testCanAccessUnderlyingObject`
-    - rename "value" to "translated" in the assertions
+  - Copy assertions from `testCanAccessUnderlyingObject`
+  - rename "value" to "translated" in the assertions
 - Run tests - failure
 - In `TranslatedObject::__construct()`
-    - add `private array $translations = []`
-    - `@param array<string, string> $translations`
-    - In __get(): `return $this->translations[$name] ?? $this->_inner->$name;`
-    - Leave __isset() as is
+  - add `private array $translations = []`
+  - `@param array<string, string> $translations`
+  - In __get(): `return $this->translations[$name] ?? $this->_inner->$name;`
+  - Leave __isset() as is
 - Run tests - error in other tests - too few arguments - fix with empty array
 - Run tests - no error but our new test still fails
 - In `TranslatedObject::__call()`
-    - `if (isset($this->translations[$name])) {`
-    - `return $this->translations[$name];`
+  - `if (isset($this->translations[$name])) {`
+  - `return $this->translations[$name];`
 - Run tests - fails, but for the getter method
 - Getting a little messy, let's add a private method:
-    - `private function translatedValue(string $name): ?string`
-    - move the if
-    - `if (!str_starts_with($name, 'get')) { return null; }`
-    - `$property = lcfirst(substr($name, 3));`
-    - `return $this->translations[$property] ?? null;`
+  - `private function translatedValue(string $name): ?string`
+  - move the if
+  - `if (!str_starts_with($name, 'get')) { return null; }`
+  - `$property = lcfirst(substr($name, 3));`
+  - `return $this->translations[$property] ?? null;`
 - Run tests - all pass!
 
 ## Translatable Entity Mapping
@@ -379,101 +379,102 @@
 - Could use an interface, but let's use attributes!
 - This is a "Mapping", so create a `Mapping` directory in our bundle
 - Create `Translatable.php` - mark final
-    - `#[\Attribute(\Attribute::TARGET_CLASS)]` - only usable on classes
-    - `public function __construct()`
-    - `public string $type,` - this will be the `object_type` in the database
-    - We could allow defining the properties here (as an array), but let's use another attribute
+  - `#[\Attribute(\Attribute::TARGET_CLASS)]` - only usable on classes
+  - `public function __construct()`
+  - `public string $type,` - this will be the `object_type` in the database
+  - We could allow defining the properties here (as an array), but let's use another attribute
 - Create `TranslatableProperty.php` - mark final
-    - `#[\Attribute(\Attribute::TARGET_PROPERTY)]` - only usable on properties
-    - We could make the field name configurable, but let's keep it simple right now
-      and just use the property name
+  - `#[\Attribute(\Attribute::TARGET_PROPERTY)]` - only usable on properties
+  - We could make the field name configurable, but let's keep it simple right now
+    and just use the property name
 - Let's map our entities!
-    - Article - add `#[Translatable('article')]`
-        - `#[TranslatableProperty]` to `title` and `content`
-    - Category - add `#[Translatable('category')]`
-        - `#[TranslatableProperty]` to `name`
-    - Tag - add `#[Translatable('tag')]`
-        - `#[TranslatableProperty]` to `name`
+  - Article - add `#[Translatable('article')]`
+    - `#[TranslatableProperty]` to `title` and `content`
+  - Category - add `#[Translatable('category')]`
+    - `#[TranslatableProperty]` to `name`
+  - Tag - add `#[Translatable('tag')]`
+    - `#[TranslatableProperty]` to `name`
 
 ## Translation Factory
 
 - In our app, run `symfony console make:fixture` for `Translation`
 - In `AppStory`,
-    - for the first article, add `$article1 =`
-    - after: `TranslationFactory::createOne([
+  - for the first article, add `$article1 =`
+  - after: `TranslationFactory::createOne([
             'locale' => 'fr',
             'objectId' => $article1->getId(),
             'objectType' => 'article',
             'field' => 'title',
             'value' => 'French title...'
         ]);`
-    - Copy for the content field (rename field and value)
+  - Copy for the content field (rename field and value)
 
 ## Translation Logic
 
 - In `ObjectTranslator::translate()`, in `new TranslatedObject($object)`
-    - add second arg: `$this->translationsFor($object, $locale)`
-    - add method via PhpStorm
+  - add second arg: `$this->translationsFor($object, $locale)`
+  - add method via PhpStorm
 - In `translationsFor()`
-    - return type: `array`
-    - We need to see if the object is translatable
-    - `$type = $class->getAttributes(Translatable::class)[0]?->newInstance()->type ?? null;`
-    - `if (!$type) { throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class)); }`
+  - return type: `array`
+  - We need to see if the object is translatable
+  - `$type = $class->getAttributes(Translatable::class)[0]?->newInstance()->type ?? null;`
+  - `if (!$type) { throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class)); }`
 - We need to load translations from the database
 - In `__construct()`, inject `private ManagerRegistry $doctrine`
 - We need to add this to our service definition
 - `symfony console debug:autowiring ManagerRegistry` - alias: doctrine
-- In `services.php`,
-    - `service('doctrine'),`
+- In `services.php`, 
+  - `service('doctrine'),`
 - Back in `translationsFor()`
-    - `$om = $this->doctrine->getManagerForClass($this->translationClass);`
+  - `$translations = $this->doctrine->getRepository($this->translationClass)->findBy([])`
+  - `'locale' => $locale,`'
+  - `'objectType' => $type,`
+  - `'objectId' => $object->getId(),` ...?
+  - we can't rely on the object having a `getId()` method
+  - We can get the id of an object from doctrine!
+  - Above, add `$id = $this->doctrine->getManagerForClass($object::class)`
         - This is really the `em` - the entity manager
-        - `om` is the generic name Doctrine uses
-        - I always use the most abstract functionality to make it easier to
-          add support for other storage (like MongoDB) later
-    - `$translations = $om->getRepository($this->translationClass)->findBy([])`
-    - `'locale' => $locale,`'
-    - `'objectType' => $type,`
-    - `'objectId' => $object->getId(),` ...
-    - we can't rely on the object having a `getId()` method
-    - Doctrine has a way to get the id of an object...
-    - Below `$om`, add `$id = $om->getClassMetadata($object::class)->getIdentifierValues($object);`
-    - `dd($id)`  - refresh page
-    - This is an array - Doctrine supports "composite" identifiers
-    - Our bundle won't support this, so let's add a check
-    - In `translationsFor()`, remove `dd()` and add
-        - `if (1 !== count($id)) { throw new \LogicException(sprintf('Class "%s" must have a single identifier to be translatable.', $object::class)); }`
-        - `$id = reset($id);`
-        - use `$id` in the `findBy()` call
-    - Above `$translations`, add `/** @var Translation[] $translations */`
-    - `dd($translations)` - refresh page to see what we have
-    - remove `dd()`, add `$translationValues = [];`
-    - `foreach ($translations as $translation) {`
-    - `$translationValues[$translation->field] = $translation->value;`
-    - Finally, return `$translationValues;`
+        - Possible to have multiple entity managers, so this finds the correct one for the object
+      - `->getClassMetadata($object::class)`
+        - special "metadata" object that contains information about the entity
+      - `->getIdentifierValues($object);`
+        - returns the actual ID value for the entity
+  - `dd($id)`  - refresh page
+  - This is an array - Doctrine supports "composite" identifiers
+  - Our bundle won't support this, so let's add a check
+  - In `translationsFor()`, remove `dd()` and add
+    - `if (1 !== count($id)) { throw new \LogicException(sprintf('Class "%s" must have a single identifier to be translatable.', $object::class)); }`
+    - `$id = reset($id);`
+    - use `$id` in the `findBy()` call
+  - Above `$translations`, add `/** @var Translation[] $translations */`
+  - `dd($translations)` - refresh page to see what we have
+  - remove `dd()`, add `$translationValues = [];`
+  - `foreach ($translations as $translation) {`
+  - `$translationValues[$translation->field] = $translation->value;`
+  - Finally, return `$translationValues;`
 - Refresh page - works!
 
 ## `translate_object` Twig Filter
 
 - Allow translating objects in Twig
 - create `src/Twig/ObjectTranslatorExtension.php`
-    - mark `final`
-    - add `@internal` - to end users know not to use this class directly
-    - `extends AbstractExtension`
-    - override `getFilters()` - add `array` return type
-    - `return [new TwigFilter('translate_object')];`
-    - For better performance, we should use a Twig runtime
-        - We could add a new service but... a runtime can be any service + method
-        - Let's reuse or `ObjectTranslator` service
-        - `[ObjectTranslator::class, 'translate']`
+  - mark `final`
+  - add `@internal` - to end users know not to use this class directly
+  - `extends AbstractExtension`
+  - override `getFilters()` - add `array` return type
+  - `return [new TwigFilter('translate_object')];`
+  - For better performance, we should use a Twig runtime
+    - We could add a new service but... a runtime can be any service + method
+    - Let's reuse or `ObjectTranslator` service
+    - `[ObjectTranslator::class, 'translate']`
 - In `services.php`
-    - add a new service: `->set('.symfonycasts.object_translator.twig_extension', ObjectTranslatorExtension::class)`
-        - Note the class is struckout - this is because of the `@internal` tag
-        - services prefixed with a dot are "hidden" - we don't want end users to see/use this service
-        - `->tag('twig.extension')`
-    - Above, add `->tag('twig.runtime')` to the `ObjectTranslator` service
+  - add a new service: `->set('.symfonycasts.object_translator.twig_extension', ObjectTranslatorExtension::class)`
+    - Note the class is struckout - this is because of the `@internal` tag
+    - services prefixed with a dot are "hidden" - we don't want end users to see/use this service
+    - `->tag('twig.extension')`
+  - Above, add `->tag('twig.runtime')` to the `ObjectTranslator` service
 - In `templates/article/index.html.twig`, in the foreach add:
-    - `{% set article = article|translate_object %}`
+  - `{% set article = article|translate_object %}`
 - Go to the French homepage - articles are translated now
 
 ## Performance Optimization 1: Memoization
@@ -482,50 +483,25 @@
 - update `index.html.twig` to call `translate_object` for title/content fields
 - Refresh - query count jumps - each item in loop now required 2 queries
 - Open `ObjectTranslator`
-    - This `transationsFor()` method is called for the same object multiple times
+  - This `transationsFor()` method is called for the same object multiple times
 - Let's use "memoization"
-    - Fancy word for in-memory caching expensive logic
-    - Resets between requests but can still help in our case
-    - We'll use a WeakMap to store the translated objects
-        - This is a special data structure that allows us to store objects as "keys"
-        - If an object key is no longer referenced, it'll be cleared from the map
-        - Prevents memory leaks
+  - Fancy word for in-memory caching expensive logic
+  - Resets between requests but can still help in our case
+  - We'll use a WeakMap to store the translated objects
+    - This is a special data structure that allows us to store objects as "keys"
+    - If an object key is no longer referenced, it'll be cleared from the map
+    - Prevents memory leaks
 - add `private \WeakMap $translatedObjects;` to `ObjectTranslator`
 - In `__construct()`, add `$this->translatedObjects = new \WeakMap();`
 - In `translate()`, add `return $this->translatedObjects[$object] ??= ...`
 - Refresh French homepage - query count is back to normal - 1 per entity!
 - We can do better though!
 
-## Refactoring `ObjectTranslator`
-
-- Let's extract `ObjectTranslator::translationsFor()` logic into its own service
-- Create `DoctrinePropertyTranslator.php`
-    - mark `final` and `@internal`
-- Cut and paste `translationsFor()` method to `DoctrinePropertyTranslator`
-    - make method public
-- Create a `__construct()` method
-    - inject `private ManagerRegistry $doctrine`
-    - inject `private string $translationClass`
-- In `ObjectTranslator`:
-    - Remove unnecessary properties & namespaces
-    - inject `private DoctrinePropertyTranslator $propertyTranslator`
-    - refactor `translate()` to use `$this->propertyTranslator->translationsFor($object, $locale)`
-- In `services.php`
-    - `->set('.symfonycasts.object_translator.doctrine_property_translator', DoctrinePropertyTranslator::class)`
-    - cut/paste the args from above
-    - add `service('.symfonycasts.object_translator.doctrine_property_translator')`
-- In `ObjectTranslationBundle::loadExtension()`
-    - `$builder->getDefinition('.symfonycasts.object_translator.doctrine_property_translator')`
-    - Set argument 1 for `$config['translation_class']`
-- Refresh homepage and check article - everything still works!
-
 ## Performance Optimization 2: Caching
 
-- We want to cache the fetched translations
-    - These probably won't change often
-    - We could inject the cache service into `DoctrinePropertyTranslator`
-    - But let's use a decorator instead
-- First, create `PropertyTranslatorInterface`
-    - copy/paste method signature from `DoctrinePropertyTranslator`
-    - have `DoctrinePropertyTranslator` implement this interface
-    - use this interface in `ObjectTranslator`
+- In `ObjectTranslator::translationsFor()`
+  - We want to cache the fetched translations db query
+  - These probably won't change often
+  - we could use "Doctrine result cache" but we'll use the standard Symfony cache instead
+- ...
+
