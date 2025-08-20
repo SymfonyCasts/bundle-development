@@ -1,12 +1,34 @@
 chapters:
-    - initialize-bundle
-    - bundle-class
-    - install-locally
-    - bundle-service-class
-    - wiring-bundle-services
-    - bundle-entity
-    - bundle-entity-mapping
-    - extend-bundle-entity
-    - bundle-configuration
-    - configuration-validation
-    - utilizing-configuration
+    initialize-bundle:
+        tutsFirstStep: 1-add-composer-json
+        tutsLastStep: 1-add-composer-json
+    bundle-class:
+        tutsFirstStep: null
+        tutsLastStep: null
+    install-locally:
+        tutsFirstStep: null
+        tutsLastStep: null
+    bundle-service-class:
+        tutsFirstStep: null
+        tutsLastStep: null
+    wiring-bundle-services:
+        tutsFirstStep: null
+        tutsLastStep: null
+    bundle-entity:
+        tutsFirstStep: null
+        tutsLastStep: null
+    bundle-entity-mapping:
+        tutsFirstStep: null
+        tutsLastStep: null
+    extend-bundle-entity:
+        tutsFirstStep: null
+        tutsLastStep: null
+    bundle-configuration:
+        tutsFirstStep: null
+        tutsLastStep: null
+    configuration-validation:
+        tutsFirstStep: null
+        tutsLastStep: null
+    utilizing-configuration:
+        tutsFirstStep: null
+        tutsLastStep: null
