@@ -4,3 +4,9 @@ chapters:
     - install-locally
     - bundle-service-class
     - wiring-bundle-services
+    - bundle-entity
+    - bundle-entity-mapping
+    - extend-bundle-entity
+    - bundle-configuration
+    - configuration-validation
+    - utilizing-configuration

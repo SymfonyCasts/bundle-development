@@ -1,0 +1,3 @@
+# Configuring our Bundle's Entity
+
+Coming soon...
