@@ -1,61 +1,68 @@
 # Install our Bundle Locally
 
-Alright, so we've got our basic code ready to install a bundle with
-Symfony. We've got our `composer.json` file and our bundle class in place.
-But the installation method is a bit different from what you might be used
-to.
+We have our bundle "package" and bundle class, and even though it lives within
+our app, we still need to "install" it. This is handled with Composer
+like normal but the method is a little different. It doesn't exist on
+Packagist or GitHub yet, so we have to tell Composer: "Hey, our bundle exists
+in this specific folder!"
 
-We still need our app's `composer.json` file, but the bundle doesn't exist
-on Packagist or GitHub yet. So we kind of have to tell Composer, "Hey, our
-bundle exists in this specific folder!"
+Open our app's `composer.json` file and add a new top-level key called
+"repositories". Composer has a default "repository" - Packagist. This is
+where it looks for packages. But we can add our own custom repositories too.
 
-Scroll down and add a new key called `repositories` to our `composer.json`.
-This should be an array. Inside this array, we'll have another array
-object. Here, we're going to specify the type as `path`. This tells
-Composer that our bundle exists somewhere on our file system. After that,
-we'll add a URL, which will be the relative path to the folder containing
-the `composer.json` file. So, relative to our `composer.json`, it would be
-`object-translation-bundle`.
+This needs to be an array, inside, a json object. The first key is "type" - what
+kind of repository. In our case, it's a "path" (or local) repository. Next,
+"url" - for "path" repositories, this is the relative path to our package
+folder. Use "object-translation-bundle", since it's in the root of our app.
 
 ## Installing the Bundle
 
-With that done, we're all set to install the bundle! Let's head over to our
-terminal and use the command:
+Now we can install our bundle package like normal - well almost...
+
+Head over to your terminal and run:
 
 ```terminal
 composer require symfonycasts/object-translation-bundle
 ```
 
-Now, this might give us an error because there isn't a stable version of
-the bundle yet. To get around this, we can run the same command but append
-`: @dev`. This tells Composer we just want the latest development version.
-This is typically needed when working with paths because Composer can't
-figure out the version on its own.
+We're getting an error about not finding a "stable" version of our package.
+Our app is configured to only install stable versions of packages by default.
 
-Once that's done, you'll see that Symfony Flex is used to auto-generate a
-recipe. We don't have a Symfony Flex recipe for this bundle yet, but it
-still did something when we installed this bundle.
+Get around this by running the command again, but appending `:@dev` to the end of
+the package name:
 
-## Checking What's Been Added
+```terminal-silent
+composer require symfonycasts/object-translation-bundle:@dev
+```
 
-Let's do a `git status` to see what's been added. There's `composer.json`,
-`composer.lock`... but hey, look at this— our `config/bundles.php` has
-been modified. How did that happen?
+Awesome! That worked now. What's cool about "path" repositories is that
+they're symlinked so changes you make to the bundle are reflected in your
+app immediately. Perfect for local development!
 
-If we check the config bundles, we'll see this line:
-`SymfonyCasts\ObjectTranslationBundle\ObjectTranslationBundle::class =>
-['all' => true]`. The bundle is being installed in all environments.
+## Auto-Flex Recipe
 
-Now, remember in the first chapter when we set our package type to
-`symfony-bundle`? This is where it comes in handy. Flex has some logic to
-detect when you're trying to install a Composer package marked as a
-`symfony-bundle`. It then looks for our bundle class based on a standard
-naming convention. Once it finds the bundle class, it automatically adds it
-to the bundles. How cool is that?
+Look at this - the output is telling us Symfony Flex installed a recipe for
+this? How? We didn't create a recipe...
 
-Without needing a recipe, we can install the bundle right out of the box.
-Whenever someone installs this package, the bundle is automatically
-installed.
+Run:
 
-At this point, we have our bundle installed, but it doesn't do anything
-yet. So next, let's add our first service to our bundle.
+```terminal
+git status
+```
+
+to see what's up. `composer.json` and `composer.lock` were modified - that's
+expected... but look: `config/bundles.php` was modified too...?
+
+Open that up in your editor. Wow! It automatically added our bundle class!
+
+Remember when we created our bundle's `composer.json` file? We set the "type"
+to "symfony-bundle"? This told Symfony Flex: "Hey, this is a Symfony bundle!
+Look for a bundle class and load it automatically."
+
+Pretty neat, huh?
+
+Without needing a *true* recipe, whenever someone installs this package,
+the bundle is automatically added to your app.
+
+We have an empty bundle installed and added to Symfony, next, let's have
+our bundle provide a service!
