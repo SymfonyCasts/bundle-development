@@ -3,17 +3,17 @@ chapters:
         tutsFirstStep: 1-add-composer-json
         tutsLastStep: 1-add-composer-json
     bundle-class:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 2-bundle-class
+        tutsLastStep: 2-bundle-class
     install-locally:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 3-install-our-bundle
+        tutsLastStep: 3-install-our-bundle
     bundle-service-class:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 4-bundle-service-class
+        tutsLastStep: 4-inject-object-translator
     wiring-bundle-services:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 5-services-php
+        tutsLastStep: 5-configure-service-args
     bundle-entity:
         tutsFirstStep: null
         tutsLastStep: null
