@@ -19,7 +19,7 @@ folder. Use "object-translation-bundle", since it's in the root of our app.
 
 Now we can install our bundle package, so head over to your terminal and run:
 
-```terminal
+```terminal-silent
 composer require symfonycasts/object-translation-bundle
 ```
 
@@ -30,7 +30,7 @@ versions of packages by default.
 We can get around this by explicitly allowing a "dev" version of this package. Run the command
 again, but appending `:@dev` to the end of the package name:
 
-```terminal-silent
+```terminal
 composer require symfonycasts/object-translation-bundle:@dev
 ```
 
