@@ -15,14 +15,14 @@ chapters:
         tutsFirstStep: 5-services-php
         tutsLastStep: 5-configure-service-args
     bundle-entity:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 6-translation-base-entity
+        tutsLastStep: 6-translation-base-entity
     bundle-entity-mapping:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 7-base-entity-mapping
+        tutsLastStep: 7-base-entity-mapping
     extend-bundle-entity:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 8-app-translation-entity
+        tutsLastStep: 8-app-translation-entity
     bundle-configuration:
         tutsFirstStep: null
         tutsLastStep: null
