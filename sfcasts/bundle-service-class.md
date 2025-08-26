@@ -1,73 +1,74 @@
 # Bundle Service Class
 
-Alright, we've successfully installed our bundle into our app. But right
-now, it's not doing much. It's just a skeleton with nothing more than that
-bundle class. Let's breathe some life into it by creating our bundle's
-first service.
+Ok, our bundle is installed and ready to roll. Time to add some functionality
+by adding our first service class. This will be the star of the show. Our
+bundle is for translating objects, so this seems like the place to start.
 
-In our bundle's `src` directory, we'll whip up a new PHP class. The star of
-the show? Our first service, the `ObjectTranslator` service. We're focusing
-on translating objects in this bundle, and this service is going to be the
-key player.
+In our bundle's `src` directory, create a new PHP class: `ObjectTranslator`.
 
-Let's put our namespace in place and hit enter.
+## `ObjectTranslator`
 
-## Establishing the Class Structure
+First, mark this class as final. This isn't meant to be extended. When developing
+bundles, it's important to be explicit about your class design and their
+intentions. This makes it easy to keep backwards compatibility. Removing `final`
+later isn't a breaking change, but adding `final` is. We'll explore more of these
+tricks as we go along.
 
-To keep things tidy, we'll mark this class as `final`. We want to make it
-clear to our users that this class is not intended to be extended. This
-way, we can tweak the internals while ensuring backward compatibility.
-We'll explore more smart tricks like this throughout our journey together.
+Create a method: `public function translate(object $object)`. Return type: `object`. This will
+eventually house the logic for translating objects. For now, just return the passed
+`$object`.
 
-Let's roll up our sleeves and add our first method. We'll name it `public
-function translate(object $object): object` and, as you can guess, it will
-return an object. For now, let's keep things simple and just return the
-object as it is.
-
-## Using PHP Generics
-
-Now, here's something a bit advanced but incredibly useful - PHP generics.
-Let's add a doc block and use `@template T of object` at the top. Not only
-does this help with static analysis tools like PHPStan, but it also makes
-our IDE super happy. It'll be able to recognize when we pass an object to
-`object`, and return the same object.
-
-We'll use `@template T`, where `T` can be anything but in this case, it's
-an object. We'll replace `object` with `T` in our parameter and also in our
-`@return` statement. This will signal to our IDE that any object we pass
-here will return the exact same object. Trust me, it'll be really cool when
-we see it in action.
-
-## Building the Constructor
-
-Our service needs a constructor to inject a few goodies. We'll say `public
+Our service needs a constructor to inject a few goodies. Add `public
 function __construct(private LocaleAwareInterface $localeAware, private
 string $defaultLocale)`. We need the `LocaleAwareInterface` service to get
 the current locale of the request, and we'll also need our app's default
-locale. Let's add some initial logic for when we translate an object.
+locale.
 
-First off, we'll grab the current locale of the request using
-`$this->localeAware->getLocale()`. If someone tries to translate an object
-to the default locale, we won't need to do anything. Hence, we'll just
-return the raw object in that case with a simple `if ($this->defaultLocale
-=== $locale)` check.
+Down in `translate()`, we can add some easy logic. Grab the current locale with
+`$locale = $this->localeAware->getLocale()`.
+Now, if the current locale is the same as the default locale, we don't need to
+do any translating, so add an `if ($this->defaultLocale === $locale)` and
+just return the raw object in this case.
 
-For now, let's just add a placeholder for the actual translation logic.
-We'll insert `// translate object` and mark this with `// todo`.
+Below is where we'll eventually add the *real* translation logic, but just
+add a comment for now: `todo translate object`.
 
-## Integrating the ObjectTranslator Service
+Let's use this new service in `ArticleController::show()`. Expand this method
+a bit and inject it: `ObjectTranslator $translator`.
 
-Let's figure out where to use this new service. Back in our app, on our
-article page, we're going to translate the articles. So, let's dive back
-into our code. In `src/Controller/ArticleController`, inside the `show`
-method, we'll inject our new service, `ObjectTranslator $translator`.
+Run the injected `Article` through our new service:
+`$article = $translator->translate($article)`. Sweet!
 
-Now, let me show you something cool. If we assign `article` to
-`$translator->translate($article)`, we can see all the methods from the
-article thanks to our IDE. This might not seem like a big deal, but we're
-able to do this thanks to the `template` doc block we added earlier.
+## PHP Generics
 
-If we refresh our app, we'll see a problem. Bundle services, like our
-`ObjectTranslator`, are not auto-wired by default. We need to configure our
-bundle to let apps know that this service is available and can be
-auto-wired. Let's tackle that next.
+Notice if we try and access a method on `$article` *before* running through
+our service, PhpStorm can auto-complete all the methods on `$article`. But...
+if we try and access a method on `$article` *after* running it through
+`$translator->translate()`, we don't have auto-completion. PhpStorm has no idea
+what `$article` is now - just that it's "an object". This is a drag...
+But we can fix this with *PHP generics*!
+
+Generics are a way to provide additional type information to our editor.
+
+Check this out: above `ObjectTranslator::translate()`, generate some doc blocks.
+This just matched the method signature and isn't super helpful... so add
+`@template T of object` above. This declares a template type `T` that must
+be an object. `T` is like an alias, or placeholder and can be any string.
+
+Now, for `@param` and `@return`, replace `object` with `T`. This tells our editor:
+"Whatever object type is passed to this method, the return type will be the same object type."
+
+Back in `ArticleController::show()`, after we call `translate()`, try auto-completing
+again on `$article`. Boom! PhpStorm knows exactly what `$article` is now. I
+love this!
+
+Remove that extra code - the *translated* article is now passed to our template
+so our work here is done.
+
+Jump back to our browser and visit an article page... An error... "Cannot
+autowire argument $translator..."
+
+Symfony doesn't know about our bundle's service - it's just a plain PHP class
+still...
+
+Let's fix that next!
