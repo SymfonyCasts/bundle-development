@@ -1,101 +1,130 @@
 # "Wiring Up" our Bundle Service
 
-Hey there, remember when we were trying to inject our new bundle service
-into the `ArticleController` show method and we ran into this error? Yeah,
-that happened because Symfony wasn't aware that it's a service. So we have
-to let Symfony in on the secret by letting it know our bundle has this
-service available.
+We created the class we want to use as a service in our bundle, but when
+we try to inject it, we get this "cannot autowire argument..." error.
 
-Now, this might be a bit more complex than what you're used to. If you've
-been using Symfony since its early days, you might remember doing this for
-every service, even in your end apps. But that was before auto wiring came
-along to make things easier. So, even though we get to enjoy the simplicity
-of auto wiring in our end apps, when it comes to bundles, we need to do
-things the old school way. And the reason for this is it gives your bundle
-the most flexibility and extensibility.
+In your end apps, you might be used to this *just working*. That's because
+*service autowiring* is enabled by default for all classes in your app's `src`
+directory.
+
+Bundles, however, are a different story. If you've been using Symfony
+as long as I have, you might remember that in the old days, autowiring
+*wasn't* a thing! You had to manually define every... single... service
+in a YAML or XML file. It was rough...
+
+Luckily, for apps, this is no longer the case (for the most part). But you
+still have to do it for bundles. This is because bundles are meant to be
+reusable, and you want to give the end user the most flexibility possible.
+
+There are still some improvements in this department though.
 
 ## Creating a Services File
 
-First off, let's go into our `ObjectTranslationBundle`'s `config` directory
-and create a `services.php` file. Remember, this isn't a class. Next, give
-it a namespace of
-`Symfony\Component\DependencyInjection\Loader\Configurator`.
+Remember we created that empty `config` directory in our bundle? This is
+where we define our bundle's services. In it, create a regular PHP
+file (not a class): `services.php`.
 
-```php <?php namespace
-Symfony\Component\DependencyInjection\Loader\Configurator; return static
-function (ContainerConfigurator $container): void { }; ```
+If you've written bundles in the past, you might have used XML for
+defining services. This was the previous best practice. But nowadays, using
+PHP is preferred. In your end-apps, if you do need to define services
+manually, YAML is likely what you use. There's nothing stopping you from
+using YAML here, but this would require your bundle to depend on the YAML
+component. So, PHP it is!
+
+First, add `namespace Symfony\Component\DependencyInjection\Loader\Configurator`.
+This'll let us use the service definition helper classes and functions we require
+without the need to import each one.
+
+Next, `return static function (ContainerConfigurator $container)`. Inside, write
+`$container->services()`. We'll chain our service definitions off this.
 
 ## Defining the Bundle's Services
 
-Now comes the fun part - defining our bundle's services. We'll be doing
-this in PHP format, but you could also use YAML or XML if you prefer.
-However, the current best practice for bundles is to use PHP to define your
-services.
-
-Time to set our first service. Remember to name it appropriately. In
-bundles, always use your bundle's namespace as the prefix for all your
-services. 
-
-```php use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
-$container->services() ->set('symfonycasts.object_translator',
-ObjectTranslator::class) ; ```
+Now comes the fun part! Add `->set()` - the first argument is the service ID.
+In your apps, this is usually just the class name, but in bundles, we use
+a plain string - again, for maximum flexibility. This ID needs to be unique,
+so prefix it with a namespace that makes sense for your bundle. Here, we'll
+use `symfonycasts.`. Now the name of our service: `object_translator`. The
+second argument is the fully qualified class name: `ObjectTranslator::class`
+(make sure you import it).
 
 ## Letting Symfony Know About the Service
 
-We've got our `services.php` file all set, but we still need to get Symfony
-in the loop. To do this, go into `ObjectTranslationBundle` and override the
-`loadExtension()` method. 
+We now have this... sort of... random `services.php` file in our bundle,
+so we need to tell Symfony about it!
 
-```php use Symfony\Component\DependencyInjection\ContainerBuilder; use
-Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-public function loadExtension(array $config, ContainerConfigurator
-$container, ContainerBuilder $builder): void {
-$container->import('../config/services.php'); } ```
+In `ObjectTranslationBundle`, override the `loadExtension()` method from
+`AbstractBundle`. This method is called when the bundle is loaded by
+Symfony.
 
-Let's make things even smoother by aliasing `ObjectTranslator::class` to
-`'symfonycasts.object_translator'`.
+The parent method is empty, so we can remove this call. Import our
+`services.php` file using `$container->import()`. The path is relative to
+our current file, so write `../config/services.php`.
 
-```php ->alias(ObjectTranslator::class, 'symfonycasts.object_translator')
-```
+Is this all we need? Let's see. Jump back to the browser and refresh the
+error page. Hmm, the same error. But now we have more
+details: "You should maybe alias this class to the existing `symfonycasts.object_translator`
+service."
 
-## Troubleshooting the Error
+This is still progress - since Symfony is suggesting the service ID, that means
+it knows about it!
 
-Alright, we still have an error, but at least now we have more details. It
-seems like we should alias this class to the existing
-`symfonycasts.object_translator` service. But, guess what? We can tell our
-bundle to enable auto wiring for this class in just a few easy steps.
+## Alias our Service
 
-```php ->args([ service('translation.locale_switcher'),
-param('kernel.default_locale'), ]) ```
+In `ArticleController::show()`, where we're trying to inject `ObjectTranslator`,
+we *could* add the `#[Autowire]` attribute with the service ID... This would work...
+but we can do better! I want this service to be autowire-able. We do this
+by setting the class name as a *service alias*.
 
-## Identifying Required Dependencies
+In `services.php`, below `set()`, write `->alias()`. The first argument
+is the alias we want to create: `ObjectTranslator::class`. The second
+argument is the service ID we defined earlier: `symfonycasts.object_translator`.
 
-Looking at our `ObjectTranslator`, we can see we have two required
-dependencies: `LocaleAwareInterface` and the `defaultLocale`. To find the
-service ID for `LocaleAwareInterface`, simply run `symfony console
-debug:autowiring LocaleAware`. 
+Back in the browser, refresh. And... still an error - but a different one. "Too
+few arguments passed to ObjectTranslator".
+
+## Defining Service Arguments
+
+Remember, in `ObjectTranslator`, we have two required dependencies:
+`LocaleAwareInterface`, a service, and `$defaultLocale`, a *container parameter*.
+We need to tell Symfony how to supply these.
+
+I know we can autowire `LocaleAwareInterface`, but in bundles, we need to
+manually configure it, so we need it's service ID. To find this, at your
+terminal, run:
 
 ```terminal
 symfony console debug:autowiring LocaleAware
 ```
 
-Once we have the service ID, we can add it as the second argument using
-`param()`. Let's give it a try and refresh. And... voilà! It works. We now
-know that the service is being injected properly.
+We don't need the full name, just the first part should be enough. Perfect!
+Here it is: `translation.locale_switcher`. Copy that.
 
-## Locating the DefaultLocale Parameter
+Back in `services.php`, right below `set()`, indent to keep this organized, and
+write `->args()` with an array. These elements match the order of the constructor
+arguments, so the first argument is the service. Use the `service()` function
+and paste the service ID we just found.
 
-The other thing we need in our `ObjectTranslator` is the `defaultLocale`.
-This is a container parameter provided by Symfony. To find this, run
-`symfony console debug:container --parameters |grep locale`.
+Now for the second argument, `$defaultLocale`. This is a container parameter.
+We can list *all* parameters in the terminal by running:
 
 ```terminal
-symfony console debug:container --parameters |grep locale
+symfony console debug:container --parameters
 ```
-This command lists all the parameters. So, let's run it again, and there we
-go. `Kernel.default_locale` - that's the parameter we've been looking for.
 
-```php ->args([service('translation.locale_switcher'),
-param('kernel.default_locale')]) ``` Let's refresh one more time. And...
-success! The service is being injected properly. Now that we've got that
-under our belt, we can move on to the next step.
+Big list... filter it by running the same command but with `| grep locale` at the
+end:
+
+```terminal-silent
+symfony console debug:container --parameters | grep locale
+```
+
+`kernel.default_locale` is what we're looking for! Copy that.
+
+Back in `services.php`, for the second `args` array element, use the `param()` function
+and... *paste*.
+
+Go back to our browser... refresh... and success! No error means the service is correctly
+defined and injected!
+
+Next, we'll look at how our bundle will *store* translations.
