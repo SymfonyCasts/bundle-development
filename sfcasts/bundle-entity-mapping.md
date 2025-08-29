@@ -1,80 +1,95 @@
 # Configuring our Bundle's Entity
 
-Hey there! Let's dive right into teaching Symfony & Doctrine about our
-abstract `translation` class. You know, the one we're planning to extend.
-All you need to do is hop on over to your terminal and run this command:
+We created the abstract `Translation` class in our bundle. Now, we need
+to tell Doctrine about it so we can extend and use it in our app as 
+a *real* entity.
+
+First, hope over to your terminal and run:
 
 ```terminal
-symfony console doctrine mapping info
+symfony console doctrine:mapping:info
 ```
 
-What you'll see is a list of all the entities and mapped superclasses that
-Doctrine knows about. However, you'll notice that your `translation` mapped
-superclass isn't on this list, and we need to change that.
+This shows all the entities that Doctrine knows about. The `Category`,
+`Tag`, and `Article` entities from our app, is all we see right now. This
+command *also* shows mapped superclasses, so we need to do some work
+to get our `Translation` class to show up here.
 
-## Working with Doctrine Entities
-
-You might be used to using the mapping attributes for your Doctrine
-entities in your end apps, but things are slightly different when you're
-dealing with bundles. The official recommendation is to use XML for
-this—yes, I know, it's not the most fun thing to work with, but it does
-provide the most flexibility.
+You're probably used to using *mapping attributes* for your Doctrine entities.
+In bundles, it's a bit different. The official recommendation is to use XML for
+the mapping. I know, I know, XML is *not* the most fun thing to work with, but it
+does provide the most flexibility.
 
 ## Creating the XML File
 
-So, let's get down to business and create that XML file. Go ahead and add a
-folder and subfolder called `doctrine mapping` in your `config`. Now, to
-save you the pain of watching me write XML, there's a file called
-`translation.orm.xml` in the tutorial directory. Just grab that and move it
-straight into this mapping directory.
+Let's get down to business. In your bundle's `config` directory, create a new
+directory and subdirectory: `doctrine/mapping`. To save you the pain of
+watching me struggle to write the XML, in the `tutorial` directory, there's a
+`Translation.orm.xml` file. Grab that file and move it in into our new
+`doctrine/mapping` directory.
+
+Note the `.orm.xml` suffix. This is important as it tells Doctrine that this
+is mapping information for the ORM. In the future, if we add support for MongoDB, we'd create
+a `Translation.mongodb.xml` file with the appropriate mapping for that.
 
 ## Understanding the XML File
 
-On first glance, it might look a bit intimidating, but it's really not.
-Essentially, you're telling Doctrine that this is a mapping for a mapped
-superclass, and you're providing the full class name of your `translation`
-mapped superclass. Then, you're defining the fields that correspond to the
-properties.
+Open `Translation.orm.xml` in your editor. Gross... let's unpack this.
+First, we're declaring a top-level `doctrine-mapping` element with some
+XML namespace stuff. Inside, a `mapped-superclass` element with a
+`name` attribute for the full class name of our bundle's `Translation` class.
 
-You've got this `objectType` property which will be a column in the
-database named `object_type` of string type, and the same goes for
-`objectId`. Then you've got the `locale` field and `value`—all strings
-except for `value`, which is text. The reason `value` is text is because we
-don't want any limitations on the size of this database column.
+Inside this, is our `field` mappings. The `name` attribute corresponds to
+the property name in our `Translation` class, and the `column` attribute
+is the column name we want to use in the database. If omitted, Doctrine
+will use the property name as the column name. I've *snake_cased* the
+`objectType` and `objectId` column names to follow common database
+naming conventions.
 
-## Linking Symfony and Doctrine to the XML File
+The `type` attribute indicates the Doctrine type for the column. We'll use
+`string` for all except for `value`, which is `text`. `string` columns
+have a maximum length, typically around 200-250 characters, depending on
+the database platform and configuration. This is fine for most of our fields,
+but the `value` column needs to hold more. The `text` type can hold much larger strings,
+so it's perfect for our translated values.
 
-Just creating the XML file isn't enough though, we need to point Symfony
-and Doctrine to this file. To do this, in your `source object translation
-bundle`, you'll override a class and a method, specifically the `build`
-method.
+## Loading the XML Mapping
 
-You'll be adding what's called a `compiler pass`. So you'll use `container
-add compiler pass` and it's going to be a `Doctrine ORM mappings pass`.
-Then you'll create an XML mapping driver. This requires an array that's
-keyed by the mapping directory to the namespace that this mapping directory
-represents.
+Just creating the XML file isn't enough though, we need to let Doctrine
+know about this file. In `ObjectTranslationBundle`, override the `build()`
+method and add the `void` return type. This parent method call can be removed,
+as it's empty.
 
-You're going to use `__DIR__` dot, and then a string of `slash..slash`, and
-then `config Doctrine mapping`. Now, you need the namespace that this
-mapping directory represents. To get that, just pop into your `translation`
-model and simply copy the namespace.
+`loadExtension()` is where we load and configure things for *this* bundle. `build()`
+is called later in the process, after all other bundles have been registered. This
+allows us to modify the service container after all other bundles have had
+a chance to register their services. Here, we can tell Doctrine about our
+bundle's mappings.
 
-And there you go!
+We'll do this with a *compiler pass*, a sort of *build hook* that has access to
+the fully built service container. Write `$container->addCompilerPass()`.
 
-## Checking Your Work
+Doctrine provides a compiler pass specifically for loading mappings. Write
+`DoctrineOrmMappingsPass` and import this class from the Doctrine bundle.
+Here we can see the static methods to create mappings. Choose `createXmlMappingDriver()`.
 
-Let's run the `Doctrine mapping info` command again to see if our
-`translation` class is now recognized:
+The first argument is an array. The keys are the directories where the mapping
+files are located, and the values are the *namespaces* that these mapping files
+represent. We only need one.
 
-```terminal
-symfony console doctrine mapping info
+For the key, use `__DIR__.'/../config/doctrine/mapping'` - this is the relative path
+to our mapping directory. For the value, jump over to the `Translation` class and
+copy its namespace `SymfonyCasts\ObjectTranslationBundle\Model`. Go back
+to `ObjectTranslationBundle` and paste it in as the value.
+
+That's it!
+
+Jump over to your terminal and run the `doctrine:mapping:info` command again:
+
+```terminal-silent
+symfony console doctrine:mapping:info
 ```
 
-And voila! If you look at the bottom, you'll see that it's detecting the
-`translation` map superclass.
+Sweet! Now we can see our `Translation` mapped superclass listed.
 
-## Creating the `Translation` Entity
-
-Next up, let's roll up our sleeves and create the real `translation` entity
-in your app. Can't wait to see this in action with you!
+Next, we'll create the *real* `Translation` entity in our app!
