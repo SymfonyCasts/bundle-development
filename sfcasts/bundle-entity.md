@@ -2,10 +2,10 @@
 
 Our bundle needs a way to *store* the object translations. Since we're
 translating Doctrine entities from the database, we know a database is
-in use so the best way to store these translations is also in the
+in use. So the best way to store these translations is also in the
 database.
 
-So, here's the plan: we're going to create a single table for all the
+Here's the plan: we're going to create a single table for all the
 translations of all the different Doctrine objects in your app. To achieve
 this, we're going to employ a neat pattern known as an Entity Attribute
 Value or, for short, an EAV model.
@@ -23,14 +23,14 @@ store the `locale` (indicating the locale of the translation) and the
 and lastly, the `value` — the translated value in that locale.
 
 You might think this pattern is inefficient, and in some ways, you'd be right.
-We can use it to easily translate dozens of entity types without
+But, we can use it to easily translate dozens of entity types without
 having to create a new table for each entity. The trade-off is performance,
 this table can, and likely will, grow quite large. However, with proper indexing
 and caching, the performance trade-off can be mostly mitigated.
 
 ## Creating the Model
 
-There's' a trick to having a bundle provide an entity, so let's dive in.
+There's a trick to having a bundle provide an entity, so let's dive in.
 
 In the bundle's `src` directory, create a new directory. Now, you might think
 it should be called `Entity`, like in your apps, but name it `Model` instead.
