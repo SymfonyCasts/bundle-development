@@ -24,11 +24,11 @@ chapters:
         tutsFirstStep: 8-app-translation-entity
         tutsLastStep: 8-app-translation-entity
     bundle-configuration:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 9-translation-class-config
+        tutsLastStep: 9-info-example
     configuration-validation:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 10-required
+        tutsLastStep: 10-proper-class
     utilizing-configuration:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 11-require-translation-class
+        tutsLastStep: 11-remove-translator-dd
