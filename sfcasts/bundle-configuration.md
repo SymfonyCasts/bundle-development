@@ -1,66 +1,95 @@
 # Bundle Configuration
 
-So you've successfully set up your translation entity in your app. Great
-job! Now it's time to let your bundle know about it. The most effective way
-to do this is by using bundle configuration, which you'll find living
-inside your app's `config packages` file. For instance, take a look at the
-`Doctrine bundle` - we want to do something similar for your bundle.
+We need to let our bundle know about our shiny new `Translation` entity. Bundle
+configuration is the best way to do this.
 
-To achieve this, inside your bundle's source `ObjectTranslationBundle`,
-you're going to override a method called `configure()`. Since the parent
-method is empty, feel free to remove it. Write `definition`, and inside
-that, write `definition->rootNode()`. Then off of that, call `children()`.
-This sets up your top-level configuration. Remember, each time you create a
-node, you must call `end()`. It's a good idea to do it immediately so you
-don't forget. Your first configuration node will be a `stringNode`, called
-`translation_class`. Don't forget to call `end()` again.
+You've totally used bundle configuration before. These are the `YAML` files
+inside your app's `config/packages/` directory. For instance, `doctrine.yaml`
+is the configuration for the *Doctrine bundle*.
+
+## Defining Your Bundle Configuration
+
+We can define our bundle configuration right inside our bundle class! Open
+`ObjectTranslationBundle.php` in the `src` directory of your bundle.
+
+Override another method: `configure()`. The parent method is also empty,
+so we can remove this call. Now for the definition. Write
+`$definition->rootNode()`, this is the top-level configuration node, which
+is defined as an *array*. Since it's an array, write `->children()` - the
+array's definition. For definitions, we need to always call `->end()` to mark
+it as *finished*. Do this right away, so we don't forget.
+
+Inside, add our first node: `->stringNode('translation_class')`. In our
+configuration, this will be the *array key*. Again, call `->end()` to
+finish it. `stringNode` means the value must be a string so we already
+get some validation for free.
+
+## Listing Available Bundle Configurations
+
+Over at your terminal, list the available bundle configurations with:
+
+```terminal
+symfony console config:dump-reference
+```
+
+With no arguments. This lists all the loaded bundle's, and their configuration
+*key* (or *extension alias*). `DoctrineBundle`, alias `doctrine`, `DoctrineMigrationsBundle`,
+alias `doctrine_migrations`. Here's our bundle: `ObjectTranslationBundle`, alias
+`object_translation`.
+
+Hmm, I'd like to prefix it with `symfonycasts`, like the Tailwind bundle below.
+
+## Changing Your Bundle's Extension Alias
+
+Here's how. In `ObjectTranslationBundle`, dig into the `AbstractBundle` class.
+`protected string $extensionAlias` what we need to override. By default, it's
+empty and automatically detected from the bundle name (snake-cased without
+the `Bundle` suffix). Copy the property and, back in *our* bundle class,
+paste. Change it to `symfonycasts_object_translation`.
 
 ## Visualizing Your Bundle Configuration
 
-To see what you've just done, there's a handy terminal command. Head over
-to your terminal and enter:
+Cool, now run the command again:
 
-```terminal
+```terminal-silent
 symfony console config:dump-reference
 ```
 
-With no arguments, this command shows all the bundles that can be
-configured. You'll see `Doctrine`, `Doctrine migrations`, and yours,
-`ObjectTranslationBundle`, `ObjectTranslation`.
-
-You probably want to prefix this with `symfonycasts`, similar to the
-`Tailwind` bundle. Here's how: in your translation bundle, pop into
-`abstract bundle`. You'll see `protected string $extensionAlias`. This is
-automatically detected as `ObjectTranslation`, but if you want your own
-prefix, simply override it in your bundle. Do this at the top, and your
-`extensionAlias` will be `symfonycasts_object_translation`.
-
-Run the command again, and voila, you'll see
-`symfonycasts_object_translation`. Running the command again will show the
-full reference of this, as `symfonycasts` argument, `translation`,
-`symfonycasts_object_translation`.
+There we go, `symfonycasts_object_translation`. Run the command again, but this
+time, add that as an argument:
 
 ```terminal
-symfony console config:dump-reference
-symfonycasts_object_translation
+symfony console config:dump-reference symfonycasts_object_translation
 ```
 
-This shows your extension and what the default config looks like. You'll
-see `translation_class` is null, which is signified by a squiggly line.
-Here, you can add more details to provide clearer instructions to your
-users.
+Sweet, here's our default bundle configuration as YAML. It shows `translation_class` as null,
+which is what this *tilda* means.
+
+This output is super useful for our users and is sort of like documentation. We can
+make it even better.
 
 ## Enhancing Your Configuration With Example and Info
 
-Head back to your `stringNode` and expand it a bit. Remember to keep things
-tidy with proper indentation, especially when dealing with large configs.
-Here, you're going to provide some info, like 'The class name of your
-Translation entity'. You can also provide an example to assist your user
-when they run that command, so `example` will be `App\Entity\Translation`.
+Head back to our bundle class and expand this `stringNode` to move the `->end()`
+to a new line. This is where we can add additional configuration for this node.
+Using indentation is very important - these definitions can get pretty complex and
+large.
 
-Keep in mind, this isn't a default value, it's just a handy example. Run
-the command again, and you'll see the info and example now appearing.
+Sometimes, PhpStorm loses track of the indentation, so you have to fight with
+it a bit.
 
-Next up, you'll add some validation to your `translation_class stringNode`,
-ensuring it's indeed the class name of your app's translation entity. Get
-ready, that's your next mission!
+First, add `->info()` - this is a short description of the node. Write
+`The class name of your Translation entity`. On a new line, write
+`->example('App\Entity\Translation')` to show an example value.
+
+Back in the terminal, run the command again:
+
+```terminal-silent
+symfony console config:dump-reference symfonycasts_object_translation
+```
+
+Awesome! A description was added above `translation_class` and our example
+was added beside it. These are commented out, so you can easily copy/paste
+into your own YAML files.
+
+Next, we'll add some validation for this node.
