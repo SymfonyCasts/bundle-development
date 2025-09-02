@@ -10,71 +10,51 @@ At your terminal, run:
 symfony console make:entity
 ```
 
-For the class name, choose `Translation`. All properties will extend
-from the abstract `Translation` class in the bundle, so just hit enter
+For the class name, use `Translation`. All properties are defined in
+the abstract `Translation` class in the bundle, so just hit enter
 to finish.
 
 ## The *Real* Translation Entity
 
 In your editor, open our new entity in `src/Entity/Translation.php`.
 
-Alright, here we go! We're about to create the real `Entity\Translation`
-that extends from our `Math` superclass in our app.
+Alright, here we go! The ID was added for us, which is all we need.
+Now to extend the abstract `Translation` class from the bundle. Since
+it has the same name, we need to import it with an alias.
 
-So, you're probably wondering, how do we make entities? It's pretty simple,
-we use `makeEntity`.
+At the top, write `use Translation` and choose the one from our bundle. Then,
+`as BaseTranslation`. Extend it with `extends BaseTranslation`.
 
-```terminal
-symfony console make:entity
-```
+Sweet, we're done with this!
 
-When it comes to the class name, let's call it `Translation`. We're not
-adding any properties here because we're going to pull everything from the
-`Math` superclass. So, you can just breeze through this by hitting enter.
-
-## Discovering Our New Class
-
-Let's hop back to our app, or more specifically, your Integrated
-Development Environment (IDE). Inside the `src/Entity` folder, you'll spot
-our new class. Here's our shiny new entity. Taking a peek inside, you'll
-see everything is neatly mapped. It even added the `ID`, which is exactly
-what we had in mind. We want only the `ID` to be user-defined for this
-class, with everything else coming from the `Math` superclass.
-
-## Extending Our Translation Model
-
-Now, we need to extend our `Translation` model here. But since it has the
-same name, we need to import it with a different alias in the namespace.
-How about we use `use
-SymfonyCasts\ObjectTranslationBundle\Model\Translation as BaseTranslation`?
-Sounds good? Great. Then, we'll just do `extends BaseTranslation`. And
-voila, we're done with this bit.
+Eventually, we'll provide a recipe so end users won't have to do this step.
 
 ## Making a Migration
 
-Jumping back to our terminal, let's create a migration for this. So, run:
+New entity? New migration!
+
+Jump back to the terminal and run:
 
 ```terminal
 symfony console make:migration
 ```
 
-Alright, now let's have a look at this migration. Just type `migrations`,
-and there it is. Check it out. We can see it's creating a table with the
-`ID`, but it's also snatching all those columns from the `Math` superclass,
-which is exactly what we were aiming for. So, let's just add a description
-here. `Add Translation entity`. Cool, right?
+Take a look at it. Open the new migration file in the `migrations/`
+directory.
 
-Then, back in our terminal, let's run:
+Check out the `up()` method. It's creating the `translation` table with the
+`id`, but also all the columns from our bundle's *mapped superclass*. Perfect!
+
+Add a description: `Add Translation entity`.
+
+Time to run it. At your terminal, run:
 
 ```terminal
 symfony console doctrine:migrations:migrate
 ```
 
-Hit yes, and voila! Migration complete.
+Choose `yes`, and... boom! Database migrated!
 
-## Configuring Our Translation Entity
-
-Now that we've got our `Translation` entity in the app, the bundle needs to
-know what your end class is. We can't just let it guess that it's an
-`App\Entity`. We need to configure it. This is where bundle configuration
-comes into play. So let's dive into that next.
+Ok, we have the entity in our app, but in order for our bundle to perform queries
+on its behalf, the bundle needs to know about it. Perfect job for *bundle
+configuration* - that's next!
