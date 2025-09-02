@@ -1,0 +1,13 @@
+diff --git a/src/Controller/ArticleController.php b/src/Controller/ArticleController.php
+index 72f6291..daee9dd 100644
+--- a/src/Controller/ArticleController.php
++++ b/src/Controller/ArticleController.php
+@@ -23,8 +23,6 @@ final class ArticleController extends AbstractController
+     #[Route('/news/{slug:article}', name: 'app_article_show')]
+     public function show(Article $article, ObjectTranslator $translator): Response
+     {
+-        dd($translator);
+-
+         $article = $translator->translate($article);
+ 
+         return $this->render('article/show.html.twig', [

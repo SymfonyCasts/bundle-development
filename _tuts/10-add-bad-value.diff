@@ -1,0 +1,8 @@
+diff --git a/config/packages/symfonycasts_object_translation.yaml b/config/packages/symfonycasts_object_translation.yaml
+index cf91a4a..e346478 100644
+--- a/config/packages/symfonycasts_object_translation.yaml
++++ b/config/packages/symfonycasts_object_translation.yaml
+@@ -1,2 +1,2 @@
+ symfonycasts_object_translation:
+-    translation_class: ''
++    translation_class: 'Translation'

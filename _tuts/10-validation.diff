@@ -1,0 +1,15 @@
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 66c4d83..5625560 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -21,6 +21,10 @@ final class ObjectTranslationBundle extends AbstractBundle
+                     ->example('App\Entity\Translation')
+                     ->isRequired()
+                     ->cannotBeEmpty()
++                    ->validate()
++                        ->ifTrue(fn ($v) => !class_exists($v))
++                        ->thenInvalid('The translation_class %s does not exist.')
++                    ->end()
+                 ->end()
+             ->end()
+         ;

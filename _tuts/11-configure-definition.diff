@@ -1,0 +1,14 @@
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 8e7059c..fa3e8ef 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -41,5 +41,9 @@ final class ObjectTranslationBundle extends AbstractBundle
+     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+     {
+         $container->import('../config/services.php');
++
++        $builder->getDefinition('symfonycasts.object_translator')
++            ->setArgument(2, $config['translation_class'])
++        ;
+     }
+ }

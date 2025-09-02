@@ -1,0 +1,13 @@
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index ed32899..168fc8e 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -10,6 +10,8 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+ 
+ final class ObjectTranslationBundle extends AbstractBundle
+ {
++    protected string $extensionAlias = 'symfonycasts_object_translation';
++
+     public function configure(DefinitionConfigurator $definition): void
+     {
+         $definition->rootNode()

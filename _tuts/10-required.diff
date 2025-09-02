@@ -1,0 +1,21 @@
+diff --git a/config/packages/symfonycasts_object_translation.yaml b/config/packages/symfonycasts_object_translation.yaml
+new file mode 100644
+index 0000000..cf91a4a
+--- /dev/null
++++ b/config/packages/symfonycasts_object_translation.yaml
+@@ -0,0 +1,2 @@
++symfonycasts_object_translation:
++    translation_class: ''
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 9a2bd8f..66c4d83 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -19,6 +19,8 @@ final class ObjectTranslationBundle extends AbstractBundle
+                 ->stringNode('translation_class')
+                     ->info('The class name of your Translation entity.')
+                     ->example('App\Entity\Translation')
++                    ->isRequired()
++                    ->cannotBeEmpty()
+                 ->end()
+             ->end()
+         ;

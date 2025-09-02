@@ -1,0 +1,31 @@
+diff --git a/config/packages/symfonycasts_object_translation.yaml b/config/packages/symfonycasts_object_translation.yaml
+index e346478..2f01dc9 100644
+--- a/config/packages/symfonycasts_object_translation.yaml
++++ b/config/packages/symfonycasts_object_translation.yaml
+@@ -1,2 +1,2 @@
+ symfonycasts_object_translation:
+-    translation_class: 'Translation'
++    translation_class: 'App\Entity\Article'
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 5625560..8e7059c 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -7,6 +7,7 @@ use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
++use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+ 
+ final class ObjectTranslationBundle extends AbstractBundle
+ {
+@@ -22,8 +23,8 @@ final class ObjectTranslationBundle extends AbstractBundle
+                     ->isRequired()
+                     ->cannotBeEmpty()
+                     ->validate()
+-                        ->ifTrue(fn ($v) => !class_exists($v))
+-                        ->thenInvalid('The translation_class %s does not exist.')
++                        ->ifTrue(fn ($v) => !is_a($v, Translation::class, true))
++                        ->thenInvalid('The translation_class %s must extend SymfonyCasts\ObjectTranslationBundle\Model\Translation.')
+                     ->end()
+                 ->end()
+             ->end()

@@ -79,7 +79,77 @@
             "id": "8-app-translation-entity",
             "name": "8. app translation entity",
             "description": null
+        },
+        {
+            "id": "9-translation-class-config",
+            "name": "9. translation class config",
+            "description": null
+        },
+        {
+            "id": "9-extension-alias",
+            "name": "9. extension alias",
+            "description": null
+        },
+        {
+            "id": "9-info-example",
+            "name": "9. info\/example",
+            "description": null
+        },
+        {
+            "id": "10-required",
+            "name": "10. required",
+            "description": null
+        },
+        {
+            "id": "10-add-bad-value",
+            "name": "10. add bad value",
+            "description": null
+        },
+        {
+            "id": "10-validation",
+            "name": "10. validation",
+            "description": null
+        },
+        {
+            "id": "10-invalid-class",
+            "name": "10. invalid class",
+            "description": null
+        },
+        {
+            "id": "10-proper-class",
+            "name": "10. proper class",
+            "description": null
+        },
+        {
+            "id": "11-require-translation-class",
+            "name": "11. require translation_class",
+            "description": null
+        },
+        {
+            "id": "11-dd-config",
+            "name": "11. dd config",
+            "description": null
+        },
+        {
+            "id": "11-remove-dd",
+            "name": "11. remove dd",
+            "description": null
+        },
+        {
+            "id": "11-configure-definition",
+            "name": "11. configure definition",
+            "description": null
+        },
+        {
+            "id": "11-add-translator-dd",
+            "name": "11. add translator dd",
+            "description": null
+        },
+        {
+            "id": "11-remove-translator-dd",
+            "name": "11. remove translator dd",
+            "description": null
         }
     ],
-    "sha": "f495b1f757e16ae43e132b201038132bc07d8924"
+    "sha": "58d699965f4ce630c4c1c0b5c23fd967012567ab"
 }

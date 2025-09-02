@@ -1,0 +1,16 @@
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 168fc8e..9a2bd8f 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -16,7 +16,10 @@ final class ObjectTranslationBundle extends AbstractBundle
+     {
+         $definition->rootNode()
+             ->children()
+-                ->stringNode('translation_class')->end()
++                ->stringNode('translation_class')
++                    ->info('The class name of your Translation entity.')
++                    ->example('App\Entity\Translation')
++                ->end()
+             ->end()
+         ;
+     }

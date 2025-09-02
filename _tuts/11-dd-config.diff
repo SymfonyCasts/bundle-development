@@ -1,0 +1,13 @@
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 8e7059c..8d2104f 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -40,6 +40,8 @@ final class ObjectTranslationBundle extends AbstractBundle
+ 
+     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+     {
++        dd($config);
++
+         $container->import('../config/services.php');
+     }
+ }

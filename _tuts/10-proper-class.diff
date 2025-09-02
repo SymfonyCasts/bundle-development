@@ -1,0 +1,8 @@
+diff --git a/config/packages/symfonycasts_object_translation.yaml b/config/packages/symfonycasts_object_translation.yaml
+index 2f01dc9..5a0880d 100644
+--- a/config/packages/symfonycasts_object_translation.yaml
++++ b/config/packages/symfonycasts_object_translation.yaml
+@@ -1,2 +1,2 @@
+ symfonycasts_object_translation:
+-    translation_class: 'App\Entity\Article'
++    translation_class: 'App\Entity\Translation'

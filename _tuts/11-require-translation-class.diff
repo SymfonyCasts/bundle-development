@@ -1,0 +1,24 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index 3a20d57..98c7700 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -10,6 +10,7 @@ return static function (ContainerConfigurator $container): void {
+             ->args([
+                 service('translation.locale_switcher'),
+                 param('kernel.default_locale'),
++                abstract_arg('translation class')
+             ])
+ 
+         ->alias(ObjectTranslator::class, 'symfonycasts.object_translator')
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 2bb444e..11abbaa 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -9,6 +9,7 @@ final class ObjectTranslator
+     public function __construct(
+         private LocaleAwareInterface $localeAware,
+         private string $defaultLocale,
++        private string $translationClass,
+     ) {
+     }
+ 

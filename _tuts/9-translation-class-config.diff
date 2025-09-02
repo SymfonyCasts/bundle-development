@@ -1,0 +1,27 @@
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 0f5c182..ed32899 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -3,12 +3,22 @@
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
+ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
++use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+ 
+ final class ObjectTranslationBundle extends AbstractBundle
+ {
++    public function configure(DefinitionConfigurator $definition): void
++    {
++        $definition->rootNode()
++            ->children()
++                ->stringNode('translation_class')->end()
++            ->end()
++        ;
++    }
++
+     public function build(ContainerBuilder $container): void
+     {
+         $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver(
