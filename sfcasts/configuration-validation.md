@@ -1,86 +1,114 @@
 # Bundle Configuration Validation
 
-Alright, great job! You've added some bundle translation definitions and
-configured your bundle successfully. But now, let's make things a little
-more interesting by adding some validation. We'll be making the
-`translation_class` a requirement, meaning the user will have to fill this
-in.
+Alight, we have this `translation_class` configuration option in our bundle.
+It needs some validation: first, it should be required, second, it should be
+a non-empty string, and third, it should be a valid class that extends our
+bundle's `Translation` class.
 
-So, under the example here, indented again, you can use `->isRequired()`.
+Since we used `stringNode()`, we already have some basic validation, it must
+be a string. Let's add the rest.
+
+## Required and Non-Empty
+
+Below our `->example()` call, add a new line and indent. Add `->isRequired()`.
 This makes sure the user sets it, but we want to prevent them from setting
-it as null or an empty string. So, we'll also use `->cannotBeEmpty()`.
-Let's see this in action.
+it as null or an empty string. So, also add `->cannotBeEmpty()`.
+
+At your terminal, dump the bundle configuration:
 
 ```terminal
-symfony console config dump reference
-symfonycasts_object_translation
+symfony console config:dump-reference symfonycasts_object_translation
 ```
 
-Running the above command in your terminal will now yield an error, which
-is good news! It means our `translation_class` is being recognized as
-required.
+Ooo, an error! "translation_class"... must be configured. It even shows our
+node's description to help us. Perfect!
 
-## Configuring Your Bundle
+This is now forcing us to create this configuration. In your app's `config/packages`
+directory, create a new file named `symfonycasts_object_translation.yaml`.
 
-Next, let's set up the configuration. In your app's config directory, under
-packages, create a new file named `symfonycasts_object_translation.yaml`.
+Inside, add the top level node name, our bundle's *extension alias*:
+`symfonycasts_object_translation:`. Then, underneath, indent and add
+our node: `translation_class`. Set it as an empty string for now.
 
-For your first config, you'll need to specify what you're configuring. So,
-under `symfonycasts_object_translation`, add your config,
-`translation_class`. Let's leave it as an empty string to see what happens.
+Re-run the command again in your terminal:
 
-Running the command again will throw a different error. It's passing the
-`isRequired()` check, but it doesn't like the empty value. Let's try
-setting it to `translation_class: 'Translation'` and see if that works.
-
-```terminal
-translation_class: 'Translation'
+```terminal-silent
+symfony console config:dump-reference symfonycasts_object_translation
 ```
 
-Run the command again. Great! Now, it passes, and you'll see it also adds
-"required" in here because we've set it to `isRequired()`.
+A different error: "translation_class" cannot contain an empty value. This is
+because of that `cannotBeEmpty()` option.
 
-## Adding Custom Validation
+So, back in our configuration, set `translation_class` to just `Translation`.
 
-Now, let's add some extra validation because we want this to be our app's
-translation entity. Back in your bundle configuration, under
-`cannotBeEmpty()`, we'll do some custom validation with `validate()` and
-then close it with `end()`.
+Re-run the command:
 
-Inside, use `ifTrue()`, and then add a function that checks
-`!class_exists(V)`. This checks if the class exists. If it doesn't, throw a
-validation exception with `invalid('The translation_class %s does not
-exist.')`.
+```terminal-silent
+symfony console config:dump-reference symfonycasts_object_translation
+```
 
-Back in your terminal, running the command again will yield an error - the
-translation class `Translation` does not exist. This means you need to set
-it to a real class name.
+Woo! All good. It even added "Required" before the example comment.
 
-Let's set it to the wrong entity just for fun: `translation_class:
-'App\Entity\Article'`. Running the command again will pass, but it's not
-correct. It needs to be an instance of your bundle's translation class.
+## Custom Validation
 
-## Advanced Validation
+For our third requirement: "a valid class that extends our bundle's `Translation`
+class", we'll need some custom validation.
 
-To ensure this, in your bundle validation, chain another `validate()` after
-and use `is_a()` to check that the value is an instance of `Translation`
-from your `ObjectTranslationBundle` class. Set the third argument to true
-so that `v` can be a string name.
+In our bundle's `translation_class` definition, after `cannotBeEmpty()`, add
+a new line, indent, and add `->validate()`. This starts a custom validation
+chain which also needs to closed with `->end()`. Inside, add `->ifTrue()` with
+a function: `fn($v) => !class_exists($v)`. This function runs with the user-supplied
+value, `$v`. If the function returns `true`, the validation fails. In our case,
+if the class does not exist. Now, we need to throw an error message. Add
+`->thenInvalid('The translation class %s does not exist.')`. The `%s` will be
+the user-supplied value.
 
-Running the command again will throw an error because `App\Entity\Article`
-does not extend `SymfonyCasts\ObjectTranslationBundle\Model\Translation`.
-Let's improve the message a bit and try again. Great! Now we get a clearer
-error message.
+Let's test this out! Back in your terminal, run the command again:
 
-To fix the error, change it to `translation_class:
-'App\Entity\Translation'` and run the command again. Perfect! You're in.
+```terminal-silent
+symfony console config:dump-reference symfonycasts_object_translation
+```
 
-## Final Thoughts
+Sweet! Our custom error: "The translation class Translation does not exist."
 
-Now there's one little thing to note. If someone actually used the bundle's
-translation class, this would still pass. As a little homework, try adding
-another validation to make sure it's not set to the bundle's translation
-entity.
+In our configuration, let's be cheeky and set it to a real class, but not
+a valid translation class: `App\Entity\Article`.
 
-Up next, you'll actually use this bundle configuration to configure your
-bundle. Exciting, isn't it? Let's keep going!
+Run the command again...
+
+```terminal-silent
+symfony console config:dump-reference symfonycasts_object_translation
+```
+
+## Improving Custom Validation
+
+This passes our validation but is still not what we want - `Article` doesn't
+extend our bundle's `Translation` class.
+
+Back in our configuration, we *could* chain another validation after the first one but
+let's keep it simple. Change the `class_exists` to `is_a`. For the second
+argument, add `Translation::class` - make sure to import the one from our bundle.
+`is_a` checks if an object is an instance of a class string. By default, `$v`
+should be an actual object, so pass `true` as the third argument to allow
+`$v` to be a class string.
+
+Run the command again:
+
+```terminal-silent
+symfony console config:dump-reference symfonycasts_object_translation
+```
+
+Error! "The translation class App\Entity\Article does not exist". Hmm, we
+need to update the error message. Back in our configuration, adjust the
+`thenInvalid()` message to read "...must extend
+SymfonyCasts\ObjectTranslationBundle\Model\Translation."
+
+Run again... "The translation class App\Entity\Article does must extend". Ew,
+that's some bad grammar! Remove the "does" and try again. Perfect! "The
+translation class App\Entity\Article must extend SymfonyCasts\ObjectTranslationBundle\Model\Translation."
+
+Fix this in our config by swapping `Article` for `Translation`.
+
+Run the command again... all good!
+
+Next, we'll actually use this configuration value in our bundle's service!

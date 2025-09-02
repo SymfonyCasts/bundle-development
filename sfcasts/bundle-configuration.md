@@ -21,8 +21,7 @@ it as *finished*. Do this right away, so we don't forget.
 
 Inside, add our first node: `->stringNode('translation_class')`. In our
 configuration, this will be the *array key*. Again, call `->end()` to
-finish it. `stringNode` means the value must be a string so we already
-get some validation for free.
+finish it.
 
 ## Listing Available Bundle Configurations
 
