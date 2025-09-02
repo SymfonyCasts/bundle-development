@@ -1,5 +1,23 @@
 # Extending our Bundle's Entity
 
+Our bundle has an abstract `Translation` *mapped superclass* and is
+registered with Doctrine. Time to create the *real* `Translation` entity
+in our app.
+
+At your terminal, run:
+
+```terminal
+symfony console make:entity
+```
+
+For the class name, choose `Translation`. All properties will extend
+from the abstract `Translation` class in the bundle, so just hit enter
+to finish.
+
+## The *Real* Translation Entity
+
+In your editor, open our new entity in `src/Entity/Translation.php`.
+
 Alright, here we go! We're about to create the real `Entity\Translation`
 that extends from our `Math` superclass in our app.
 
