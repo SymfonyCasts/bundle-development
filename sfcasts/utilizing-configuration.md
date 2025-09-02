@@ -1,69 +1,59 @@
 # Using Bundle Configuration
 
-Alright, so you've defined a translation class and added some validation to
-the bundle configuration. You've also configured your app to recognize the
-correct entity class name. Now it's time to inject this class into your
-`ObjectTranslator`.
+In our bundle, we've defined and validated the `translation_class` configuration
+option. In our app, we've configured it as `App\Entity\Translation`. Now, we
+need to use it in our bundle's `ObjectTranslator` service.
 
-## Updating Your ObjectTranslator Class
+## `ObjectTranslator` Update
 
-Go ahead and open up your `ObjectTranslator` and add `private string
-$translationClass`.
+Open this class up, and add it to the constructor as `private string $translationClass`.
 
-## Addressing the Error
+Hope over to the browser and click an article. An error: "Too few arguments to
+... ObjectTranslator::__construct(), 2 passed... 3 expected".
 
-When you go back to your app and select an article, you're likely to run
-into an error: "Too few arguments". This happens because you need to define
-this argument in your service. Let's fix that.
+## `abstract_arg()`
 
-Open your `config/services.php` file. Here you'll need to add the argument
-as the third parameter. But, currently, you don't have access to that
-configuration.
+Let's fix this. Open our bundle's `config/services.php`. We need to add it
+as a third element in this `args()` array. But... we don't have access to our
+configuration here. For now, we can stub it out with a special function:
+`abstract_arg()`. For the first argument, describe its purpose: "Translation class".
 
-## Using Abstract Argument for Debugging
+This isn't strictly required, but it helps with debugging. We're basically letting
+Symfony know that we need to configure this argument still.
 
-Here's a neat trick: use the `abstract_arg` function and give it a brief
-description of what you expect. This will help you remember what you need
-to inject, and will also assist with debugging later. Let's label this
-'translation class'.
+Back in the browser, refresh. A new error: "Argument 3 of service ...object_translator
+is abstract". And we see our description: "Translation class". Perfect!
 
-After doing that, refresh your page. Perfect! Argument three of this
-service is abstract. That's your argument and it's giving you a helpful
-little message: 'translation class'.
+## Using Bundle Configuration
 
-## Configuring Injection in ObjectTranslationBundle
+Now... we need to find the place where we have access to the bundle configuration.
 
-Now, where do you configure this to be injected? This will be in your
-`ObjectTranslationBundle`, within the `loadExtension()`. Pay attention to
-the `config` argument.
+In `ObjectTranslationBundle::loadExtension()`, notice the `array $config` argument.
+Inside this method, dump it with: `dd($config)`. Back in the browser, refresh.
 
-Let's do a quick `dd($config)`. Refresh your page. That's it! You're now
-looking at the fully built config for your bundle.
+Nice! Here's our processed configuration as an array! Time to put it to use!
 
-## Using Your Config
+Below the import, write `$builder->getDefinition()`. Be sure to use `getDefinition()`,
+not `get()`. Inside, pass the service ID for our `ObjectTranslator` service:
+`symfonycasts.object_translator`.
 
-Now it's time to put it to use. Remove the `dd()` and then, right after the
-import, write this line:
+One of the bonuses of working on your bundle within an app is that you can
+get PhpStorm + Symfony Plugin auto-completion for your services.
 
-```terminal
-$builder->getDefinition('symfonycasts.object_translator')->setArgument(2,
-$config['translation_class']);
-```
+Next, chain `->setArgument()`. The first argument here is the 0-based index
+of the constructor argument we want to set. Quickly jump to `ObjectTranslator`,
+`$translationClass` is the third argument, so we need to pass `2`.
 
-Side note: one of the cool things about working on your bundle within your
-app is that you get all the PHPStorm auto-completion for the services
-you've added. Nice little bonus, right?
+The second argument is the value we want to set: `$config['translation_class']`.
 
-## Confirming Your Changes
+Jump back to your browser and refresh. Nice! No errors.
 
-Jump back to your browser and hit refresh. And voila! It worked. To make
-doubly sure, do a `dd($translator)` in your `ArticleController`. There you
-have it. You can see that the `translationClass` was successfully set to
-`app entity translation`.
+Let's make sure this was given the value we expect. Open `ArticleController::show()`
+and `dd($translator)`.
 
-Remove the `dd()`, refresh, and you're all set!
+Back in the browser... refresh. Sweet! Here's our `ObjectTranslator` object and indeed,
+the `translationClass` property is set to `App\Entity\Translation`.
 
-## Adding Logic to Your Translate Method
+Remove the `dd()`, refresh, and we're ready to move on!
 
-Next, it's time to start adding some logic to your `translate()` method.
-Let's get to it.
+Next, let's start writing our translation logic in `ObjectTranslator::translate()`.
