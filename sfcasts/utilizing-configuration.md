@@ -56,4 +56,4 @@ the `translationClass` property is set to `App\Entity\Translation`.
 
 Remove the `dd()`, refresh, and we're ready to move on!
 
-Next, let's start writing our translation logic in `ObjectTranslator::translate()`.
+Next, let's start writing our translation logic in `ObjectTranslator`.

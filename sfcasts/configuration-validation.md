@@ -51,8 +51,8 @@ Woo! All good. It even added "Required" before the example comment.
 
 ## Custom Validation
 
-For our third requirement: "a valid class that extends our bundle's `Translation`
-class", we'll need some custom validation.
+For our third requirement: "a valid class name that extends our bundle's `Translation`
+class", we'll need some *custom* validation.
 
 In our bundle's `translation_class` definition, after `cannotBeEmpty()`, add
 a new line, indent, and add `->validate()`. This starts a custom validation
@@ -105,7 +105,7 @@ SymfonyCasts\ObjectTranslationBundle\Model\Translation."
 
 Run again... "The translation class App\Entity\Article does must extend". Ew,
 that's some bad grammar! Remove the "does" and try again. Perfect! "The
-translation class App\Entity\Article must extend SymfonyCasts\ObjectTranslationBundle\Model\Translation."
+translation class App\Entity\Article must extend..." Much better!
 
 Fix this in our config by swapping `Article` for `Translation`.
 
