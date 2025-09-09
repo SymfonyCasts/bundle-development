@@ -1,0 +1,21 @@
+diff --git a/object-translation-bundle/src/TranslatedObject.php b/object-translation-bundle/src/TranslatedObject.php
+index 017887f..80b96b0 100644
+--- a/object-translation-bundle/src/TranslatedObject.php
++++ b/object-translation-bundle/src/TranslatedObject.php
+@@ -2,8 +2,16 @@
+ 
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
++/**
++ * @template T of object
++ *
++ * @mixin T
++ */
+ final class TranslatedObject
+ {
++    /**
++     * @param T $_inner
++     */
+     public function __construct(
+         private object $_inner,
+     ) {

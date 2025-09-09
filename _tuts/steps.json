@@ -149,7 +149,37 @@
             "id": "11-remove-translator-dd",
             "name": "11. remove translator dd",
             "description": null
+        },
+        {
+            "id": "11-create-translatedobject",
+            "name": "11. create TranslatedObject",
+            "description": null
+        },
+        {
+            "id": "12-translatedobject-generics",
+            "name": "12. TranslatedObject generics",
+            "description": null
+        },
+        {
+            "id": "12-return-translatedobject",
+            "name": "12. return TranslatedObject",
+            "description": null
+        },
+        {
+            "id": "13-create-unit-test",
+            "name": "13. create unit test",
+            "description": null
+        },
+        {
+            "id": "14-add-getter-test",
+            "name": "14. add getter test",
+            "description": null
+        },
+        {
+            "id": "13-call-logic",
+            "name": "13. call logic",
+            "description": null
         }
     ],
-    "sha": "58d699965f4ce630c4c1c0b5c23fd967012567ab"
+    "sha": "c9271cf41ebe55e621e3a828c2f8a1665d13d157"
 }

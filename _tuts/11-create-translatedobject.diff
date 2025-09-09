@@ -1,0 +1,32 @@
+diff --git a/object-translation-bundle/src/TranslatedObject.php b/object-translation-bundle/src/TranslatedObject.php
+new file mode 100644
+index 0000000..017887f
+--- /dev/null
++++ b/object-translation-bundle/src/TranslatedObject.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle;
++
++final class TranslatedObject
++{
++    public function __construct(
++        private object $_inner,
++    ) {
++    }
++
++    public function __call(string $name, array $arguments): mixed
++    {
++        return $this->_inner->$name(...$arguments);
++    }
++
++    public function __get(string $name): mixed
++    {
++        return $this->_inner->$name;
++    }
++
++    public function __isset(string $name): bool
++    {
++        return isset($this->_inner->$name);
++    }
++}

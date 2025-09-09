@@ -1,0 +1,59 @@
+diff --git a/object-translation-bundle/composer.json b/object-translation-bundle/composer.json
+index 84be673..4ff1218 100644
+--- a/object-translation-bundle/composer.json
++++ b/object-translation-bundle/composer.json
+@@ -8,6 +8,11 @@
+             "SymfonyCasts\\ObjectTranslationBundle\\": "src/"
+         }
+     },
++    "autoload-dev": {
++        "psr-4": {
++            "SymfonyCasts\\ObjectTranslationBundle\\Tests\\": "tests/"
++        }
++    },
+     "authors": [
+         {
+             "name": "Kevin Bond",
+diff --git a/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
+new file mode 100644
+index 0000000..cd9a0cc
+--- /dev/null
++++ b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
+@@ -0,0 +1,37 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Tests\Unit;
++
++use PHPUnit\Framework\TestCase;
++use SymfonyCasts\ObjectTranslationBundle\TranslatedObject;
++
++class ObjectTranslatorTest extends TestCase
++{
++    public function testCanAccessUnderlyingObject()
++    {
++        $object = new TranslatedObject(new ObjectForTranslationStub());
++
++        $this->assertSame('value1', $object->prop1);
++        $this->assertTrue(isset($object->prop1), 'Public property should be accessible');
++        $this->assertFalse(isset($object->prop2), 'Private property should not be accessible');
++        $this->assertSame('value2', $object->prop2());
++        $this->assertSame('value3', $object->getProp3());
++    }
++}
++
++class ObjectForTranslationStub
++{
++    public string $prop1 = 'value1';
++    private string $prop2 = 'value2';
++    private string $prop3 = 'value3';
++
++    public function prop2(): string
++    {
++        return $this->prop2;
++    }
++
++    public function getProp3(): string
++    {
++        return $this->prop3;
++    }
++}

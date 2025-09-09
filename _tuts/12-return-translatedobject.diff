@@ -1,0 +1,12 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 11abbaa..438387e 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -30,6 +30,6 @@ final class ObjectTranslator
+ 
+         // todo translate object
+ 
+-        return $object;
++        return new TranslatedObject($object);
+     }
+ }

@@ -1,0 +1,19 @@
+diff --git a/object-translation-bundle/src/TranslatedObject.php b/object-translation-bundle/src/TranslatedObject.php
+index 80b96b0..123be48 100644
+--- a/object-translation-bundle/src/TranslatedObject.php
++++ b/object-translation-bundle/src/TranslatedObject.php
+@@ -19,7 +19,13 @@ final class TranslatedObject
+ 
+     public function __call(string $name, array $arguments): mixed
+     {
+-        return $this->_inner->$name(...$arguments);
++        $method = $name;
++
++        if (!method_exists($this->_inner, $method)) {
++            $method = 'get'.ucfirst($name);
++        }
++
++        return $this->_inner->$method(...$arguments);
+     }
+ 
+     public function __get(string $name): mixed
