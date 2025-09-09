@@ -30,6 +30,6 @@ Esta es nuestra clase bundle. Primero, márcala como `final` - no queremos que n
 
 Si alguna vez has construido bundles en el pasado, concretamente antes de Symfony 6, puede que recuerdes que las clases bundle solían extender `Bundle`, no `AbstractBundle`.
 
-En Symfony 6, se ha mejorado la forma de construir bundles. La nueva clase `AbstractBundle`proporciona un enfoque más ágil para el desarrollo de bundles. Ahora puedes alojar casi toda la configuración de tu bundle y la lógica de extensión directamente dentro de tu clase "bundle". La forma antigua requería varias clases adicionales. Consulta esta [entrada de blog](https://symfony.com/blog/new-in-symfony-6-1-simpler-bundle-extension-and-configuration) para obtener más información.
+En Symfony 6, se ha mejorado la forma de construir bundles. La nueva clase `AbstractBundle`proporciona un enfoque más racionalizado para el desarrollo de bundles. Ahora puedes alojar casi toda la configuración de tu bundle y la lógica de extensión directamente dentro de tu clase "bundle". La forma antigua requería varias clases adicionales. Consulta esta [entrada de blog](https://symfony.com/blog/new-in-symfony-6-1-simpler-bundle-extension-and-configuration) para obtener más información.
 
 A continuación, ¡vamos a "instalar" este bundle en nuestra aplicación!
