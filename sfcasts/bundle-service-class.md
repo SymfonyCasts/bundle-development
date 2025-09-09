@@ -12,32 +12,48 @@ First, mark this class as final. This isn't meant to be extended. When developin
 bundles, it's important to be explicit about your class design and their
 intentions. This makes it easy to keep backwards compatibility. Removing `final`
 later isn't a breaking change, but adding `final` is. We'll explore more of these
-tricks as we go along.
+tricks as we go along:
+
+[[[ code('eda36dbdac') ]]]
 
 Create a method: `public function translate(object $object)`. Return type: `object`. This will
 eventually house the logic for translating objects. For now, just return the passed
-`$object`.
+`$object`:
+
+[[[ code('afffbf9ff1') ]]]
 
 Our service needs a constructor to inject a few goodies. Add `public
 function __construct(private LocaleAwareInterface $localeAware, private
 string $defaultLocale)`. We need the `LocaleAwareInterface` service to get
 the current locale of the request, and we'll also need our app's default
-locale.
+locale:
+
+[[[ code('f134be4b58') ]]]
 
 Down in `translate()`, we can add some easy logic. Grab the current locale with
 `$locale = $this->localeAware->getLocale()`.
 Now, if the current locale is the same as the default locale, we don't need to
 do any translating, so add an `if ($this->defaultLocale === $locale)` and
-just return the raw object in this case.
+just return the raw object in this case:
+
+[[[ code('0bf83206dc') ]]]
 
 Below is where we'll eventually add the *real* translation logic, but just
-add a comment for now: `todo translate object`.
+add a comment for now: `todo translate object`:
+
+[[[ code('7eb0b0c396') ]]]
 
 Let's use this new service in `ArticleController::show()`. Expand this method
-a bit and inject it: `ObjectTranslator $translator`.
+a bit and inject it: `ObjectTranslator $translator`:
+
+[[[ code('fde71e6395') ]]]
 
 Run the injected `Article` through our new service:
-`$article = $translator->translate($article)`. Sweet!
+`$article = $translator->translate($article)`:
+
+[[[ code('f1f1395dd8') ]]]
+
+Sweet!
 
 ## PHP Generics
 
@@ -55,8 +71,12 @@ This just matched the method signature and isn't super helpful... so add
 `@template T of object` above. This declares a template type `T` that must
 be an object. `T` is like an alias, or placeholder and can be any string.
 
-Now, for `@param` and `@return`, replace `object` with `T`. This tells our editor:
-"Whatever object type is passed to this method, the return type will be the same object type."
+Now, for `@param` and `@return`, replace `object` with `T`:
+
+[[[ code('3a1638f44e') ]]]
+
+This tells our editor: "Whatever object type is passed to this method, the return type
+will be the same object type."
 
 Back in `ArticleController::show()`, after we call `translate()`, try auto-completing
 again on `$article`. Boom! PhpStorm knows exactly what `$article` is now. I

@@ -35,7 +35,9 @@ The namespace is now pre-filled! Call it `ObjectTranslationBundle`.
 
 Here's our bundle class. First, mark it as `final` - we don't want anyone
 to extend this. Leave it empty for now and have it extend `AbstractBundle`
-from the `HttpKernel` component.
+from the `HttpKernel` component:
+
+[[[ code('97b7abb6b9') ]]]
 
 ## Enhanced Bundle Class
 

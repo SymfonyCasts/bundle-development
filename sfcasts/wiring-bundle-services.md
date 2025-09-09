@@ -31,12 +31,20 @@ manually, YAML is likely what you use. There's nothing stopping you from
 using YAML here, but this would require your bundle to depend on the YAML
 component. So, PHP it is!
 
-First, add `namespace Symfony\Component\DependencyInjection\Loader\Configurator`.
+First, add `namespace Symfony\Component\DependencyInjection\Loader\Configurator`:
+
+[[[ code('96b14330d1') ]]]
+
 This'll let us use the service definition helper classes and functions we require
 without the need to import each one.
 
-Next, `return static function (ContainerConfigurator $container)`. Inside, write
-`$container->services()`. We'll chain our service definitions off this.
+Next, `return static function (ContainerConfigurator $container)`:
+
+[[[ code('837a032f92') ]]]
+
+Inside, write `$container->services()`. We'll chain our service definitions off this:
+
+[[[ code('837a032f92') ]]]
 
 ## Defining the Bundle's Services
 
@@ -46,7 +54,9 @@ a plain string - again, for maximum flexibility. This ID needs to be unique,
 so prefix it with a namespace that makes sense for your bundle. Here, we'll
 use `symfonycasts.`. Now the name of our service: `object_translator`. The
 second argument is the fully qualified class name: `ObjectTranslator::class`
-(make sure you import it).
+(make sure you import it):
+
+[[[ code('97fb40b378') ]]]
 
 ## Letting Symfony Know About the Service
 
@@ -59,7 +69,9 @@ Symfony.
 
 The parent method is empty, so we can remove this call. Import our
 `services.php` file using `$container->import()`. The path is relative to
-our current file, so write `../config/services.php`.
+our current file, so write `../config/services.php`:
+
+[[[ code('97fb40b378') ]]]
 
 Is this all we need? Let's see. Jump back to the browser and refresh the
 error page. Hmm, the same error. But now we have more
@@ -78,7 +90,9 @@ by setting the class name as a *service alias*.
 
 In `services.php`, below `set()`, write `->alias()`. The first argument
 is the alias we want to create: `ObjectTranslator::class`. The second
-argument is the service ID we defined earlier: `symfonycasts.object_translator`.
+argument is the service ID we defined earlier: `symfonycasts.object_translator`:
+
+[[[ code('3fa31097b8') ]]]
 
 Back in the browser, refresh. And... still an error - but a different one. "Too
 few arguments passed to ObjectTranslator".
@@ -103,7 +117,9 @@ Here it is: `translation.locale_switcher`. Copy that.
 Back in `services.php`, right below `set()`, indent to keep this organized, and
 write `->args()` with an array. These elements match the order of the constructor
 arguments, so the first argument is the service. Use the `service()` function
-and paste the service ID we just found.
+and paste the service ID we just found:
+
+[[[ code('0e13ecf373') ]]]
 
 Now for the second argument, `$defaultLocale`. This is a container parameter.
 We can list *all* parameters in the terminal by running:
@@ -122,7 +138,9 @@ symfony console debug:container --parameters | grep locale
 `kernel.default_locale` is what we're looking for! Copy that.
 
 Back in `services.php`, for the second `args` array element, use the `param()` function
-and... *paste*.
+and... *paste*:
+
+[[[ code('84fd51c09f') ]]]
 
 Go back to our browser... refresh... and success! No error means the service is correctly
 defined and injected!

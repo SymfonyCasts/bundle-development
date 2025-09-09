@@ -117,11 +117,15 @@ Jump back to our IDE - we have some new stuff inside our bundle folder. For some
 reason, it created this empty `composer` directory - just delete that.
 
 Like our actual app, our bundle now has a `vendor` directory. To avoid it from being
-committed, in our *bundle* directory, create a `.gitignore` file and add `vendor/`.
+committed, in our *bundle* directory, create a `.gitignore` file and add `vendor/`:
+
+[[[ code('89d20ebfdb') ]]]
 
 Let's check out our freshly baked `composer.json` file!
 
 This is a solid starting point. The only tweak I'll make is to
-capitalize the "C" in "SymfonyCasts".
+capitalize the "C" in "SymfonyCasts":
+
+[[[ code('c9a3826eb4') ]]]
 
 Next, let's add some code - we'll start with the all-important *Bundle* class.

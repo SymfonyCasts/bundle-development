@@ -13,7 +13,9 @@ where it looks for packages. But we can add our own custom repositories too.
 This needs to be an array, inside, a json object. The first key is "type" - what
 kind of repository. In our case, it's a "path" (or local) repository. Next,
 "url" - for "path" repositories, this is the relative path to our package
-folder. Use "object-translation-bundle", since it's in the root of our app.
+folder. Use "object-translation-bundle", since it's in the root of our app:
+
+[[[ code('1ce160487d') ]]]
 
 ## Installing the Bundle
 
@@ -53,6 +55,8 @@ to see what's up. `composer.json` and `composer.lock` were modified - that's
 expected... but look: `config/bundles.php` was modified too...?
 
 Open that up in your editor. Wow! It automatically added our bundle class!
+
+[[[ code('d45eadafd2') ]]]
 
 Remember when we created our bundle's `composer.json` file? We set the "type"
 to "symfony-bundle"? This told Symfony Flex: "Hey, this is a Symfony bundle!
