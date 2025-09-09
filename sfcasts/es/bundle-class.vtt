@@ -1,0 +1,140 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:03.166 align:middle
+Tenemos una página de inicio para nuestro
+bundle dentro de nuestra aplicación.
+
+00:00:03.366 --> 00:00:08.196 align:middle
+Y hemos configurado su archivo composer.json para
+que esté marcado como paquete para Composer.
+
+00:00:08.686 --> 00:00:12.216 align:middle
+Ahora necesita una "clase bundle" para
+que Symfony pueda cargarlo como un bundle.
+
+00:00:12.216 --> 00:00:15.826 align:middle
+Esta clase es el corazón de tu
+bundle, el punto de entrada principal.
+
+00:00:16.396 --> 00:00:19.186 align:middle
+En el directorio src/,
+crea una nueva clase PHP...
+
+00:00:19.436 --> 00:00:21.596 align:middle
+con el nombre ObjectTranslationBundle.
+
+00:00:22.216 --> 00:00:23.936 align:middle
+Pero espera, tenemos un pequeño contratiempo.
+
+00:00:24.266 --> 00:00:28.686 align:middle
+El "campo espacio de nombres" no está siendo
+rellenado por PhpStorm como suele ser habitual.
+
+00:00:29.076 --> 00:00:32.286 align:middle
+PhpStorm aún no conoce el espacio
+de nombres de nuestro bundle.
+
+00:00:32.876 --> 00:00:34.466 align:middle
+Sal de este diálogo por ahora.
+
+00:00:35.166 --> 00:00:39.816 align:middle
+En el archivo composer.json de nuestro bundle, establecemos
+que el espacio de nombres de nuestro directorio src/
+
+00:00:39.816 --> 00:00:43.436 align:middle
+sea SymfonyCasts\ObjectTranslationBundle\.
+
+00:00:44.586 --> 00:00:45.646 align:middle
+Copia el espacio de nombres.
+
+00:00:45.826 --> 00:00:47.596 align:middle
+Aquí tenemos que ayudar un poco a PhpStorm.
+
+00:00:48.236 --> 00:00:51.756 align:middle
+Ve a la configuración de PhpStorm
+y busca la sección "Directorios".
+
+00:00:52.296 --> 00:00:53.976 align:middle
+Esta es la estructura
+actual de nuestro proyecto.
+
+00:00:54.396 --> 00:00:57.656 align:middle
+Abre object-translation-bundle
+y haz clic en el directorio src.
+
+00:00:58.306 --> 00:01:00.186 align:middle
+Arriba, márcalo como "Fuentes".
+
+00:01:00.476 --> 00:01:04.526 align:middle
+Ahora PhpStorm sabe que es un directorio
+"fuentes", y lo ha añadido aquí a la derecha.
+
+00:01:05.236 --> 00:01:09.886 align:middle
+Haz clic en el pequeño icono del lápiz para establecer el
+espacio de nombres, o "prefijo del paquete" para esta fuente.
+
+00:01:10.306 --> 00:01:13.296 align:middle
+Pega, elimina las barras inclinadas
+adicionales y haz clic en "Aceptar".
+
+00:01:14.286 --> 00:01:18.536 align:middle
+Pulsa "Aplicar" y "Aceptar" para guardar esta
+actualización, y cierra el archivo composer.json.
+
+00:01:19.186 --> 00:01:22.566 align:middle
+De nuevo, crea una nueva clase PHP en
+el directorio src/ de nuestro bundle.
+
+00:01:23.196 --> 00:01:25.416 align:middle
+¡Fantástico! ¡El espacio
+de nombres ya está rellenado!
+
+00:01:25.896 --> 00:01:27.696 align:middle
+Llámala ObjectTranslationBundle.
+
+00:01:28.776 --> 00:01:29.886 align:middle
+Aquí tienes nuestra clase bundle.
+
+00:01:30.266 --> 00:01:33.796 align:middle
+Primero, márcala como final - no
+queremos que nadie extienda esto.
+
+00:01:34.336 --> 00:01:39.436 align:middle
+Déjala vacía por ahora y haz que extienda
+AbstractBundle desde el componente HttpKernel:
+
+00:01:39.976 --> 00:01:43.716 align:middle
+Si alguna vez has construido bundles en el
+pasado, concretamente antes de Symfony 6,
+
+00:01:43.906 --> 00:01:47.996 align:middle
+puede que recuerdes que las clases bundle
+solían extender Bundle, no AbstractBundle.
+
+00:01:48.586 --> 00:01:51.526 align:middle
+En Symfony 6, se ha mejorado
+la forma de construir bundles.
+
+00:01:51.896 --> 00:01:56.236 align:middle
+La nueva clase AbstractBundle proporciona un enfoque
+más racionalizado para el desarrollo de bundles.
+
+00:01:56.596 --> 00:01:59.316 align:middle
+Ahora puedes alojar casi toda
+la configuración de tu bundle
+
+00:01:59.316 --> 00:02:02.566 align:middle
+y la lógica de extensión directamente
+dentro de tu clase "bundle".
+
+00:02:02.896 --> 00:02:05.146 align:middle
+La forma antigua requería
+varias clases adicionales.
+
+00:02:05.456 --> 00:02:07.526 align:middle
+Consulta esta entrada del blog
+para obtener más detalles.
+
+00:02:08.216 --> 00:02:10.536 align:middle
+A continuación, vamos a "instalar"
+este bundle en nuestra aplicación
