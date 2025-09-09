@@ -1,0 +1,332 @@
+WEBVTT
+
+00:00:00.036 --> 00:00:03.626 align:middle
+¡Hola amigos!
+
+00:00:03.866 --> 00:00:06.236 align:middle
+Bienvenidos al curso Reusable Symfony Bundle.
+
+00:00:06.556 --> 00:00:09.496 align:middle
+Soy Kevin, y seré tu navegador
+de bundles en este viaje.
+
+00:00:10.016 --> 00:00:14.216 align:middle
+He creado unos cuantos bundles en mis tiempos, así que
+estoy muy emocionado de compartir mis conocimientos contigo.
+
+00:00:14.826 --> 00:00:18.756 align:middle
+No vamos a crear simplemente un bundle de demostración
+para este curso, vamos a crear un bundle real,
+
+00:00:18.816 --> 00:00:20.966 align:middle
+utilizable y, con suerte, útil.
+
+00:00:21.456 --> 00:00:22.466 align:middle
+¿Y la guinda del pastel?
+
+00:00:22.656 --> 00:00:26.256 align:middle
+Lo publicaremos como código abierto
+en GitHub y lo añadiremos a Packagist.
+
+00:00:26.796 --> 00:00:31.046 align:middle
+Si encuentras útil este bundle, podrás
+incorporarlo a tus propios proyectos.
+
+00:00:31.396 --> 00:00:33.546 align:middle
+Tal vez incluso ayudes a su futuro desarrollo
+
+00:00:33.546 --> 00:00:36.106 align:middle
+¿Qué es exactamente un bundle?
+
+00:00:36.436 --> 00:00:40.946 align:middle
+Es un trozo de código reutilizable que puede
+incluirse fácilmente en cualquier proyecto Symfony.
+
+00:00:41.306 --> 00:00:44.006 align:middle
+Pueden compartirse de forma
+privada, en todos tus proyectos,
+
+00:00:44.086 --> 00:00:46.496 align:middle
+o ponerse a disposición de la
+comunidad Symfony en general.
+
+00:00:47.186 --> 00:00:51.666 align:middle
+Cualquier cosa que puedas añadir a una aplicación
+Symfony se puede bundlear: controladores, servicios,
+
+00:00:51.666 --> 00:00:54.186 align:middle
+entidades, formularios,
+¡incluso plantillas Twig!
+
+00:00:54.736 --> 00:00:58.386 align:middle
+Imagina tu aplicación como una estación
+espacial: los bundles son como módulos adicionales
+
+00:00:58.386 --> 00:01:00.376 align:middle
+que puedes conectar para
+añadir nuevas funciones.
+
+00:01:00.376 --> 00:01:04.486 align:middle
+Para seguir adelante, asegúrate de descargar
+el código del curso desde esta página.
+
+00:01:04.786 --> 00:01:07.146 align:middle
+Consulta el README para configurar
+y poner en marcha la aplicación.
+
+00:01:07.646 --> 00:01:10.226 align:middle
+Una vez que hayas completado el último
+paso y ejecutes el servidor web,
+
+00:01:10.436 --> 00:01:12.606 align:middle
+deberías aterrizar en una página
+como la que se muestra aquí.
+
+00:01:13.196 --> 00:01:17.636 align:middle
+Bienvenido a la Barra Espacial--- Un momento,
+esto es una aplicación Symfony en toda regla,
+
+00:01:17.696 --> 00:01:19.266 align:middle
+¿pensaba que estábamos creando un bundle?
+
+00:01:19.896 --> 00:01:23.396 align:middle
+Cuando se crea un bundle por primera vez,
+me parece útil empezar a desarrollarlo
+
+00:01:23.396 --> 00:01:25.276 align:middle
+dentro de una aplicación Symfony existente,
+
+00:01:25.656 --> 00:01:28.816 align:middle
+que requiera la funcionalidad que
+proporcionará tu nuevo bundle.
+
+00:01:29.266 --> 00:01:31.806 align:middle
+Esto hace que la fase inicial de
+desarrollo sea mucho más fácil,
+
+00:01:31.986 --> 00:01:36.116 align:middle
+y puedes probar la funcionalidad de tu bundle
+en un escenario del mundo real, de inmediato.
+
+00:01:36.116 --> 00:01:37.866 align:middle
+Así que... la Barra Espacial.
+
+00:01:38.366 --> 00:01:40.566 align:middle
+Se trata de una plataforma de
+blogs de noticias espaciales.
+
+00:01:40.946 --> 00:01:45.346 align:middle
+La página de inicio enumera los artículos disponibles y,
+al hacer clic en uno, te lleva a la página del artículo.
+
+00:01:45.536 --> 00:01:50.196 align:middle
+Si has seguido nuestro curso de
+Traducciones, puede que reconozcas esto.
+
+00:01:50.346 --> 00:01:52.676 align:middle
+Lo retomamos donde lo dejó ese curso.
+
+00:01:52.676 --> 00:01:54.916 align:middle
+Este conmutador de idiomas
+alterna entre el inglés,
+
+00:01:54.916 --> 00:01:57.826 align:middle
+que es nuestro idioma por defecto,
+el francés y el español.
+
+00:01:58.366 --> 00:02:02.206 align:middle
+Usamos el componente de traducción de
+Symfony para traducir el material estático
+
+00:02:02.206 --> 00:02:04.176 align:middle
+de nuestro sitio, como el
+encabezado y el pie de página.
+
+00:02:04.546 --> 00:02:08.186 align:middle
+Pero los propios artículos se almacenan
+como entidades en nuestra base de datos,
+
+00:02:08.446 --> 00:02:11.536 align:middle
+y el componente Traducción
+no permite traducirlos.
+
+00:02:11.916 --> 00:02:14.336 align:middle
+Necesitamos una solución diferente
+para estas traducciones...
+
+00:02:14.336 --> 00:02:17.806 align:middle
+Ya existen algunos bundles
+que son capaces de hacer esto,
+
+00:02:17.886 --> 00:02:20.946 align:middle
+pero yo quería enfocarlo desde otro punto de
+vista, con una perspectiva ligeramente diferente.
+
+00:02:21.416 --> 00:02:24.896 align:middle
+Así que eso es lo que hará nuestro
+bundle: ¡traducir entidades Doctrine!
+
+00:02:25.166 --> 00:02:26.136 align:middle
+¡Empecemos!
+
+00:02:26.536 --> 00:02:30.796 align:middle
+Salta al código de este proyecto en
+tu IDE - yo estoy utilizando PhpStorm.
+
+00:02:31.226 --> 00:02:34.106 align:middle
+En la raíz del proyecto, crea una
+nueva carpeta para nuestro bundle.
+
+00:02:34.546 --> 00:02:36.836 align:middle
+Llámala object-translation-bundle.
+
+00:02:37.336 --> 00:02:42.576 align:middle
+Podríamos llamarla entidad-traducción-bundle, pero
+prefiero utilizar el término más abstracto, objeto.
+
+00:02:43.146 --> 00:02:45.146 align:middle
+Recuerda, las entidades son objetos.
+
+00:02:45.506 --> 00:02:49.016 align:middle
+Para empezar, sólo soportaremos el ORM de Doctrine,
+pero en el futuro podríamos añadir soporte
+
+00:02:49.016 --> 00:02:52.066 align:middle
+para otros mapeadores de objetos, como MongoDB.
+
+00:02:52.806 --> 00:03:04.636 align:middle
+Dentro de este directorio, crea tres
+subcarpetas: src, tests, y config.
+
+00:03:04.636 --> 00:03:07.826 align:middle
+Como este bundle acabará
+siendo un paquete independiente,
+
+00:03:07.826 --> 00:03:09.896 align:middle
+necesita un archivo composer.json.
+
+00:03:10.426 --> 00:03:13.816 align:middle
+En lugar de crearlo manualmente,
+¡existe un práctico comando asistente!
+
+00:03:14.286 --> 00:03:18.236 align:middle
+En tu terminal, en la raíz de nuestro proyecto,
+desplázate a nuestra nueva carpeta bundle:
+
+00:03:18.236 --> 00:03:21.916 align:middle
+cd object-translation-bundle Ejecuta:
+
+00:03:21.916 --> 00:03:26.266 align:middle
+symfony composer init Nos
+pide el nombre del paquete.
+
+00:03:26.686 --> 00:03:28.916 align:middle
+Este nombre por defecto es
+casi correcto, pero quiero
+
+00:03:28.916 --> 00:03:32.796 align:middle
+utilizar el nombre del proveedor symfonycasts
+(por defecto es el nombre de mi ordenador).
+
+00:03:32.796 --> 00:03:37.136 align:middle
+Así que introduce
+symfonycasts/object-translation-bundle.
+
+00:03:37.606 --> 00:03:38.196 align:middle
+¿Descripción?
+
+00:03:38.416 --> 00:03:39.856 align:middle
+Translate your entities!
+
+00:03:40.546 --> 00:03:44.636 align:middle
+¿Autor? Parece que de alguna manera encuentra mi nombre y
+mi dirección de correo electrónico, así que lo aceptaré.
+
+00:03:45.226 --> 00:03:46.226 align:middle
+¿Estabilidad mínima?
+
+00:03:46.596 --> 00:03:49.096 align:middle
+No necesitamos preocuparnos por
+eso ahora, así que introdúcelo.
+
+00:03:49.756 --> 00:03:50.416 align:middle
+¿Tipo de paquete?
+
+00:03:50.726 --> 00:03:53.046 align:middle
+Este es importante, y veremos
+por qué más adelante.
+
+00:03:53.416 --> 00:03:55.036 align:middle
+Introduce symfony-bundle.
+
+00:03:55.666 --> 00:04:00.186 align:middle
+¿Licencia? Al final lo publicaremos bajo
+la licencia MIT, así que introduce MIT.
+
+00:04:00.886 --> 00:04:02.646 align:middle
+Ahora pregunta por las dependencias.
+
+00:04:02.886 --> 00:04:05.396 align:middle
+No te preocupes por eso ahora, así
+que introduce n para saltártelo.
+
+00:04:05.496 --> 00:04:07.366 align:middle
+Lo mismo para las dependencias de desarrollo.
+
+00:04:07.946 --> 00:04:09.006 align:middle
+Ahora, carga automática.
+
+00:04:09.416 --> 00:04:12.446 align:middle
+Ya está adivinando un espacio de nombres para
+nosotros basándose en el nombre de nuestro paquete,
+
+00:04:12.446 --> 00:04:15.806 align:middle
+Symfonycasts\ObjectTranslationBundle.
+
+00:04:16.286 --> 00:04:17.806 align:middle
+¡Qué bien! Acéptalo.
+
+00:04:17.806 --> 00:04:20.706 align:middle
+Por último, tenemos que
+confirmar la generación.
+
+00:04:21.106 --> 00:04:22.736 align:middle
+Esto tiene buena pinta, así que pulsa intro.
+
+00:04:23.146 --> 00:04:25.076 align:middle
+composer.json ¡generado!
+
+00:04:25.586 --> 00:04:27.996 align:middle
+Vuelve a la raíz de nuestro
+proyecto ejecutando: cd ..
+
+00:04:28.126 --> 00:04:33.066 align:middle
+Vuelve a nuestro IDE - tenemos algunas cosas
+nuevas dentro de nuestra carpeta bundle.
+
+00:04:33.066 --> 00:04:37.186 align:middle
+Por alguna razón, se ha creado este
+directorio vacío composer - bórralo.
+
+00:04:37.916 --> 00:04:41.096 align:middle
+Al igual que nuestra aplicación, nuestro
+bundle tiene ahora un directorio vendor.
+
+00:04:41.546 --> 00:04:46.126 align:middle
+Para evitar que se confirme, en nuestro
+directorio bundle, crea un archivo .gitignore
+
+00:04:46.556 --> 00:04:51.806 align:middle
+y añade vendor/: ¡Veamos nuestro
+archivo composer.json recién horneado!
+
+00:04:52.316 --> 00:04:53.866 align:middle
+Este es un punto de partida sólido.
+
+00:04:53.866 --> 00:04:58.856 align:middle
+El único ajuste que haré es poner en mayúsculas
+la "C" en "SymfonyCasts": A continuación, vamos
+
+00:04:58.856 --> 00:05:02.366 align:middle
+a añadir algo de código: empezaremos
+con la importantísima clase Bundle.
