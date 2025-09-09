@@ -59,7 +59,7 @@ symfony composer init
 Nos pide el nombre del paquete. Este nombre por defecto es casi correcto, pero quiero utilizar el nombre del proveedor `symfonycasts` (por defecto es el nombre de mi ordenador). Así que introduce `symfonycasts/object-translation-bundle`. ¿Descripción? `Translate your entities!`
 ¿Autor? Parece que de alguna manera encuentra mi nombre y mi dirección de correo electrónico, así que lo acepto. ¿Estabilidad mínima? No tenemos que preocuparnos por eso ahora, así que introdúcelo. ¿Tipo de paquete? Este es importante, y veremos por qué más adelante. Introduce `symfony-bundle`. ¿Licencia? Al final lo publicaremos bajo la licencia MIT, así que introduce `MIT`.
 
-Ahora te pregunta por las dependencias. No te preocupes por eso ahora, así que introduce `n`para saltártelo. Lo mismo para las dependencias de desarrollo.
+Ahora te pregunta por las dependencias. No te preocupes por eso ahora, así que introduce `n`para omitirlas. Lo mismo para las dependencias de desarrollo.
 
 Ahora, carga automática. Ya está adivinando un espacio de nombres para nosotros basándose en el nombre de nuestro paquete,`Symfonycasts\ObjectTranslationBundle`. ¡Qué bien! Acéptalo.
 
