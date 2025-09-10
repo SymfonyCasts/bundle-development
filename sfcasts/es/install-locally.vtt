@@ -1,0 +1,157 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.356 align:middle
+Tenemos un "paquete" bundle y
+una clase bundle, y aunque vive
+
+00:00:04.356 --> 00:00:06.896 align:middle
+dentro de nuestra app,
+tenemos que "instalarlo".
+
+00:00:07.286 --> 00:00:10.956 align:middle
+Esto se gestiona con Composer de forma
+normal, pero el método es un poco diferente.
+
+00:00:11.516 --> 00:00:15.706 align:middle
+Aún no existe en Packagist ni en GitHub, así
+que tenemos que decirle a Composer: "¡Eh,
+
+00:00:16.026 --> 00:00:18.936 align:middle
+nuestro paquete bundle existe
+en esta carpeta específica!"
+
+00:00:19.606 --> 00:00:24.756 align:middle
+Abre el archivo composer.json de nuestra app y añade
+una nueva clave de nivel superior llamada "repositorios".
+
+00:00:25.376 --> 00:00:28.126 align:middle
+Composer tiene un "repositorio"
+por defecto: Packagist.
+
+00:00:28.416 --> 00:00:30.086 align:middle
+Aquí es donde busca los paquetes.
+
+00:00:30.276 --> 00:00:32.876 align:middle
+Pero también podemos añadir nuestros
+propios repositorios personalizados.
+
+00:00:33.536 --> 00:00:36.666 align:middle
+Esto tiene que ser un array,
+dentro, un objeto json.
+
+00:00:36.886 --> 00:00:39.756 align:middle
+La primera clave es "tipo"
+- qué tipo de repositorio.
+
+00:00:40.116 --> 00:00:43.066 align:middle
+En nuestro caso, es un
+repositorio "path" (o local).
+
+00:00:43.666 --> 00:00:49.306 align:middle
+A continuación, "url" - para los repositorios "path",
+es la ruta relativa a la carpeta de nuestro paquete.
+
+00:00:49.796 --> 00:00:53.066 align:middle
+Utiliza "object-translation-bundle", ya que
+está en la raíz de nuestra aplicación:
+
+00:00:53.856 --> 00:00:57.526 align:middle
+Ahora podemos instalar nuestro paquete bundle,
+así que dirígete a tu terminal y ejecuta:
+
+00:00:57.706 --> 00:01:03.396 align:middle
+composer require
+symfonycasts/object-translation-bundle Oh...
+
+00:01:03.676 --> 00:01:07.086 align:middle
+Nos aparece un error porque no encontramos
+una versión "estable" de nuestro paquete.
+
+00:01:07.596 --> 00:01:11.496 align:middle
+En realidad, esto tiene sentido, ya que no hemos publicado
+ninguna versión y nuestra aplicación está configurada
+
+00:01:11.496 --> 00:01:14.726 align:middle
+para instalar sólo versiones
+estables de los paquetes por defecto.
+
+00:01:15.176 --> 00:01:18.926 align:middle
+Podemos evitarlo permitiendo explícitamente
+una versión "dev" de este paquete.
+
+00:01:19.366 --> 00:01:28.146 align:middle
+Ejecuta de nuevo el comando, pero añadiendo al
+final del nombre del paquete: ¡Genial! :@dev
+
+00:01:28.146 --> 00:01:28.876 align:middle
+Ha funcionado.
+
+00:01:29.446 --> 00:01:33.786 align:middle
+Lo bueno de los repositorios "ruta" es que están
+enlazados simbólicamente, por lo que los cambios que hagas
+
+00:01:33.786 --> 00:01:36.496 align:middle
+en el bundle se reflejarán
+inmediatamente en tu aplicación.
+
+00:01:36.706 --> 00:01:38.236 align:middle
+¡Perfecto para el desarrollo local!
+
+00:01:38.856 --> 00:01:42.966 align:middle
+Mira esto - la salida nos está diciendo que
+Symfony Flex instaló una receta para esto?
+
+00:01:43.196 --> 00:01:45.096 align:middle
+¿Cómo? No hemos creado una receta...
+
+00:01:45.666 --> 00:01:47.626 align:middle
+Ejecuta: para ver qué pasa. git status
+
+00:01:48.286 --> 00:01:52.436 align:middle
+composer.json y fueron modificados -
+eso es lo esperado... composer.lock
+
+00:01:52.656 --> 00:01:56.026 align:middle
+¿pero mira: también se
+modificó...? config/bundles.php
+
+00:01:56.566 --> 00:01:57.686 align:middle
+Ábrelo en tu editor.
+
+00:01:59.866 --> 00:02:02.476 align:middle
+¡Vaya! ¡Ha añadido
+automáticamente nuestra clase bundle!
+
+00:02:03.056 --> 00:02:05.996 align:middle
+¿Recuerdas cuando creamos el archivo
+de nuestro bundle? composer.json
+
+00:02:06.286 --> 00:02:08.266 align:middle
+¿Pusimos el "tipo" a "symfony-bundle"?
+
+00:02:08.696 --> 00:02:11.736 align:middle
+Esto le dijo a Symfony Flex:
+"¡Eh, esto es un bundle Symfony!
+
+00:02:11.866 --> 00:02:14.196 align:middle
+Busca una clase bundle y
+cárgala automáticamente"
+
+00:02:14.826 --> 00:02:18.586 align:middle
+Sin necesidad de una verdadera receta,
+cada vez que alguien instale este paquete,
+
+00:02:18.746 --> 00:02:21.096 align:middle
+el bundle se añadirá
+automáticamente a tu aplicación.
+
+00:02:21.376 --> 00:02:22.146 align:middle
+Muy bonito, ¿eh?
+
+00:02:22.926 --> 00:02:25.406 align:middle
+Ya tenemos un bundle vacío
+instalado y cargado en nuestra app.
+
+00:02:25.886 --> 00:02:29.076 align:middle
+A continuación, ¡vamos a hacer que nuestro
+bundle proporcione un servicio Symfony!
