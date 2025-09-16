@@ -95,8 +95,8 @@ symfony console config:dump-reference symfonycasts_object_translation
 This passes our validation but is still not what we want - `Article` doesn't
 extend our bundle's `Translation` class.
 
-Back in our configuration, we *could* chain another validation after the first one but
-let's keep it simple. Change the `class_exists` to `is_a`. For the second
+Back in our configuration, we *could* chain another validation after the first one
+but let's keep it simple. Change the `class_exists` to `is_a`. For the second
 argument, add `Translation::class` - make sure to import the one from our bundle.
 `is_a` checks if an object is an instance of a class string. By default, `$v`
 should be an actual object, so pass `true` as the third argument to allow
