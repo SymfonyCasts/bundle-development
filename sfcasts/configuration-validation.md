@@ -14,7 +14,7 @@ Below our `->example()` call, add a new line and indent. Add `->isRequired()`.
 This makes sure the user sets it, but we want to prevent them from setting
 it as null or an empty string. So, also add `->cannotBeEmpty()`:
 
-[[[ code('a525c1572d') ]]]
+[[[ code('5b4c33db0f') ]]]
 
 At your terminal, dump the bundle configuration:
 
