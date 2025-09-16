@@ -32,3 +32,12 @@ chapters:
     utilizing-configuration:
         tutsFirstStep: 11-require-translation-class
         tutsLastStep: 11-remove-translator-dd
+    translated-object-wrapper:
+        tutsFirstStep: 11-create-translatedobject
+        tutsLastStep: 12-translatedobject-generics
+    unit-testing-translated-object:
+        tutsFirstStep: 12-return-translatedobject
+        tutsLastStep: 12-return-translatedobject
+    tdd-getter:
+        tutsFirstStep: 13-create-unit-test
+        tutsLastStep: 14-add-getter-test
