@@ -40,7 +40,11 @@ term `Document` instead of `Entity`. `Model` is a more generic term that covers
 both `Entity`, `Document`, and others.
 
 Inside this directory, create a new class called `Translation`. Here's the
-trick: make this class `abstract`. This is going to be a `MappedSuperclass`
+trick: make this class `abstract`: 
+
+[[[ code('fc2e5d8a8f') ]]]
+
+This is going to be a `MappedSuperclass`
 in Doctrine terms. We don't want our bundle to provide the *real* entity.
 The user of the bundle will create their own `Translation` entity that
 extends this one. All they'll need is an ID field. The rest of the fields
@@ -60,6 +64,8 @@ allow us to query all field translations for a given object, in a given locale.
 
 Finally, `public string $field`, the property name on the entity being translated,
 and `public string $value`, the translated value in this *row's* locale.
+
+[[[ code('da0c8132fa') ]]]
 
 That's it!
 

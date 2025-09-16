@@ -34,7 +34,11 @@ a `Translation.mongodb.xml` file with the appropriate mapping for that.
 
 ## Understanding the XML File
 
-Open `Translation.orm.xml` in your editor. Gross... let's unpack this.
+Open `Translation.orm.xml` in your editor:
+
+[[[ code('d3446f1a4f') ]]]
+
+Gross... let's unpack this.
 First, we're declaring a top-level `doctrine-mapping` element with some
 XML namespace stuff. Inside, a `mapped-superclass` element with a
 `name` attribute for the full class name of our bundle's `Translation` class.
@@ -60,6 +64,8 @@ know about this file. In `ObjectTranslationBundle`, override the `build()`
 method and add the `void` return type. This parent method call can be removed,
 as it's empty.
 
+[[[ code('1de87770eb') ]]]
+
 `loadExtension()` is where we load and configure things for *this* bundle. `build()`
 is called later in the process, after all other bundles have been registered. This
 allows us to modify the service container after all other bundles have had
@@ -80,7 +86,9 @@ represent. We only need one.
 For the key, use `__DIR__.'/../config/doctrine/mapping'` - this is the relative path
 to our mapping directory. For the value, jump over to the `Translation` class and
 copy its namespace `SymfonyCasts\ObjectTranslationBundle\Model`. Go back
-to `ObjectTranslationBundle` and paste it in as the value.
+to `ObjectTranslationBundle` and paste it in as the value:
+
+[[[ code('62ebf10ae2') ]]]
 
 That's it!
 

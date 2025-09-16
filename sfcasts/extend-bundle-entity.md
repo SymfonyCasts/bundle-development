@@ -16,7 +16,9 @@ to finish.
 
 ## The *Real* Translation Entity
 
-In your editor, open our new entity in `src/Entity/Translation.php`.
+In your editor, open our new entity in `src/Entity/Translation.php`:
+
+[[[ code('30a8a8eaab') ]]]
 
 Alright, here we go! The ID was added for us, which is all we need.
 Now to extend the abstract `Translation` class from the bundle. Since
@@ -45,7 +47,9 @@ directory.
 Check out the `up()` method. It's creating the `translation` table with the
 `id`, but also all the columns from our bundle's *mapped superclass*. Perfect!
 
-Add a description: `Add Translation entity`.
+Add a description: `Add Translation entity`:
+
+[[[ code('b28a12aa12') ]]]
 
 Time to run it. At your terminal, run:
 

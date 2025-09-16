@@ -13,7 +13,11 @@ We can define our bundle configuration right inside our bundle class! Open
 `ObjectTranslationBundle.php` in the `src` directory of your bundle.
 
 Override another method: `configure()`. The parent method is also empty,
-so we can remove this call. Now for the definition. Write
+so we can remove this call:
+
+[[[ code('be1876a297') ]]]
+
+Now for the definition. Write
 `$definition->rootNode()`, this is the top-level configuration node, which
 is defined as an *array*. Since it's an array, write `->children()` - the
 array's definition. For definitions, we need to always call `->end()` to mark
@@ -21,7 +25,9 @@ it as *finished*. Do this right away, so we don't forget.
 
 Inside, add our first node: `->stringNode('translation_class')`. In our
 configuration, this will be the *array key*. Again, call `->end()` to
-finish it.
+finish it:
+
+[[[ code('b26b11a5ee') ]]]
 
 ## Listing Available Bundle Configurations
 
@@ -44,7 +50,9 @@ Here's how. In `ObjectTranslationBundle`, dig into the `AbstractBundle` class.
 `protected string $extensionAlias` what we need to override. By default, it's
 empty and automatically detected from the bundle name (snake-cased without
 the `Bundle` suffix). Copy the property and, back in *our* bundle class,
-paste. Change it to `symfonycasts_object_translation`.
+paste. Change it to `symfonycasts_object_translation`:
+
+[[[ code('0f3c9ee195') ]]]
 
 ## Visualizing Your Bundle Configuration
 
@@ -79,7 +87,9 @@ it a bit.
 
 First, add `->info()` - this is a short description of the node. Write
 `The class name of your Translation entity`. On a new line, write
-`->example('App\Entity\Translation')` to show an example value.
+`->example('App\Entity\Translation')` to show an example value:
+
+[[[ code('a525c1572d') ]]]
 
 Back in the terminal, run the command again:
 
