@@ -1,14 +1,35 @@
 diff --git a/object-translation-bundle/src/TranslatedObject.php b/object-translation-bundle/src/TranslatedObject.php
-index 00511b5..6b592b6 100644
+index 00511b5..32694ba 100644
 --- a/object-translation-bundle/src/TranslatedObject.php
 +++ b/object-translation-bundle/src/TranslatedObject.php
-@@ -42,4 +42,9 @@ final class TranslatedObject
+@@ -20,8 +20,8 @@ final class TranslatedObject
+ 
+     public function __call(string $name, array $arguments): mixed
+     {
+-        if (isset($this->_translations[$name])) {
+-            return $this->_translations[$name];
++        if ($translatedValue = $this->translatedValue($name)) {
++            return $translatedValue;
+         }
+ 
+         $method = $name;
+@@ -42,4 +42,19 @@ final class TranslatedObject
      {
          return isset($this->_inner->$name);
      }
 +
 +    private function translatedValue(string $name): ?string
 +    {
-+        
++        if (isset($this->_translations[$name])) {
++            return $this->_translations[$name];
++        }
++
++        if (!str_starts_with($name, 'get')) {
++            return null;
++        }
++
++        $property = lcfirst(substr($name, 3));
++
++        return $this->_translations[$property] ?? null;
 +    }
  }
