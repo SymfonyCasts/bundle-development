@@ -1,0 +1,215 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:03.436 align:middle
+Bien, nuestro bundle está
+instalado y listo para funcionar.
+
+00:00:03.616 --> 00:00:07.016 align:middle
+Es hora de añadir algo de funcionalidad
+añadiendo nuestra primera clase de servicio.
+
+00:00:07.416 --> 00:00:08.796 align:middle
+Ésta será la estrella del espectáculo.
+
+00:00:09.076 --> 00:00:12.506 align:middle
+Nuestro bundle es para traducir objetos, así
+que éste parece el lugar adecuado para empezar.
+
+00:00:13.016 --> 00:00:17.736 align:middle
+En el directorio src de nuestro bundle,
+crea una nueva clase PHP: ObjectTranslator.
+
+00:00:18.826 --> 00:00:20.396 align:middle
+En primer lugar, marca esta clase como final.
+
+00:00:20.706 --> 00:00:22.066 align:middle
+No está pensada para ser ampliada.
+
+00:00:22.586 --> 00:00:25.136 align:middle
+Al desarrollar bundles, es
+importante ser explícito
+
+00:00:25.136 --> 00:00:27.426 align:middle
+sobre el diseño de tus
+clases y sus intenciones.
+
+00:00:27.926 --> 00:00:30.226 align:middle
+Esto facilita mantener la
+compatibilidad hacia atrás.
+
+00:00:30.746 --> 00:00:35.066 align:middle
+Eliminar final más adelante no es un cambio
+de ruptura, pero añadir final sí lo es.
+
+00:00:35.436 --> 00:00:38.906 align:middle
+Exploraremos más trucos de este tipo a
+medida que avancemos: Crea un método:
+
+00:00:39.156 --> 00:00:42.506 align:middle
+public function translate(object $object).
+
+00:00:42.866 --> 00:00:44.236 align:middle
+Tipo de retorno: object.
+
+00:00:44.786 --> 00:00:47.576 align:middle
+Con el tiempo, albergará la
+lógica para traducir objetos.
+
+00:00:47.976 --> 00:00:50.056 align:middle
+Por ahora, sólo devuelve el $object pasado:
+
+00:00:50.806 --> 00:00:53.576 align:middle
+Nuestro servicio necesita un
+constructor para inyectar algunas cosas.
+
+00:00:53.986 --> 00:01:01.396 align:middle
+Añade public function __construct(private
+LocaleAwareInterface $localeAware,
+
+00:01:02.726 --> 00:01:04.826 align:middle
+private string $defaultLocale).
+
+00:01:05.426 --> 00:01:09.516 align:middle
+Necesitamos que el servicio LocaleAwareInterface obtenga
+la configuración regional actual de la petición,
+
+00:01:09.516 --> 00:01:15.066 align:middle
+y también necesitaremos la configuración regional predeterminada de nuestra
+aplicación: En translate(), podemos añadir algo de lógica sencilla.
+
+00:01:15.386 --> 00:01:21.936 align:middle
+Obtén la configuración regional actual con
+$locale = $this->localeAware->getLocale().
+
+00:01:22.716 --> 00:01:25.756 align:middle
+Ahora, si la configuración regional
+actual es la misma que la predeterminada,
+
+00:01:25.996 --> 00:01:32.896 align:middle
+no necesitamos hacer ninguna traducción, así que
+añade un if ($this->defaultLocale === $locale)
+
+00:01:33.086 --> 00:01:35.296 align:middle
+y devuelve simplemente el objeto
+sin procesar en este caso:
+
+00:01:36.546 --> 00:01:40.786 align:middle
+A continuación es donde añadiremos finalmente la lógica de
+traducción real, pero por ahora sólo añade un comentario
+
+00:01:40.786 --> 00:01:47.076 align:middle
+: todo translate object: Utilicemos este
+nuevo servicio en ArticleController::show().
+
+00:01:50.146 --> 00:01:55.506 align:middle
+Amplía un poco este método e
+inyéctalo: ObjectTranslator $translator:
+
+00:01:56.486 --> 00:01:58.696 align:middle
+Ejecuta el Article inyectado a
+través de nuestro nuevo servicio:
+
+00:01:58.926 --> 00:02:04.456 align:middle
+$article =
+$translator->translate($article): ¡Genial!
+
+00:02:05.046 --> 00:02:08.906 align:middle
+Observa que si intentamos acceder a un método de $article
+antes de ejecutarlo a través de nuestro servicio,
+
+00:02:09.186 --> 00:02:12.266 align:middle
+PhpStorm puede autocompletar
+todos los métodos de $article.
+
+00:02:12.816 --> 00:02:15.876 align:middle
+Pero... si intentamos acceder a un
+método en $article después de ejecutarlo
+
+00:02:15.876 --> 00:02:19.126 align:middle
+a través de $translator->translate(),
+no tenemos autocompletado.
+
+00:02:19.536 --> 00:02:23.786 align:middle
+PhpStorm no tiene ni idea de qué es
+ahora $article - sólo que es "un objeto".
+
+00:02:24.346 --> 00:02:25.146 align:middle
+Esto es un fastidio...
+
+00:02:25.276 --> 00:02:27.916 align:middle
+¡Pero podemos arreglarlo
+con los genéricos de PHP!
+
+00:02:28.396 --> 00:02:31.896 align:middle
+Los genéricos son una forma de proporcionar
+información de tipo adicional a nuestro editor.
+
+00:02:32.346 --> 00:02:33.026 align:middle
+Mira esto
+
+00:02:33.326 --> 00:02:37.206 align:middle
+por encima de ObjectTranslator::translate(),
+genera algunos bloques doc.
+
+00:02:37.666 --> 00:02:40.236 align:middle
+Esto sólo coincide con la firma
+del método y no es súper útil...
+
+00:02:40.486 --> 00:02:43.756 align:middle
+así que añade @template T of object encima.
+
+00:02:44.606 --> 00:02:47.906 align:middle
+Esto declara un tipo de plantilla
+T que debe ser un objeto.
+
+00:02:48.226 --> 00:02:51.436 align:middle
+T es como un alias, o marcador de
+posición y puede ser cualquier cadena.
+
+00:02:52.166 --> 00:02:58.066 align:middle
+Ahora, para @param y @return, sustituye
+object por T: Esto le dice a nuestro editor:
+
+00:02:58.226 --> 00:03:03.196 align:middle
+"Sea cual sea el tipo de objeto que se pase a este
+método, el tipo devuelto será el mismo tipo de objeto"
+
+00:03:03.986 --> 00:03:07.266 align:middle
+De vuelta en ArticleController::show(),
+después de llamar a translate(),
+
+00:03:07.306 --> 00:03:09.266 align:middle
+intenta autocompletar de nuevo en $article.
+
+00:03:09.896 --> 00:03:13.266 align:middle
+¡Pum! Ahora PhpStorm sabe
+exactamente qué es $article.
+
+00:03:13.386 --> 00:03:14.346 align:middle
+¡Esto me encanta!
+
+00:03:15.196 --> 00:03:18.396 align:middle
+Elimina ese código extra - el
+artículo traducido se pasa ahora
+
+00:03:18.396 --> 00:03:20.336 align:middle
+a nuestra plantilla, así que
+nuestro trabajo aquí está hecho.
+
+00:03:21.016 --> 00:03:23.286 align:middle
+Volvemos a nuestro navegador y
+visitamos la página del artículo...
+
+00:03:23.796 --> 00:03:24.436 align:middle
+Un error...
+
+00:03:24.986 --> 00:03:27.366 align:middle
+"No se puede autohilar el
+argumento $translator..."
+
+00:03:27.856 --> 00:03:31.966 align:middle
+Symfony no conoce el servicio de nuestro
+bundle - sigue siendo una simple clase PHP...
+
+00:03:32.406 --> 00:03:33.546 align:middle
+¡Arreglémoslo a continuación!
