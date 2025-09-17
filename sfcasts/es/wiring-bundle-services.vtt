@@ -1,0 +1,350 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:05.336 align:middle
+Hemos creado la clase que queremos utilizar como servicio
+en nuestro bundle, pero cuando intentamos inyectarla,
+
+00:00:05.336 --> 00:00:07.306 align:middle
+obtenemos este error "no se puede
+autoconectar el argumento..."
+
+00:00:07.306 --> 00:00:10.666 align:middle
+error. En tus aplicaciones finales, puede
+que estés acostumbrado a que esto funcione.
+
+00:00:11.046 --> 00:00:13.876 align:middle
+Esto se debe a que la autoconexión de
+servicios está activada por defecto
+
+00:00:13.876 --> 00:00:16.316 align:middle
+para todas las clases del
+directorio src de tu aplicación.
+
+00:00:16.926 --> 00:00:18.596 align:middle
+Los bundles, sin embargo, son otra historia.
+
+00:00:19.006 --> 00:00:21.736 align:middle
+Si llevas usando Symfony tanto
+tiempo como yo, puede que recuerdes
+
+00:00:21.736 --> 00:00:24.366 align:middle
+que en los viejos tiempos,
+¡la autoconexión no existía!
+
+00:00:24.756 --> 00:00:26.726 align:middle
+Tenías que definir manualmente cada...
+
+00:00:26.726 --> 00:00:29.696 align:middle
+cada... servicio en un archivo YAML o XML.
+
+00:00:30.016 --> 00:00:30.766 align:middle
+Era duro...
+
+00:00:31.316 --> 00:00:34.516 align:middle
+Por suerte, para las aplicaciones,
+esto ya no es así (en su mayor parte).
+
+00:00:34.916 --> 00:00:36.696 align:middle
+Pero aún tienes que hacerlo para los bundles.
+
+00:00:37.026 --> 00:00:39.156 align:middle
+Esto se debe a que los bundles están
+pensados para ser reutilizables
+
+00:00:39.336 --> 00:00:42.496 align:middle
+, y quieres dar al usuario final
+la mayor flexibilidad posible.
+
+00:00:43.046 --> 00:00:45.036 align:middle
+Sin embargo, todavía hay algunas
+mejoras en este departamento.
+
+00:00:45.626 --> 00:00:48.596 align:middle
+¿Recuerdas que creamos ese directorio
+vacío config en nuestro bundle?
+
+00:00:48.956 --> 00:00:51.046 align:middle
+Aquí es donde definimos los
+servicios de nuestro bundle.
+
+00:00:51.426 --> 00:00:55.736 align:middle
+En él, crea un archivo PHP normal
+(no una clase): services.php.
+
+00:00:55.736 --> 00:01:00.826 align:middle
+Si has escrito bundles en el pasado, puede que
+hayas utilizado XML para definir los servicios.
+
+00:01:01.096 --> 00:01:02.856 align:middle
+Esta era la mejor práctica anterior.
+
+00:01:02.926 --> 00:01:05.196 align:middle
+Pero hoy en día se prefiere utilizar PHP.
+
+00:01:05.696 --> 00:01:10.616 align:middle
+En tus aplicaciones finales, si necesitas definir
+servicios manualmente, es probable que utilices YAML.
+
+00:01:10.926 --> 00:01:12.926 align:middle
+No hay nada que te impida utilizar YAML
+
+00:01:12.966 --> 00:01:16.066 align:middle
+, pero esto requeriría que tu bundle
+dependiera del componente YAML.
+
+00:01:16.256 --> 00:01:17.686 align:middle
+Así pues, ¡que sea PHP!
+
+00:01:18.386 --> 00:01:23.696 align:middle
+En primer lugar, añade namespace
+Symfony\Component\DependencyInjection\Loader\Configurator:
+
+00:01:23.896 --> 00:01:27.896 align:middle
+Esto nos permitirá utilizar las clases y
+funciones de ayuda a la definición del servicio
+
+00:01:27.896 --> 00:01:31.196 align:middle
+que necesitamos sin necesidad de importar
+cada una de ellas. A continuación,
+
+00:01:31.976 --> 00:01:36.836 align:middle
+return static function
+(ContainerConfigurator $container): Dentro,
+
+00:01:37.946 --> 00:01:40.896 align:middle
+escribe $container->services().
+
+00:01:41.406 --> 00:01:45.306 align:middle
+Encadenaremos nuestras definiciones de servicio a
+partir de esto: ¡Ahora viene la parte divertida! Añade
+
+00:01:45.536 --> 00:01:48.926 align:middle
+->set() - el primer argumento
+es el ID del servicio. En
+
+00:01:49.336 --> 00:01:52.236 align:middle
+tus aplicaciones, suele ser sólo el
+nombre de la clase, pero en los bundles,
+
+00:01:52.236 --> 00:01:55.556 align:middle
+utilizamos una cadena sin formato, de nuevo,
+para obtener la máxima flexibilidad. Este
+
+00:01:56.266 --> 00:02:00.596 align:middle
+ID tiene que ser único, así que ponle como prefijo un espacio
+de nombres que tenga sentido para tu bundle. En este caso,
+
+00:02:01.016 --> 00:02:02.866 align:middle
+utilizaremos symfonycasts.. Ahora
+
+00:02:02.986 --> 00:02:07.236 align:middle
+el nombre de nuestro servicio:
+object_translator. El
+
+00:02:07.816 --> 00:02:10.426 align:middle
+segundo argumento es el nombre completo
+de la clase: ObjectTranslator::class
+
+00:02:10.676 --> 00:02:14.626 align:middle
+(asegúrate de importarlo): Ahora
+tenemos este archivo ... más o
+
+00:02:14.626 --> 00:02:15.016 align:middle
+menos... aleatorio
+
+00:02:15.016 --> 00:02:19.486 align:middle
+services.php en nuestro bundle, ¡así
+que tenemos que decírselo a Symfony! En
+
+00:02:19.916 --> 00:02:24.466 align:middle
+ObjectTranslationBundle, anula el método
+loadExtension() de AbstractBundle. Este
+
+00:02:24.996 --> 00:02:27.496 align:middle
+método se llama cuando
+Symfony carga el bundle. El
+
+00:02:28.396 --> 00:02:30.736 align:middle
+método padre está vacío, así que
+podemos eliminar esta llamada. Importa
+
+00:02:31.206 --> 00:02:35.366 align:middle
+nuestro archivo services.php
+utilizando $container->import(). La
+
+00:02:35.806 --> 00:02:39.826 align:middle
+ruta es relativa a nuestro archivo actual,
+así que escribe ../config/services.php:
+
+00:02:39.986 --> 00:02:44.366 align:middle
+¿Esto es todo lo que necesitamos? Veamos.
+
+00:02:44.706 --> 00:02:45.196 align:middle
+Vuelve
+
+00:02:45.626 --> 00:02:48.016 align:middle
+al navegador y actualiza la
+página de error. Hmm, el
+
+00:02:48.656 --> 00:02:50.136 align:middle
+mismo error. Pero ahora
+
+00:02:50.486 --> 00:02:53.746 align:middle
+tenemos más detalles: "Tal vez deberías
+asignar un alias de esta clase al
+
+00:02:53.776 --> 00:02:57.186 align:middle
+servicio symfonycasts.object_translator
+existente" Esto
+
+00:02:57.816 --> 00:03:01.206 align:middle
+sigue siendo un progreso: puesto que Symfony
+sugiere el ID del servicio, ¡eso significa
+
+00:03:01.386 --> 00:03:02.726 align:middle
+que lo conoce! En ArticleController::show(),
+
+00:03:03.246 --> 00:03:06.826 align:middle
+donde intentamos inyectar
+ObjectTranslator, podríamos
+
+00:03:07.066 --> 00:03:09.786 align:middle
+añadir el atributo #[Autowire]
+con el ID del servicio... Esto
+
+00:03:10.286 --> 00:03:11.136 align:middle
+funcionaría... ¡pero
+
+00:03:11.166 --> 00:03:12.326 align:middle
+podemos hacerlo mejor! Quiero
+
+00:03:12.786 --> 00:03:14.766 align:middle
+que este servicio sea autoconectable.
+
+00:03:15.166 --> 00:03:18.536 align:middle
+Lo hacemos estableciendo el nombre de la clase
+como alias del servicio. En services.php,
+
+00:03:19.146 --> 00:03:23.656 align:middle
+debajo de set(), escribe
+->alias(). El primer
+
+00:03:24.116 --> 00:03:28.556 align:middle
+argumento es el alias que queremos crear:
+ObjectTranslator::class. El segundo
+
+00:03:29.246 --> 00:03:32.066 align:middle
+argumento es el ID del servicio que definimos
+antes: symfonycasts.object_translator: De vuelta
+
+00:03:32.286 --> 00:03:37.046 align:middle
+en el navegador, actualiza. Y... sigue
+
+00:03:37.046 --> 00:03:39.666 align:middle
+apareciendo un error, pero
+diferente. "Demasiados pocos
+
+00:03:39.886 --> 00:03:42.366 align:middle
+argumentos pasados a
+ObjectTranslator". Recuerda que en
+
+00:03:43.096 --> 00:03:48.306 align:middle
+ObjectTranslator, tenemos dos dependencias necesarias:
+LocaleAwareInterface $defaultLocale , un servicio,
+
+00:03:48.436 --> 00:03:51.796 align:middle
+y , un parámetro contenedor.
+
+00:03:52.266 --> 00:03:54.356 align:middle
+Tenemos que decirle a Symfony
+cómo suministrarlas. Sé
+
+00:03:54.846 --> 00:03:58.516 align:middle
+que podemos autoconectar LocaleAwareInterface,
+pero en los bundles, necesitamos
+
+00:03:58.516 --> 00:04:01.426 align:middle
+configurarlo manualmente, por lo que
+necesitamos su ID de servicio. Para
+
+00:04:02.126 --> 00:04:04.066 align:middle
+encontrarlo, en tu terminal,
+ejecuta: symfony console
+
+00:04:04.066 --> 00:04:09.466 align:middle
+debug:autowiring LocaleAware No
+necesitamos el nombre completo, con la
+
+00:04:09.466 --> 00:04:10.876 align:middle
+primera parte debería bastar. Perfecto Aquí
+
+00:04:11.616 --> 00:04:15.176 align:middle
+está: translation.locale_switcher. Cópialo.
+
+00:04:15.646 --> 00:04:16.296 align:middle
+Vuelve a
+
+00:04:17.036 --> 00:04:21.546 align:middle
+services.php, justo debajo de set(), haz una
+sangría para mantener esto organizado, y escribe
+
+00:04:21.546 --> 00:04:23.626 align:middle
+->args() con una matriz. Estos elementos
+
+00:04:24.376 --> 00:04:27.326 align:middle
+coinciden con el orden de los
+argumentos del constructor, así que el
+
+00:04:27.426 --> 00:04:29.276 align:middle
+primer argumento es el servicio. Utiliza la
+
+00:04:29.756 --> 00:04:33.166 align:middle
+funciónservice() y pega el ID del
+servicio que acabamos de encontrar: Ahora
+
+00:04:33.976 --> 00:04:36.266 align:middle
+el segundo argumento,
+$defaultLocale. Se trata de
+
+00:04:36.746 --> 00:04:38.236 align:middle
+un parámetro contenedor. Podemos
+
+00:04:38.536 --> 00:04:41.056 align:middle
+listar todos los parámetros en el
+terminal ejecutando: symfony console
+
+00:04:41.056 --> 00:04:47.066 align:middle
+debug:container --parameters
+Lista grande... fíltralo
+
+00:04:47.626 --> 00:04:51.726 align:middle
+ejecutando el mismo comando pero con | grep
+locale al final: ¡ kernel.default_locale
+
+00:04:52.656 --> 00:04:55.106 align:middle
+es lo que buscamos! Cópialo. De
+
+00:04:55.356 --> 00:04:56.036 align:middle
+vuelta en
+
+00:04:56.696 --> 00:05:02.726 align:middle
+services.php, para el segundo elemento de la
+matriz args, utiliza la función param() y... pega:
+
+00:05:02.916 --> 00:05:05.796 align:middle
+Volvemos a nuestro
+navegador... refrescamos... ¡y
+
+00:05:05.996 --> 00:05:06.656 align:middle
+éxito! ¡
+
+00:05:07.436 --> 00:05:08.516 align:middle
+Ningún error
+
+00:05:08.736 --> 00:05:11.866 align:middle
+significa que el servicio está correctamente
+definido e inyectado! A continuación,
+
+00:05:12.646 --> 00:05:15.726 align:middle
+veremos cómo nuestro bundle
+almacenará las traducciones.
