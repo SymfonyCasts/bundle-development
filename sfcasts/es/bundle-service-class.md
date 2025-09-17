@@ -50,11 +50,11 @@ Ahora, para `@param` y `@return`, sustituye `object` por `T`:
 
 [[[ code('3a1638f44e') ]]]
 
-Esto le dice a nuestro editor: "Sea cual sea el tipo de objeto que se pase a este método, el tipo devuelto será el mismo tipo de objeto"
+Esto le dice a nuestro editor: "Sea cual sea el tipo de objeto que se pase a este método, el tipo de retorno será el mismo tipo de objeto"
 
 De vuelta en `ArticleController::show()`, después de llamar a `translate()`, intenta autocompletar de nuevo en `$article`. ¡Pum! Ahora PhpStorm sabe exactamente qué es `$article`. ¡Esto me encanta!
 
-Elimina ese código extra - el artículo traducido se pasa ahora a nuestra plantilla, así que nuestro trabajo aquí está hecho.
+Elimina ese código extra - el artículo traducido se pasa ahora a nuestra plantilla por lo que nuestro trabajo aquí está hecho.
 
 Volvemos a nuestro navegador y visitamos la página del artículo... Un error... "No se puede autohilar el argumento $translator..."
 
