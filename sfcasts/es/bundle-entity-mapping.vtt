@@ -1,0 +1,250 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:03.936 align:middle
+Hemos creado la clase abstracta
+Translation en nuestro bundle.
+
+00:00:04.296 --> 00:00:09.096 align:middle
+Ahora tenemos que informar a Doctrine sobre ella para que podamos
+extenderla y utilizarla en nuestra aplicación como una entidad real.
+
+00:00:09.736 --> 00:00:11.506 align:middle
+Primero, ve a tu terminal y ejecuta:
+
+00:00:11.506 --> 00:00:17.726 align:middle
+symfony console doctrine:mapping:info Esto
+muestra todas las entidades que Doctrine conoce.
+
+00:00:18.006 --> 00:00:21.596 align:middle
+Las entidades Category, Tag, y Article de
+nuestra app, es todo lo que vemos por ahora.
+
+00:00:22.166 --> 00:00:25.836 align:middle
+Este comando también muestra las superclases
+mapeadas, así que tenemos que hacer algo
+
+00:00:25.836 --> 00:00:27.836 align:middle
+para que nuestra clase
+Translation aparezca aquí.
+
+00:00:28.416 --> 00:00:31.736 align:middle
+Probablemente estés acostumbrado a utilizar
+atributos de mapeo para tus entidades Doctrine.
+
+00:00:32.156 --> 00:00:33.666 align:middle
+En los bundles es un poco diferente.
+
+00:00:33.886 --> 00:00:36.896 align:middle
+La recomendación oficial es
+utilizar XML para el mapeo.
+
+00:00:37.196 --> 00:00:40.566 align:middle
+Lo sé, lo sé, XML no es lo
+más divertido para trabajar,
+
+00:00:40.976 --> 00:00:42.796 align:middle
+pero proporciona la mayor flexibilidad.
+
+00:00:43.436 --> 00:00:44.686 align:middle
+Pongámonos manos a la obra.
+
+00:00:45.046 --> 00:00:50.596 align:middle
+En el directorio config de tu bundle, crea un
+directorio y un subdirectorio nuevos: doctrine/mapping.
+
+00:00:51.356 --> 00:00:55.426 align:middle
+Para ahorrarte la molestia de verme esforzarme
+en escribir el XML, en el directorio tutorial
+
+00:00:55.636 --> 00:00:58.406 align:middle
+hay un archivo Translation.orm.xml.
+
+00:00:58.906 --> 00:01:02.166 align:middle
+Coge ese archivo y muévelo a nuestro
+nuevo directorio doctrine/mapping.
+
+00:01:02.816 --> 00:01:05.016 align:middle
+Fíjate en el sufijo .orm.xml.
+
+00:01:05.456 --> 00:01:09.466 align:middle
+Esto es importante, ya que indica a Doctrine que
+se trata de información de mapeo para el ORM.
+
+00:01:10.056 --> 00:01:16.036 align:middle
+En el futuro, si añadimos soporte para MongoDB,
+crearemos un archivo Translation.mongodb.xml
+
+00:01:16.086 --> 00:01:17.766 align:middle
+con la asignación adecuada para ello.
+
+00:01:18.326 --> 00:01:22.296 align:middle
+Abre Translation.orm.xml
+en tu editor: Asqueroso...
+
+00:01:22.546 --> 00:01:23.556 align:middle
+vamos a descomprimir esto.
+
+00:01:23.956 --> 00:01:27.226 align:middle
+En primer lugar, estamos declarando un
+elemento doctrine-mapping de nivel superior
+
+00:01:27.346 --> 00:01:29.296 align:middle
+con algunas cosas del espacio de nombres XML.
+
+00:01:29.756 --> 00:01:34.666 align:middle
+Dentro, un elemento mapped-superclass con
+un atributo name para el nombre completo de
+
+00:01:34.666 --> 00:01:36.616 align:middle
+la clase Translation de nuestro bundle.
+
+00:01:37.166 --> 00:01:39.346 align:middle
+Dentro de éste, están
+nuestras asignaciones field.
+
+00:01:39.666 --> 00:01:43.786 align:middle
+El atributo name corresponde al nombre de
+la propiedad de nuestra clase Translation
+
+00:01:44.086 --> 00:01:47.786 align:middle
+, y el atributo column es el nombre de la columna
+que queremos utilizar en la base de datos.
+
+00:01:48.286 --> 00:01:51.656 align:middle
+Si se omite, Doctrine utilizará el nombre
+de la propiedad como nombre de la columna.
+
+00:01:52.086 --> 00:01:55.536 align:middle
+He entrecomillado los nombres de
+las columnas objectType y objectId
+
+00:01:55.536 --> 00:01:57.996 align:middle
+para seguir las convenciones habituales
+de nomenclatura de las bases de datos.
+
+00:01:58.706 --> 00:02:01.596 align:middle
+El atributo type indica el tipo
+de Doctrine para la columna.
+
+00:02:01.896 --> 00:02:05.036 align:middle
+Utilizaremos string para todas
+excepto para value, que es text.
+
+00:02:05.546 --> 00:02:10.416 align:middle
+string las columnas tienen una longitud máxima,
+que suele rondar los 200-250 caracteres,
+
+00:02:10.416 --> 00:02:13.426 align:middle
+dependiendo de la plataforma y la
+configuración de la base de datos.
+
+00:02:14.216 --> 00:02:18.166 align:middle
+Esto está bien para la mayoría de nuestros campos,
+pero la columna value necesita contener más.
+
+00:02:18.596 --> 00:02:22.756 align:middle
+El tipo text puede contener cadenas mucho mayores, por
+lo que es perfecto para nuestros valores traducidos.
+
+00:02:23.466 --> 00:02:28.096 align:middle
+Sin embargo, no basta con crear el archivo XML,
+tenemos que hacer que Doctrine conozca este archivo.
+
+00:02:28.526 --> 00:02:34.396 align:middle
+En ObjectTranslationBundle, anula el método
+build() y añade el tipo de retorno void.
+
+00:02:34.986 --> 00:02:37.496 align:middle
+Esta llamada al método padre puede
+eliminarse, ya que está vacía.
+
+00:02:38.316 --> 00:02:41.906 align:middle
+loadExtension() es donde cargamos y
+configuramos las cosas para este bundle.
+
+00:02:42.286 --> 00:02:46.296 align:middle
+build() se llama más adelante en el proceso, después
+de que se hayan registrado todos los demás bundles.
+
+00:02:46.846 --> 00:02:49.066 align:middle
+Esto nos permite modificar
+el contenedor de servicios
+
+00:02:49.196 --> 00:02:52.736 align:middle
+después de que todos los demás bundles hayan
+tenido la oportunidad de registrar sus servicios.
+
+00:02:53.156 --> 00:02:55.816 align:middle
+Aquí podemos informar a Doctrine de
+las asignaciones de nuestro bundle.
+
+00:02:56.336 --> 00:03:00.326 align:middle
+Lo haremos con un pase del compilador, una
+especie de gancho de compilación que tiene
+
+00:03:00.326 --> 00:03:01.706 align:middle
+acceso al contenedor de servicios
+completamente compilado.
+
+00:03:02.286 --> 00:03:05.246 align:middle
+Escribe $container->addCompilerPass().
+
+00:03:05.916 --> 00:03:09.416 align:middle
+Doctrine proporciona un pase de compilador
+específico para cargar asignaciones.
+
+00:03:09.736 --> 00:03:14.936 align:middle
+Escribe DoctrineOrmMappingsPass e
+importa esta clase del bundle Doctrine.
+
+00:03:15.736 --> 00:03:18.336 align:middle
+Aquí podemos ver los métodos
+estáticos para crear mapeos.
+
+00:03:18.516 --> 00:03:20.676 align:middle
+Elige createXmlMappingDriver().
+
+00:03:21.386 --> 00:03:22.826 align:middle
+El primer argumento es un array.
+
+00:03:23.216 --> 00:03:26.196 align:middle
+Las claves son los directorios
+donde se encuentran los archivos
+
+00:03:26.296 --> 00:03:30.026 align:middle
+de mapeo, y los valores son los espacios de
+nombres que representan estos archivos de mapeo.
+
+00:03:30.466 --> 00:03:31.326 align:middle
+Sólo necesitamos uno.
+
+00:03:31.976 --> 00:03:34.856 align:middle
+Para la clave, utiliza
+__DIR__.'/../config/doctrine/mapping'
+
+00:03:34.856 --> 00:03:43.896 align:middle
+- es la ruta relativa a nuestro
+directorio de mapeo. Para
+
+00:03:44.466 --> 00:03:47.106 align:middle
+el valor, salta a la clase Translation y
+
+00:03:47.106 --> 00:03:51.766 align:middle
+copia su espacio de nombres
+SymfonyCasts\ObjectTranslationBundle\Model.
+
+00:03:52.326 --> 00:03:56.526 align:middle
+Vuelve a ObjectTranslationBundle
+y pégalo como valor: ¡Ya está!
+
+00:03:56.896 --> 00:04:01.656 align:middle
+Salta a tu terminal y ejecuta de nuevo el
+comando doctrine:mapping:info: ¡Genial! Ahora
+
+00:04:01.866 --> 00:04:04.726 align:middle
+podemos ver nuestra superclase mapeada
+Translation en la lista. A continuación,
+
+00:04:05.156 --> 00:04:08.396 align:middle
+crearemos la entidad Translation
+real en nuestra aplicación
