@@ -53,7 +53,7 @@ Esto sigue siendo un progreso: puesto que Symfony sugiere el ID del servicio, ¡
 
 ## Alias de nuestro servicio
 
-En `ArticleController::show()`, donde estamos intentando inyectar `ObjectTranslator`, podríamos añadir el atributo `#[Autowire]` con el ID del servicio... Esto funcionaría... ¡pero podemos hacerlo mejor! Quiero que este servicio sea autoconectable. Lo hacemos estableciendo el nombre de la clase como alias del servicio.
+En `ArticleController::show()`, donde intentamos inyectar `ObjectTranslator`, podríamos añadir el atributo `#[Autowire]` con el ID del servicio... Esto funcionaría... ¡pero podemos hacerlo mejor! Quiero que este servicio sea autoconectable. Lo hacemos estableciendo el nombre de la clase como alias del servicio.
 
 En `services.php`, debajo de `set()`, escribe `->alias()`. El primer argumento es el alias que queremos crear: `ObjectTranslator::class`. El segundo argumento es el ID del servicio que definimos antes: `symfonycasts.object_translator`:
 
