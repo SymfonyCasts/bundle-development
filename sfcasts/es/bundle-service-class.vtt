@@ -90,15 +90,15 @@ no necesitamos hacer ninguna traducción, así que
 añade un if ($this->defaultLocale === $locale)
 
 00:01:33.086 --> 00:01:35.296 align:middle
-y devuelve simplemente el objeto
-sin procesar en este caso:
+y, en este caso, sólo devuelve 
+el objeto sin procesar:
 
 00:01:36.546 --> 00:01:40.786 align:middle
 A continuación es donde añadiremos finalmente la lógica de
-traducción real, pero por ahora sólo añade un comentario
+traducción real, pero por ahora sólo añade un comentario:
 
 00:01:40.786 --> 00:01:47.076 align:middle
-: todo translate object: Utilicemos este
+todo translate object: Utilicemos este
 nuevo servicio en ArticleController::show().
 
 00:01:50.146 --> 00:01:55.506 align:middle
