@@ -1,0 +1,22 @@
+diff --git a/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
+index 65ba421..e1736de 100644
+--- a/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
++++ b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
+@@ -9,7 +9,7 @@ class ObjectTranslatorTest extends TestCase
+ {
+     public function testCanAccessUnderlyingObject()
+     {
+-        $object = new TranslatedObject(new ObjectForTranslationStub());
++        $object = new TranslatedObject(new ObjectForTranslationStub(), []);
+ 
+         $this->assertSame('value1', $object->prop1);
+         $this->assertTrue(isset($object->prop1), 'Public property should be accessible');
+@@ -20,7 +20,7 @@ class ObjectTranslatorTest extends TestCase
+ 
+     public function testCallUsesGetterIfAvailable()
+     {
+-        $object = new TranslatedObject(new ObjectForTranslationStub());
++        $object = new TranslatedObject(new ObjectForTranslationStub(), []);
+ 
+         $this->assertSame('value3', $object->prop3());
+     }

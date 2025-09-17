@@ -1,0 +1,15 @@
+diff --git a/object-translation-bundle/src/TranslatedObject.php b/object-translation-bundle/src/TranslatedObject.php
+index 7427b7c..00511b5 100644
+--- a/object-translation-bundle/src/TranslatedObject.php
++++ b/object-translation-bundle/src/TranslatedObject.php
+@@ -20,6 +20,10 @@ final class TranslatedObject
+ 
+     public function __call(string $name, array $arguments): mixed
+     {
++        if (isset($this->_translations[$name])) {
++            return $this->_translations[$name];
++        }
++
+         $method = $name;
+ 
+         if (!method_exists($this->_inner, $method)) {

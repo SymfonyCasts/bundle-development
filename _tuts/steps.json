@@ -179,7 +179,32 @@
             "id": "13-call-logic",
             "name": "13. call logic",
             "description": null
+        },
+        {
+            "id": "15-add-test",
+            "name": "15. add test",
+            "description": null
+        },
+        {
+            "id": "15-add-translations-array",
+            "name": "15. add translations array",
+            "description": null
+        },
+        {
+            "id": "15-too-few-arguments",
+            "name": "15. too few arguments",
+            "description": null
+        },
+        {
+            "id": "15-call-logic",
+            "name": "15. call logic",
+            "description": null
+        },
+        {
+            "id": "15-call-private-method",
+            "name": "15. call private method",
+            "description": null
         }
     ],
-    "sha": "c9271cf41ebe55e621e3a828c2f8a1665d13d157"
+    "sha": "378e6ba2a4133444ae5261d232fccee4e0fb5f90"
 }

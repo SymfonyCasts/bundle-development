@@ -1,0 +1,21 @@
+diff --git a/object-translation-bundle/src/TranslatedObject.php b/object-translation-bundle/src/TranslatedObject.php
+index 123be48..7427b7c 100644
+--- a/object-translation-bundle/src/TranslatedObject.php
++++ b/object-translation-bundle/src/TranslatedObject.php
+@@ -14,6 +14,7 @@ final class TranslatedObject
+      */
+     public function __construct(
+         private object $_inner,
++        private array $_translations,
+     ) {
+     }
+ 
+@@ -30,7 +31,7 @@ final class TranslatedObject
+ 
+     public function __get(string $name): mixed
+     {
+-        return $this->_inner->$name;
++        return $this->_translations[$name] ?? $this->_inner->$name;
+     }
+ 
+     public function __isset(string $name): bool

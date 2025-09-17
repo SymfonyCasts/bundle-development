@@ -1,0 +1,14 @@
+diff --git a/object-translation-bundle/src/TranslatedObject.php b/object-translation-bundle/src/TranslatedObject.php
+index 00511b5..6b592b6 100644
+--- a/object-translation-bundle/src/TranslatedObject.php
++++ b/object-translation-bundle/src/TranslatedObject.php
+@@ -42,4 +42,9 @@ final class TranslatedObject
+     {
+         return isset($this->_inner->$name);
+     }
++
++    private function translatedValue(string $name): ?string
++    {
++        
++    }
+ }
