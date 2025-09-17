@@ -1,0 +1,99 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:05.566 align:middle
+Nuestro bundle tiene una superclase abstracta
+mapeada Translation y está registrado en Doctrine.
+
+00:00:05.916 --> 00:00:08.796 align:middle
+Es hora de crear la entidad real
+Translation en nuestra aplicación.
+
+00:00:09.316 --> 00:00:15.336 align:middle
+En tu terminal, ejecuta: symfony console make:entity
+Para el nombre de la clase, utiliza Translation.
+
+00:00:16.026 --> 00:00:18.926 align:middle
+Todas las propiedades están definidas
+en la clase abstracta Translation
+
+00:00:18.926 --> 00:00:21.156 align:middle
+del bundle, así que pulsa enter para terminar.
+
+00:00:22.006 --> 00:00:28.526 align:middle
+En tu editor, abre nuestra nueva entidad en
+src/Entity/Translation.php: Muy bien, ¡allá vamos!
+
+00:00:29.026 --> 00:00:31.496 align:middle
+Se nos ha añadido el ID, que
+es todo lo que necesitamos.
+
+00:00:32.006 --> 00:00:35.336 align:middle
+Ahora vamos a extender la clase
+abstracta Translation del bundle.
+
+00:00:36.086 --> 00:00:39.206 align:middle
+Como tiene el mismo nombre,
+necesitamos importarla con un alias.
+
+00:00:40.586 --> 00:00:44.926 align:middle
+En la parte superior, escribe use
+Translation y elige el de nuestro bundle.
+
+00:00:45.256 --> 00:00:47.326 align:middle
+Después, as BaseTranslation.
+
+00:00:48.156 --> 00:00:50.466 align:middle
+Extiéndelo con extends BaseTranslation.
+
+00:00:51.256 --> 00:00:52.556 align:middle
+Genial, ¡ya hemos terminado!
+
+00:00:52.946 --> 00:00:56.746 align:middle
+Con el tiempo, proporcionaremos una receta para que
+los usuarios finales no tengan que hacer este paso.
+
+00:00:57.256 --> 00:00:57.966 align:middle
+¿Nueva entidad?
+
+00:00:58.016 --> 00:00:58.866 align:middle
+¡Nueva migración!
+
+00:00:59.196 --> 00:01:05.036 align:middle
+Vuelve al terminal y ejecuta: symfony
+console make:migration Echa un vistazo.
+
+00:01:05.466 --> 00:01:08.266 align:middle
+Abre el nuevo archivo de migración
+en el directorio migrations/.
+
+00:01:09.266 --> 00:01:10.326 align:middle
+Comprueba el método up().
+
+00:01:10.606 --> 00:01:14.726 align:middle
+Está creando la tabla translation con
+la id, pero también todas las columnas
+
+00:01:14.726 --> 00:01:16.756 align:middle
+de la superclase mapeada de nuestro bundle.
+
+00:01:16.956 --> 00:01:22.706 align:middle
+¡Perfecto! Añade una descripción: Add
+Translation entity: Es hora de ejecutarlo.
+
+00:01:22.936 --> 00:01:29.196 align:middle
+En tu terminal, ejecuta: symfony console
+doctrine:migrations:migrate Elige yes, y...
+
+00:01:29.606 --> 00:01:31.426 align:middle
+¡boom! ¡Base de datos migrada!
+
+00:01:32.126 --> 00:01:37.026 align:middle
+Vale, ya tenemos la entidad en nuestra aplicación, pero para
+que nuestro bundle pueda realizar consultas en su nombre,
+
+00:01:37.306 --> 00:01:38.826 align:middle
+el bundle necesita conocerla.
+
+00:01:39.086 --> 00:01:42.206 align:middle
+Un trabajo perfecto para la configuración
+del bundle: ¡Eso a continuación!
