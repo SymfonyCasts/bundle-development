@@ -32,7 +32,7 @@ Me gustaría ponerle el prefijo `symfonycasts`, como en el bundle Tailwind que a
 
 ## Cambiar el alias de extensión de tu bundle
 
-He aquí cómo hacerlo. En `ObjectTranslationBundle`, indaga en la clase `AbstractBundle`.`protected string $extensionAlias` lo que necesitamos anular. Por defecto, está vacío y se detecta automáticamente a partir del nombre del bundle (en mayúsculas sin el sufijo `Bundle` ). Copia la propiedad y, de nuevo en nuestra clase bundle, pégala. Cámbiala a `symfonycasts_object_translation`:
+He aquí cómo hacerlo. En `ObjectTranslationBundle`, indaga en la clase `AbstractBundle`.`protected string $extensionAlias` lo que necesitamos anular. Por defecto, está vacía y se detecta automáticamente a partir del nombre del bundle (en mayúsculas sin el sufijo `Bundle` ). Copia la propiedad y, de nuevo en nuestra clase bundle, pégala. Cámbiala a `symfonycasts_object_translation`:
 
 [[[ code('0f3c9ee195') ]]]
 
