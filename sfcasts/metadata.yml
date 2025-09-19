@@ -41,3 +41,6 @@ chapters:
     tdd-getter:
         tutsFirstStep: 13-create-unit-test
         tutsLastStep: 14-add-getter-test
+    tdd-translatedobject-translations:
+        tutsFirstStep: 13-call-logic
+        tutsLastStep: 15-call-logic
