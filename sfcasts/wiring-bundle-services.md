@@ -71,7 +71,7 @@ The parent method is empty, so we can remove this call. Import our
 `services.php` file using `$container->import()`. The path is relative to
 our current file, so write `../config/services.php`:
 
-[[[ code('97fb40b378') ]]]
+[[[ code('3c23c68b1d') ]]]
 
 Is this all we need? Let's see. Jump back to the browser and refresh the
 error page. Hmm, the same error. But now we have more
