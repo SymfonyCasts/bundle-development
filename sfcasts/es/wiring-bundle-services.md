@@ -45,7 +45,7 @@ En `ObjectTranslationBundle`, anula el método `loadExtension()` de`AbstractBund
 
 El método padre está vacío, así que podemos eliminar esta llamada. Importa nuestro archivo`services.php` utilizando `$container->import()`. La ruta es relativa a nuestro archivo actual, así que escribe `../config/services.php`:
 
-[[[ code('97fb40b378') ]]]
+[[[ code('3c23c68b1d') ]]]
 
 ¿Esto es todo lo que necesitamos? Veamos. Vuelve al navegador y actualiza la página de error. Hmm, el mismo error. Pero ahora tenemos más detalles: "Tal vez deberías asignar un alias de esta clase al servicio `symfonycasts.object_translator`existente"
 
