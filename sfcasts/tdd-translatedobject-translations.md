@@ -1,114 +1,178 @@
 # TDD `TranslatedObject` Translations
 
-Great job! Our `TranslatedObject` is doing an excellent job passing all
-method calls and property access to the underlying object. However, it's
-time we make it handle property translations. Let's get into it using
-Test-Driven Development (TDD). First, let's make sure our test suite is all
-green by running:
+The current logic of our `TranslatedObject` is solid. It effectively passes
+all method calls and property access to the underlying object. And... we have
+the tests to prove it!
+
+We previously used TDD to fix that Twig method call issue. Now, let's use
+it to bang out a feature!
+
+Our `TranslatedObject` needs to handle property translations. Before calling
+the underlying object's method or property, it should check if a translated
+value exists. If it does, it should return that translated value instead.
+
+Let's get started!
+
+## Start with Green Tests
+
+First, before doing anything, confirm our test suite is all green. At your
+terminal, run:
 
 ```terminal
-Symfony PHP Vendor Bin PHP Unit Object Translation Bundle Tests
+symfony php vendor/bin/phpunit object-translation-bundle/tests
 ```
 
-Perfect! We're all green. This is a fantastic starting point for some TDD.
-Let's write a test that reflects the logic we want to implement. 
+Green, great! Starting a new feature with TDD is a fools errand if your tests
+are already failing.
 
-```php public function testCanTranslateProperties() ```
+## New Test
 
-To kick things off, we'll copy the setup phase from the previous test. To
-translate properties, the `TranslatedObject` constructor will accept an
-array of translated properties. We'll set all properties to translated
-values like so: 
+Back in `TranslatedObjectTest`, add a new test with:
+`public function testCanTranslateProperties()`.
 
-```php 'prop1' => 'translated1', 'prop2' => 'translated2', 'prop3' =>
-'translated3', ```
+We write this test with the *logic we want to see*. So, copy the setup phase
+from the test above and paste here.
 
-You may notice PHP Storm has turned this gray because the constructor
-doesn't yet accept this parameter. Not to worry, we'll tackle that soon.
-For now, let's write the logic we want to see when we access the
-properties. We'll copy the assertions from the first test and change all
-values to `translated`.
+Now, for the second argument of the `TranslatedObject` constructor, this'll be
+an array of translated properties. We'll translate all properties for our
+`ObjectForTranslationStub` below. Inside the array, write
+`'prop1' => 'translated1', 'prop2' => 'translated2', 'prop3' => 'translated3',`.
 
-```php $this->assertSame('translated1', $object->prop1);
-$this->assertSame('translated2', $object->prop2());
-$this->assertSame('translated3', $object->getProp3()); ```
+You can see PhpStorm is marking all this as gray since the constructor doesn't
+accept this parameter yet.
 
-## Debugging Our Test
+I think this looks pretty good. When you pass an array of translated values,
+keyed by property name, when accessing these properties, we should get the
+translated values back.
 
-Next, let's head over to our terminal and run the test suite again. As
-expected, it fails since we don't have any logic dealing with the
-`translated` properties yet. We're failing on line 36, which is where we're
-trying to access the property. Time to add the logic to make this test
-pass!
+For the assertions, copy these from the first test and paste here. Now,
+change all the expected values from `value` to `translated`. `translated1`,
+`translated2`, and `translated3`.
 
-In our `TranslatedObject`, let's accept an array in the constructor:
+I think we all know this isn't going to work but... let's let the tests tell us
+that!
 
-```php private array $_translations, ```
+At your terminal, run the tests again:
 
-We'll also add a doc block `@param`, which will be an array of strings. The
-key will be the property name, and the value will be the translated value,
-`translations`.
-
-Next, we'll head down to the `get` method and return `this
-translations[name]`. If that doesn't exist, it'll fall back to calling the
-inner property.
-
-```php return $this->_translations[$name] ?? $this->_inner->$name; ```
-
-## Fixing the Test Errors
-
-Let's rerun our test suite. We're still seeing an error, but now it's on
-line 39 of our test - when it's calling the `prop2` method. So let's modify
-our `TranslatedObject`, in the `call` method:
-
-```php if (isset($this->_translations[$name])) {     return
-$this->_translations[$name]; } ```
-
-Now it's failing on line 40. It passed the first method call, but it's
-failing on the getter for `prop3`. To fix this, we need to account for the
-getter.
-
-```php private function translatedValue(string $name): ?string ```
-
-Next, we'll cut this `if` statement and paste it here:
-
-```php if (!str_starts_with($name, 'get')) { return null; } ```
-
-Then, let's generate the property name we want with `property =
-lcfirst(substr(name, 3))`.
-
-```php $property = lcfirst(substr($name, 3)); ```
-
-This will chop the first three characters off the string (which is `get`)
-and lowercase the first character, giving us the property name. Then we'll
-return `this translations[property]`, and if it still doesn't exist, we'll
-return null.
-
-```php return $this->translations[$property] ?? null; ```
-
-We need to call this private function:
-
-```php if (translated value = this translated value name, return translated
-value) ```
-
-If a translation is found, it will return that value. Let's rerun our test
-suite.
-
-There are a few errors, but our third test - the one we've been working on
-- is now passing. The issue arises from too few arguments being passed to
-the constructor of `TranslatedObject`.
-
-```php $object = new TranslatedObject(new ObjectForTranslationStub(), []);
+```terminal-silent
+symfony php vendor/bin/phpunit object-translation-bundle/tests
 ```
 
-The first tests are not passing the `translations` array. Let's fix this
-and rerun the test suite.
+Fail! But totally expected. Failed asserting that "value1" is "translated1"
+on line 36.
 
-```terminal
-Symfony PHP Vendor Bin PHP Unit Object Translation Bundle Tests
+Back in the test, line 36 is where we're accessing the `prop1` property. So,
+let's add the logic to make this test pass!
+
+This test... is driving... our development - get it?!
+
+## Injecting Translations
+
+Over in `TranslatedObject`, add a new property to the constructor:
+`private array $_translations,` - remember, the `_` prefix is a convention
+we're using just because this is a *mixin*.
+
+Above, add a doc block `@param` for this new parameter, type: `array`. Let's
+be clever and specify the key and value types of this array.
+Inside angle brackets, write `string,string`. The first `string` is the key type,
+the property name, and the second `string` is the value type, the translated value.
+Finally, write `$_translations` to finish this doc block.
+
+## Translating Property Access
+
+Remember, our test is failing when accessing a property. So, down in the
+`__get()` method, before returning the inner property, write
+`$this->_translations[$name] ??`. This will check if a translated value exists
+for this property name. If it does, it'll return that. If not, it'll fall back
+to returning the inner object property.
+
+Ok, back to the terminal and run the tests again:
+
+```terminal-silent
+symfony php vendor/bin/phpunit object-translation-bundle/tests
 ```
 
-Excellent! All tests are green. Our `TranslatedObject` now correctly
-handles the new feature and meets our expectations. In the next step, we'll
-pull in translations from the database using our `ObjectTranslator
-translate` method. Stay tuned!
+Still failing... but look closely - it's now failing for "translated2" and "value2"
+not matching - and on line 39.
+
+Jump back to the test. Line 39 is where we're calling the `prop2()` method. That it
+got this far means our translated property access logic on line 36 is working! Sweet!
+
+## Translating Method Calls
+
+Now to handle method calls. Over in `TranslatedObject::__call()`, at the top,
+add `if (isset($this->_translations[$name]))`. Inside,
+`return $this->_translations[$name];`. This checks if a translated value
+exists for this exact method name. If it does, it returns that value.
+
+You know what to do! Back in the terminal, run the tests again:
+
+```terminal-silent
+symfony php vendor/bin/phpunit object-translation-bundle/tests
+```
+
+Failing on line 40 now - "translated3" and "value3". Check this line our in
+our test. Ahh... the getter method... We need to account for this but kind
+of in the opposite way we did for the Twig method call issue. We need to check
+if the method name exists as a translated property *without* the `get` prefix.
+Tricky!
+
+## Translating Getter Methods
+
+Check back in with `TranslatedObject::__call()`. This method is getting a bit
+long, so let's refactor and add our new logic in a private method. Below,
+write `private function translatedValue(string $name): ?string`. This will
+accept the method name and return the translated value as a string, or null
+if it doesn't exist.
+
+Back up in `__call()`, cut the `if (isset(...))` statement and paste it in
+our new private method. This checks if the exact method name exists as a
+translated property.
+
+Next, write `if (!str_starts_with($name, 'get'))`. This checks if the method
+name is *not* a getter. There's nothing to do in this case, so, `return null`.
+
+Below, write `$property = lcfirst(substr($name, 3))`. `substr` chops the
+first 3 characters off the name - which we know is `get`. `lcfirst` lowercases
+the first character, leaving us with the property name.
+
+Finally, `return $this->_translations[$property] ?? null`. Return the translated
+value for this property if it exists, otherwise, return `null`.
+
+Back up in `__call()`, check if a translated value exists with
+`if ($translatedValue = $this->translatedValue($name))`. Inside,
+`return $translatedValue`. 
+
+Run tests, run!
+
+```terminal-silent
+symfony php vendor/bin/phpunit object-translation-bundle/tests
+```
+
+Hmm, we have some errors. Scroll up a bit to see the summary. The first two
+tests errored, but our third test, the translated properties one, *is* passing.
+It's the original tests that have issues. This is why it was important to
+run the tests before starting this feature! We know for sure, we did something
+that broke existing functionality.
+
+## Fixing Existing Functionality
+
+Checkout the error: "Too few arguments to... TranslatedObject::__construct()"
+
+Ahh, we added a new required parameter to this class's constructor. The first two
+tests aren't passing the `$_translations` array.
+
+Over in our test class, scroll up to the first two tests. PhpStorm
+is even warning us about this. In both tests, pass an empty array as the second
+argument.
+
+Are we done?! Find out by running our tests again:
+
+```terminal-silent
+symfony php vendor/bin/phpunit object-translation-bundle/tests
+```
+
+Woo! All tests are passing! New feature successfully added!
+
+Next, we'll take a side step and look at how we'll *mark* our app's
+entities for translation.
