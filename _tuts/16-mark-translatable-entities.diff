@@ -1,0 +1,80 @@
+diff --git a/src/Entity/Article.php b/src/Entity/Article.php
+index f3bed1f..180ac5a 100644
+--- a/src/Entity/Article.php
++++ b/src/Entity/Article.php
+@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
+ use Doctrine\Common\Collections\Collection;
+ use Doctrine\DBAL\Types\Types;
+ use Doctrine\ORM\Mapping as ORM;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\TranslatableProperty;
+ 
+ #[ORM\Entity(repositoryClass: ArticleRepository::class)]
++#[Translatable('article')]
+ class Article
+ {
+     #[ORM\Id]
+@@ -20,6 +23,7 @@ class Article
+     private ?string $slug = null;
+ 
+     #[ORM\Column(length: 255)]
++    #[TranslatableProperty]
+     private ?string $title = null;
+ 
+     #[ORM\Column]
+@@ -29,6 +33,7 @@ class Article
+     private ?string $author = null;
+ 
+     #[ORM\Column(type: Types::TEXT)]
++    #[TranslatableProperty]
+     private ?string $content = null;
+ 
+     #[ORM\ManyToOne(inversedBy: 'articles')]
+diff --git a/src/Entity/Category.php b/src/Entity/Category.php
+index 53e5901..d0f18aa 100644
+--- a/src/Entity/Category.php
++++ b/src/Entity/Category.php
+@@ -6,8 +6,11 @@ use App\Repository\CategoryRepository;
+ use Doctrine\Common\Collections\ArrayCollection;
+ use Doctrine\Common\Collections\Collection;
+ use Doctrine\ORM\Mapping as ORM;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\TranslatableProperty;
+ 
+ #[ORM\Entity(repositoryClass: CategoryRepository::class)]
++#[Translatable('category')]
+ class Category
+ {
+     #[ORM\Id]
+@@ -16,6 +19,7 @@ class Category
+     private ?int $id = null;
+ 
+     #[ORM\Column(length: 255)]
++    #[TranslatableProperty]
+     private ?string $name = null;
+ 
+     /**
+diff --git a/src/Entity/Tag.php b/src/Entity/Tag.php
+index 05bf4b8..482f3d4 100644
+--- a/src/Entity/Tag.php
++++ b/src/Entity/Tag.php
+@@ -6,8 +6,11 @@ use App\Repository\TagRepository;
+ use Doctrine\Common\Collections\ArrayCollection;
+ use Doctrine\Common\Collections\Collection;
+ use Doctrine\ORM\Mapping as ORM;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\TranslatableProperty;
+ 
+ #[ORM\Entity(repositoryClass: TagRepository::class)]
++#[Translatable('tag')]
+ class Tag
+ {
+     #[ORM\Id]
+@@ -16,6 +19,7 @@ class Tag
+     private ?int $id = null;
+ 
+     #[ORM\Column(length: 255)]
++    #[TranslatableProperty]
+     private ?string $name = null;
+ 
+     /**

@@ -1,0 +1,101 @@
+diff --git a/src/Factory/TranslationFactory.php b/src/Factory/TranslationFactory.php
+new file mode 100644
+index 0000000..c963059
+--- /dev/null
++++ b/src/Factory/TranslationFactory.php
+@@ -0,0 +1,52 @@
++<?php
++
++namespace App\Factory;
++
++use App\Entity\Translation;
++use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
++
++/**
++ * @extends PersistentProxyObjectFactory<Translation>
++ */
++final class TranslationFactory extends PersistentProxyObjectFactory
++{
++    /**
++     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
++     *
++     * @todo inject services if required
++     */
++    public function __construct()
++    {
++    }
++
++    public static function class(): string
++    {
++        return Translation::class;
++    }
++
++    /**
++     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
++     *
++     * @todo add your default values here
++     */
++    protected function defaults(): array|callable
++    {
++        return [
++            'field' => self::faker()->text(),
++            'locale' => self::faker()->text(),
++            'objectId' => self::faker()->text(),
++            'objectType' => self::faker()->text(),
++            'value' => self::faker()->text(),
++        ];
++    }
++
++    /**
++     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
++     */
++    protected function initialize(): static
++    {
++        return $this
++            // ->afterInstantiate(function(Translation $translation): void {})
++        ;
++    }
++}
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index fc1f788..b402e01 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -5,6 +5,7 @@ namespace App\Story;
+ use App\Factory\ArticleFactory;
+ use App\Factory\CategoryFactory;
+ use App\Factory\TagFactory;
++use App\Factory\TranslationFactory;
+ use Zenstruck\Foundry\Attribute\AsFixture;
+ use Zenstruck\Foundry\Story;
+ 
+@@ -20,7 +21,7 @@ final class AppStory extends Story
+         $science = TagFactory::createOne(['name' => 'science']);
+         $time = TagFactory::createOne(['name' => 'time']);
+ 
+-        ArticleFactory::createOne([
++        $article1 = ArticleFactory::createOne([
+             'title' => 'Why Asteroids Taste Like Bacon',
+             'slug' => 'asteroid',
+             'author' => 'Mike Ferengi',
+@@ -66,6 +67,21 @@ final class AppStory extends Story
+             EOF,
+         ]);
+ 
++        TranslationFactory::createOne([
++            'locale' => 'fr',
++            'objectId' => $article1->getId(),
++            'objectType' => 'article',
++            'field' => 'title',
++            'value' => 'French title...',
++        ]);
++        TranslationFactory::createOne([
++            'locale' => 'fr',
++            'objectId' => $article1->getId(),
++            'objectType' => 'article',
++            'field' => 'content',
++            'value' => 'French content...',
++        ]);
++
+         ArticleFactory::createOne([
+             'title' => 'Life on Planet Mercury: Tan, Relaxing and Fabulous',
+             'slug' => 'mercury',

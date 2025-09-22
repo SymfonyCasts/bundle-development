@@ -1,0 +1,32 @@
+diff --git a/object-translation-bundle/src/Mapping/Translatable.php b/object-translation-bundle/src/Mapping/Translatable.php
+new file mode 100644
+index 0000000..0b2ddaa
+--- /dev/null
++++ b/object-translation-bundle/src/Mapping/Translatable.php
+@@ -0,0 +1,12 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Mapping;
++
++#[\Attribute(\Attribute::TARGET_CLASS)]
++final class Translatable
++{
++    public function __construct(
++        public string $type,
++    ) {
++    }
++}
+diff --git a/object-translation-bundle/src/Mapping/TranslatableProperty.php b/object-translation-bundle/src/Mapping/TranslatableProperty.php
+new file mode 100644
+index 0000000..92b6814
+--- /dev/null
++++ b/object-translation-bundle/src/Mapping/TranslatableProperty.php
+@@ -0,0 +1,8 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Mapping;
++
++#[\Attribute(\Attribute::TARGET_PROPERTY)]
++final class TranslatableProperty
++{
++}

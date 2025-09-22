@@ -204,7 +204,22 @@
             "id": "15-call-private-method",
             "name": "15. call private method",
             "description": null
+        },
+        {
+            "id": "16-mapping-attributes",
+            "name": "16. mapping attributes",
+            "description": null
+        },
+        {
+            "id": "16-mark-translatable-entities",
+            "name": "16. mark translatable entities",
+            "description": null
+        },
+        {
+            "id": "16-translation-factory",
+            "name": "16. translation factory",
+            "description": null
         }
     ],
-    "sha": "cf027179e77c9a830f9ead653efcfd15afe09007"
+    "sha": "b9b04338cae1d2eb30bab9d9c69225031f479831"
 }
