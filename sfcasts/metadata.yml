@@ -44,3 +44,6 @@ chapters:
     tdd-translatedobject-translations:
         tutsFirstStep: 13-call-logic
         tutsLastStep: 15-call-logic
+    translatable-mapping:
+        tutsFirstStep: 16-mapping-attributes
+        tutsLastStep: 16-translation-factory
