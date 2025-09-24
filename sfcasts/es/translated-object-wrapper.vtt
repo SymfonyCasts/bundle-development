@@ -1,0 +1,253 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.756 align:middle
+Bien, ya tenemos una forma de
+almacenar nuestras traducciones.
+
+00:00:04.096 --> 00:00:05.956 align:middle
+Vamos a ver cómo podemos utilizarlas.
+
+00:00:06.456 --> 00:00:10.326 align:middle
+Si abres nuestro ObjectTranslator,
+tenemos este todo esperándonos.
+
+00:00:10.766 --> 00:00:12.506 align:middle
+Hay un par de formas de enfocar esto.
+
+00:00:12.836 --> 00:00:15.546 align:middle
+Una forma es modificar directamente
+las propiedades del objeto.
+
+00:00:15.956 --> 00:00:19.426 align:middle
+Pero como se trata de una entidad
+Doctrine, se marcará como modificada.
+
+00:00:19.636 --> 00:00:23.586 align:middle
+Si lo modificas sin querer, sobrescribirás tus
+traducciones de configuración regional por defecto
+
+00:00:23.586 --> 00:00:24.856 align:middle
+en la propia entidad.
+
+00:00:25.156 --> 00:00:26.636 align:middle
+Definitivamente, no queremos eso.
+
+00:00:27.486 --> 00:00:31.656 align:middle
+Otro enfoque sería clonar primero el
+objeto y luego modificar las propiedades.
+
+00:00:32.096 --> 00:00:32.866 align:middle
+Esto es mejor...
+
+00:00:32.956 --> 00:00:37.256 align:middle
+pero si accidentalmente intentas persistir este
+nuevo objeto, podría guardar una nueva versión
+
+00:00:37.256 --> 00:00:39.036 align:middle
+en la base de datos, lo que sería malo.
+
+00:00:39.876 --> 00:00:43.336 align:middle
+Exploremos mi opción preferida:
+crear una envoltura para el objeto,
+
+00:00:43.666 --> 00:00:45.336 align:middle
+puedes pensar en esto como un modelo de vista.
+
+00:00:45.796 --> 00:00:50.466 align:middle
+Esta envoltura pasará todas las llamadas a métodos
+y accesos a propiedades al objeto subyacente.
+
+00:00:50.916 --> 00:00:55.626 align:middle
+Entonces, cuando se acceda a una propiedad, primero
+comprobará si existe una traducción para esa propiedad.
+
+00:00:56.036 --> 00:01:00.796 align:middle
+En caso afirmativo, devolverá el valor traducido;
+en caso contrario, devolverá el valor original.
+
+00:01:01.436 --> 00:01:06.166 align:middle
+Primero, en el directorio src de tu bundle,
+crea una nueva clase llamada TranslatedObject.
+
+00:01:07.216 --> 00:01:10.156 align:middle
+Márcala como final y crea un constructor.
+
+00:01:14.326 --> 00:01:18.936 align:middle
+Aceptará un único parámetro,
+private object $_inner.
+
+00:01:19.486 --> 00:01:22.306 align:middle
+El guión bajo es una convención
+para garantizar que no haya conflictos
+
+00:01:22.306 --> 00:01:24.696 align:middle
+al llamar a métodos o
+propiedades de esta envoltura.
+
+00:01:25.366 --> 00:01:28.596 align:middle
+Vamos a utilizar de nuevo los genéricos
+de PHP, pero a nivel de clase.
+
+00:01:29.166 --> 00:01:33.226 align:middle
+Añade un bloque doc de clase
+y añade @template T of object.
+
+00:01:33.706 --> 00:01:38.546 align:middle
+Luego, conviértelo en un mixin añadiendo
+@mixin T. Esto significa esencialmente
+
+00:01:38.546 --> 00:01:43.166 align:middle
+que este objeto tendrá todos los mismos métodos
+y propiedades que el objeto de plantilla T.
+
+00:01:43.736 --> 00:01:47.726 align:middle
+A continuación, añade un bloque doc al
+constructor, y en lugar de @param object
+
+00:01:47.936 --> 00:01:51.616 align:middle
+, sustitúyelo por @param T.
+Esto permite a PHPStorm saber
+
+00:01:51.616 --> 00:01:54.496 align:middle
+que estamos inyectando aquí este
+objeto plantilla a nivel de clase.
+
+00:01:55.156 --> 00:01:58.926 align:middle
+Entonces, ¿cómo reenviamos las llamadas
+a métodos y propiedades al objeto interno?
+
+00:01:59.226 --> 00:02:00.266 align:middle
+¡Métodos mágicos!
+
+00:02:00.816 --> 00:02:06.136 align:middle
+Anula tres métodos: __get(),
+__isset(), y __call().
+
+00:02:06.136 --> 00:02:12.756 align:middle
+__call() se llama cuando se utiliza un
+método que no existe en este objeto.
+
+00:02:13.366 --> 00:02:14.896 align:middle
+Establece el tipo de retorno a mixed.
+
+00:02:15.416 --> 00:02:21.286 align:middle
+En el interior, escribe return
+$this->_inner->$name(...$arguments).
+
+00:02:21.556 --> 00:02:22.976 align:middle
+Esto
+
+00:02:23.646 --> 00:02:26.136 align:middle
+reenvía cualquier llamada a
+un método al objeto interior
+
+00:02:26.136 --> 00:02:28.536 align:middle
+utilizando la variable $name
+como nombre del método. ¡ PHP
+
+00:02:28.866 --> 00:02:30.296 align:middle
+es así de guay! __get()
+
+00:02:30.976 --> 00:02:35.866 align:middle
+se invoca cuando se intenta acceder a una
+propiedad de este objeto que no existe. Establece
+
+00:02:36.516 --> 00:02:40.636 align:middle
+el tipo de retorno en mixed, y
+dentro, reenvía al objeto interno con
+
+00:02:40.636 --> 00:02:45.826 align:middle
+return $this->_inner->$name. De nuevo,
+
+00:02:46.376 --> 00:02:49.166 align:middle
+utilizando la variable $name como
+nombre de la propiedad. Por último,
+
+00:02:49.716 --> 00:02:54.626 align:middle
+se llama a__isset() cuando se utiliza isset()
+en una propiedad que no existe. Reenvía
+
+00:02:55.076 --> 00:03:01.526 align:middle
+la llamada con return
+isset($this->_inner->$name). Ahora bien,
+
+00:03:02.426 --> 00:03:05.946 align:middle
+si ya has escrito antes este tipo de objetos, puede
+que estés pensando: "Espera un momento, ¿qué
+
+00:03:06.136 --> 00:03:08.606 align:middle
+pasa con el método mágico __set()?" ¡ Buena
+
+00:03:09.006 --> 00:03:09.696 align:middle
+pregunta!
+
+00:03:10.166 --> 00:03:13.936 align:middle
+Queremos que esto sea una envoltura de sólo lectura,
+así que nos saltaremos este método mágico. ¡
+
+00:03:14.596 --> 00:03:16.106 align:middle
+Pongamos a trabajar esta nueva clase!
+
+00:03:16.486 --> 00:03:19.656 align:middle
+Ve a ObjectTranslator::translate()
+y elimina el todo.
+
+00:03:20.906 --> 00:03:23.756 align:middle
+Envuelve este $object en new
+TranslatedObject(). Recuerda que
+
+00:03:25.746 --> 00:03:29.776 align:middle
+en nuestro método ArticleController::show(),
+estamos pasando el objeto artículo por
+
+00:03:29.776 --> 00:03:32.136 align:middle
+este traductor y pasándoselo
+a Twig. ¡ Es hora
+
+00:03:32.926 --> 00:03:33.966 align:middle
+de probarlo! En
+
+00:03:34.236 --> 00:03:36.446 align:middle
+tu navegador, visita la
+página de un artículo. Vale,
+
+00:03:37.556 --> 00:03:39.086 align:middle
+hasta aquí todo bien... Pero
+
+00:03:39.616 --> 00:03:42.366 align:middle
+estamos en la versión inglesa, nuestra
+configuración regional por defecto. Recuerda que
+
+00:03:42.956 --> 00:03:47.166 align:middle
+en ObjectTranslator::translate(), si estamos en
+la configuración regional por defecto, estamos
+
+00:03:47.336 --> 00:03:49.456 align:middle
+devolviendo el objeto tal cual.
+
+00:03:49.756 --> 00:03:52.356 align:middle
+No estamos utilizando nuestra nueva
+clase TranslatedObject. Así que,
+
+00:03:52.806 --> 00:03:55.596 align:middle
+de vuelta en el navegador, cambia
+a la versión francesa... Uh
+
+00:03:56.216 --> 00:04:00.566 align:middle
+oh, un error: "Llamada a método
+indefinido Article::title()". Hmm,
+
+00:04:01.156 --> 00:04:04.456 align:middle
+esto funcionó sin problemas con
+el objeto artículo real. ¿Qué
+
+00:04:04.816 --> 00:04:05.606 align:middle
+ocurre aquí?
+
+00:04:06.236 --> 00:04:09.096 align:middle
+Se trata de un matiz de Twig que tendremos
+que tener en cuenta en nuestra envoltura.
+
+00:04:09.476 --> 00:04:12.446 align:middle
+Nos ocuparemos de ello a continuación,
+¡y además con una prueba unitaria!
