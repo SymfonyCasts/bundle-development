@@ -1,0 +1,249 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:04.906 align:middle
+Muy bien, tenemos esta opción de configuración
+translation_class en nuestro bundle.
+
+00:00:05.286 --> 00:00:09.476 align:middle
+Necesita algunas validaciones:
+primero, debe ser obligatoria; segundo,
+
+00:00:09.476 --> 00:00:13.566 align:middle
+debe ser una cadena no vacía; y
+tercero, debe ser una clase válida
+
+00:00:13.566 --> 00:00:15.896 align:middle
+que extienda la clase
+Translation de nuestro bundle.
+
+00:00:15.896 --> 00:00:21.036 align:middle
+Como hemos utilizado stringNode(), ya tenemos
+una validación básica: debe ser una cadena.
+
+00:00:21.586 --> 00:00:22.506 align:middle
+Añadamos el resto.
+
+00:00:22.916 --> 00:00:26.176 align:middle
+Debajo de nuestra llamada a ->example(),
+añade una nueva línea y una sangría.
+
+00:00:26.756 --> 00:00:28.446 align:middle
+Añade ->isRequired().
+
+00:00:28.816 --> 00:00:31.796 align:middle
+Esto asegura que el usuario
+lo establece, pero queremos
+
+00:00:31.796 --> 00:00:33.796 align:middle
+evitar que lo establezca como
+nulo o como una cadena vacía.
+
+00:00:34.046 --> 00:00:39.696 align:middle
+Así que añade también ->cannotBeEmpty(): En
+tu terminal, vuelca la configuración del bundle:
+
+00:00:39.696 --> 00:00:47.676 align:middle
+symfony console config:dump-reference
+symfonycasts_object_translation Ooo, ¡un error!
+
+00:00:47.956 --> 00:00:48.896 align:middle
+"clase_traduccion"...
+
+00:00:48.896 --> 00:00:49.936 align:middle
+debe estar configurada.
+
+00:00:50.226 --> 00:00:52.466 align:middle
+Incluso muestra la descripción
+de nuestro nodo para ayudarnos.
+
+00:00:52.746 --> 00:00:56.566 align:middle
+¡Perfecto! Esto nos obliga ahora
+a crear esta configuración.
+
+00:00:57.096 --> 00:00:59.266 align:middle
+En el directorio de tu
+aplicación, config/packages
+
+00:00:59.496 --> 00:01:03.466 align:middle
+crea un nuevo archivo llamado
+symfonycasts_object_translation.yaml.
+
+00:01:04.416 --> 00:01:08.736 align:middle
+Dentro, añade el nombre del nodo de nivel
+superior, el alias de extensión de nuestro bundle:
+
+00:01:09.126 --> 00:01:11.266 align:middle
+symfonycasts_object_translation:.
+
+00:01:11.786 --> 00:01:15.606 align:middle
+A continuación, debajo, indenta y
+añade nuestro nodo: . translation_class
+
+00:01:16.606 --> 00:01:20.606 align:middle
+Establécelo como una cadena vacía por ahora:
+Ejecuta de nuevo el comando en tu terminal:
+
+00:01:21.596 --> 00:01:25.096 align:middle
+Un error diferente: "translation_class"
+no puede contener un valor vacío.
+
+00:01:25.426 --> 00:01:27.666 align:middle
+Esto se debe a la opción . cannotBeEmpty()
+
+00:01:27.666 --> 00:01:31.386 align:middle
+Así que, de nuevo en nuestra
+configuración, establece translation_class
+
+00:01:31.386 --> 00:01:36.096 align:middle
+como : Vuelve a ejecutar el
+comando: ¡Woo! Translation
+
+00:01:36.256 --> 00:01:39.946 align:middle
+Todo correcto. Incluso ha añadido
+"Obligatorio" antes del comentario del ejemplo.
+
+00:01:39.946 --> 00:01:45.516 align:middle
+Para nuestro tercer requisito "un nombre de clase válido
+que extienda la clase de nuestro bundle", Translation
+
+00:01:45.766 --> 00:01:47.576 align:middle
+necesitaremos una validación personalizada.
+
+00:01:48.196 --> 00:01:52.036 align:middle
+En la definición de nuestro bundle, después
+de translation_class cannotBeEmpty(),
+
+00:01:52.266 --> 00:01:55.976 align:middle
+añade una nueva línea, sangrada
+y añade ->validate().
+
+00:01:56.536 --> 00:02:01.106 align:middle
+Esto inicia una cadena de validación personalizada
+que también debe cerrarse con . ->end()
+
+00:02:01.816 --> 00:02:10.006 align:middle
+Dentro, añade con una función: .
+->ifTrue() fn($v) => !class_exists($v)
+
+00:02:10.746 --> 00:02:13.026 align:middle
+Esta función se ejecuta con el valor
+proporcionado por el usuario, . $v
+
+00:02:13.426 --> 00:02:16.276 align:middle
+Si la función devuelve ,
+la validación falla. true
+
+00:02:16.516 --> 00:02:18.906 align:middle
+En nuestro caso, si la clase no existe.
+
+00:02:19.476 --> 00:02:21.456 align:middle
+Ahora, necesitamos lanzar un mensaje de error.
+
+00:02:21.696 --> 00:02:27.426 align:middle
+Añade . ->thenInvalid('The
+translation class %s does not exist.')
+
+00:02:27.426 --> 00:02:29.476 align:middle
+El será el valor proporcionado
+por el usuario. %s
+
+00:02:29.476 --> 00:02:31.176 align:middle
+¡Vamos a probarlo!
+
+00:02:31.436 --> 00:02:34.936 align:middle
+De nuevo en tu terminal, ejecuta
+de nuevo el comando: ¡Genial!
+
+00:02:34.936 --> 00:02:38.896 align:middle
+Nuestro error personalizado: "La clase
+de traducción Traducción no existe"
+
+00:02:39.596 --> 00:02:43.136 align:middle
+En nuestra configuración, seamos
+descarados y fijémosla en una clase real,
+
+00:02:43.226 --> 00:02:48.686 align:middle
+pero no en una clase de traducción válida: :
+Ejecuta de nuevo el comando... App\Entity\Article
+
+00:02:50.196 --> 00:02:53.066 align:middle
+Esto pasa nuestra validación,
+pero sigue sin ser lo que queremos:
+
+00:02:53.216 --> 00:02:56.336 align:middle
+Article no extiende la clase
+de nuestro bundle. Translation
+
+00:02:56.906 --> 00:02:59.826 align:middle
+De vuelta a nuestra configuración,
+podríamos encadenar otra validación
+
+00:02:59.826 --> 00:03:01.976 align:middle
+después de la primera,
+pero vamos a simplificarlo.
+
+00:03:02.456 --> 00:03:05.006 align:middle
+Cambia por . class_exists is_a
+
+00:03:05.006 --> 00:03:10.606 align:middle
+Para el segundo argumento, añade -asegúrate de
+importar el de nuestro bundle. Translation::class
+
+00:03:11.206 --> 00:03:14.326 align:middle
+is_a comprueba si un objeto es una
+instancia de una cadena de clase.
+
+00:03:14.946 --> 00:03:20.986 align:middle
+Por defecto, debe ser un objeto real, así que pasa
+como tercer argumento para permitir que $v true $v
+
+00:03:20.986 --> 00:03:25.176 align:middle
+sea una cadena de clase: Ejecuta
+de nuevo el comando: ¡Error!
+
+00:03:25.336 --> 00:03:28.906 align:middle
+"La clase de traducción
+App\Entity\Article no existe".
+
+00:03:29.416 --> 00:03:31.756 align:middle
+Hmm, tenemos que actualizar
+el mensaje de error.
+
+00:03:32.176 --> 00:03:35.646 align:middle
+De vuelta a nuestra configuración, ajusta
+el mensaje para que diga thenInvalid()
+
+00:03:35.646 --> 00:03:40.376 align:middle
+"...debe extender
+SymfonyCasts\ObjectTranslationBundle\Model\Translation"
+
+00:03:40.376 --> 00:03:41.076 align:middle
+Ejecuta
+
+00:03:41.776 --> 00:03:42.316 align:middle
+de nuevo... "La
+
+00:03:43.826 --> 00:03:47.546 align:middle
+clase de traducción App\Entity\Article
+sí debe extender". ¡
+
+00:03:47.836 --> 00:03:49.446 align:middle
+Qué mala gramática! Elimina
+
+00:03:49.956 --> 00:03:51.686 align:middle
+el "debe" e inténtalo de nuevo. Perfecto
+
+00:03:54.796 --> 00:03:58.876 align:middle
+"La clase de traducción App\Entidad\Artículo
+debe extender..." ¡Mucho
+
+00:03:59.356 --> 00:03:59.996 align:middle
+mejor! Arréglalo
+
+00:03:59.996 --> 00:04:05.816 align:middle
+en nuestra configuración cambiando por : Ejecuta
+de nuevo el comando... ¡todo Article Translation
+
+00:04:07.546 --> 00:04:12.616 align:middle
+bien! A continuación, utilizaremos este valor de
+configuración en el servicio de nuestro bundle
