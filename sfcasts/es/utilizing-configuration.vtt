@@ -1,0 +1,174 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:05.556 align:middle
+En nuestro bundle, hemos definido y validado
+la opción de configuración translation_class.
+
+00:00:05.956 --> 00:00:08.926 align:middle
+En nuestra aplicación, la hemos
+configurado como App\Entity\Translation.
+
+00:00:09.316 --> 00:00:12.676 align:middle
+Ahora tenemos que utilizarla en el servicio
+ObjectTranslator de nuestro bundle.
+
+00:00:13.226 --> 00:00:18.106 align:middle
+Abre esta clase y añádela al constructor
+como private string $translationClass.
+
+00:00:19.216 --> 00:00:21.096 align:middle
+Ve al navegador y haz clic en un artículo.
+
+00:00:21.746 --> 00:00:24.126 align:middle
+Aparecerá un error: "Demasiados
+pocos argumentos para ...
+
+00:00:24.126 --> 00:00:26.746 align:middle
+ObjectTranslator::__construct(), 2 pasados...
+
+00:00:26.836 --> 00:00:27.636 align:middle
+3 esperados".
+
+00:00:28.016 --> 00:00:28.896 align:middle
+Vamos a solucionarlo.
+
+00:00:29.306 --> 00:00:31.226 align:middle
+Abre la página config/services.php
+de nuestro bundle.
+
+00:00:31.226 --> 00:00:34.996 align:middle
+Tenemos que añadirlo como tercer
+elemento en esta matriz args().
+
+00:00:35.456 --> 00:00:37.996 align:middle
+Pero... aquí no tenemos acceso
+a nuestra configuración.
+
+00:00:38.396 --> 00:00:42.156 align:middle
+De momento, podemos hacerlo con una
+función especial: abstract_arg().
+
+00:00:42.866 --> 00:00:46.356 align:middle
+Para el primer argumento, describe su
+propósito: "Clase de traducción".
+
+00:00:47.066 --> 00:00:49.666 align:middle
+Esto no es estrictamente necesario,
+pero ayuda con la depuración.
+
+00:00:50.116 --> 00:00:53.696 align:middle
+Básicamente estamos haciendo saber a Symfony
+que aún necesitamos configurar este argumento.
+
+00:00:54.366 --> 00:00:55.816 align:middle
+De vuelta en el navegador, actualiza.
+
+00:00:56.916 --> 00:01:01.366 align:middle
+Un nuevo error: "Argumento 3 del servicio
+...object_translator es abstracto".
+
+00:01:01.586 --> 00:01:03.836 align:middle
+Y vemos nuestra descripción:
+"Clase de traducción".
+
+00:01:04.196 --> 00:01:05.426 align:middle
+Perfecto Ahora...
+
+00:01:05.426 --> 00:01:08.526 align:middle
+tenemos que encontrar el lugar donde tenemos
+acceso a la configuración del bundle.
+
+00:01:09.126 --> 00:01:14.066 align:middle
+En ObjectTranslationBundle::loadExtension(),
+fíjate en el argumento array $config.
+
+00:01:14.536 --> 00:01:17.256 align:middle
+Dentro de este método,
+vuélcalo con: dd($config).
+
+00:01:18.376 --> 00:01:19.916 align:middle
+De vuelta en el navegador, actualiza.
+
+00:01:20.516 --> 00:01:23.396 align:middle
+¡Qué bien! ¡Aquí tienes nuestra
+configuración procesada como una matriz!
+
+00:01:23.916 --> 00:01:25.066 align:middle
+¡Es hora de ponerla en práctica!
+
+00:01:25.516 --> 00:01:29.996 align:middle
+Debajo de la importación, escribe
+$builder->getDefinition().
+
+00:01:30.596 --> 00:01:32.866 align:middle
+Asegúrate de utilizar
+getDefinition(), no get().
+
+00:01:33.606 --> 00:01:35.326 align:middle
+Dentro, pasa el ID de
+
+00:01:35.326 --> 00:01:39.596 align:middle
+servicio de nuestro servicio ObjectTranslator:
+symfonycasts.object_translator.
+
+00:01:40.306 --> 00:01:43.226 align:middle
+Una de las ventajas de trabajar en tu
+bundle dentro de una aplicación es
+
+00:01:43.226 --> 00:01:47.606 align:middle
+que puedes obtener el autocompletado del
+plugin PhpStorm + Symfony para tus servicios.
+
+00:01:48.336 --> 00:01:50.496 align:middle
+A continuación, encadena ->setArgument().
+
+00:01:50.886 --> 00:01:55.256 align:middle
+El primer argumento aquí es el índice basado en 0
+del argumento del constructor que queremos establecer.
+
+00:01:55.966 --> 00:01:57.396 align:middle
+Salta rápidamente a ObjectTranslator,
+
+00:01:57.396 --> 00:02:01.416 align:middle
+$translationClass es el tercer
+argumento, así que tenemos que pasar 2.
+
+00:02:02.146 --> 00:02:06.646 align:middle
+El segundo argumento es el valor que queremos
+establecer: $config['translation_class'].
+
+00:02:07.626 --> 00:02:09.276 align:middle
+Vuelve a tu navegador y actualiza.
+
+00:02:10.306 --> 00:02:11.626 align:middle
+¡Muy bien! No hay errores.
+
+00:02:12.186 --> 00:02:14.386 align:middle
+Asegurémonos de que se le ha
+dado el valor que esperamos.
+
+00:02:14.776 --> 00:02:19.306 align:middle
+Abre ArticleController::show()
+y dd($translator).
+
+00:02:20.236 --> 00:02:21.066 align:middle
+De nuevo en el navegador...
+
+00:02:21.116 --> 00:02:22.946 align:middle
+actualiza. ¡Qué bien!
+
+00:02:23.176 --> 00:02:25.656 align:middle
+Aquí está nuestro objeto
+ObjectTranslator y, efectivamente,
+
+00:02:25.656 --> 00:02:29.556 align:middle
+la propiedad translationClass está
+establecida en App\Entity\Translation.
+
+00:02:30.256 --> 00:02:34.926 align:middle
+Elimina el dd(), actualiza y ¡ya
+estamos listos para continuar!
+
+00:02:35.536 --> 00:02:39.096 align:middle
+A continuación, empecemos a escribir nuestra
+lógica de traducción en ObjectTranslator.
