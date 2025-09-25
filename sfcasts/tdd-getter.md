@@ -15,15 +15,23 @@ available. When calling `title()`, if this method doesn't exist on the
 inner object, try and call `getTitle()`.
 
 In `TranslatedObjectTest`, below our first test, create a new one
-`public function testCallUsesGetterIfAvailable()`. Inside, our *setup*
+`public function testCallUsesGetterIfAvailable()`:
+
+[[[ code('6f0252b83c') ]]]
+
+Inside, our *setup*
 will be the same so copy the `$object =` from the test above and paste
-it here.
+it here:
+
+[[[ code('6f0252b83c') ]]]
 
 Now for the assertion. In our *stub* object, we have a `prop3` property with
 a getter: `getProp3()`. So, if calling the `prop3()` method on our wrapper
 (without the `get`) we want to forward this call to `getProp3()` on the inner object.
 
 `$this->assertSame('value3', $object->prop3())` - that's it!
+
+[[[ code('f26a67c726') ]]]
 
 At your terminal, run the tests with:
 
@@ -39,9 +47,13 @@ we're seeing from Twig. Now we need to write the code to make it pass.
 In `TranslatedObject::__call()`, at the beginning of the method, set
 `$method = $name`. Now, add a check: `if (!method_exists($this->_inner, $name))`.
 Inside, write `$method = 'get'.ucfirst($name)` - this capitalizes the first
-letter of the name and prepends `get`.
+letter of the name and prepends `get`:
+
+[[[ code('f9667acaa5') ]]]
 
 Below, in the `return`, change `$name` to `$method`. That should be it!
+
+[[[ code('cf1378fce9') ]]]
 
 ## Verifying the Behavior
 

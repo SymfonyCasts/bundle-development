@@ -6,7 +6,9 @@ need to use it in our bundle's `ObjectTranslator` service.
 
 ## `ObjectTranslator` Update
 
-Open this class up, and add it to the constructor as `private string $translationClass`.
+Open this class up, and add it to the constructor as `private string $translationClass`:
+
+[[[ code('253fd1348d') ]]]
 
 Hope over to the browser and click an article. An error: "Too few arguments to
 ... ObjectTranslator::__construct(), 2 passed... 3 expected".
@@ -16,7 +18,9 @@ Hope over to the browser and click an article. An error: "Too few arguments to
 Let's fix this. Open our bundle's `config/services.php`. We need to add it
 as a third element in this `args()` array. But... we don't have access to our
 configuration here. For now, we can stub it out with a special function:
-`abstract_arg()`. For the first argument, describe its purpose: "Translation class".
+`abstract_arg()`. For the first argument, describe its purpose: "Translation class":
+
+[[[ code('1f29965344') ]]]
 
 This isn't strictly required, but it helps with debugging. We're basically letting
 Symfony know that we need to configure this argument still.
@@ -29,13 +33,19 @@ is abstract". And we see our description: "Translation class". Perfect!
 Now... we need to find the place where we have access to the bundle configuration.
 
 In `ObjectTranslationBundle::loadExtension()`, notice the `array $config` argument.
-Inside this method, dump it with: `dd($config)`. Back in the browser, refresh.
+Inside this method, dump it with: `dd($config)`:
+
+[[[ code('9d159605d3') ]]]
+
+Back in the browser, refresh.
 
 Nice! Here's our processed configuration as an array! Time to put it to use!
 
 Below the import, write `$builder->getDefinition()`. Be sure to use `getDefinition()`,
 not `get()`. Inside, pass the service ID for our `ObjectTranslator` service:
-`symfonycasts.object_translator`.
+`symfonycasts.object_translator`:
+
+[[[ code('e930aa2b1c') ]]]
 
 One of the bonuses of working on your bundle within an app is that you can
 get PhpStorm + Symfony Plugin auto-completion for your services.
@@ -44,12 +54,16 @@ Next, chain `->setArgument()`. The first argument here is the 0-based index
 of the constructor argument we want to set. Quickly jump to `ObjectTranslator`,
 `$translationClass` is the third argument, so we need to pass `2`.
 
-The second argument is the value we want to set: `$config['translation_class']`.
+The second argument is the value we want to set: `$config['translation_class']`:
+
+[[[ code('2ba6dd2c44') ]]]
 
 Jump back to your browser and refresh. Nice! No errors.
 
 Let's make sure this was given the value we expect. Open `ArticleController::show()`
-and `dd($translator)`.
+and `dd($translator)`:
+
+[[[ code('e3a8319534') ]]]
 
 Back in the browser... refresh. Sweet! Here's our `ObjectTranslator` object and indeed,
 the `translationClass` property is set to `App\Entity\Translation`.

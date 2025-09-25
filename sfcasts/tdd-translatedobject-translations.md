@@ -28,7 +28,9 @@ are already failing.
 ## New Test
 
 Back in `TranslatedObjectTest`, add a new test with:
-`public function testCanTranslateProperties()`.
+`public function testCanTranslateProperties()`:
+
+[[[ code('bbc3cef623') ]]]
 
 We write this test with the *logic we want to see*. So, copy the setup phase
 from the test above and paste here.
@@ -36,7 +38,9 @@ from the test above and paste here.
 Now, for the second argument of the `TranslatedObject` constructor, this'll be
 an array of translated properties. We'll translate all properties for our
 `ObjectForTranslationStub` below. Inside the array, write
-`'prop1' => 'translated1', 'prop2' => 'translated2', 'prop3' => 'translated3',`.
+`'prop1' => 'translated1', 'prop2' => 'translated2', 'prop3' => 'translated3',`:
+
+[[[ code('c2a46fe2d5') ]]]
 
 You can see PhpStorm is marking all this as gray since the constructor doesn't
 accept this parameter yet.
@@ -47,7 +51,9 @@ translated values back.
 
 For the assertions, copy these from the first test and paste here. Now,
 change all the expected values from `value` to `translated`. `translated1`,
-`translated2`, and `translated3`.
+`translated2`, and `translated3`:
+
+[[[ code('19e77faf43') ]]]
 
 I think we all know this isn't going to work but... let's let the tests tell us
 that!
@@ -72,6 +78,8 @@ Over in `TranslatedObject`, add a new property to the constructor:
 `private array $_translations,` - remember, the `_` prefix is a convention
 we're using just because this is a *mixin*.
 
+[[[ code('7eb1bf0ede') ]]]
+
 Above, add a doc block `@param` for this new parameter, type: `array`. Let's
 be clever and specify the key and value types of this array.
 Inside angle brackets, write `string,string`. The first `string` is the key type,
@@ -82,7 +90,11 @@ Finally, write `$_translations` to finish this doc block.
 
 Remember, our test is failing when accessing a property. So, down in the
 `__get()` method, before returning the inner property, write
-`$this->_translations[$name] ??`. This will check if a translated value exists
+`$this->_translations[$name] ??`:
+
+[[[ code('adf0845149') ]]]
+
+This will check if a translated value exists
 for this property name. If it does, it'll return that. If not, it'll fall back
 to returning the inner object property.
 
@@ -102,7 +114,11 @@ got this far means our translated property access logic on line 36 is working! S
 
 Now to handle method calls. Over in `TranslatedObject::__call()`, at the top,
 add `if (isset($this->_translations[$name]))`. Inside,
-`return $this->_translations[$name];`. This checks if a translated value
+`return $this->_translations[$name];`.
+
+[[[ code('cbedb20383') ]]]
+
+This checks if a translated value
 exists for this exact method name. If it does, it returns that value.
 
 You know what to do! Back in the terminal, run the tests again:
@@ -121,27 +137,43 @@ Tricky!
 
 Check back in with `TranslatedObject::__call()`. This method is getting a bit
 long, so let's refactor and add our new logic in a private method. Below,
-write `private function translatedValue(string $name): ?string`. This will
+write `private function translatedValue(string $name): ?string`:
+
+[[[ code('fc2b1670c6') ]]]
+
+This will
 accept the method name and return the translated value as a string, or null
 if it doesn't exist.
 
 Back up in `__call()`, cut the `if (isset(...))` statement and paste it in
-our new private method. This checks if the exact method name exists as a
+our new private method:
+
+[[[ code('bc4fde836a') ]]]
+
+This checks if the exact method name exists as a
 translated property.
 
 Next, write `if (!str_starts_with($name, 'get'))`. This checks if the method
-name is *not* a getter. There's nothing to do in this case, so, `return null`.
+name is *not* a getter. There's nothing to do in this case, so, `return null`:
+
+[[[ code('bc4fde836a') ]]]
 
 Below, write `$property = lcfirst(substr($name, 3))`. `substr` chops the
 first 3 characters off the name - which we know is `get`. `lcfirst` lowercases
-the first character, leaving us with the property name.
+the first character, leaving us with the property name:
+
+[[[ code('c3ef62cce1') ]]]
 
 Finally, `return $this->_translations[$property] ?? null`. Return the translated
-value for this property if it exists, otherwise, return `null`.
+value for this property if it exists, otherwise, return `null`:
+
+[[[ code('86de53e9f7') ]]]
 
 Back up in `__call()`, check if a translated value exists with
 `if ($translatedValue = $this->translatedValue($name))`. Inside,
-`return $translatedValue`. 
+`return $translatedValue`:
+
+[[[ code('e79b5dfa4a') ]]]
 
 Run tests, run!
 
@@ -164,7 +196,9 @@ tests aren't passing the `$_translations` array.
 
 Over in our test class, scroll up to the first two tests. PhpStorm
 is even warning us about this. In both tests, pass an empty array as the second
-argument.
+argument:
+
+[[[ code('ef7e8b3d95') ]]]
 
 Are we done?! Find out by running our tests again:
 

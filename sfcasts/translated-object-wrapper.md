@@ -25,18 +25,30 @@ original value.
 
 First, in your bundle's `src` directory, create a new class named `TranslatedObject`.
 Mark it as `final` and create a constructor. It'll accept a single parameter,
-`private object $_inner`. The underscore is a convention to ensure there's no
+`private object $_inner`:
+
+[[[ code('1b2b540462') ]]]
+
+The underscore is a convention to ensure there's no
 conflict when calling methods or properties on this wrapper.
 
 ## Adding Generics for Better IDE Support
 
 We're going to use PHP generics again here, but at a class level. Add a class doc
 block, and add `@template T of object`. Then, make this a mixin by
-adding `@mixin T`. This essentially means that this object will have all
+adding `@mixin T`:
+
+[[[ code('c9ee64bd1a') ]]]
+
+This essentially means that this object will have all
 the same methods and properties as the `T` template object.
 
 Next, add a doc block to the constructor, and instead of `@param object`,
-replace with `@param T`. This lets PHPStorm know that we're injecting this
+replace with `@param T`:
+
+[[[ code('a2daed4ab1') ]]]
+
+This lets PHPStorm know that we're injecting this
 class-level template object here.
 
 ## Magic!
@@ -46,16 +58,26 @@ methods! Override three methods: `__get()`, `__isset()`, and `__call()`.
 
 `__call()` is *called* when a method is used that doesn't exist on *this*
 object. Set the return type to `mixed`. Inside, write
-`return $this->_inner->$name(...$arguments)`. This forwards any method calls to
+`return $this->_inner->$name(...$arguments)`.
+
+[[[ code('08ecf400eb') ]]]
+
+This forwards any method calls to
 the inner object by using the `$name` variable as the method name. PHP is cool like this!
 
 `__get()` is invoked when trying to access a *property* on this object that
 doesn't exist. Set the return type to `mixed`, and inside, forward to the inner
-object with `return $this->_inner->$name`. Again, using the `$name` variable
+object with `return $this->_inner->$name`.
+
+[[[ code('612478e939') ]]]
+
+Again, using the `$name` variable
 as the property name.
 
 Finally, `__isset()` is called when using `isset()` on a property that doesn't
-exist. Forward the call with `return isset($this->_inner->$name)`.
+exist. Forward the call with `return isset($this->_inner->$name)`:
+
+[[[ code('45a0c40dc7') ]]]
 
 Now, if you've written this type of object before, you might be thinking:
 "Wait a minute, what about the `__set()` magic method?" Good question!
@@ -65,7 +87,9 @@ method.
 ## Using `TranslatedObject`
 
 Let's put this new class to work! Go to `ObjectTranslator::translate()` and
-remove the *todo*. Wrap this `$object` in `new TranslatedObject()`.
+remove the *todo*. Wrap this `$object` in `new TranslatedObject()`:
+
+[[[ code('0f318a39f4') ]]]
 
 Remember, in our `ArticleController::show()` method, we're running the article
 object through this translator and passing it to Twig.

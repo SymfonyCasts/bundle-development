@@ -20,7 +20,9 @@ our bundle's `composer.json` file. Copy the entire `autoload` section and paste 
 Rename it to `autoload-dev`. We only want composer to see tests when we're in development.
 
 Same namespace, but append `\\Tests` to the end. Instead of `src/`, use
-`tests/`.
+`tests/`:
+
+[[[ code('27aefc2851') ]]]
 
 Composer now know about our tests, but not PhpStorm. Like we did for the main
 namespace, we'll need to give PhpStorm a little nudge. Open Settings, Directories.
@@ -36,16 +38,22 @@ Great, ready for our first test!
 
 Inside our bundle's `tests` directory, create a `Unit` directory. This will help
 us organize our tests by *type*. Inside, create a new PHP class named
-`TranslatedObjectTest`. Have it extend `TestCase`, from `PHPUnit`.
+`TranslatedObjectTest`. Have it extend `TestCase`, from `PHPUnit`:
+
+[[[ code('32c32ba469') ]]]
 
 Our first test will just prove that our `TranslatedObject` works as
 we currently expect - no Twig stuff yet. Create the test with
-`public function testCanAccessUnderlyingObject()`.
+`public function testCanAccessUnderlyingObject()`:
+
+[[[ code('06afaed956') ]]]
 
 ## Creating a Stub Object
 
 Now we need an object to wrap with our `TranslatedObject`. We'll create a *stub* class
-right in this file. Below our test class, create a `class ObjectForTranslationStub`.
+right in this file. Below our test class, create a `class ObjectForTranslationStub`:
+
+[[[ code('e353ff2be3') ]]]
 
 I know, I know, this totally can't be autoloaded correctly when used outside this class.
 You'd never want to do this in your production code - but in tests, as long as you're only
@@ -53,16 +61,22 @@ using it in this file, I think it's ok. Feel free to create a proper *fixture* c
 
 In this class, let's add some different *scenarios*. A public property
 `public string $prop1 = 'value1'`. Two private properties:
-`private string $prop2 = 'value2'` and `private string $prop3 = 'value3'`.
+`private string $prop2 = 'value2'` and `private string $prop3 = 'value3'`:
+
+[[[ code('d1b1f0eb33') ]]]
 
 A *non-getter* method to access `prop2`: `public function prop2(): string`. Inside,
 `return $this->prop2;`. A *getter* to access `prop3`: `public function getProp3(): string`.
-And inside, `return $this->prop3;`.
+And inside, `return $this->prop3;`:
+
+[[[ code('d1b1f0eb33') ]]]
 
 ## Writing the Test
 
 In our test method, create the object with
-`$object = new TranslatedObject(new ObjectForTranslationStub());`.
+`$object = new TranslatedObject(new ObjectForTranslationStub());`:
+
+[[[ code('fbc2944273') ]]]
 
 This is the setup, or *arrange* phase of our test. `$object` is what's called our *system under test* - a
 fancy way to saying "the thing we want to test".
@@ -72,13 +86,19 @@ Now for the *assertions* phase!
 First, let's test public property access. `$this->assertSame('value1', $object->prop1)`.
 Next, `isset()` on the public property: `$this->assertTrue(isset($object->prop1))`. Add
 a description as the second parameter: `Public property should be accessible`. This description
-isn't required but can be handy to have when a test fails.
+isn't required but can be handy to have when a test fails:
+
+[[[ code('8736e6794a') ]]]
 
 Now, non-public property access: `$this->assertFalse(isset($object->prop2))`. Description:
-`Private properties should not be accessible`.
+`Private properties should not be accessible`:
+
+[[[ code('8bc220be78') ]]]
 
 Onto the methods: `$this->assertSame('value2', $object->prop2())` and
-`$this->assertSame('value3', $object->getProp3())`.
+`$this->assertSame('value3', $object->getProp3())`:
+
+[[[ code('d318d0937f') ]]]
 
 ## Running the Test
 
