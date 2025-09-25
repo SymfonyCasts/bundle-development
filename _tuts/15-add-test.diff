@@ -1,8 +1,8 @@
-diff --git a/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
-index 833edad..65ba421 100644
---- a/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
-+++ b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
-@@ -24,6 +24,21 @@ class ObjectTranslatorTest extends TestCase
+diff --git a/object-translation-bundle/tests/Unit/TranslatedObjectTest.php b/object-translation-bundle/tests/Unit/TranslatedObjectTest.php
+index d94d4e6..9021f4c 100644
+--- a/object-translation-bundle/tests/Unit/TranslatedObjectTest.php
++++ b/object-translation-bundle/tests/Unit/TranslatedObjectTest.php
+@@ -24,6 +24,21 @@ class TranslatedObjectTest extends TestCase
  
          $this->assertSame('value3', $object->prop3());
      }

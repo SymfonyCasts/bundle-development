@@ -1,8 +1,8 @@
-diff --git a/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
-index 65ba421..e1736de 100644
---- a/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
-+++ b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
-@@ -9,7 +9,7 @@ class ObjectTranslatorTest extends TestCase
+diff --git a/object-translation-bundle/tests/Unit/TranslatedObjectTest.php b/object-translation-bundle/tests/Unit/TranslatedObjectTest.php
+index 9021f4c..32473ad 100644
+--- a/object-translation-bundle/tests/Unit/TranslatedObjectTest.php
++++ b/object-translation-bundle/tests/Unit/TranslatedObjectTest.php
+@@ -9,7 +9,7 @@ class TranslatedObjectTest extends TestCase
  {
      public function testCanAccessUnderlyingObject()
      {
@@ -11,7 +11,7 @@ index 65ba421..e1736de 100644
  
          $this->assertSame('value1', $object->prop1);
          $this->assertTrue(isset($object->prop1), 'Public property should be accessible');
-@@ -20,7 +20,7 @@ class ObjectTranslatorTest extends TestCase
+@@ -20,7 +20,7 @@ class TranslatedObjectTest extends TestCase
  
      public function testCallUsesGetterIfAvailable()
      {

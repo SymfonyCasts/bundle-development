@@ -14,11 +14,11 @@ index 84be673..4ff1218 100644
      "authors": [
          {
              "name": "Kevin Bond",
-diff --git a/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
+diff --git a/object-translation-bundle/tests/Unit/TranslatedObjectTest.php b/object-translation-bundle/tests/Unit/TranslatedObjectTest.php
 new file mode 100644
-index 0000000..cd9a0cc
+index 0000000..cba7ddb
 --- /dev/null
-+++ b/object-translation-bundle/tests/Unit/ObjectTranslatorTest.php
++++ b/object-translation-bundle/tests/Unit/TranslatedObjectTest.php
 @@ -0,0 +1,37 @@
 +<?php
 +
@@ -27,7 +27,7 @@ index 0000000..cd9a0cc
 +use PHPUnit\Framework\TestCase;
 +use SymfonyCasts\ObjectTranslationBundle\TranslatedObject;
 +
-+class ObjectTranslatorTest extends TestCase
++class TranslatedObjectTest extends TestCase
 +{
 +    public function testCanAccessUnderlyingObject()
 +    {
