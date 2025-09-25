@@ -14,7 +14,7 @@ En `TranslatedObjectTest`, debajo de nuestra primera prueba, crea una nueva`publ
 
 Dentro, nuestra configuración será la misma, así que copia el `$object =` de la prueba anterior y pégalo aquí:
 
-[[[ code('6f0252b83c') ]]]
+[[[ code('2c2dfd35a6') ]]]
 
 Ahora la aserción. En nuestro objeto stub, tenemos una propiedad `prop3` con un getter: `getProp3()`. Por lo tanto, si llamamos al método `prop3()` en nuestro wrapper (sin el `get`) queremos reenviar esta llamada a `getProp3()` en el objeto interno.
 
