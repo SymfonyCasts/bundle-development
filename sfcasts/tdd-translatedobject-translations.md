@@ -156,7 +156,7 @@ translated property.
 Next, write `if (!str_starts_with($name, 'get'))`. This checks if the method
 name is *not* a getter. There's nothing to do in this case, so, `return null`:
 
-[[[ code('bc4fde836a') ]]]
+[[[ code('8455f9d55a') ]]]
 
 Below, write `$property = lcfirst(substr($name, 3))`. `substr` chops the
 first 3 characters off the name - which we know is `get`. `lcfirst` lowercases

@@ -23,7 +23,7 @@ Inside, our *setup*
 will be the same so copy the `$object =` from the test above and paste
 it here:
 
-[[[ code('6f0252b83c') ]]]
+[[[ code('2c2dfd35a6') ]]]
 
 Now for the assertion. In our *stub* object, we have a `prop3` property with
 a getter: `getProp3()`. So, if calling the `prop3()` method on our wrapper
