@@ -1,0 +1,24 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index b58593f..3a9012f 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -3,6 +3,7 @@
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
+ use Symfony\Contracts\Translation\LocaleAwareInterface;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
+ 
+ final class ObjectTranslator
+ {
+@@ -33,5 +34,11 @@ final class ObjectTranslator
+ 
+     private function translationsFor(object $object, string $locale): array
+     {
++        $class = new \ReflectionClass($object);
++        $type = $class->getAttributes(Translatable::class)[0]?->newInstance()->type ?? null;
++
++        if (!$type) {
++            throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));
++        }
+     }
+ }

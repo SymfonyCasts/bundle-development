@@ -1,0 +1,33 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index a869017..5e3eaa9 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -44,11 +44,27 @@ final class ObjectTranslator
+             throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));
+         }
+ 
++        $om = $this->doctrine->getManagerForClass($object::class);
++
++        if (!$om) {
++            throw new \LogicException(sprintf('No object manager found for class "%s".', $object::class));
++        }
++
++        $id = $om->getClassMetadata($object::class)
++            ->getIdentifierValues($object)
++        ;
++
++        if (1 !== count($id)) {
++            throw new \LogicException(sprintf('Class "%s" must have a single identifier to be translatable.', $object::class));
++        }
++
++        $id = reset($id);
++
+         /** @var Translation[] $translations */
+         $translations = $this->doctrine->getRepository($this->translationClass)->findBy([
+             'locale' => $locale,
+             'objectType' => $type,
+-            'objectId' => $object->getId(),
++            'objectId' => $id,
+         ]);
+ 
+         $translationValues = [];

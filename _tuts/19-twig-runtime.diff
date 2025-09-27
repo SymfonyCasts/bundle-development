@@ -1,0 +1,45 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index 6343104..89f7afa 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -3,6 +3,7 @@
+ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+ 
+ use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
++use SymfonyCasts\ObjectTranslationBundle\Twig\ObjectTranslatorExtension;
+ 
+ return static function (ContainerConfigurator $container): void {
+     $container->services()
+@@ -13,7 +14,11 @@ return static function (ContainerConfigurator $container): void {
+                 abstract_arg('translation class'),
+                 service('doctrine'),
+             ])
++            ->tag('twig.runtime')
+ 
+         ->alias(ObjectTranslator::class, 'symfonycasts.object_translator')
++
++        ->set('.symfonycasts.object_translator.twig_extension', ObjectTranslatorExtension::class)
++            ->tag('twig.extension')
+     ;
+ };
+diff --git a/object-translation-bundle/src/Twig/ObjectTranslatorExtension.php b/object-translation-bundle/src/Twig/ObjectTranslatorExtension.php
+index 992f68b..220ed60 100644
+--- a/object-translation-bundle/src/Twig/ObjectTranslatorExtension.php
++++ b/object-translation-bundle/src/Twig/ObjectTranslatorExtension.php
+@@ -2,6 +2,7 @@
+ 
+ namespace SymfonyCasts\ObjectTranslationBundle\Twig;
+ 
++use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
+ use Twig\Extension\AbstractExtension;
+ use Twig\TwigFilter;
+ 
+@@ -13,7 +14,7 @@ final class ObjectTranslatorExtension extends AbstractExtension
+     public function getFilters(): array
+     {
+         return [
+-            new TwigFilter('translate_object'),
++            new TwigFilter('translate_object', [ObjectTranslator::class, 'translate']),
+         ];
+     }
+ }

@@ -219,7 +219,52 @@
             "id": "16-translation-factory",
             "name": "16. translation factory",
             "description": null
+        },
+        {
+            "id": "17-add-translationsfor-method",
+            "name": "17. add translationsFor method",
+            "description": null
+        },
+        {
+            "id": "17-is-translatable",
+            "name": "17. is translatable?",
+            "description": null
+        },
+        {
+            "id": "17-find-id",
+            "name": "17. find id",
+            "description": null
+        },
+        {
+            "id": "18-find-id",
+            "name": "18. find id",
+            "description": null
+        },
+        {
+            "id": "19-twig-filter",
+            "name": "19. twig filter",
+            "description": null
+        },
+        {
+            "id": "19-twig-runtime",
+            "name": "19. twig runtime",
+            "description": null
+        },
+        {
+            "id": "19-use-twig-extension",
+            "name": "19. use twig extension",
+            "description": null
+        },
+        {
+            "id": "20-refactor-using-filter",
+            "name": "20. refactor using filter",
+            "description": null
+        },
+        {
+            "id": "20-memoization",
+            "name": "20. memoization",
+            "description": null
         }
     ],
-    "sha": "c319c833ff7042c5b47191e6e1aaadcf42dd98ee"
+    "sha": "f771e039804f13cfecf18a64955ae81703405600"
 }

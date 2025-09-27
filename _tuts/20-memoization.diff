@@ -1,0 +1,29 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 5e3eaa9..59262b6 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -9,12 +9,15 @@ use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+ 
+ final class ObjectTranslator
+ {
++    private \WeakMap $translatedObjects;
++
+     public function __construct(
+         private LocaleAwareInterface $localeAware,
+         private string $defaultLocale,
+         private string $translationClass,
+         private ManagerRegistry $doctrine,
+     ) {
++        $this->translatedObjects = new \WeakMap();
+     }
+ 
+     /**
+@@ -32,7 +35,7 @@ final class ObjectTranslator
+             return $object;
+         }
+ 
+-        return new TranslatedObject($object, $this->translationsFor($object, $locale));
++        return $this->translatedObjects[$object] ??= new TranslatedObject($object, $this->translationsFor($object, $locale));
+     }
+ 
+     private function translationsFor(object $object, string $locale): array

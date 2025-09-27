@@ -1,0 +1,17 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 438387e..b58593f 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -28,8 +28,10 @@ final class ObjectTranslator
+             return $object;
+         }
+ 
+-        // todo translate object
++        return new TranslatedObject($object, $this->translationsFor($object, $locale));
++    }
+ 
+-        return new TranslatedObject($object);
++    private function translationsFor(object $object, string $locale): array
++    {
+     }
+ }

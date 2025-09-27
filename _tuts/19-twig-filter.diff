@@ -1,0 +1,25 @@
+diff --git a/object-translation-bundle/src/Twig/ObjectTranslatorExtension.php b/object-translation-bundle/src/Twig/ObjectTranslatorExtension.php
+new file mode 100644
+index 0000000..992f68b
+--- /dev/null
++++ b/object-translation-bundle/src/Twig/ObjectTranslatorExtension.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Twig;
++
++use Twig\Extension\AbstractExtension;
++use Twig\TwigFilter;
++
++/**
++ * @internal
++ */
++final class ObjectTranslatorExtension extends AbstractExtension
++{
++    public function getFilters(): array
++    {
++        return [
++            new TwigFilter('translate_object'),
++        ];
++    }
++}

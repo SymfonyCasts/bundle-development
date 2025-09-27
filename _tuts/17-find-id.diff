@@ -1,0 +1,58 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index 98c7700..6343104 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -10,7 +10,8 @@ return static function (ContainerConfigurator $container): void {
+             ->args([
+                 service('translation.locale_switcher'),
+                 param('kernel.default_locale'),
+-                abstract_arg('translation class')
++                abstract_arg('translation class'),
++                service('doctrine'),
+             ])
+ 
+         ->alias(ObjectTranslator::class, 'symfonycasts.object_translator')
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 3a9012f..a869017 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -2,8 +2,10 @@
+ 
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
++use Doctrine\Persistence\ManagerRegistry;
+ use Symfony\Contracts\Translation\LocaleAwareInterface;
+ use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
++use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+ 
+ final class ObjectTranslator
+ {
+@@ -11,6 +13,7 @@ final class ObjectTranslator
+         private LocaleAwareInterface $localeAware,
+         private string $defaultLocale,
+         private string $translationClass,
++        private ManagerRegistry $doctrine,
+     ) {
+     }
+ 
+@@ -40,5 +43,20 @@ final class ObjectTranslator
+         if (!$type) {
+             throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));
+         }
++
++        /** @var Translation[] $translations */
++        $translations = $this->doctrine->getRepository($this->translationClass)->findBy([
++            'locale' => $locale,
++            'objectType' => $type,
++            'objectId' => $object->getId(),
++        ]);
++
++        $translationValues = [];
++
++        foreach ($translations as $translation) {
++            $translationValues[$translation->field] = $translation->value;
++        }
++
++        return $translationValues;
+     }
+ }
