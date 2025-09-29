@@ -56,6 +56,6 @@ Ahora, la verdadera prueba: veamos si esto soluciona nuestro problema con Twig.
 
 En tu navegador, en la página del artículo que tiene el error, actualiza... ¡y perfecto! El error ha desaparecido. El título y el contenido se extraen correctamente del objeto subyacente.
 
-Probablemente haya más casos extremos que debamos tener en cuenta, pero éste es un buen comienzo. Ahora que tenemos esta prueba, si encontramos un caso extremo, podemos añadir una prueba para él, ver si falla, y luego implementar la lógica para que pase. ¡Bien de TDD!
+Probablemente haya más casos extremos que debamos tener en cuenta, pero éste es un buen comienzo. Ahora que tenemos esta prueba, si encontramos un caso extremo, podemos añadir una prueba para él, ver si falla y, a continuación, implementar la lógica para que pase. ¡Bien de TDD!
 
 A continuación, volvamos a utilizar TDD para desarrollar una función: ¡las traducciones de objetos reales!
