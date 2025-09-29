@@ -62,3 +62,6 @@ chapters:
     caching:
         tutsFirstStep: ~
         tutsLastStep: ~
+    cache-configuration:
+        tutsFirstStep: ~
+        tutsLastStep: ~
