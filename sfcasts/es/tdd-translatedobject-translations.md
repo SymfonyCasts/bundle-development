@@ -60,7 +60,7 @@ En `TranslatedObject`, añade una nueva propiedad al constructor:`private array 
 
 Arriba, añade un bloque doc `@param` para este nuevo parámetro, de tipo: `array`. Seamos inteligentes y especifiquemos los tipos de clave y valor de esta matriz. Dentro de los corchetes angulares, escribe `string,string`. El primer `string` es el tipo de clave, el nombre de la propiedad, y el segundo `string` es el tipo de valor, el valor traducido. Por último, escribe `$_translations` para terminar este doc block.
 
-## Traducir el acceso a la propiedad
+## Traducir el acceso a propiedades
 
 Recuerda que nuestra prueba falla al acceder a una propiedad. Así que, abajo en el método`__get()`, antes de devolver la propiedad interna, escribe`$this->_translations[$name] ??`:
 
@@ -92,7 +92,7 @@ Esto comprueba si existe un valor traducido para este nombre exacto de método. 
 symfony php vendor/bin/phpunit object-translation-bundle/tests
 ```
 
-Ahora falla en la línea 40 - "traducido3" y "valor3". Comprueba esta línea en nuestra prueba. Ahh... el método getter... Tenemos que tenerlo en cuenta, pero más o menos al revés de lo que hicimos con el problema de la llamada al método Twig. Tenemos que comprobar si el nombre del método existe como propiedad traducida sin el prefijo `get`. ¡Qué complicado!
+Ahora falla en la línea 40 - "traducido3" y "valor3". Comprueba esta línea en nuestra prueba. Ahh... el método getter... Tenemos que tenerlo en cuenta, pero más o menos al revés de lo que hicimos con el problema de la llamada al método Twig. Tenemos que comprobar si el nombre del método existe como una propiedad traducida sin el prefijo `get`. ¡Intrincado!
 
 ## Traducir métodos Getter
 
