@@ -1,6 +1,6 @@
 diff --git a/object-translation-bundle/src/Mapping/Translatable.php b/object-translation-bundle/src/Mapping/Translatable.php
 new file mode 100644
-index 0000000..0b2ddaa
+index 0000000..81114cd
 --- /dev/null
 +++ b/object-translation-bundle/src/Mapping/Translatable.php
 @@ -0,0 +1,12 @@
@@ -12,7 +12,7 @@ index 0000000..0b2ddaa
 +final class Translatable
 +{
 +    public function __construct(
-+        public string $type,
++        public string $name,
 +    ) {
 +    }
 +}
