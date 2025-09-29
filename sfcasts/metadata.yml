@@ -47,3 +47,18 @@ chapters:
     translatable-mapping:
         tutsFirstStep: 16-mapping-attributes
         tutsLastStep: 16-translation-factory
+    translation-logic:
+        tutsFirstStep: 17-add-translationsfor-method
+        tutsLastStep: 17-find-id
+    doctrine-get-id:
+        tutsFirstStep: 18-find-id
+        tutsLastStep: 18-find-id
+    twig-filter:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    memoization:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    caching:
+        tutsFirstStep: ~
+        tutsLastStep: ~

@@ -1,0 +1,3 @@
+# Performance Optimization 1: Memoization
+
+Coming soon...
