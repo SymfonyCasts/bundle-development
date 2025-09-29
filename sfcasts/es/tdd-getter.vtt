@@ -1,0 +1,155 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:04.026 align:middle
+Tenemos nuestra primera prueba para
+TranslatedObject, que está superando.
+
+00:00:04.526 --> 00:00:08.226 align:middle
+Cuando escribimos esa prueba, no utilizamos
+realmente el Desarrollo Dirigido por Pruebas,
+
+00:00:08.226 --> 00:00:11.626 align:middle
+porque la lógica ya existía,
+sólo la confirmamos con una prueba.
+
+00:00:12.236 --> 00:00:16.966 align:middle
+El verdadero TDD es cuando escribes una prueba para
+algo que aún no existe, de la forma que quieres
+
+00:00:16.966 --> 00:00:20.666 align:middle
+que funcione, ves que falla y luego
+escribes el código para que pase.
+
+00:00:20.876 --> 00:00:22.266 align:middle
+Así que, ¡hagámoslo ahora!
+
+00:00:23.146 --> 00:00:27.946 align:middle
+Queremos que TranslatedObject::__call()
+compruebe primero si hay un getter disponible.
+
+00:00:28.446 --> 00:00:31.176 align:middle
+Al llamar a title(), si este método no existe
+
+00:00:31.176 --> 00:00:34.016 align:middle
+en el objeto interno,
+intenta llamar a getTitle().
+
+00:00:34.546 --> 00:00:37.236 align:middle
+En TranslatedObjectTest, debajo
+de nuestra primera prueba,
+
+00:00:37.356 --> 00:00:44.926 align:middle
+crea una nueva public function
+testCallUsesGetterIfAvailable(): Dentro,
+
+00:00:44.926 --> 00:00:48.916 align:middle
+nuestra configuración será la misma, así
+que copia la $object = de la prueba anterior
+
+00:00:49.056 --> 00:00:51.576 align:middle
+y pégala aquí: Ahora la aserción.
+
+00:00:52.026 --> 00:00:56.786 align:middle
+En nuestro objeto stub, tenemos una
+propiedad prop3 con un getter: getProp3().
+
+00:00:57.236 --> 00:01:02.946 align:middle
+Por lo tanto, si llamamos al método prop3() en nuestra
+envoltura (sin el get) queremos reenviar esta llamada
+
+00:01:02.946 --> 00:01:05.256 align:middle
+a getProp3() en el objeto interno.
+
+00:01:07.286 --> 00:01:13.096 align:middle
+$this->assertSame('value3',
+$object->prop3()) - ¡Ya está!
+
+00:01:14.016 --> 00:01:15.836 align:middle
+En tu terminal, ejecuta las pruebas con:
+
+00:01:15.956 --> 00:01:24.046 align:middle
+symfony php vendor/bin/phpunit
+object-translation-bundle/tests Esta prueba falla
+
+00:01:24.046 --> 00:01:25.316 align:middle
+- ¡pero eso es lo que esperamos!
+
+00:01:25.526 --> 00:01:28.096 align:middle
+Esto coincide básicamente con
+el error que vemos en Twig.
+
+00:01:28.636 --> 00:01:30.926 align:middle
+Ahora tenemos que escribir
+el código para que pase.
+
+00:01:32.676 --> 00:01:38.526 align:middle
+En TranslatedObject::__call(), al
+principio del método, pon $method = $name.
+
+00:01:39.696 --> 00:01:46.346 align:middle
+Ahora, añade una comprobación: if
+(!method_exists($this->_inner, $name)).
+
+00:01:46.346 --> 00:01:55.206 align:middle
+Dentro, escribe $method = 'get'.ucfirst($name) -
+esto pone en mayúscula la primera letra del nombre
+
+00:01:55.206 --> 00:01:59.886 align:middle
+y antepone get: Abajo, en
+return, cambia $name por $method.
+
+00:02:00.196 --> 00:02:00.896 align:middle
+¡Ya está!
+
+00:02:02.156 --> 00:02:05.296 align:middle
+De nuevo en tu terminal, ejecuta
+de nuevo las pruebas: ¡Verde!
+
+00:02:05.516 --> 00:02:09.266 align:middle
+TDDS - ¡Éxito en el
+desarrollo dirigido por pruebas!
+
+00:02:09.876 --> 00:02:12.446 align:middle
+Observa que nuestras dos pruebas han
+sido superadas, lo que es importante
+
+00:02:12.446 --> 00:02:15.176 align:middle
+porque significa que no hemos roto
+ninguna funcionalidad existente.
+
+00:02:15.636 --> 00:02:18.866 align:middle
+Ahora, la verdadera prueba: veamos si
+esto soluciona nuestro problema con Twig.
+
+00:02:19.476 --> 00:02:22.876 align:middle
+En tu navegador, en la página del
+artículo que tiene el error, actualiza...
+
+00:02:23.016 --> 00:02:23.946 align:middle
+¡y perfecto!
+
+00:02:23.946 --> 00:02:24.656 align:middle
+El error ha desaparecido.
+
+00:02:24.986 --> 00:02:28.956 align:middle
+El título y el contenido se extraen
+correctamente del objeto subyacente.
+
+00:02:30.456 --> 00:02:34.466 align:middle
+Probablemente haya más casos extremos que debamos
+tener en cuenta, pero éste es un buen comienzo.
+
+00:02:35.016 --> 00:02:39.366 align:middle
+Ahora que tenemos esta prueba, si encontramos un
+caso extremo, podemos añadir una prueba para él,
+
+00:02:39.366 --> 00:02:42.386 align:middle
+ver si falla e implementar
+la lógica para que pase.
+
+00:02:42.496 --> 00:02:44.826 align:middle
+¡Bondad TDD!
+
+00:02:44.826 --> 00:02:49.956 align:middle
+A continuación, volvamos a utilizar TDD para desarrollar
+una función: ¡las traducciones de objetos reales!
