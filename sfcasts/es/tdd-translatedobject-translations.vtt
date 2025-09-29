@@ -1,0 +1,408 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:03.706 align:middle
+La lógica actual de nuestro
+TranslatedObject es sólida.
+
+00:00:03.996 --> 00:00:08.476 align:middle
+En efecto, pasa todas las llamadas a métodos
+y accesos a propiedades al objeto subyacente.
+
+00:00:08.716 --> 00:00:10.356 align:middle
+Y... ¡tenemos las pruebas que lo demuestran!
+
+00:00:10.916 --> 00:00:14.366 align:middle
+Antes utilizamos TDD para solucionar el
+problema de las llamadas a métodos Twig.
+
+00:00:14.826 --> 00:00:16.776 align:middle
+Ahora, ¡utilicémoslo para crear una función!
+
+00:00:17.376 --> 00:00:20.616 align:middle
+Nuestro TranslatedObject necesita
+gestionar traducciones de propiedades.
+
+00:00:20.966 --> 00:00:23.966 align:middle
+Antes de llamar al método o
+propiedad del objeto subyacente,
+
+00:00:24.236 --> 00:00:26.656 align:middle
+debe comprobar si existe un valor traducido.
+
+00:00:26.656 --> 00:00:29.936 align:middle
+Si existe, debe devolver ese valor traducido.
+
+00:00:30.236 --> 00:00:30.986 align:middle
+¡Pongámonos manos a la obra!
+
+00:00:31.566 --> 00:00:34.736 align:middle
+Primero, antes de hacer nada, confirma que
+nuestro conjunto de pruebas está en verde.
+
+00:00:35.006 --> 00:00:40.076 align:middle
+En tu terminal, ejecuta:
+symfony php vendor/bin/phpunit
+
+00:00:40.386 --> 00:00:44.246 align:middle
+object-translation-bundle/tests
+Verde, ¡genial!
+
+00:00:45.046 --> 00:00:49.106 align:middle
+Empezar una nueva función con TDD es una
+tontería si tus pruebas ya están fallando.
+
+00:00:49.696 --> 00:00:52.966 align:middle
+De vuelta en TranslatedObjectTest,
+añade una nueva prueba con:
+
+00:00:53.126 --> 00:00:59.866 align:middle
+public function testCanTranslateProperties():
+Escribimos esta prueba con la lógica que queremos ver.
+
+00:01:00.036 --> 00:01:03.436 align:middle
+Entonces, copia la fase de configuración
+de la prueba anterior y pégala aquí.
+
+00:01:04.626 --> 00:01:07.756 align:middle
+Ahora, para el segundo argumento
+del constructor TranslatedObject
+
+00:01:08.126 --> 00:01:10.636 align:middle
+, éste será un array de
+propiedades traducidas.
+
+00:01:10.996 --> 00:01:14.976 align:middle
+A continuación traduciremos todas las
+propiedades de nuestro ObjectForTranslationStub.
+
+00:01:15.536 --> 00:01:23.436 align:middle
+Dentro del array, escribe 'prop1' =>
+'translated1', 'prop2' => 'translated2',
+
+00:01:24.046 --> 00:01:29.986 align:middle
+'prop3' => 'translated3',: Puedes ver
+que PhpStorm marca todo esto como gris
+
+00:01:29.986 --> 00:01:32.366 align:middle
+, ya que el constructor aún
+no acepta este parámetro.
+
+00:01:33.116 --> 00:01:34.306 align:middle
+Creo que esto se ve bastante bien.
+
+00:01:34.546 --> 00:01:37.966 align:middle
+Cuando pasas un array de valores traducidos,
+con la clave del nombre de la propiedad,
+
+00:01:38.196 --> 00:01:41.756 align:middle
+al acceder a estas propiedades, deberíamos
+obtener de vuelta los valores traducidos.
+
+00:01:42.466 --> 00:01:45.946 align:middle
+Para las afirmaciones, copia éstas
+de la primera prueba y pégalas aquí.
+
+00:01:48.516 --> 00:01:52.446 align:middle
+Ahora, cambia todos los valores
+esperados de value a translated.
+
+00:01:52.676 --> 00:01:56.866 align:middle
+translated1, translated2, y translated3:
+
+00:01:57.546 --> 00:01:59.646 align:middle
+Creo que todos sabemos que
+esto no va a funcionar, pero...
+
+00:01:59.916 --> 00:02:01.606 align:middle
+¡dejemos que las pruebas nos lo digan!
+
+00:02:02.026 --> 00:02:05.206 align:middle
+En tu terminal, vuelve a
+ejecutar las pruebas: ¡Fallo!
+
+00:02:05.236 --> 00:02:06.406 align:middle
+Pero totalmente esperado.
+
+00:02:06.826 --> 00:02:10.866 align:middle
+Fallo al afirmar que "valor1"
+es "traducido1" en la línea 36.
+
+00:02:11.466 --> 00:02:15.356 align:middle
+De vuelta a la prueba, en la línea 36
+es donde accedemos a la propiedad prop1.
+
+00:02:15.686 --> 00:02:18.116 align:middle
+Así que, ¡añadamos la lógica
+para que esta prueba pase!
+
+00:02:18.446 --> 00:02:19.116 align:middle
+Esta prueba...
+
+00:02:19.116 --> 00:02:20.126 align:middle
+impulsa...
+
+00:02:20.126 --> 00:02:22.256 align:middle
+nuestro desarrollo, ¿lo pillas?
+
+00:02:22.256 --> 00:02:29.046 align:middle
+En TranslatedObject, añade una nueva propiedad
+al constructor: private array $_translations, -
+
+00:02:29.526 --> 00:02:33.896 align:middle
+recuerda, el prefijo _ es una convención que
+estamos utilizando porque se trata de un mixin.
+
+00:02:34.576 --> 00:02:39.156 align:middle
+Arriba, añade un bloque doc @param para
+este nuevo parámetro, de tipo: array.
+
+00:02:39.776 --> 00:02:42.836 align:middle
+Seamos listos y especifiquemos los
+tipos de clave y valor de esta matriz.
+
+00:02:43.526 --> 00:02:46.866 align:middle
+Dentro de los corchetes
+angulares, escribe string,string.
+
+00:02:47.556 --> 00:02:50.096 align:middle
+El primer string es el tipo de
+clave, el nombre de la propiedad,
+
+00:02:50.436 --> 00:02:53.626 align:middle
+y el segundo string es el tipo
+de valor, el valor traducido.
+
+00:02:54.256 --> 00:02:57.336 align:middle
+Por último, escribe $_translations
+para terminar este bloque doc.
+
+00:02:58.026 --> 00:03:00.746 align:middle
+Recuerda que nuestra prueba
+falla al acceder a una propiedad.
+
+00:03:01.156 --> 00:03:04.626 align:middle
+Así que, abajo en el método __get(),
+antes de devolver la propiedad interior,
+
+00:03:04.726 --> 00:03:07.896 align:middle
+escribe $this->_translations[$name] ??:
+
+00:03:08.126 --> 00:03:13.066 align:middle
+Esto comprobará si existe un valor
+traducido para este nombre de propiedad.
+
+00:03:13.386 --> 00:03:14.946 align:middle
+Si existe, lo devolverá.
+
+00:03:15.206 --> 00:03:18.466 align:middle
+Si no, volverá a devolver la
+propiedad interna del objeto.
+
+00:03:19.316 --> 00:03:23.136 align:middle
+Bien, vuelve al terminal y ejecuta de
+nuevo las pruebas: Sigue fallando...
+
+00:03:23.556 --> 00:03:26.556 align:middle
+pero fíjate bien: ahora
+falla porque "traducido2"
+
+00:03:26.556 --> 00:03:29.466 align:middle
+y "valor2" no coinciden, y en la línea 39.
+
+00:03:30.136 --> 00:03:31.276 align:middle
+Vuelve a la prueba.
+
+00:03:31.496 --> 00:03:34.206 align:middle
+En la línea 39 es donde
+llamamos al método prop2().
+
+00:03:34.816 --> 00:03:39.536 align:middle
+Que haya llegado tan lejos significa que nuestra lógica de
+acceso a la propiedad traducida de la línea 36 ¡funciona!
+
+00:03:39.686 --> 00:03:42.456 align:middle
+¡Estupendo! Ahora vamos a gestionar
+las llamadas a los métodos.
+
+00:03:42.736 --> 00:03:50.296 align:middle
+En TranslatedObject::__call(), en la parte superior,
+añade if (isset($this->_translations[$name])).
+
+00:03:51.156 --> 00:03:54.636 align:middle
+Dentro, return $this->_translations[$name];.
+
+00:03:55.316 --> 00:03:58.536 align:middle
+Esto comprueba si existe un valor traducido
+para este nombre exacto de método.
+
+00:03:58.876 --> 00:04:00.596 align:middle
+Si existe, devuelve ese valor.
+
+00:04:01.216 --> 00:04:02.056 align:middle
+¡Ya sabes lo que tienes que hacer!
+
+00:04:02.416 --> 00:04:04.166 align:middle
+De vuelta al terminal,
+ejecuta de nuevo las pruebas:
+
+00:04:04.946 --> 00:04:08.596 align:middle
+Ahora falla en la línea 40
+- "traducido3" y "valor3".
+
+00:04:09.276 --> 00:04:10.676 align:middle
+Comprueba esta línea en nuestra prueba.
+
+00:04:11.426 --> 00:04:12.876 align:middle
+Ahh... el método getter...
+
+00:04:13.256 --> 00:04:14.776 align:middle
+Tenemos que tenerlo en cuenta, pero más
+
+00:04:14.776 --> 00:04:17.596 align:middle
+o menos al revés de lo que hicimos con
+el problema de la llamada al método Twig.
+
+00:04:18.126 --> 00:04:23.506 align:middle
+Tenemos que comprobar si el nombre del método
+existe como propiedad traducida sin el prefijo get.
+
+00:04:23.726 --> 00:04:26.936 align:middle
+¡Difícil! Vuelve a comprobarlo
+con TranslatedObject::__call().
+
+00:04:27.526 --> 00:04:29.946 align:middle
+Este método se está haciendo un
+poco largo, así que refactoricemos
+
+00:04:29.946 --> 00:04:32.076 align:middle
+y añadamos nuestra nueva
+lógica en un método privado.
+
+00:04:32.546 --> 00:04:38.766 align:middle
+A continuación, escribe private function
+translatedValue(string $name): ?string:
+
+00:04:39.346 --> 00:04:42.296 align:middle
+Esto aceptará el nombre del método
+y devolverá el valor traducido
+
+00:04:42.296 --> 00:04:44.676 align:middle
+como una cadena, o null si no existe.
+
+00:04:45.316 --> 00:04:48.726 align:middle
+Vuelve a __call(), corta la
+declaración if (isset(...)) y pégala
+
+00:04:48.726 --> 00:04:51.636 align:middle
+en nuestro nuevo método
+privado: Esto comprueba
+
+00:04:51.636 --> 00:04:54.476 align:middle
+si el nombre exacto del método
+existe como propiedad traducida.
+
+00:04:55.016 --> 00:04:59.376 align:middle
+A continuación, escribe if
+(!str_starts_with($name, 'get')).
+
+00:05:00.006 --> 00:05:02.206 align:middle
+Esto comprueba si el nombre
+del método no es un getter.
+
+00:05:02.546 --> 00:05:06.626 align:middle
+No hay nada que hacer en este
+caso, así que, return null: A
+
+00:05:06.726 --> 00:05:12.396 align:middle
+continuación, escribe $property
+= lcfirst(substr($name, 3)).
+
+00:05:12.956 --> 00:05:16.736 align:middle
+substr corta los 3 primeros caracteres
+del nombre, que sabemos que es get.
+
+00:05:17.206 --> 00:05:22.266 align:middle
+lcfirst pone en minúsculas el primer carácter,
+dejándonos con el nombre de la propiedad: Por último,
+
+00:05:22.336 --> 00:05:27.406 align:middle
+return $this->_traducciones[$propiedad] ??
+
+00:05:27.406 --> 00:05:32.466 align:middle
+null. Devuelve el valor traducido de esta
+propiedad si existe; si no, devuelve null:
+
+00:05:33.116 --> 00:05:35.986 align:middle
+Retrocede en __call(), comprueba
+si existe un valor traducido
+
+00:05:35.986 --> 00:05:41.296 align:middle
+con if ($translatedValue =
+$this->translatedValue($name)).
+
+00:05:42.086 --> 00:05:46.586 align:middle
+Dentro, return $translatedValue:
+Ejecuta las pruebas, ¡ejecuta!
+
+00:05:47.366 --> 00:05:49.106 align:middle
+Hmm, tenemos algunos errores.
+
+00:05:49.226 --> 00:05:50.706 align:middle
+Desplázate un poco hacia
+arriba para ver el resumen.
+
+00:05:51.296 --> 00:05:56.426 align:middle
+Las dos primeras pruebas han dado error, pero nuestra tercera
+prueba, la de las propiedades traducidas, está pasando.
+
+00:05:56.946 --> 00:05:58.996 align:middle
+Son las pruebas originales
+las que tienen problemas.
+
+00:05:59.336 --> 00:06:02.476 align:middle
+¡Por eso era importante ejecutar las
+pruebas antes de iniciar esta función!
+
+00:06:02.796 --> 00:06:06.206 align:middle
+Sabemos con certeza que hicimos algo
+que rompió la funcionalidad existente.
+
+00:06:06.906 --> 00:06:09.436 align:middle
+Comprueba el error: "Demasiados
+pocos argumentos para...
+
+00:06:09.436 --> 00:06:12.546 align:middle
+TranslatedObject::__construct()" Ahh,
+
+00:06:12.546 --> 00:06:15.836 align:middle
+hemos añadido un nuevo parámetro
+obligatorio al constructor de esta clase.
+
+00:06:16.406 --> 00:06:19.276 align:middle
+Las dos primeras pruebas no están
+pasando la matriz $_translations.
+
+00:06:19.936 --> 00:06:22.796 align:middle
+En nuestra clase de prueba, desplázate
+hasta las dos primeras pruebas.
+
+00:06:22.826 --> 00:06:25.206 align:middle
+PhpStorm incluso nos advierte de esto.
+
+00:06:25.586 --> 00:06:31.506 align:middle
+En ambas pruebas, pasa un array vacío como
+segundo argumento: ¿Ya hemos terminado?
+
+00:06:31.506 --> 00:06:34.976 align:middle
+Averígualo volviendo a ejecutar
+nuestras pruebas: ¡Woo!
+
+00:06:35.196 --> 00:06:36.536 align:middle
+¡Todas las pruebas son correctas!
+
+00:06:36.896 --> 00:06:38.816 align:middle
+¡Nueva función añadida con éxito!
+
+00:06:39.496 --> 00:06:43.896 align:middle
+A continuación, daremos un paso al lado y veremos cómo marcaremos
+las entidades de nuestra aplicación para su traducción.
