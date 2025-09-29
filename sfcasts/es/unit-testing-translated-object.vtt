@@ -1,0 +1,261 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.306 align:middle
+Tenemos un pequeño contratiempo al
+utilizar nuestro TranslatedObject en Twig.
+
+00:00:04.846 --> 00:00:05.736 align:middle
+Esto es lo que ocurre
+
+00:00:06.166 --> 00:00:11.126 align:middle
+En el contexto de esta excepción, puedes ver que
+está llamando a article.title en nuestra plantilla.
+
+00:00:11.756 --> 00:00:15.026 align:middle
+Cuando la entidad no estaba envuelta en
+un TranslatedObject, funcionaba bien.
+
+00:00:15.556 --> 00:00:18.636 align:middle
+Twig tiene una lógica ingeniosa
+para que, al llamar a .title,
+
+00:00:18.856 --> 00:00:21.106 align:middle
+compruebe si existe un
+método getter: getTitle().
+
+00:00:21.546 --> 00:00:23.506 align:middle
+Si lo encuentra, llama a ese método.
+
+00:00:23.846 --> 00:00:26.566 align:middle
+Esa lógica no funciona con
+nuestra envoltura TranslatedObject:
+
+00:00:26.896 --> 00:00:30.696 align:middle
+este objeto no tiene los getters,
+sino el objeto subyacente.
+
+00:00:31.246 --> 00:00:36.376 align:middle
+Twig ve que tenemos el método mágico
+__call(), así que intenta llamar a title().
+
+00:00:36.376 --> 00:00:38.256 align:middle
+¡Podemos engancharnos a esto!
+
+00:00:38.256 --> 00:00:40.496 align:middle
+¡Hagámoslo mediante pruebas unitarias!
+
+00:00:40.496 --> 00:00:43.086 align:middle
+En primer lugar, tenemos que configurar
+nuestro bundle para las pruebas.
+
+00:00:43.086 --> 00:00:47.336 align:middle
+Si aún no existe, crea un directorio
+tests en la raíz de nuestro bundle.
+
+00:00:47.846 --> 00:00:50.636 align:middle
+Ahora, abre el archivo
+composer.json de nuestro bundle.
+
+00:00:51.316 --> 00:00:54.266 align:middle
+Copia toda la sección autoload
+y pégala a continuación.
+
+00:00:54.656 --> 00:00:56.696 align:middle
+Cámbiale el nombre a autoload-dev.
+
+00:00:57.346 --> 00:01:00.406 align:middle
+Sólo queremos que Composer vea las
+pruebas cuando estemos en desarrollo.
+
+00:01:00.406 --> 00:01:04.586 align:middle
+El mismo espacio de nombres,
+pero añade \\Tests al final.
+
+00:01:04.586 --> 00:01:11.296 align:middle
+En lugar de src/, utiliza tests/: Ahora Composer
+conoce nuestras pruebas, pero no PhpStorm.
+
+00:01:11.726 --> 00:01:15.726 align:middle
+Al igual que hicimos con el espacio de nombres
+principal, tendremos que darle un empujoncito a PhpStorm.
+
+00:01:16.066 --> 00:01:17.626 align:middle
+Abre Configuración, Directorios.
+
+00:01:18.026 --> 00:01:22.006 align:middle
+Navega hasta el directorio tests de nuestro
+bundle y márcalo como Raíz de Pruebas.
+
+00:01:22.536 --> 00:01:26.366 align:middle
+Utiliza el icono del lápiz para abrir el espacio
+de nombres del directorio src de nuestro bundle.
+
+00:01:26.836 --> 00:01:32.056 align:middle
+Copia el espacio de nombres, cierra la ventana y abre la
+configuración del espacio de nombres de nuestro directorio tests.
+
+00:01:32.656 --> 00:01:35.766 align:middle
+Pega el espacio de nombres
+y añade Tests\ al final.
+
+00:01:36.236 --> 00:01:38.106 align:middle
+Haz clic en Aceptar, Aplicar, Ok.
+
+00:01:38.716 --> 00:01:41.036 align:middle
+Genial, ¡listo para nuestra primera prueba!
+
+00:01:41.036 --> 00:01:44.576 align:middle
+Dentro del directorio tests de nuestro
+bundle, crea un directorio Unit.
+
+00:01:44.906 --> 00:01:47.126 align:middle
+Esto nos ayudará a organizar
+nuestras pruebas por tipos.
+
+00:01:48.036 --> 00:01:52.286 align:middle
+Dentro, crea una nueva clase PHP
+llamada TranslatedObjectTest.
+
+00:01:54.086 --> 00:01:58.756 align:middle
+Haz que extienda TestCase, de PHPUnit: Nuestra
+primera prueba se limitará a demostrar
+
+00:01:58.756 --> 00:02:03.086 align:middle
+que nuestro TranslatedObject funciona
+como esperamos, sin nada de Twig todavía.
+
+00:02:03.606 --> 00:02:08.246 align:middle
+Crea la prueba con public function
+testCanAccessUnderlyingObject():
+
+00:02:08.836 --> 00:02:11.706 align:middle
+Ahora necesitamos un objeto que
+envolver con nuestro TranslatedObject.
+
+00:02:12.096 --> 00:02:14.466 align:middle
+Crearemos una clase stub justo en este archivo.
+
+00:02:14.996 --> 00:02:20.086 align:middle
+Debajo de nuestra clase de prueba, crea un
+class ObjectForTranslationStub: Lo sé, lo sé,
+
+00:02:20.086 --> 00:02:23.756 align:middle
+esto no puede autoloaded totalmente correctamente
+cuando se utiliza fuera de esta clase.
+
+00:02:24.276 --> 00:02:27.166 align:middle
+Nunca querrás hacer esto en tu código
+de producción, pero en las pruebas,
+
+00:02:27.226 --> 00:02:30.256 align:middle
+mientras sólo lo utilices en
+este archivo, creo que está bien.
+
+00:02:30.256 --> 00:02:33.716 align:middle
+Si lo prefieres, puedes crear
+una clase fixture propia.
+
+00:02:34.356 --> 00:02:36.946 align:middle
+En esta clase, vamos a añadir
+algunos escenarios diferentes.
+
+00:02:37.086 --> 00:02:41.666 align:middle
+Una propiedad pública public
+string $prop1 = 'value1'.
+
+00:02:42.166 --> 00:02:50.296 align:middle
+Dos propiedades privadas: private string $prop2
+= 'value2' y private string $prop3 = 'value3':
+
+00:02:51.126 --> 00:02:56.036 align:middle
+Un método no-objetivo para acceder a
+prop2: public function prop2(): string.
+
+00:02:56.856 --> 00:02:59.116 align:middle
+En su interior, return $this->prop2;.
+
+00:03:00.556 --> 00:03:05.346 align:middle
+Un método getter para acceder a prop3:
+public function getProp3(): string.
+
+00:03:05.926 --> 00:03:11.046 align:middle
+Y dentro, return $this->prop3;:
+En nuestro método de prueba,
+
+00:03:11.136 --> 00:03:16.556 align:middle
+crea el objeto con $object
+= new TranslatedObject(new
+
+00:03:16.556 --> 00:03:21.506 align:middle
+ObjectForTranslationStub());: Esta es la fase
+de configuración, o arreglo, de nuestra prueba.
+
+00:03:21.506 --> 00:03:24.676 align:middle
+$object es lo que se llama
+nuestro sistema bajo prueba,
+
+00:03:24.856 --> 00:03:27.826 align:middle
+una forma elegante de decir
+"la cosa que queremos probar".
+
+00:03:27.826 --> 00:03:29.326 align:middle
+Ahora pasemos a la fase de las afirmaciones
+
+00:03:29.326 --> 00:03:32.266 align:middle
+En primer lugar, vamos a comprobar el
+acceso a las propiedades públicas.
+
+00:03:32.606 --> 00:03:37.536 align:middle
+$this->assertSame('value1',
+$object->prop1).
+
+00:03:38.496 --> 00:03:44.846 align:middle
+A continuación, isset() sobre la propiedad pública:
+$this->assertTrue(isset($object->prop1)).
+
+00:03:44.846 --> 00:03:50.036 align:middle
+Añade una descripción como segundo parámetro:
+Public property should be accessible.
+
+00:03:50.956 --> 00:03:55.716 align:middle
+Esta descripción no es necesaria, pero puede
+ser útil cuando falla una prueba: Ahora,
+
+00:03:55.716 --> 00:04:02.056 align:middle
+acceso a la propiedad no pública:
+$this->assertFalse(isset($object->prop2)).
+
+00:04:02.056 --> 00:04:08.056 align:middle
+Descripción: Private properties should
+not be accessible: A los métodos:
+
+00:04:08.216 --> 00:04:17.086 align:middle
+$this->assertSame('value2', $object->prop2())
+y $this->assertSame ('valor3',
+
+00:04:17.086 --> 00:04:21.546 align:middle
+$object->getProp3()):
+¡Vamos a ejecutar esta prueba!
+
+00:04:21.916 --> 00:04:24.466 align:middle
+No tenemos configurada la prueba para el bundle
+
+00:04:24.736 --> 00:04:28.336 align:middle
+, pero de momento podemos utilizar la
+configuración PHPUnit de nuestra aplicación.
+
+00:04:28.756 --> 00:04:32.386 align:middle
+En tu terminal, en la raíz de nuestra
+aplicación (no en el bundle), ejecuta:
+
+00:04:32.386 --> 00:04:40.036 align:middle
+symfony php vendor/bin/phpunit
+object-translation-bundle/tests ¡Woo!
+
+00:04:40.036 --> 00:04:45.426 align:middle
+¡Pasando! La funcionalidad básica de nuestro
+funciona como esperábamos. TranslatedObject
+
+00:04:46.036 --> 00:04:51.486 align:middle
+A continuación, vamos a utilizar el verdadero Desarrollo
+Dirigido por Pruebas (TDD) para resolver el problema de Twig.
