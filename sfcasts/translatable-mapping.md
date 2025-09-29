@@ -33,10 +33,10 @@ write `#[\Attribute()]`. The first argument is what type of element this
 attribute can be applied to. In our case, we want to apply this to classes,
 so write `\Attribute::TARGET_CLASS`.
 
-We need to pass in one argument to this attribute: the `type`. This is that string
+We need to pass in one argument to this attribute: the `name`. This is that string
 *alias* we'll store in the database instead of the class name. Create a constructor
 with `public function __construct()`. Now add a single, mandatory argument (that's also
-a property): `public string $type`.
+a property): `public string $name`.
 
 ## Creating the `TranslatableProperty` Attribute
 
