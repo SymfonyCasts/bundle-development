@@ -54,14 +54,14 @@ chapters:
         tutsFirstStep: 18-find-id
         tutsLastStep: 18-find-id
     twig-filter:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: 19-twig-filter
+        tutsLastStep: 20-refactor-using-filter
     memoization:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: 20-memoization
+        tutsLastStep: 20-memoization
     caching:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: null
+        tutsLastStep: null
     cache-configuration:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: null
+        tutsLastStep: null
