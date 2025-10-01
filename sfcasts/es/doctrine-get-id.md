@@ -1,6 +1,6 @@
 # Obtener el ID de objeto con Doctrine
 
-Actualmente, nuestros datos de traducción al francés se muestran correctamente en la página. Sin embargo, nuestro método actual para obtener el ID utilizando`$object->getId()` es un poco inestable. Supone que el usuario siempre tiene un método `getId()`en sus entidades, lo que no siempre es el caso. Podemos hacerlo mejor... ¡y Doctrine nos cubre las espaldas!
+Actualmente, nuestros datos de traducción al francés se muestran correctamente en la página. Sin embargo, nuestro método actual de obtención del ID mediante`$object->getId()` es un poco inestable. Supone que el usuario siempre tiene un método `getId()`en sus entidades, lo que no siempre es el caso. Podemos hacerlo mejor... ¡y Doctrine nos cubre las espaldas!
 
 ## Obtener el gestor de objetos
 
@@ -14,7 +14,7 @@ Cuando utilices el ORM, habrás utilizado algo llamado gestor de entidades. Esto
 
 [[[ code('e8675ab2bb') ]]]
 
-## Obtener el ID del Gestor de Objetos
+## Obtener el ID del gestor de objetos
 
 A continuación, `$id = $om->getClassMetadata($object::class)`. Esto devuelve un objeto especial que lo sabe todo sobre el mapeo Doctrine para esta clase. `->getIdentifierValues()`
 es lo que queremos. Pasa la instancia `$object`:
@@ -27,7 +27,7 @@ Esto recupera el ID del objeto pasado, independientemente de cómo esté impleme
 
 Aunque tu entidad sólo tenga un campo ID, Doctrine lo devuelve como una matriz. Elimina el `dd()` y añade una comprobación: `if (count($id) > 1)`. Dentro,`throw new \LogicException(sprintf('Class "%s" must have a single identifier to be translatable', $object::class))`:
 
-[[[ code('0cfaa3bab2') ]]]
+[[[ code('a97732e72e') ]]]
 
 Coge el primer elemento del array con `$id = reset($id)`:
 
