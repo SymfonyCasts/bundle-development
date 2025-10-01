@@ -1,0 +1,304 @@
+WEBVTT
+
+00:00:01.046 --> 00:00:05.086 align:middle
+Es hora de sumergirse en cómo marcarán los
+usuarios las entidades de su app para traducirlas.
+
+00:00:05.086 --> 00:00:10.866 align:middle
+Para nuestra aplicación, tenemos cuatro
+entidades: Article, Category, Tag, y Translation.
+
+00:00:11.286 --> 00:00:14.166 align:middle
+La entidad Translation almacena,
+por supuesto, nuestras traducciones,
+
+00:00:14.256 --> 00:00:16.316 align:middle
+pero las otras tres necesitan traducción.
+
+00:00:16.316 --> 00:00:18.166 align:middle
+Por ejemplo, echa un vistazo a Article.
+
+00:00:18.466 --> 00:00:20.536 align:middle
+Necesitamos marcar esta clase como traducible.
+
+00:00:20.856 --> 00:00:23.866 align:middle
+Y aquí abajo, queremos que
+las propiedades title y content
+
+00:00:23.866 --> 00:00:25.966 align:middle
+sean campos traducibles en esta entidad.
+
+00:00:26.686 --> 00:00:28.646 align:middle
+Tenemos un par de formas de conseguirlo.
+
+00:00:28.956 --> 00:00:31.866 align:middle
+Un método podría ser crear algún
+tipo de interfaz en nuestro bundle.
+
+00:00:32.216 --> 00:00:35.226 align:middle
+Los usuarios podrían implementarla en las
+entidades que quisieran que fueran traducibles.
+
+00:00:35.766 --> 00:00:39.296 align:middle
+Pero un enfoque más moderno y
+elegante es utilizar atributos PHP.
+
+00:00:39.586 --> 00:00:42.366 align:middle
+A mí me gusta lo moderno y elegante,
+así que vamos a utilizar atributos.
+
+00:00:42.946 --> 00:00:46.496 align:middle
+Serán similares a los atributos
+de mapeo ORM de Doctrine.
+
+00:00:46.496 --> 00:00:49.166 align:middle
+Los nuestros mapearán entidades
+y propiedades traducibles.
+
+00:00:49.856 --> 00:00:54.606 align:middle
+En nuestro directorio object-translation-bundle/src,
+crea un nuevo directorio, Mapping.
+
+00:00:55.156 --> 00:00:56.996 align:middle
+Aquí es donde almacenaremos
+nuestros atributos.
+
+00:00:57.506 --> 00:01:00.506 align:middle
+Dentro, crea una nueva clase
+PHP llamada Translatable.
+
+00:01:01.016 --> 00:01:04.276 align:middle
+Este atributo se utilizará para
+marcar una entidad como traducible.
+
+00:01:04.906 --> 00:01:05.576 align:middle
+Hazlo final.
+
+00:01:06.256 --> 00:01:09.936 align:middle
+Para que PHP sepa que se trata de un
+atributo, ¡necesitamos utilizar un atributo!
+
+00:01:10.356 --> 00:01:12.776 align:middle
+Sobre la clase, escribe #[\Attribute()].
+
+00:01:13.276 --> 00:01:16.736 align:middle
+El primer argumento es a qué tipo de
+elemento se puede aplicar este atributo.
+
+00:01:17.136 --> 00:01:21.836 align:middle
+En nuestro caso, queremos aplicarlo a las clases,
+así que escribe \Attribute::TARGET_CLASS:
+
+00:01:22.596 --> 00:01:25.496 align:middle
+Tenemos que pasar un argumento
+a este atributo: el name.
+
+00:01:25.496 --> 00:01:29.966 align:middle
+Este es el alias de cadena que almacenaremos en
+la base de datos en lugar del nombre de la clase.
+
+00:01:30.536 --> 00:01:34.246 align:middle
+Crea un constructor con
+public function __construct().
+
+00:01:34.926 --> 00:01:40.396 align:middle
+Ahora añade un único argumento obligatorio (que
+también es una propiedad): public string $name:
+
+00:01:40.936 --> 00:01:44.306 align:middle
+También tenemos que indicar a nuestro bundle
+qué propiedades deben ser traducibles.
+
+00:01:44.916 --> 00:01:49.536 align:middle
+Ahora bien, podríamos utilizar un argumento de matriz en
+el atributo Translatable para enumerar las propiedades...
+
+00:01:49.786 --> 00:01:53.336 align:middle
+pero creo que es más limpio utilizar
+un atributo independiente para esto.
+
+00:01:53.336 --> 00:01:57.826 align:middle
+También en el directorio Mapping, crea
+otra clase PHP llamada TranslatableProperty.
+
+00:01:58.856 --> 00:02:02.976 align:middle
+Esta clase estará vacía, sin argumentos -
+sólo se utiliza como marcador de propiedades.
+
+00:02:03.656 --> 00:02:05.946 align:middle
+Marca la clase como atributo
+con #[\Attribute()].
+
+00:02:06.526 --> 00:02:11.786 align:middle
+Esta vez, queremos aplicar este atributo a las
+propiedades, así que utiliza \Attribute::TARGET_PROPERTY:
+
+00:02:11.786 --> 00:02:15.966 align:middle
+Ahora que nuestros atributos están listos, vayamos a
+las entidades de nuestra aplicación y marquémoslas.
+
+00:02:15.966 --> 00:02:17.276 align:middle
+Empieza con Article. Encima
+
+00:02:17.556 --> 00:02:22.606 align:middle
+de la clase, añade el atributo
+#[Translatable('article')]: Ahora,
+
+00:02:22.666 --> 00:02:25.106 align:middle
+identifica las propiedades
+que van a ser traducibles.
+
+00:02:25.566 --> 00:02:33.196 align:middle
+Encima de $title, añade #[TranslatableProperty]
+y haz lo mismo con $content:
+
+00:02:33.196 --> 00:02:38.046 align:middle
+A continuación, marca Category como
+traducible con #[Translatable('category')].
+
+00:02:38.046 --> 00:02:43.106 align:middle
+La propiedad $name será una
+TranslatableProperty: Por último,
+
+00:02:43.106 --> 00:02:47.166 align:middle
+marca Tag como
+#[Translatable('tag')] y de nuevo,
+
+00:02:47.166 --> 00:02:52.046 align:middle
+la propiedad $name será la única
+TranslatableProperty : Tanto nuestro Tag
+
+00:02:52.046 --> 00:02:54.406 align:middle
+como nuestro Category tienen
+una única propiedad traducible.
+
+00:02:54.856 --> 00:02:57.556 align:middle
+Article tiene dos: $content y $title.
+
+00:02:57.556 --> 00:03:00.106 align:middle
+¡Qué bien! Hay una última
+cosa que quiero hacer.
+
+00:03:00.426 --> 00:03:03.806 align:middle
+Si miramos en el directorio Story de
+nuestra aplicación, encontraremos AppStory
+
+00:03:03.806 --> 00:03:06.246 align:middle
+, donde estamos cargando los
+artículos para nuestros datos fijos.
+
+00:03:06.786 --> 00:03:10.156 align:middle
+Para probar esto de forma más eficaz,
+crearemos algunas fijaciones de traducción.
+
+00:03:10.456 --> 00:03:14.606 align:middle
+De este modo, cuando cambiemos al francés en nuestro
+sitio, mostraremos algunos datos simulados en francés,
+
+00:03:14.856 --> 00:03:16.956 align:middle
+igual que actualmente tenemos
+datos simulados en inglés.
+
+00:03:17.716 --> 00:03:19.586 align:middle
+Necesitamos crear una
+fábrica utilizando Foundry.
+
+00:03:19.586 --> 00:03:24.026 align:middle
+Ejecuta: symfony console
+make:factory Crear una fábrica
+
+00:03:24.026 --> 00:03:26.486 align:middle
+para la entidad Translation: 0 en esta lista.
+
+00:03:27.266 --> 00:03:31.836 align:middle
+Si navegamos de nuevo a nuestro directorio
+Factory, aquí está: TranslationFactory.
+
+00:03:32.536 --> 00:03:36.566 align:middle
+En defaults(), ha detectado todos los campos
+y está generando datos falsos para ellos.
+
+00:03:37.156 --> 00:03:40.996 align:middle
+Vamos a anular todo esto cuando lo creemos,
+así que no hace falta editar nada aquí,
+
+00:03:41.216 --> 00:03:43.006 align:middle
+sólo necesitamos que exista esta fábrica.
+
+00:03:43.726 --> 00:03:48.166 align:middle
+Ahora, en AppStory, busca el primer artículo
+"Por qué los asteroides saben a beicon".
+
+00:03:48.826 --> 00:03:54.416 align:middle
+Asigna este artículo creado a una variable con
+$article1 = : Hacemos esto porque necesitamos
+
+00:03:54.416 --> 00:03:56.976 align:middle
+obtener su ID para vincular
+nuestras traducciones a él.
+
+00:03:57.746 --> 00:04:02.396 align:middle
+Debajo de esta fijación, crea nuestra primera
+traducción con TranslationFactory::createOne().
+
+00:04:02.946 --> 00:04:07.086 align:middle
+Dentro, un array: 'locale' => 'fr',
+
+00:04:07.896 --> 00:04:14.706 align:middle
+'objectId' => $article1->getId(),
+'objectType' => 'article'.
+
+00:04:15.556 --> 00:04:20.336 align:middle
+Ahora, el primer campo que queremos traducir
+es el título, así que 'field' => 'title'.
+
+00:04:20.336 --> 00:04:27.056 align:middle
+Para el valor, 'value' => 'French title...':
+No es muy creativo, pero cumple su función.
+
+00:04:27.056 --> 00:04:29.296 align:middle
+Ahora vamos a traducir el contenido.
+
+00:04:29.816 --> 00:04:33.606 align:middle
+Copia todo este TranslationFactory::createOne()
+y pégalo abajo.
+
+00:04:34.226 --> 00:04:37.596 align:middle
+Cambia el field por 'content' y el value
+
+00:04:37.596 --> 00:04:41.876 align:middle
+por 'French content...'. Deja todo lo
+demás igual, ya que es para el mismo objeto
+
+00:04:41.876 --> 00:04:44.046 align:middle
+y localización: ¡Basta para empezar!
+
+00:04:44.456 --> 00:04:51.576 align:middle
+En tu terminal, vuelve a cargar los accesorios
+con: symfony console foundry:load-fixtures Elige y
+
+00:04:51.576 --> 00:04:53.386 align:middle
+para confirmar la recreación
+de la base de datos.
+
+00:04:54.166 --> 00:04:57.966 align:middle
+Hagamos una comprobación rápida para asegurarnos
+de que las traducciones se han cargado:
+
+00:04:57.966 --> 00:05:02.946 align:middle
+symfony console doctrine:query:sql 'SELECT *
+
+00:05:02.946 --> 00:05:07.896 align:middle
+FROM translation' (traducción es el nombre
+de la tabla de nuestra entidad Translation.)
+
+00:05:08.516 --> 00:05:11.516 align:middle
+¡Perfecto! Nuestras dos entidades de
+traducción están en la base de datos.
+
+00:05:12.146 --> 00:05:15.276 align:middle
+A continuación, escribiremos la lógica que
+carga las traducciones de la base de datos
+
+00:05:15.276 --> 00:05:17.936 align:middle
+y traduce nuestras entidades Translatable.
