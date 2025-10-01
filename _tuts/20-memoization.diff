@@ -1,5 +1,5 @@
 diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
-index 5e3eaa9..59262b6 100644
+index c6561d8..2762a65 100644
 --- a/object-translation-bundle/src/ObjectTranslator.php
 +++ b/object-translation-bundle/src/ObjectTranslator.php
 @@ -9,12 +9,15 @@ use SymfonyCasts\ObjectTranslationBundle\Model\Translation;

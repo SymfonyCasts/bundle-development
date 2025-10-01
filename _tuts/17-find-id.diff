@@ -13,7 +13,7 @@ index 98c7700..6343104 100644
  
          ->alias(ObjectTranslator::class, 'symfonycasts.object_translator')
 diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
-index 3a9012f..a869017 100644
+index 4708ae9..2d48bfc 100644
 --- a/object-translation-bundle/src/ObjectTranslator.php
 +++ b/object-translation-bundle/src/ObjectTranslator.php
 @@ -2,8 +2,10 @@

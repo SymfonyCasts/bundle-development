@@ -1,5 +1,5 @@
 diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
-index b58593f..3a9012f 100644
+index b58593f..4708ae9 100644
 --- a/object-translation-bundle/src/ObjectTranslator.php
 +++ b/object-translation-bundle/src/ObjectTranslator.php
 @@ -3,6 +3,7 @@
@@ -15,7 +15,7 @@ index b58593f..3a9012f 100644
      private function translationsFor(object $object, string $locale): array
      {
 +        $class = new \ReflectionClass($object);
-+        $type = $class->getAttributes(Translatable::class)[0]?->newInstance()->type ?? null;
++        $type = $class->getAttributes(Translatable::class)[0]?->newInstance()->name ?? null;
 +
 +        if (!$type) {
 +            throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));

@@ -1,5 +1,5 @@
 diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
-index a869017..5e3eaa9 100644
+index 2d48bfc..c6561d8 100644
 --- a/object-translation-bundle/src/ObjectTranslator.php
 +++ b/object-translation-bundle/src/ObjectTranslator.php
 @@ -44,11 +44,27 @@ final class ObjectTranslator
