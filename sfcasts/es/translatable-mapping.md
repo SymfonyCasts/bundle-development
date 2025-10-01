@@ -66,7 +66,7 @@ symfony console make:factory
 
 Crear una fábrica para la entidad `Translation`: `0` en esta lista.
 
-Si volvemos a nuestro directorio `Factory`, aquí está: `TranslationFactory`. En `defaults()`, se han detectado todos los campos y se están generando datos falsos para ellos. Vamos a anular todo esto cuando lo creemos, así que no hace falta editar nada aquí, sólo necesitamos que exista esta fábrica. 
+Si navegamos de nuevo a nuestro directorio `Factory`, aquí está: `TranslationFactory`. En `defaults()`, se han detectado todos los campos y se están generando datos falsos para ellos. Vamos a anular todo esto cuando lo creemos, así que no hace falta editar nada aquí, sólo necesitamos que exista esta fábrica. 
 
 Ahora, en `AppStory`, encuentra el primer artículo "Por qué los asteroides saben a beicon". Asigna este artículo creado a una variable con `$article1 = `:
 
