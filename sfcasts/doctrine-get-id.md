@@ -43,7 +43,7 @@ Even if your entity only has a single ID field, Doctrine still returns it
 as an array. Remove the `dd()` and add a check: `if (count($id) > 1)`. Inside,
 `throw new \LogicException(sprintf('Class "%s" must have a single identifier to be translatable', $object::class))`:
 
-[[[ code('a97732e72e1') ]]]
+[[[ code('a97732e72e') ]]]
 
 Grab the first element of the array with `$id = reset($id)`:
 
