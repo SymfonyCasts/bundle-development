@@ -13,10 +13,16 @@ Mark it as `final` and add a class-level docblock. In it, write `@internal`. Thi
 is another trick to let users know this class isn't meant to be used directly
 in their apps. Shh... it's a secret!
 
-Next, have it extend `AbstractExtension` from Twig. Now, override a single method:
+Next, have it extend `AbstractExtension` from Twig:
+
+[[[ code('3be97cff16') ]]]
+
+Now, override a single method:
 `getFilters()`, and mark the return type as `array`. Inside, return an array with a
 single element: `new TwigFilter()`. The first argument is the name of our filter,
-`translate_object`.
+`translate_object`:
+
+[[[ code('664453d150') ]]]
 
 ## Wiring Up the Extension
 
@@ -26,13 +32,19 @@ Now, because this is an internal service we don't want users to see, we can mark
 as *hidden* by prefixing the service ID with `.`. I'll show you later how this affects
 things.
 
-The second argument is the class name: `ObjectTranslatorExtension::class`. Check this out,
+The second argument is the class name: `ObjectTranslatorExtension::class`:
+
+[[[ code('bc092d5fc8') ]]]
+
+Check this out,
 PhpStorm formats the class name with a strikethrough. This is because of that `@internal` flag. It's
 detecting we're trying to use it outside our bundle's `src` directory. In this case, it's a false
 positive - we really need to use it here. But in a user's app, this strikethrough would hopefully
 discourage them from using it directly.
 
-Finally, tag it as a `twig.extension` with `->tag('twig.extension')`.
+Finally, tag it as a `twig.extension` with `->tag('twig.extension')`:
+
+[[[ code('35d9edefc4') ]]]
 
 ## Extension Code
 
@@ -46,12 +58,18 @@ as well. We want to avoid that, and make it lazy. Twig Runtimes to the rescue!
 ## Twig Runtime
 
 For the second argument, after `translate_object`, create an array:
-`[ObjectTranslator::class, 'translate']`. This isn't a *true* callable since
+`[ObjectTranslator::class, 'translate']`:
+
+[[[ code('48daacf147') ]]]
+
+This isn't a *true* callable since
 `translate()` isn't static. But Twig understands `ObjectTranslator` might be a runtime and will
 lazily load this class and call `translate()` on it when the filter is used.
 
 We just need to mark `ObjectTranslator` as a Twig runtime. Over in `services.php`, under
-the first service, our object translator, add a tag: `->tag('twig.runtime')`.
+the first service, our object translator, add a tag: `->tag('twig.runtime')`:
+
+[[[ code('9bfef3af7d') ]]]
 
 Now, if you've written Twig runtimes before, you might have created a dedicated class for it.
 This isn't strictly required! You can make any service as a runtime with this tag. Then, in your
@@ -63,7 +81,9 @@ Let's give it a whirl! Our article show page is already translating object fine,
 use the filter in the index - where we list all articles. Open `templates/article/index.html.twig`.
 
 Inside the articles loop, at the very top, override the `article` with the translated
-version: `{% set article = article|translate_object %}`.
+version: `{% set article = article|translate_object %}`:
+
+[[[ code('ed58b7aa9c') ]]]
 
 Jump over to the browser and refresh. We're on the English homepage, so switch to French...
 

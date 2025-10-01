@@ -18,11 +18,15 @@ method, where we're creating a new `TranslatedObject`, we need to add a
 second argument.
 
 Stub out a method for this: `$this->translationsFor()`. Pass `$object` and
-`$locale`.
+`$locale`:
+
+[[[ code('2e9447f2d1') ]]]
 
 This method doesn't exist, so generate it with PhpStorm. Cool! It knew the parameter
 type-hints! This method needs to return the translated values as an array, keyed
-by property names. So, set the return type to `array`.
+by property names. So, set the return type to `array`:
+
+[[[ code('bcb1bf9ee0') ]]]
 
 ## Translatable "Name"
 
@@ -30,7 +34,9 @@ First, we need to determine if this object is translatable, and if so, get
 the `$name` property from the `Translatable` attribute.
 
 We can use PHP's reflection system to do this. Create a `ReflectionClass`
-for the passed object: `$class = new \ReflectionClass($object)`.
+for the passed object: `$class = new \ReflectionClass($object)`:
+
+[[[ code('ad63aaf539') ]]]
 
 Now, we need to fetch the attribute: `$type = $class->getAttributes()`. By default,
 this will return *all* attributes used on this class - since we only want
@@ -40,15 +46,23 @@ only allow one `Translatable` attribute per class, we can safely get the first e
 `[0]`. This class *might* not have the attribute, so use the null-safe operator, `?->`, and call
 `newInstance()`. This instantiates our `Translatable` attribute class. Now that we have the object,
 grab the name with `->name`. Because of the null-safe check, this whole thing might
-be null, so use the null coalescing operator, `??`, and default to `null`.
+be null, so use the null coalescing operator, `??`, and default to `null`:
+
+[[[ code('ac68c3c065') ]]]
 
 Ensure we have a type with `if (!$type)`. Inside,
-`throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));`.
+`throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));`:
+
+[[[ code('db23ed3c28') ]]]
 
 ## `ManagerRegistry` Service
 
 Now we need to fetch the translations from Doctrine. In our constructor, inject
-another service: `private ManagerRegistry $doctrine`. This is the "one
+another service: `private ManagerRegistry $doctrine`:
+
+[[[ code('5db729302f') ]]]
+
+This is the "one
 Doctrine service to rule them all". You might be used to using the
 *Entity Manager* or *em*. The `ManagerRegistry` is a level above. You can get
 pretty complex with Doctrine, multiple databases and multiple entity, or object
@@ -66,7 +80,11 @@ symfony console debug:autowiring ManagerRegistry
 
 Here we go: `alias:doctrine` - `doctrine` is the service ID - that's a short one!
 Copy that and back in `services.php`, define it as the fourth argument:
-`service()`, paste. Perfect!
+`service()`, paste:
+
+[[[ code('309d7a1635') ]]]
+
+Perfect!
 
 ## Fetching Translations
 
@@ -80,7 +98,9 @@ Look familiar? `findBy()` is what we want. We'll pass an array of criteria,
 or filters. First? `'locale' => $locale`. Second, the object type:
 `'objectType' => $type`. Finally, object ID: `'objectId' =>`... hmm... what
 should we use here? If we look at one of our app's entities, we can see they
-all have a `getId()` method. For now, let's just use that: `$object->getId()`.
+all have a `getId()` method. For now, let's just use that: `$object->getId()`:
+
+[[[ code('9e164e97d4') ]]]
 
 Make sure we're on the right track by `dd($translations)`, jump over to the browser
 and refresh.
@@ -92,17 +112,25 @@ to be *normalized* into a simple array of key-value pairs.
 
 Back in our code, remove the `dd()`. To help with the next step, above `$translations`,
 add a docblock comment with `@var $translations`. For the type, `Translation` - import
-the one from our bundle. Suffix with `[]` to indicate it's an array of these objects.
+the one from our bundle. Suffix with `[]` to indicate it's an array of these objects:
 
-Create a new array variable for our normalized translations: `$translationValues = []`.
+[[[ code('b286e053d0') ]]]
+
+Create a new array variable for our normalized translations: `$translationValues = []`:
+
+[[[ code('8fb47fffd4') ]]]
 
 Loop over the translation entities with `foreach ($translations as $translation)`. Inside,
-set the key-value pair: `$translationValues[$translation->field] = $translation->value`.
+set the key-value pair: `$translationValues[$translation->field] = $translation->value`:
+
+[[[ code('ba99e95dc7') ]]]
 
 `dd($translationValues)` to check our work. Jump back to the browser and refresh.
 Beautiful! This is exactly the format we need!
 
-Remove the `dd()` and `return $translationValues`.
+Remove the `dd()` and `return $translationValues`:
+
+[[[ code('6048411f77') ]]]
 
 Moment of truth! Back in the browser, refresh the page. Boom! "French title" and "French content".
 

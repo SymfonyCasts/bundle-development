@@ -10,7 +10,9 @@ filter - only when we need it.
 First, delete the `set article` override. Then, down here, where we actually
 need the translated version - for title and content. Change `article.title`
 to `article|translate_object.title` and do the same for content:
-`article|translate_object.content`.
+`article|translate_object.content`:
+
+[[[ code('eae757dd6f') ]]]
 
 Jump back to our browser - we're on the French homepage. Before refreshing,
 notice the query count in the web debug toolbar. 4, one query to fetch all
@@ -31,7 +33,9 @@ could lead to memory leaks. In long-running processes, this array could grow
 indefinitely.
 
 Instead, we'll use a special PHP core object called a `WeakMap`. Add a new property,
-`private \WeakMap $translatedObjects`.
+`private \WeakMap $translatedObjects`:
+
+[[[ code('fec6df920b') ]]]
 
 This is like an array, but it's keyed by objects, not strings or integers like you're used to.
 In PHP, when an object is created and passed around, it's actually a reference to
@@ -42,12 +46,17 @@ is different, it holds the object but doesn't prevent it from being cleaned up -
 *weak reference*. This is perfect for our use case!
 
 To use it, we need to instantiate it first, so in the constructor,
-`$this->translatedObjects = new \WeakMap()`.
+`$this->translatedObjects = new \WeakMap()`:
+
+[[[ code('f135e5fa61') ]]]
 
 Down in the `translate()` method, this `translationFor()` call is expensive, it's making
 a database query. So, let's save this whole `TranslatedObject` in our `WeakMap`.
 Right after `return`, write `$this->translatedObjects` - what to key it by? The original `$object`!
-Now, use the null coalescing assignment operator `??=` and then create the `TranslatedObject`.
+Now, use the null coalescing assignment operator `??=` and then create the `TranslatedObject`:
+
+[[[ code('960494a0c8') ]]]
+
 This checks if the translated object is already in the weak map (for the original object). If so,
 return that. Otherwise, create a new `TranslatedObject`, store it in the weak map, and return it.
 If the original object is cleaned up by PHP, it'll automatically be removed from the weak map.

@@ -31,12 +31,16 @@ used to mark an entity as translatable. Make it `final`. To let PHP
 know that this is an attribute, we need to use an attribute! Above the class,
 write `#[\Attribute()]`. The first argument is what type of element this
 attribute can be applied to. In our case, we want to apply this to classes,
-so write `\Attribute::TARGET_CLASS`.
+so write `\Attribute::TARGET_CLASS`:
+
+[[[ code('02ed7ee669') ]]]
 
 We need to pass in one argument to this attribute: the `name`. This is that string
 *alias* we'll store in the database instead of the class name. Create a constructor
 with `public function __construct()`. Now add a single, mandatory argument (that's also
-a property): `public string $name`.
+a property): `public string $name`:
+
+[[[ code('a96d3a0e12') ]]]
 
 ## Creating the `TranslatableProperty` Attribute
 
@@ -49,21 +53,33 @@ Also in the `Mapping` directory, create another PHP class called
 used as a *property marker*.
 
 Mark the class as an attribute with `#[\Attribute()]`. This time, we want to
-apply this attribute to properties, so use `\Attribute::TARGET_PROPERTY`.
+apply this attribute to properties, so use `\Attribute::TARGET_PROPERTY`:
+
+[[[ code('2505f059c4') ]]]
 
 ## Marking Entities as Translatable
 
 Now that our attributes are ready, let's go to our app's entities and mark them.
 Start with `Article`. Above the class, add the attribute
-`#[Translatable('article')]`. Now, identify the properties that are
+`#[Translatable('article')]`:
+
+[[[ code('93fc418149') ]]]
+
+Now, identify the properties that are
 going to be translatable. Above `$title`, add
-`#[TranslatableProperty]` and do the same for `$content`.
+`#[TranslatableProperty]` and do the same for `$content`:
+
+[[[ code('d78daff195') ]]]
 
 Next, mark `Category` as translatable with `#[Translatable('category')]`.
-The `$name` property will be a `TranslatableProperty`.
+The `$name` property will be a `TranslatableProperty`:
+
+[[[ code('4aa0bf2697') ]]]
 
 Finally, mark `Tag` as `#[Translatable('tag')]` and again, the `$name`
-property will be the only `TranslatableProperty`.
+property will be the only `TranslatableProperty`:
+
+[[[ code('88ef4d0773') ]]]
 
 Both our `Tag` and `Category` have a single translatable property.
 `Article` has two: `$content` and `$title`. Nice!
@@ -90,19 +106,27 @@ generating fake data for them. We're going to override all of these when we
 create it, so no need to edit anything here - we just need this factory to exist. 
 
 Now, in `AppStory`, find the first article "Why asteroids taste like bacon".
-Assign this created article to a variable with `$article1 = `. We do this
-because we need to get its ID to link our translations to it.
+Assign this created article to a variable with `$article1 = `:
+
+[[[ code('4b6bcfa305') ]]]
+
+We do this because we need to get its ID to link our translations to it.
 
 Below this fixture, create our first translation with `TranslationFactory::createOne()`.
 Inside, an array: `'locale' => 'fr'`, `'objectId' => $article1->getId()`,
 `'objectType' => 'article'`. Now, the first field we want to translate is the title,
-so `'field' => 'title'`. For the value, `'value' => 'French title...'`. Not super
-creative but it gets the job done.
+so `'field' => 'title'`. For the value, `'value' => 'French title...'`:
+
+[[[ code('ce5c1e900b') ]]]
+
+Not super creative but it gets the job done.
 
 Now for the content translation. Copy this whole `TranslationFactory::createOne()`
 and paste below. Change the `field` to `'content'` and the `value` to
 `'French content...'`. Leave everything else the same - as it's for the same
-object and locale.
+object and locale:
+
+[[[ code('c2ba8ba5a0') ]]]
 
 Good enough to get started!
 
