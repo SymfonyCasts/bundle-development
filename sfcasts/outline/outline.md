@@ -503,5 +503,69 @@
   - We want to cache the fetched translations db query
   - These probably won't change often
   - we could use "Doctrine result cache" but we'll use the standard Symfony cache instead
-- ...
+- In the constructor, add `private CacheInterface $cache`
+- Below `reset($id)` add:
+  - `return $this->cache->get()`
+  - first argument: `"object_translation.{$locale}.{$type}.{$id}"` - the "key"
+  - second argument: `function () {}`
+  - cut the remainder of the method and paste into this function
+  - `use ($locale, $type, $id)`
+- In `services.php`
+  - In the terminal run `symfony console debug:autowiring Cache` to find the service id
+  - `service('cache.app')`
+- Refresh french homepage - 4 queries
+- Refresh again... 1 query!
+- `symfony console cache:clear` - clear the cache
+- Refresh french homepage - 4 queries
+- Tag aware
+  - for the closure, inject `ItemInterface $item`
+  - We need to check if the adapter is cache-aware
+  - `if ($this->cache instanceof TagAwareCacheInterface)`
+  - `$item->tag(['object-translation', "object-translation-{$type}"])`
+  - Now users can invalid all object translations or just a specific type
+  - `symfony console cache:pool:invalidate-tags object-translation`
+  - `symfony console cache:pool:invalidate-tags object-translation-article`
+
+## Caching Configuration
+
+- In our bundle configuration
+- Below stringNode, add:
+  - `->arrayNode('cache')->end()`
+  - Inside, `->info('Cache settings for object translations.')`
+  - `->canBeDisabled()` enabled by default but user can disable caching entirely
+  - `->children()->end()`
+  - `->stringNode('pool')->end()`
+    - `->info('The cache pool to use for storing object translations.')`
+    - `->defaultValue('cache.app')`
+  - `->integerNode('ttl')->end()`
+    - `->info('The time-to-live for cached translations, in seconds. null for no expiration.')`
+    - `->defaultNull()`
+- Check the definition `symfony console config:dump-reference symfonycasts_object_translation`
+- Check the current config `symfony console debug:config symfonycasts_object_translation`
+- In `ObjectTranslator`
+  - move cache property above constructor, remove private and make nullable
+  - add `private ?int $cacheTtl = null`
+  - We'll use the null object pattern if cache disabled:
+  - In constructor: `$this->cache = $cache ?? new NullAdapter()`
+  - In `translationsFor()` callable:
+    - `if ($this->cacheTtl) { $item->expiresAfter($this->cacheTtl); }`
+- In `services.php`, remove the `cache` arg
+- In app, no caching should be used but should still work just fine
+- In `ObjectTranslationBundle::loadExtension()`
+  - `dd($config)` - refresh page
+  - `$objectTranslatorDef = $builder->getDefinition('symfonycasts.object_translator');`
+  - Use definition below to set the arg
+  - Below, `if ($config['cache']['enabled'])`
+    - `$objectTranslatorDef` (count the arguments in `services.php`)
+      - `->setArgument(4, new Reference($config['cache']['pool']))`
+        - `Reference` is a special object that tells the container to use a service
+      - `->setArgument(5, $config['cache']['ttl'])` (use the raw data here)
+- Back in app, refresh twice - cache is working!
+- Let's create a custom pool, in `config/packages/cache.yaml`
+  - `pools.object_translation.cache.tags: true` (to enable tagging)
+- In `config/packages/symfonycasts_object_translation.yaml`
+  - `cache.pool: 'cache.object_translation'`
+- Refresh twice - works!
+- `symfony console cache:pool:invalidate-tags object-translation`
+- Refresh - cache was cleared for object translations!
 
