@@ -60,8 +60,8 @@ chapters:
         tutsFirstStep: 20-memoization
         tutsLastStep: 20-memoization
     caching:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 21-cache
+        tutsLastStep: 21-cache-tags
     cache-configuration:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 22-cache-config
+        tutsLastStep: 22-custom-cache-pool
