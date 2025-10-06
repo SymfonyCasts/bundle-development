@@ -2,7 +2,7 @@
 
 Hemos hecho un montón de trabajo de configuración para llegar a este punto, pero ha llegado el momento del evento principal: traducir nuestros objetos. ¡Manos a la obra!
 
-Nuestra base de datos se ha cargado con estos accesorios. En nuestro navegador, haz clic en el primer artículo. Esta es la versión en inglés. Cuando cambiemos al francés, deberíamos ver esos valores de fixture franceses... Pero... tenemos un error...
+Nuestra base de datos se ha cargado con estos accesorios. En nuestro navegador, haz clic en el primer artículo. Esta es la versión en inglés. Cuando cambiemos al francés, deberíamos ver esos valores de fixture en francés... Pero... tenemos un error...
 
 "Demasiados pocos argumentos para... TranslatedObject::__construct()". Ah, sí, hemos añadido el argumento traducciones, pero aún no hemos actualizado nuestro `ObjectTranslator`. Perfecto, ¡ese es nuestro objetivo!
 
@@ -70,7 +70,7 @@ Asegúrate de que vamos por buen camino con `dd($translations)`, salta al navega
 
 ## Normalizar las traducciones
 
-De vuelta a nuestro código, elimina el `dd()`. Para ayudarte con el siguiente paso, encima de `$translations`, añade un comentario docblock con `@var $translations`. Para el tipo, `Translation` - importa el de nuestro bundle. Sufijo con `[]` para indicar que es una matriz de estos objetos:
+De vuelta a nuestro código, elimina el `dd()`. Para ayudarnos en el siguiente paso, encima de `$translations`, añade un comentario docblock con `@var $translations`. Para el tipo, `Translation` - importa el de nuestro bundle. Sufijo con `[]` para indicar que es una matriz de estos objetos:
 
 [[[ code('b286e053d0') ]]]
 
