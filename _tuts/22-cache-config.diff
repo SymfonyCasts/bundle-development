@@ -1,0 +1,104 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index aea65e9..89f7afa 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -13,7 +13,6 @@ return static function (ContainerConfigurator $container): void {
+                 param('kernel.default_locale'),
+                 abstract_arg('translation class'),
+                 service('doctrine'),
+-                service('cache.app'),
+             ])
+             ->tag('twig.runtime')
+ 
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index fa3e8ef..1f7496b 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappi
+ use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
++use Symfony\Component\DependencyInjection\Reference;
+ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+ use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+ 
+@@ -27,6 +28,19 @@ final class ObjectTranslationBundle extends AbstractBundle
+                         ->thenInvalid('The translation_class %s must extend SymfonyCasts\ObjectTranslationBundle\Model\Translation.')
+                     ->end()
+                 ->end()
++                ->arrayNode('cache')
++                    ->info('Cache settings for object translations.')
++                    ->canBeDisabled()
++                    ->children()
++                        ->stringNode('pool')
++                            ->info('The cache pool to use for storing object translations.')
++                            ->defaultValue('cache.app')
++                        ->end()
++                        ->integerNode('ttl')
++                            ->info('The time-to-live for cached translations, in seconds. null for no expiration.')
++                            ->defaultNull()
++                        ->end()
++                ->end()
+             ->end()
+         ;
+     }
+@@ -42,8 +56,13 @@ final class ObjectTranslationBundle extends AbstractBundle
+     {
+         $container->import('../config/services.php');
+ 
+-        $builder->getDefinition('symfonycasts.object_translator')
+-            ->setArgument(2, $config['translation_class'])
+-        ;
++        $objectTranslatorDef = $builder->getDefinition('symfonycasts.object_translator');
++
++        $objectTranslatorDef->setArgument(2, $config['translation_class']);
++
++        if ($config['cache']['enabled']) {
++            $objectTranslatorDef->setArgument(4, new Reference($config['cache']['pool']));
++            $objectTranslatorDef->setArgument(5, $config['cache']['ttl']);
++        }
+     }
+ }
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 1209e21..49e867a 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -3,6 +3,7 @@
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
+ use Doctrine\Persistence\ManagerRegistry;
++use Symfony\Component\Cache\Adapter\NullAdapter;
+ use Symfony\Contracts\Cache\CacheInterface;
+ use Symfony\Contracts\Cache\ItemInterface;
+ use Symfony\Contracts\Cache\TagAwareCacheInterface;
+@@ -12,6 +13,7 @@ use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+ 
+ final class ObjectTranslator
+ {
++    private CacheInterface $cache;
+     private \WeakMap $translatedObjects;
+ 
+     public function __construct(
+@@ -19,8 +21,10 @@ final class ObjectTranslator
+         private string $defaultLocale,
+         private string $translationClass,
+         private ManagerRegistry $doctrine,
+-        private CacheInterface $cache,
++        ?CacheInterface $cache = null,
++        private ?int $cacheTtl = null,
+     ) {
++        $this->cache = $cache ?? new NullAdapter();
+         $this->translatedObjects = new \WeakMap();
+     }
+ 
+@@ -74,6 +78,10 @@ final class ObjectTranslator
+                     $item->tag(['object-translation', "object-translation-{$type}"]);
+                 }
+ 
++                if ($this->cacheTtl) {
++                    $item->expiresAfter($this->cacheTtl);
++                }
++
+                 /** @var Translation[] $translations */
+                 $translations = $this->doctrine->getRepository($this->translationClass)->findBy([
+                     'locale' => $locale,

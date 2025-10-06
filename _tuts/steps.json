@@ -264,7 +264,32 @@
             "id": "20-memoization",
             "name": "20. memoization",
             "description": null
+        },
+        {
+            "id": "21-cache",
+            "name": "21. cache",
+            "description": null
+        },
+        {
+            "id": "21-cache-fn",
+            "name": "21. cache fn",
+            "description": null
+        },
+        {
+            "id": "21-cache-tags",
+            "name": "21. cache tags",
+            "description": null
+        },
+        {
+            "id": "22-cache-config",
+            "name": "22. cache config",
+            "description": null
+        },
+        {
+            "id": "22-custom-cache-pool",
+            "name": "22. custom cache pool",
+            "description": null
         }
     ],
-    "sha": "9b2c5a04bcb820d8071a1964b65a5989fb6ce9b1"
+    "sha": "7d588eeba6600189e76e4fb9911daa1a7b2c3861"
 }

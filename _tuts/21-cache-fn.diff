@@ -1,0 +1,55 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index 89f7afa..aea65e9 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -13,6 +13,7 @@ return static function (ContainerConfigurator $container): void {
+                 param('kernel.default_locale'),
+                 abstract_arg('translation class'),
+                 service('doctrine'),
++                service('cache.app'),
+             ])
+             ->tag('twig.runtime')
+ 
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 614af53..0127616 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -67,24 +67,22 @@ final class ObjectTranslator
+ 
+         return $this->cache->get(
+             "object_translation.{$locale}.{$type}.{$id}",
+-            function() {
++            function() use ($locale, $type, $id) {
++                /** @var Translation[] $translations */
++                $translations = $this->doctrine->getRepository($this->translationClass)->findBy([
++                    'locale' => $locale,
++                    'objectType' => $type,
++                    'objectId' => $id,
++                ]);
+ 
+-            }
+-        );
++                $translationValues = [];
+ 
+-        /** @var Translation[] $translations */
+-        $translations = $this->doctrine->getRepository($this->translationClass)->findBy([
+-            'locale' => $locale,
+-            'objectType' => $type,
+-            'objectId' => $id,
+-        ]);
++                foreach ($translations as $translation) {
++                    $translationValues[$translation->field] = $translation->value;
++                }
+ 
+-        $translationValues = [];
+-
+-        foreach ($translations as $translation) {
+-            $translationValues[$translation->field] = $translation->value;
+-        }
+-
+-        return $translationValues;
++                return $translationValues;
++            }
++        );
+     }
+ }

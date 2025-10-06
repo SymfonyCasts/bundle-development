@@ -1,0 +1,34 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 2762a65..614af53 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -3,6 +3,7 @@
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
+ use Doctrine\Persistence\ManagerRegistry;
++use Symfony\Contracts\Cache\CacheInterface;
+ use Symfony\Contracts\Translation\LocaleAwareInterface;
+ use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
+ use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+@@ -16,6 +17,7 @@ final class ObjectTranslator
+         private string $defaultLocale,
+         private string $translationClass,
+         private ManagerRegistry $doctrine,
++        private CacheInterface $cache,
+     ) {
+         $this->translatedObjects = new \WeakMap();
+     }
+@@ -63,6 +65,13 @@ final class ObjectTranslator
+ 
+         $id = reset($id);
+ 
++        return $this->cache->get(
++            "object_translation.{$locale}.{$type}.{$id}",
++            function() {
++
++            }
++        );
++
+         /** @var Translation[] $translations */
+         $translations = $this->doctrine->getRepository($this->translationClass)->findBy([
+             'locale' => $locale,
