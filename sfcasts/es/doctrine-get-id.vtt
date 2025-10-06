@@ -1,0 +1,136 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:05.216 align:middle
+Actualmente, nuestros datos de traducción al
+francés se muestran correctamente en la página.
+
+00:00:05.606 --> 00:00:11.226 align:middle
+Sin embargo, nuestro método actual de obtención del
+ID mediante $object->getId() es un poco inestable.
+
+00:00:11.686 --> 00:00:14.496 align:middle
+Asume que el usuario siempre
+tiene un método getId()
+
+00:00:14.496 --> 00:00:17.026 align:middle
+en sus entidades, lo que no siempre es el caso.
+
+00:00:17.426 --> 00:00:18.266 align:middle
+Podemos hacerlo mejor...
+
+00:00:18.376 --> 00:00:19.766 align:middle
+¡y Doctrine nos cubre las espaldas!
+
+00:00:20.456 --> 00:00:23.696 align:middle
+En nuestro método
+ObjectTranslator::translationsFor(),
+
+00:00:23.956 --> 00:00:26.706 align:middle
+encima de obtener las
+traducciones, haz algo de espacio.
+
+00:00:26.706 --> 00:00:35.576 align:middle
+Primero, coge el gestor de objetos de Doctrine:
+$om = $this->doctrine->getManagerForClass().
+
+00:00:36.116 --> 00:00:40.716 align:middle
+Esto necesita un nombre de clase, así que utiliza
+la clase del objeto pasado: $object::class:
+
+00:00:41.566 --> 00:00:44.676 align:middle
+Cuando utilices el ORM, habrás utilizado
+algo llamado gestor de entidades.
+
+00:00:44.986 --> 00:00:49.706 align:middle
+Esto es lo que tenemos aquí: el gestor de
+objetos es una interfaz más general para él.
+
+00:00:49.926 --> 00:00:53.966 align:middle
+De nuevo, utilizar estas interfaces abstractas
+hace que nuestro bundle sea más flexible.
+
+00:00:54.586 --> 00:00:57.616 align:middle
+getManagerForClass() puede devolver
+null, así que compruébalo:
+
+00:00:58.126 --> 00:01:05.536 align:middle
+if (!$om) { throw new \LogicException(sprintf('No
+se ha encontrado ningún gestor de
+
+00:01:05.536 --> 00:01:17.936 align:middle
+objetos para la clase "%s".', $object::class)); }: A
+continuación, $id = $om->getClassMetadata($object::class).
+
+00:01:18.546 --> 00:01:22.906 align:middle
+Esto devuelve un objeto especial que lo sabe
+todo sobre el mapeo de Doctrine para esta clase.
+
+00:01:23.506 --> 00:01:26.236 align:middle
+->getIdentifierValues() es lo que queremos.
+
+00:01:26.236 --> 00:01:31.256 align:middle
+Pasa la instancia $object: Esto
+recupera el ID del objeto pasado,
+
+00:01:31.256 --> 00:01:32.906 align:middle
+independientemente de cómo esté implementado.
+
+00:01:33.516 --> 00:01:35.636 align:middle
+dd($id) para ver de qué se trata.
+
+00:01:36.286 --> 00:01:37.716 align:middle
+En el navegador, actualiza.
+
+00:01:38.696 --> 00:01:40.956 align:middle
+Hmm... Es una matriz de valores...
+
+00:01:41.356 --> 00:01:46.396 align:middle
+Doctrine admite ID compuestos, lo que básicamente
+significa múltiples campos de ID para una entidad.
+
+00:01:46.976 --> 00:01:51.636 align:middle
+Se trata de una función bastante avanzada, y
+nuestro bundle, al menos inicialmente, no la admite.
+
+00:01:52.176 --> 00:01:56.896 align:middle
+Aunque tu entidad sólo tenga un campo
+ID, Doctrine lo devuelve como una matriz.
+
+00:01:57.496 --> 00:02:02.776 align:middle
+Elimina el dd() y añade una
+comprobación: if (count($id) > 1).
+
+00:02:03.396 --> 00:02:11.156 align:middle
+Dentro, lanza una nueva \LogicException(sprintf('La
+clase "%s" debe tener un único identificador
+
+00:02:11.156 --> 00:02:17.436 align:middle
+para ser traducible', $object::class)):
+Coge el primer elemento de la matriz
+
+00:02:17.436 --> 00:02:23.146 align:middle
+con $id = reset($id): dd() que...
+
+00:02:24.256 --> 00:02:25.376 align:middle
+y actualiza el navegador.
+
+00:02:26.216 --> 00:02:27.936 align:middle
+Perfecto, ¡un solo valor!
+
+00:02:28.626 --> 00:02:34.376 align:middle
+Elimina el dd() y abajo en nuestro array
+findBy(), sustituye $object->getId()
+
+00:02:34.446 --> 00:02:37.106 align:middle
+por $id: Pruébalo en el navegador...
+
+00:02:38.166 --> 00:02:39.246 align:middle
+¡y ha funcionado!
+
+00:02:39.246 --> 00:02:42.446 align:middle
+Nuestro ObjectTranslator
+funciona, y es bastante sólido.
+
+00:02:42.776 --> 00:02:45.246 align:middle
+A continuación, ¡creemos
+un filtro Twig para él!
