@@ -14,7 +14,7 @@ Cuando utilices el ORM, habrás utilizado algo llamado gestor de entidades. Esto
 
 [[[ code('e8675ab2bb') ]]]
 
-## Obtener el ID del gestor de objetos
+## Obtener el ID del Gestor de Objetos
 
 A continuación, `$id = $om->getClassMetadata($object::class)`. Esto devuelve un objeto especial que lo sabe todo sobre el mapeo Doctrine para esta clase. `->getIdentifierValues()`
 es lo que queremos. Pasa la instancia `$object`:
