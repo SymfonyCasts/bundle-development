@@ -1,10 +1,10 @@
 # Performance Optimization 1: Caching
 
-We have some in-memory memoization happening to reduce database calls, but
+We have some in-memory memoization happening to reduce database calls, but,
 only for the duration of a single request. We're still seeing 4 queries on
-the French home page. 1 to fetch the articles and 3 to fetch the translations
+the French homepage. 1 to fetch the articles and 3 to fetch the translations
 (1 per article). Since these translations likely won't change that often, let's
-implement a more persistent caching strategy.
+additionally implement a more persistent caching strategy.
 
 Dive into the code for the `ObjectTranslator` service. Down here in the
 `translationsFor()` method, this `findBy()` is what's making the queries.
@@ -81,7 +81,7 @@ your default `cache.app` does not. Check if it's supported by adding
 `if ($this->cache instanceof TagAwareCacheInterface)`. Make sure to import the
 one from `Symfony\Contracts\Cache`.
 
-Now we're able to add tags! Use `$item->tag()`. This takes an array. What tags
+Now we're able to add tags! Inside the if, write `$item->tag()`. This takes an array. What tags
 would be useful? How about `object-translation` and `object-translation-{$type}`.
 
 User's can now invalidate *all* object translations... or, just a specific type.
