@@ -268,12 +268,12 @@ Para ayudarte con el siguiente paso, encima de , añade un
 comentario docblock con . $translations @var $translations
 
 00:04:45.096 --> 00:04:48.236 align:middle
-Para el tipo, - importa el de
-nuestro bundle. Translation
+Para el tipo, Translation - importa el de
+nuestro bundle.
 
 00:04:48.716 --> 00:04:55.226 align:middle
-Sufijo con para indicar que es un array de estos
-objetos: Crea una nueva variable de matriz []
+Sufijo con [] para indicar que es un array de estos
+objetos: Crea una nueva variable de matriz
 
 00:04:55.226 --> 00:04:59.096 align:middle
 para nuestras traducciones
@@ -281,7 +281,7 @@ normalizadas: $translationValues = []:
 
 00:04:59.096 --> 00:05:05.596 align:middle
 Recorre las entidades de traducción con
-. foreach ($translations as $translation)
+foreach ($translations as $translation)
 
 00:05:06.376 --> 00:05:08.126 align:middle
 Dentro, establece el par clave-valor:
