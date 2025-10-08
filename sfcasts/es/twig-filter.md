@@ -16,7 +16,7 @@ Ahora, anula un único método:`getFilters()`, y marca el tipo de retorno como `
 
 [[[ code('664453d150') ]]]
 
-## Cableado de la extensión
+## Cablear la extensión
 
 ¡Es hora de conectar este bebé! En tu bundle `services.php`, debajo de `alias()`, define un nuevo servicio con `->set('symfonycasts.object_translator.twig_extension')`. Ahora, como se trata de un servicio interno que no queremos que vean los usuarios, podemos marcarlo como oculto anteponiendo al ID del servicio `.`. Más adelante te mostraré cómo afecta esto a las cosas.
 
