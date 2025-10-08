@@ -1,0 +1,3 @@
+# Symfony Flex Recipe
+
+Coming soon...

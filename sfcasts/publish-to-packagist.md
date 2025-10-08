@@ -1,0 +1,3 @@
+# 1.0 and Publish to Packagist
+
+Coming soon...

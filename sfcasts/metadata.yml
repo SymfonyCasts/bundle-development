@@ -65,3 +65,36 @@ chapters:
     cache-configuration:
         tutsFirstStep: 22-cache-config
         tutsLastStep: 22-custom-cache-pool
+    refactor-object-translator:
+        tutsFirstStep: null
+        tutsLastStep: null
+    cache-warmup-command:
+        tutsFirstStep: null
+        tutsLastStep: null
+    export-command:
+        tutsFirstStep: null
+        tutsLastStep: null
+    import-command:
+        tutsFirstStep: null
+        tutsLastStep: null
+    bundle-dependencies:
+        tutsFirstStep: null
+        tutsLastStep: null
+    integration-testing:
+        tutsFirstStep: null
+        tutsLastStep: null
+    metadata-php-cs-fixer:
+        tutsFirstStep: null
+        tutsLastStep: null
+    static-analysis:
+        tutsFirstStep: null
+        tutsLastStep: null
+    github-actions:
+        tutsFirstStep: null
+        tutsLastStep: null
+    flex-recipe:
+        tutsFirstStep: null
+        tutsLastStep: null
+    publish-to-packagist:
+        tutsFirstStep: null
+        tutsLastStep: null
