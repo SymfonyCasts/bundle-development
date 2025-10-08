@@ -1,0 +1,272 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:03.626 align:middle
+Tenemos nuestro servicio
+ObjectTranslator en pleno funcionamiento.
+
+00:00:04.016 --> 00:00:08.486 align:middle
+Se puede inyectar y utilizar en código PHP como
+estamos haciendo en ArticleController::show().
+
+00:00:09.056 --> 00:00:12.466 align:middle
+Ahora, animemos un poco las cosas
+y creemos un filtro Twig para él.
+
+00:00:12.956 --> 00:00:16.986 align:middle
+En object-translation-bundle/src,
+crea un nuevo directorio llamado Twig.
+
+00:00:17.976 --> 00:00:22.456 align:middle
+Dentro, una nueva clase PHP
+llamada ObjectTranslatorExtension.
+
+00:00:23.746 --> 00:00:27.126 align:middle
+Márcala como final y añade
+un docblock a nivel de clase.
+
+00:00:27.486 --> 00:00:29.566 align:middle
+En él, escribe @internal.
+
+00:00:30.246 --> 00:00:33.116 align:middle
+Este es otro truco para que los usuarios
+sepan que esta clase no está pensada
+
+00:00:33.116 --> 00:00:34.956 align:middle
+para ser utilizada directamente
+en sus aplicaciones.
+
+00:00:35.306 --> 00:00:36.556 align:middle
+Shh... ¡es un secreto!
+
+00:00:37.236 --> 00:00:42.606 align:middle
+A continuación, haz que extienda AbstractExtension
+de Twig: Ahora, anula un único método:
+
+00:00:42.816 --> 00:00:46.226 align:middle
+getFilters()y marca el
+tipo de retorno como array.
+
+00:00:47.186 --> 00:00:51.736 align:middle
+Dentro, devuelve una matriz con un
+único elemento: new TwigFilter().
+
+00:00:52.386 --> 00:00:58.456 align:middle
+El primer argumento es el nombre de nuestro filtro,
+translate_object: ¡Es hora de conectar este bebé!
+
+00:00:58.946 --> 00:01:03.736 align:middle
+En tu bundle services.php, debajo
+de alias(), define un nuevo servicio
+
+00:01:03.736 --> 00:01:09.886 align:middle
+con ->set('symfonycasts.object_translator.twig_extension').
+Ahora,
+
+00:01:10.536 --> 00:01:13.886 align:middle
+como se trata de un servicio interno
+que no queremos que vean los usuarios,
+
+00:01:14.226 --> 00:01:17.256 align:middle
+podemos marcarlo como oculto anteponiendo
+al ID del servicio el prefijo ..
+
+00:01:17.256 --> 00:01:19.886 align:middle
+Más adelante te mostraré
+cómo afecta esto a las cosas.
+
+00:01:20.436 --> 00:01:24.786 align:middle
+El segundo argumento es el nombre de la clase:
+ObjectTranslatorExtension::class: Fíjate
+
+00:01:25.416 --> 00:01:28.996 align:middle
+, PhpStorm formatea el nombre
+de la clase con un tachado.
+
+00:01:29.366 --> 00:01:31.636 align:middle
+Esto se debe a la bandera @internal.
+
+00:01:31.986 --> 00:01:35.426 align:middle
+Detecta que estamos intentando utilizarla
+fuera del directorio src de nuestro bundle. En
+
+00:01:35.856 --> 00:01:39.196 align:middle
+este caso, es un falso positivo: realmente
+necesitamos utilizarlo aquí. Pero
+
+00:01:39.646 --> 00:01:42.996 align:middle
+en la aplicación de un usuario, es de
+esperar que este tachado le disuada de
+
+00:01:42.996 --> 00:01:44.136 align:middle
+utilizarlo directamente. Por último,
+
+00:01:45.026 --> 00:01:50.266 align:middle
+etiquétalo como twig.extension
+con ->tag('twig.extension'):
+
+00:01:51.036 --> 00:01:52.996 align:middle
+Volver a ObjectTranslatorExtension. Este
+
+00:01:53.586 --> 00:01:55.676 align:middle
+filtro Twig todavía no hace nada.
+
+00:01:56.126 --> 00:01:59.696 align:middle
+El segundo argumento de TwigFilter
+es una llamada que hace el trabajo.
+
+00:02:00.376 --> 00:02:03.666 align:middle
+Podríamos inyectar nuestro
+ObjectTranslator en un constructor y
+
+00:02:03.796 --> 00:02:06.216 align:middle
+llamar aquí a su método translate() pero...
+
+00:02:06.446 --> 00:02:07.706 align:middle
+no es la mejor idea. Todas las
+
+00:02:08.166 --> 00:02:10.986 align:middle
+extensiones de Twig se cargan cada
+vez que se carga Twig. Incluso
+
+00:02:11.546 --> 00:02:15.336 align:middle
+si no estamos utilizando este filtro,
+se instanciaría este objeto y
+
+00:02:15.336 --> 00:02:17.166 align:middle
+también nuestro ObjectTranslator.
+
+00:02:17.556 --> 00:02:19.566 align:middle
+Queremos evitar eso y hacerlo perezoso. ¡ Twig
+
+00:02:20.106 --> 00:02:21.606 align:middle
+Runtimes al rescate! Para
+
+00:02:22.196 --> 00:02:28.016 align:middle
+el segundo argumento, después de translate_object,
+crea una matriz: [ObjectTranslator::class, 'translate']:
+
+00:02:28.836 --> 00:02:33.376 align:middle
+No es una verdadera llamada, ya que
+translate() no es estática. Pero
+
+00:02:33.616 --> 00:02:38.466 align:middle
+Twig entiende que ObjectTranslator puede ser un
+runtime y cargará perezosamente esta clase y
+
+00:02:38.466 --> 00:02:40.996 align:middle
+llamará a translate() en ella
+cuando se utilice el filtro.
+
+00:02:41.386 --> 00:02:44.596 align:middle
+Sólo tenemos que marcar ObjectTranslator
+como tiempo de ejecución Twig.
+
+00:02:45.176 --> 00:02:52.096 align:middle
+En services.php, bajo el primer servicio, nuestro traductor
+de objetos, añade una etiqueta: ->tag('twig.runtime'):
+
+00:02:52.356 --> 00:02:56.696 align:middle
+Ahora bien, si has escrito antes
+tiempos de ejecución Twig,
+
+00:02:56.926 --> 00:02:59.266 align:middle
+puede que hayas creado una
+clase dedicada para ello. Esto
+
+00:02:59.626 --> 00:03:01.226 align:middle
+no es estrictamente necesario
+
+00:03:01.706 --> 00:03:04.006 align:middle
+Puedes hacer que cualquier servicio sea un
+tiempo de ejecución con esta etiqueta. Luego,
+
+00:03:04.466 --> 00:03:07.566 align:middle
+en tus extensiones, puedes hacer
+referencia a él como hemos hecho aquí. ¡
+
+00:03:08.346 --> 00:03:09.236 align:middle
+Vamos a probarlo! Nuestra
+
+00:03:09.626 --> 00:03:13.806 align:middle
+página de presentación de artículos ya está traduciendo
+bien el objeto, así que vamos a utilizar el filtro en
+
+00:03:13.806 --> 00:03:16.326 align:middle
+el índice, donde listamos
+todos los artículos. Abre
+
+00:03:16.926 --> 00:03:20.526 align:middle
+templates/article/index.html.twig. Dentro
+
+00:03:21.226 --> 00:03:24.706 align:middle
+del bucle de artículos, en la parte
+superior, sustituye article por
+
+00:03:24.706 --> 00:03:31.056 align:middle
+la versión traducida: {% set article
+= article|translate_object %}:
+
+00:03:31.796 --> 00:03:33.596 align:middle
+Salta al navegador y actualiza.
+
+00:03:34.146 --> 00:03:36.646 align:middle
+Estamos en la página de inicio en inglés,
+así que cambia al francés... ¡Ya está!
+
+00:03:37.366 --> 00:03:40.886 align:middle
+El título y el contenido del primer
+artículo están en francés. ¡ Nuestro
+
+00:03:41.146 --> 00:03:42.596 align:middle
+filtro Twig funciona!
+
+00:03:43.196 --> 00:03:45.346 align:middle
+Por supuesto, los demás artículos
+siguen en inglés, ya que
+
+00:03:45.346 --> 00:03:47.566 align:middle
+aún no hemos configurado
+traducciones para ellos.
+
+00:03:48.266 --> 00:03:52.846 align:middle
+Vamos a dar un pequeño rodeo para entender cómo funcionan
+los servicios ocultos, los que llevan el prefijo ..
+
+00:03:52.846 --> 00:04:00.436 align:middle
+En tu terminal, ejecuta: symfony
+console debug:container symfonycasts Ok,
+
+00:04:00.486 --> 00:04:04.296 align:middle
+vemos dos servicios,
+symfonycasts.object_translator y
+
+00:04:04.506 --> 00:04:07.846 align:middle
+ObjectTranslator como clase
+- este es nuestro alias.
+
+00:04:08.736 --> 00:04:11.496 align:middle
+No vemos nuestro servicio de extensión
+Twig porque está oculto. Oculto
+
+00:04:11.906 --> 00:04:15.576 align:middle
+no significa "que no esté", ni siquiera "que no
+se pueda utilizar", simplemente están excluidos
+
+00:04:15.576 --> 00:04:17.586 align:middle
+por defecto al listar los servicios. Ejecuta
+
+00:04:18.016 --> 00:04:22.816 align:middle
+de nuevo el comando, pero añade
+--show-hidden: ¡Ya está! La
+
+00:04:23.056 --> 00:04:25.896 align:middle
+primera entrada es nuestro servicio oculto
+de extensión Twig. A continuación, vamos
+
+00:04:26.526 --> 00:04:29.146 align:middle
+a trabajar en algunas
+optimizaciones de rendimiento para
+
+00:04:29.146 --> 00:04:31.336 align:middle
+mantener las consultas a la
+base de datos bajo control.
