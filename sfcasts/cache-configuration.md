@@ -1,118 +1,161 @@
 # Cache Configuration
 
-Great! We've set up caching for our object translations. Now, let's go a
-step further and add some configuration to our bundle. This way, we can
-give our end users the ability to tweak it a bit.
+Our object translations are successfully being cached! I now want to
+allow the user to configure their cache pool and *how long* to cache
+the translations. Let's use our old friend, the bundle configuration to
+do this.
 
-So, the first thing we're going to do is dive into our `object translation
-bundle`. Here, we have a `configure` section and just below the end of the
-`string node`, we're going to add an `array node`. We're doing this because
-we want to provide a few options for caching configuration, which we'll
-call `cache`. Finish this off with an `end`.
+## An ArrayNode
 
-The first thing we'll add is some `info` cache settings for object
-translations. The exciting part is that the user can disable this whole
-setup if they want to. We can set this up with the `add arrow can be
-disabled` command.
+Open up our `ObjectTranslationBundle` and find the `configure()` method.
+We'll allow two options for caching: the *cache pool* to use, and the
+*time to live* or *ttl* - how long we want the cache to be valid. We
+can group these two options.
 
-# Adding Child Nodes
+Below the `->stringNode()`'s `->end()`, add an `->arrayNode()` and call
+it `cache`. Close it with an `->end()`, and add some space. Add a
+description with `->info('Cache settings for object translations.')`.
 
-Now, we're going to add some 'children' to this `array node`. As usual,
-let's not forget to add an `end` at the end.
+I want the user to be able to disable this whole node to prevent caching entirely. There's
+a shortcut for this: `->canBeDisabled()`. This automatically adds a
+boolean `enabled` option and defaults to `true`. 
 
-The first child is going to be a `string node` for the `pool` or the `cache
-pool` that the user wants to use. We'll finish this off with an `end` and
-add some `info` regarding the `cache pool` to use for storing object
-translations. For the default value, we'll use the `cache app` which every
-Symfony app has. Sounds neat, right?
+***TIP
+There's also a `canBeEnabled()` method if you want the default to be
+`false`.
+***
 
-Next, we're going to add one more thing - the `time to live` or how long we
-want the cache to live before it's considered invalid and then refreshes
-itself. For this, we'll add an `integer node` because it'll be the number
-in seconds. We'll call it `ttl`. If the user does not want, they can
-disable expiration entirely with this. Our default for this will be
-`default null`. Even though it's an `integer node`, you're still allowed to
-have a `default null` for this. That's going to be our default bundle
-settings.
+## Adding Children
 
-# Debugging the Config
+Now to add the two sub-options: Write `->children()` and close it with an
+`->end()`.
 
-Let's now debug this config to see what it looks like. We can do this by
-jumping over to our terminal and running the following command:
+The first child is going to be `->stringNode('pool')->end()`. Inside,
+`->info('The cache pool to use for storing object translations.')`. I
+know every Symfony app has a `cache.app` pool, so use this as the default
+value with `->defaultValue('cache.app')`.
 
-```terminal
-symfony console config dump reference symfony casts object
-translation
-```
+Next, add an `->integerNode('ttl')->end()` and inside,
+`->info('The time-to-live for cached translations, in seconds. null for no expiration')`.
+Even though this is an integer node, unless we explicitly disallow it, `null`
+can be used. By default, I want no expiration, so `->defaultNull()`.
 
-Great! So, we have our new node setting. Notice how `can be disabled`
-automatically added `enabled true` to it. This gives the user the ability
-to disable this whole setup if they want to.
+## Debugging the Config
 
-There's another command we can use to dump the current config as it's
-configured. This is:
+Double check this all looks right by jumping over to your terminal and running:
 
 ```terminal
-symfony console debug config symfony casts object translation
+symfony console config:dump-reference symfonycasts_object_translation
 ```
 
-# Injecting the ObjectTranslator
+Beautiful, nicely documented configuration! Check out the `enabled` option
+automatically added by `canBeDisabled()`.
 
-Now, we need to work on getting this injected. In our `ObjectTranslator`,
-we're going to make caching optional. We'll move this property up and take
-away the `private` from here, and make this `nullable`.
-
-Then we're going to inject an `integer` for the `ttl` - `private int cache
-ttl equals null`. We could do a check to see if the cache has been
-injected, but let's use the null object pattern here so we can do `this
-cache equals cache or new null adapter`. This way, we won't have to worry
-about doing a check for this.
-
-# Configuring for Use
-
-Finally, we need to configure this to use the config. We'll go to our
-bundle services and just remove `cache app`, which will be set later.
-
-Now, we can go back to our `translation bundle` and down where we're
-loading the config, we can quickly see what we're dealing with.
-
-If we refresh the page, we can see our `cache array`. We can see `enabled
-true`, and then here's our `pool`.
-
-Now, let's set `objectTranslatorDef` as a variable because we're going to
-be reusing this definition and inject the `translation class`.
-
-Down here, we will check if caching is enabled with `if config cache
-enabled`. If it is, we'll inject the `cache pool` with `setArgument` and,
-finally, the `ttl` with `set argument`.
-
-Let's quickly clear our whole cache to make sure that we're starting fresh.
-
+There's another command to actually show the current config (and all the default
+values) for a bundle. Run:
 
 ```terminal
-symfony console cache clear
+symfony console debug:config symfonycasts_object_translation
 ```
 
-# Testing and Refactoring
+Cool, this is the config that our bundle will be loading.
 
-Now, if we go back to our French homepage and refresh, we can see it's
-using our cache.
+## Optional `CacheInterface`
 
-To illustrate how the tagging system works, let's set up a custom pool. In
-our app's `config packages cache`, down in `pools`, uncomment this and
-we'll create a custom pool called `object translation cache`.
+Now to prepare our code for the new config. Open up `ObjectTranslator.php`. Because
+caching is now optional, we need to allow null for the `CacheInterface`.
+First, copy this property and paste it above the constructor.
 
-Finally, we can configure it for our bundle in `symfony cast object
-translation bundle`.
+In the constructor, remove `private`, we want this just as a normal argument.
+Make it nullable by prefixing the type-hint with `?` and give it a default value
+of `null`.
 
-With that done, we can see how the tag invalidation works by running:
+Below, add a new property argument for the ttl: `private ?int $cacheTtl = null`.
+
+We could add some checks to only use caching if a cache adapter was injected...
+but... there's a cleaner way to do this. The *null object pattern*.
+
+Inside the constructor, write `$this->cache = $cache ?? new NullAdapter()`.
+Sweet, now we don't have to change any code that uses the cache!
+
+Now to use the `cacheTtl` value. Down in `translationsFor()`, inside the callable,
+we already injected the `ItemInterface` - this is what we set the expiration on.
+
+Add a check to see if the ttl is set: `if ($this->cacheTtl)`. Inside:
+`$item->expiresAfter($this->cacheTtl)`. Done!
+
+## Using the Configuration
+
+Finally, we need to adjust our service definition to *use* our new
+configuration.
+
+Open up our bundle's `services.php` and remove the `service('cache.app')`
+argument. It's optional now and will be configured based on the user's config.
+
+Now, go to `ObjectTranslationBundle::loadExtension()`. To double-check
+what our `$config` looks like, `dd` it... and... back in the browser, refresh.
+
+Perfect, here's our cache array, the two options, plus enabled.
+
+Back in `loadExtension()`, remove the `dd`. Because we're going to be
+using this service definition multiple times, we'll create a variable
+for it. Copy the `$builder->getDefinition(...)`, and above, write
+`$objectTranslatorDef =` and... paste.
+
+Below, refactor to call `->setArgument()` on our new variable. Setting
+the `translation_class` is always required, but we only set the cache if
+enabled.
+
+Write `if ($config['cache']['enabled'])`. Inside, we'll configure
+the cache pool and ttl arguments. First, `$objectTranslatorDef->setArgument()`.
+Find the argument index by quickly jumping back to the `ObjectTranslator` constructor,
+and count the arguments, 0, 1, 2, 3, 4. Got it!
+
+Use `4` as the first argument, and for the second, we can't just use the raw
+`pool` string - it needs to be a service reference. So write
+`new Reference()`, be sure to import this from the DependencyInjection namespace.
+Inside, pass `$config['cache']['pool']`. 
+
+For the ttl, we *can* use the raw integer, so
+`$objectTranslatorDef->setArgument(5, $config['cache']['ttl'])`.
+
+I think we're good to go! First, let's make sure our app's cache is cleared.
+At your terminal, run:
 
 ```terminal
-symfony console cache pool invalidate tags tags object
-translation
+symfony console cache:clear
 ```
 
-Great! The tag invalidation is working as well. Now that we've got this
-far, let's look at doing a bit of refactoring to clean up our rather large
-`ObjectTranslator`. It's getting pretty big, so let's see what we can do to
-make it easier to work with.
+In the browser, refresh... 4 queries, this should be calculating and setting the cache.
+Refresh again... Down to 1 query.
+
+Ok, not much really changed... so let's actually configure it with
+a custom pool!
+
+## Custom Cache Pool
+
+In our app's `cache.yaml`, uncomment the `pools` section. Name our pool
+`object_translation.cache`. By default, this will just piggyback on our
+`cache.app` pool. But let's enable tagging by adding `tags: true`.
+
+Now, in `symfonycasts_object_translation.yaml`, configure our custom
+pool by setting: `cache: pool:`. What did we call it here...? `object_translation.cache`
+copy that and paste.
+
+Back in the browser, refresh... 4 queries, this should be using the new pool.
+Refresh again... Down to 1 query. Perfect!
+
+## Cache Tag Invalidation (for real)
+
+We should be able to really see cache tag invalidation working now. Jump
+to your terminal and run:
+
+```terminal
+symfony console cache:pool:invalidate-tags object-translation
+```
+
+Jump back to the browser and refresh... 4 queries. That means the tagged
+cache items were invalidated and had to be calculated again!
+
+Ok, our `ObjectTranslator` has grown into a bit of a monster. Next, let's
+refactor this beast!
