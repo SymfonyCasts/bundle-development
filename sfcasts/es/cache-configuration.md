@@ -4,7 +4,7 @@
 
 ## Un ArrayNode
 
-Abre nuestro `ObjectTranslationBundle` y busca el método `configure()`. Permitiremos dos opciones para la caché: la reserva de caché a utilizar, y el tiempo de vida o ttl - cuánto tiempo queremos que la caché sea válida. Podemos agrupar estas dos opciones.
+Abre nuestro `ObjectTranslationBundle` y busca el método `configure()`. Permitiremos dos opciones para la caché: la reserva de caché a utilizar y el tiempo de vida o ttl. Podemos agrupar estas dos opciones.
 
 Debajo del `->stringNode()`'s `->end()`, añade un `->arrayNode()` y llámalo `cache`. Ciérralo con un `->end()`, y añade un espacio. Añade una descripción con `->info('Cache settings for object translations.')`.
 
@@ -66,11 +66,11 @@ Ahora, ve a `ObjectTranslationBundle::loadExtension()`. Para volver a comprobar 
 
 Perfecto, aquí está nuestra matriz de caché, las dos opciones, más la activada.
 
-De vuelta en `loadExtension()`, elimina el `dd`. Como vamos a utilizar esta definición de servicio varias veces, crearemos una variable para ella. Copia el `$builder->getDefinition(...)`, y arriba, escribe`$objectTranslatorDef =` y... pega.
+De vuelta en `loadExtension()`, elimina el `dd`. Como vamos a utilizar esta definición de servicio varias veces, crea una variable para ella. Copia el `$builder->getDefinition(...)`, y arriba, escribe`$objectTranslatorDef =` y... pega.
 
 Abajo, refactoriza para llamar a `->setArgument()` en nuestra nueva variable. Establecer el `translation_class` siempre es necesario, pero sólo establecemos la caché si está activada.
 
-Escribe `if ($config['cache']['enabled'])`. Dentro, configuraremos el pool de caché y los argumentos ttl. Primero, `$objectTranslatorDef->setArgument()`. Encuentra el índice de argumentos saltando rápidamente al constructor `ObjectTranslator`, y cuenta los argumentos, 0, 1, 2, 3, 4. ¡Ya está!
+Escribe `if ($config['cache']['enabled'])`. Dentro, configura los argumentos pool de caché y ttl. Primero, `$objectTranslatorDef->setArgument()`. Encuentra el índice de argumentos saltando rápidamente al constructor `ObjectTranslator`, y cuenta los argumentos, 0, 1, 2, 3, 4. ¡Ya está!
 
 Utiliza `4` como primer argumento, y para el segundo, no podemos utilizar simplemente la cadena`pool` sin procesar: tiene que ser una referencia de servicio. Así que escribe`new Reference()`, asegúrate de importarlo del espacio de nombres DependencyInjection. Dentro, pasa `$config['cache']['pool']`. 
 
