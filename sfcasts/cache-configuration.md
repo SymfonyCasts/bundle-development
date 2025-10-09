@@ -9,8 +9,7 @@ do this.
 
 Open up our `ObjectTranslationBundle` and find the `configure()` method.
 We'll allow two options for caching: the *cache pool* to use, and the
-*time to live* or *ttl* - how long we want the cache to be valid. We
-can group these two options.
+*time to live* or *ttl*. We can group these two options.
 
 Below the `->stringNode()`'s `->end()`, add an `->arrayNode()` and call
 it `cache`. Close it with an `->end()`, and add some space. Add a
@@ -98,7 +97,7 @@ what our `$config` looks like, `dd` it... and... back in the browser, refresh.
 Perfect, here's our cache array, the two options, plus enabled.
 
 Back in `loadExtension()`, remove the `dd`. Because we're going to be
-using this service definition multiple times, we'll create a variable
+using this service definition multiple times, create a variable
 for it. Copy the `$builder->getDefinition(...)`, and above, write
 `$objectTranslatorDef =` and... paste.
 
@@ -106,7 +105,7 @@ Below, refactor to call `->setArgument()` on our new variable. Setting
 the `translation_class` is always required, but we only set the cache if
 enabled.
 
-Write `if ($config['cache']['enabled'])`. Inside, we'll configure
+Write `if ($config['cache']['enabled'])`. Inside, configure
 the cache pool and ttl arguments. First, `$objectTranslatorDef->setArgument()`.
 Find the argument index by quickly jumping back to the `ObjectTranslator` constructor,
 and count the arguments, 0, 1, 2, 3, 4. Got it!
