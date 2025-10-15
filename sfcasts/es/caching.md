@@ -1,4 +1,4 @@
-# Optimización del rendimiento 1: Almacenamiento en caché
+# Optimización del rendimiento 2: Almacenamiento en caché
 
 Tenemos algo de memoización en memoria para reducir las llamadas a la base de datos, pero sólo mientras dura una petición. Seguimos viendo 4 consultas en la página de inicio en francés. 1 para obtener los artículos y 3 para obtener las traducciones (1 por artículo). Como es probable que estas traducciones no cambien tan a menudo, implementemos además una estrategia de almacenamiento en caché más persistente.
 
