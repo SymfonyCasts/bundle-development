@@ -1,4 +1,4 @@
-# Performance Optimization 1: Caching
+# Performance Optimization 2: Caching
 
 We have some in-memory memoization happening to reduce database calls, but,
 only for the duration of a single request. We're still seeing 4 queries on
