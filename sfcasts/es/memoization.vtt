@@ -1,0 +1,196 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:05.436 align:middle
+Nuestro filtro Twig funciona como esperábamos, y lo
+estamos utilizando aquí en nuestro índice de artículos.
+
+00:00:05.936 --> 00:00:08.326 align:middle
+Ahora mismo, estamos sobreescribiendo
+la variable artículo
+
+00:00:08.356 --> 00:00:10.606 align:middle
+con su versión traducida al inicio del bucle.
+
+00:00:11.016 --> 00:00:14.606 align:middle
+Creo que hay otra forma válida de utilizar
+este filtro: sólo cuando lo necesitemos.
+
+00:00:15.366 --> 00:00:17.706 align:middle
+En primer lugar, elimina la
+modificación de set article.
+
+00:00:18.076 --> 00:00:22.906 align:middle
+Luego, aquí abajo, donde realmente necesitamos la
+versión traducida - para el título y el contenido.
+
+00:00:23.096 --> 00:00:29.436 align:middle
+Cambia article.title por
+article|translate_object.title y haz lo mismo
+
+00:00:29.436 --> 00:00:33.826 align:middle
+para el contenido:
+article|translate_object.content:
+
+00:00:34.606 --> 00:00:36.926 align:middle
+Vuelve a nuestro navegador: estamos
+en la página de inicio en francés.
+
+00:00:37.296 --> 00:00:41.096 align:middle
+Antes de actualizar, observa el recuento de consultas
+en la barra de herramientas de depuración web.
+
+00:00:41.186 --> 00:00:47.366 align:middle
+4, una consulta para obtener todos los artículos, y luego
+una consulta por artículo para obtener las traducciones.
+
+00:00:47.746 --> 00:00:48.956 align:middle
+Ahora actualiza la página.
+
+00:00:49.556 --> 00:00:50.986 align:middle
+Vale, todo sigue funcionando...
+
+00:00:51.166 --> 00:00:53.126 align:middle
+pero mira el número de consultas: ¡7!
+
+00:00:53.546 --> 00:00:57.506 align:middle
+Una consulta para todos los artículos,
+y ahora dos consultas por artículo.
+
+00:00:57.786 --> 00:01:01.596 align:middle
+Los valores traducidos se están cargando
+dos veces, aunque sean idénticos.
+
+00:01:02.316 --> 00:01:05.266 align:middle
+Arreglemos esto con una
+técnica llamada memoización.
+
+00:01:05.716 --> 00:01:09.846 align:middle
+Es una palabra elegante, y me gusta mucho
+decirla, pero sólo significa almacenar datos
+
+00:01:09.846 --> 00:01:12.326 align:middle
+en memoria para evitar el
+procesamiento redundante.
+
+00:01:12.886 --> 00:01:16.156 align:middle
+Lo implementaremos en nuestro
+ObjectTranslator, así que ábrelo.
+
+00:01:16.736 --> 00:01:21.166 align:middle
+Podríamos simplemente añadir una propiedad array
+para almacenar objetos traducidos por ID o algo así,
+
+00:01:21.526 --> 00:01:23.216 align:middle
+pero esto podría provocar fugas de memoria.
+
+00:01:23.696 --> 00:01:27.066 align:middle
+En procesos de larga duración, esta
+matriz podría crecer indefinidamente.
+
+00:01:27.646 --> 00:01:31.506 align:middle
+En su lugar, utilizaremos un objeto
+especial del núcleo de PHP llamado WeakMap.
+
+00:01:32.066 --> 00:01:37.896 align:middle
+Añade una nueva propiedad, private \WeakMap
+$translatedObjects: Es como una matriz,
+
+00:01:37.896 --> 00:01:42.936 align:middle
+pero con claves de objetos, no de cadenas
+o enteros como estás acostumbrado.
+
+00:01:42.936 --> 00:01:45.836 align:middle
+En PHP, cuando se crea y se pasa un objeto,
+
+00:01:46.026 --> 00:01:48.166 align:middle
+en realidad es una referencia a ese objeto.
+
+00:01:48.676 --> 00:01:51.796 align:middle
+Mientras algo esté utilizando
+ese objeto, permanece en memoria.
+
+00:01:52.246 --> 00:01:55.736 align:middle
+Cuando ya nada lo utiliza, PHP
+lo limpia automáticamente.
+
+00:01:56.316 --> 00:02:01.426 align:middle
+Si utilizáramos una matriz estándar para almacenar
+objetos traducidos, esa referencia nunca se eliminaría.
+
+00:02:01.786 --> 00:02:05.776 align:middle
+Un WeakMap es diferente, guarda
+el objeto pero no impide que
+
+00:02:05.776 --> 00:02:08.396 align:middle
+se limpie: es una referencia débil.
+
+00:02:08.716 --> 00:02:10.426 align:middle
+¡Esto es perfecto para nuestro caso de uso!
+
+00:02:10.956 --> 00:02:14.036 align:middle
+Para utilizarlo, primero tenemos que
+instanciarlo, así que en el constructor,
+
+00:02:14.036 --> 00:02:21.226 align:middle
+$this->translatedObjects = new
+\WeakMap(): Abajo, en el método translate()
+
+00:02:21.386 --> 00:02:25.666 align:middle
+, esta llamada a translationFor() es cara,
+está haciendo una consulta a la base de datos.
+
+00:02:25.986 --> 00:02:29.736 align:middle
+Así que vamos a guardar todo este
+TranslatedObject en nuestro WeakMap.
+
+00:02:30.156 --> 00:02:35.686 align:middle
+Justo después de return, escribe
+$this->translatedObjects - ¿por qué clave?
+
+00:02:35.916 --> 00:02:37.226 align:middle
+¡El $object original !
+
+00:02:38.436 --> 00:02:45.576 align:middle
+Ahora, utiliza el operador de asignación de
+coalescencia nula ??= y luego crea el TranslatedObject:
+
+00:02:46.156 --> 00:02:50.466 align:middle
+Esto comprueba si el objeto traducido ya está
+en el mapa débil (para el objeto original).
+
+00:02:50.916 --> 00:02:52.396 align:middle
+Si es así, lo devuelve.
+
+00:02:52.566 --> 00:02:57.236 align:middle
+En caso contrario, crea un nuevo TranslatedObject,
+lo almacena en el mapa débil y lo devuelve.
+
+00:02:57.746 --> 00:02:59.806 align:middle
+Si el objeto original es limpiado por PHP,
+
+00:02:59.806 --> 00:03:02.966 align:middle
+se eliminará automáticamente del mapa débil.
+
+00:03:03.666 --> 00:03:04.656 align:middle
+¡Veámoslo en acción!
+
+00:03:04.996 --> 00:03:07.416 align:middle
+De vuelta en tu navegador,
+vemos las 7 consultas.
+
+00:03:07.716 --> 00:03:08.636 align:middle
+Ahora actualiza...
+
+00:03:09.346 --> 00:03:10.166 align:middle
+sigue funcionando...
+
+00:03:10.386 --> 00:03:12.846 align:middle
+y mira el recuento de
+consultas: ¡vuelve a ser 4!
+
+00:03:13.106 --> 00:03:14.626 align:middle
+¡La memoización funciona!
+
+00:03:15.356 --> 00:03:20.296 align:middle
+A continuación, vamos a continuar este proceso de optimización
+del rendimiento con el almacenamiento en caché sin memoria.
