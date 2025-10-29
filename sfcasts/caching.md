@@ -35,7 +35,7 @@ string interpolation to create a key like this: `object_translation.{$locale}.{$
 
 The second argument is where the fun happens - it's a callable `function()...`:
 
-[[[ code('e585d7ac9e') ]]]
+[[[ code('6c88a2fe7b') ]]]
 
 How this works is pretty neat. When you call `get()`, it first checks if the
 key exists in the cache. If not, it runs the callable and stores the result.
