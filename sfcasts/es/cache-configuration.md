@@ -6,9 +6,13 @@
 
 Abre nuestro `ObjectTranslationBundle` y busca el método `configure()`. Permitiremos dos opciones para la caché: la reserva de caché a utilizar y el tiempo de vida o ttl. Podemos agrupar estas dos opciones.
 
-Debajo del `->stringNode()`'s `->end()`, añade un `->arrayNode()` y llámalo `cache`. Ciérralo con un `->end()`, y añade un espacio. Añade una descripción con `->info('Cache settings for object translations.')`.
+Debajo del `->stringNode()`'s `->end()`, añade un `->arrayNode()` y llámalo `cache`. Ciérralo con un `->end()`, y añade un espacio. Añade una descripción con `->info('Cache settings for object translations.')`:
 
-Quiero que el usuario pueda desactivar todo este nodo para evitar por completo el almacenamiento en caché. Hay un atajo para esto: `->canBeDisabled()`. Esto añade automáticamente una opción booleana `enabled` y por defecto `true`. 
+[[[ code('02d2610eac') ]]]
+
+Quiero que el usuario pueda desactivar todo este nodo para evitar por completo el almacenamiento en caché. Hay un atajo para esto: `->canBeDisabled()`. Esto añade automáticamente una opción booleana `enabled` y por defecto `true`:
+
+[[[ code('10e2b42a31') ]]]
 
 ***TIP
 También hay un método `canBeEnabled()` si quieres que el valor por defecto sea`false`.
@@ -16,11 +20,17 @@ También hay un método `canBeEnabled()` si quieres que el valor por defecto sea
 
 ## Añadir hijos
 
-Ahora añade las dos subopciones: Escribe `->children()` y ciérralo con un`->end()`.
+Ahora añade las dos subopciones: Escribe `->children()` y ciérralo con un`->end()`:
 
-El primer hijo será `->stringNode('pool')->end()`. Dentro,`->info('The cache pool to use for storing object translations.')`. Sé que todas las aplicaciones Symfony tienen un grupo `cache.app`, así que úsalo como valor por defecto con `->defaultValue('cache.app')`.
+[[[ code('b970a0b0b2') ]]]
 
-A continuación, añade un `->integerNode('ttl')->end()` y dentro,`->info('The time-to-live for cached translations, in seconds. null for no expiration')`. Aunque se trata de un nodo entero, a menos que lo desautoricemos explícitamente, se puede utilizar `null`. Por defecto, no quiero caducidad, así que `->defaultNull()`.
+El primer hijo será `->stringNode('pool')->end()`. Dentro,`->info('The cache pool to use for storing object translations.')`. Sé que todas las aplicaciones Symfony tienen un grupo `cache.app`, así que úsalo como valor por defecto con `->defaultValue('cache.app')`:
+
+[[[ code('4f9c798b36') ]]]
+
+A continuación, añade un `->integerNode('ttl')->end()` y dentro,`->info('The time-to-live for cached translations, in seconds. null for no expiration')`. Aunque se trata de un nodo entero, a menos que lo desautoricemos explícitamente, se puede utilizar `null`. Por defecto, no quiero ninguna caducidad, así que `->defaultNull()`:
+
+[[[ code('254a831acc') ]]]
 
 ## Depurar la configuración
 
@@ -30,7 +40,7 @@ Comprueba que todo parece correcto saltando a tu terminal y ejecutando:
 symfony console config:dump-reference symfonycasts_object_translation
 ```
 
-¡Bonita y bien documentada configuración! Comprueba la opción `enabled` añadida automáticamente por `canBeDisabled()`.
+¡Bonita configuración bien documentada! Comprueba la opción `enabled` añadida automáticamente por `canBeDisabled()`.
 
 Hay otro comando que muestra la configuración actual (y todos los valores por defecto) de un bundle. Ejecuta:
 
@@ -44,21 +54,33 @@ Genial, esta es la configuración que cargará nuestro bundle.
 
 Ahora preparemos nuestro código para la nueva configuración. Abre `ObjectTranslator.php`. Como ahora la caché es opcional, necesitamos permitir null para `CacheInterface`. Primero, copia esta propiedad y pégala encima del constructor.
 
-En el constructor, elimina `private`, lo queremos como un argumento normal. Hazlo anulable anteponiendo a la sugerencia de tipo `?` y dale un valor por defecto de `null`.
+En el constructor, elimina `private`, lo queremos como un argumento normal. Hazlo anulable anteponiendo a la sugerencia de tipo `?` y dale un valor por defecto de `null`:
 
-A continuación, añade un nuevo argumento de propiedad para el ttl: `private ?int $cacheTtl = null`.
+[[[ code('08a557bb08') ]]]
+
+A continuación, añade un nuevo argumento de propiedad para el ttl: `private ?int $cacheTtl = null`:
+
+[[[ code('1c4d949517') ]]]
 
 Podríamos añadir algunas comprobaciones para que sólo se utilice la caché si se ha inyectado un adaptador de caché... pero... hay una forma más limpia de hacerlo. El patrón de objeto nulo.
 
-Dentro del constructor, escribe `$this->cache = $cache ?? new NullAdapter()`. ¡Genial, ahora no tenemos que cambiar ningún código que utilice la caché!
+Dentro del constructor, escribe `$this->cache = $cache ?? new NullAdapter()`:
 
-Ahora a utilizar el valor `cacheTtl`. Abajo en `translationsFor()`, dentro de la llamada, ya hemos inyectado el `ItemInterface` - esto es en lo que fijamos la caducidad.
+[[[ code('1508b556a1') ]]]
 
-Añade una comprobación para ver si el ttl está establecido: `if ($this->cacheTtl)`. Dentro:`$item->expiresAfter($this->cacheTtl)`. ¡Listo!
+Genial, ¡ahora no tenemos que cambiar ningún código que utilice la caché!
+
+Ahora a utilizar el valor `cacheTtl`. Abajo en `translationsFor()`, dentro de la llamada, ya inyectamos el `ItemInterface` - esto es en lo que fijamos la caducidad.
+
+Añade una comprobación para ver si el ttl está establecido: `if ($this->cacheTtl)`. Dentro:`$item->expiresAfter($this->cacheTtl)`:
+
+[[[ code('dd3382a70a') ]]]
+
+¡Listo!
 
 ## Utilizar la configuración
 
-Por último, tenemos que ajustar la definición de nuestro servicio para que utilice nuestra nueva configuración.
+Por último, tenemos que ajustar nuestra definición de servicio para que utilice nuestra nueva configuración.
 
 Abre el `services.php` de nuestro bundle y elimina el argumento `service('cache.app')`. Ahora es opcional y se configurará en función de la configuración del usuario.
 
@@ -66,17 +88,31 @@ Ahora, ve a `ObjectTranslationBundle::loadExtension()`. Para volver a comprobar 
 
 Perfecto, aquí está nuestra matriz de caché, las dos opciones, más la activada.
 
-De vuelta en `loadExtension()`, elimina el `dd`. Como vamos a utilizar esta definición de servicio varias veces, crea una variable para ella. Copia el `$builder->getDefinition(...)`, y arriba, escribe`$objectTranslatorDef =` y... pega.
+De vuelta en `loadExtension()`, elimina el `dd`. Como vamos a utilizar esta definición de servicio varias veces, crea una variable para ella. Copia el `$builder->getDefinition(...)`, y encima, escribe`$objectTranslatorDef =` y... pega:
 
-Abajo, refactoriza para llamar a `->setArgument()` en nuestra nueva variable. Establecer el `translation_class` siempre es necesario, pero sólo establecemos la caché si está activada.
+[[[ code('590b03a840') ]]]
 
-Escribe `if ($config['cache']['enabled'])`. Dentro, configura los argumentos pool de caché y ttl. Primero, `$objectTranslatorDef->setArgument()`. Encuentra el índice de argumentos saltando rápidamente al constructor `ObjectTranslator`, y cuenta los argumentos, 0, 1, 2, 3, 4. ¡Ya está!
+Abajo, refactoriza para llamar a `->setArgument()` en nuestra nueva variable:
 
-Utiliza `4` como primer argumento, y para el segundo, no podemos utilizar simplemente la cadena`pool` sin procesar: tiene que ser una referencia de servicio. Así que escribe`new Reference()`, asegúrate de importarlo del espacio de nombres DependencyInjection. Dentro, pasa `$config['cache']['pool']`. 
+[[[ code('3c8cfac20a') ]]]
 
-Para el ttl, podemos utilizar el entero en bruto, así que`$objectTranslatorDef->setArgument(5, $config['cache']['ttl'])`.
+Establecer el `translation_class` siempre es necesario, pero sólo establecemos la caché si está activada.
 
-¡Creo que ya estamos listos! Primero, asegurémonos de que la caché de nuestra aplicación está limpia. En tu terminal, ejecuta:
+Escribe `if ($config['cache']['enabled'])`:
+
+[[[ code('16fe3e13ee') ]]]
+
+Dentro, configura el pool de caché y los argumentos ttl. Primero, `$objectTranslatorDef->setArgument()`. Encuentra el índice de argumentos saltando rápidamente al constructor `ObjectTranslator`, y cuenta los argumentos, 0, 1, 2, 3, 4. ¡Ya está!
+
+Utiliza `4` como primer argumento, y para el segundo, no podemos utilizar simplemente la cadena`pool` sin procesar: tiene que ser una referencia de servicio. Así que escribe`new Reference()`, asegúrate de importarlo del espacio de nombres DependencyInjection. Dentro, pasa `$config['cache']['pool']`:
+
+[[[ code('8380b537be') ]]]
+
+Para el ttl, podemos utilizar el entero sin procesar, así que`$objectTranslatorDef->setArgument(5, $config['cache']['ttl'])`:
+
+[[[ code('7683cc6ac2') ]]]
+
+¡Creo que ya podemos empezar! Primero, asegurémonos de que la caché de nuestra aplicación está limpia. En tu terminal, ejecuta:
 
 ```terminal
 symfony console cache:clear
@@ -88,12 +124,16 @@ Vale, en realidad no ha cambiado mucho... ¡así que vamos a configurarlo con un
 
 ## Grupo de caché personalizado
 
-En `cache.yaml` de nuestra aplicación, descomenta la sección `pools`. Nombra nuestro pool`object_translation.cache`. Por defecto, se basará en nuestra reserva`cache.app`. Pero vamos a activar el etiquetado añadiendo `tags: true`.
+En `cache.yaml` de nuestra aplicación, descomenta la sección `pools`. Nombra nuestro pool`object_translation.cache`. Por defecto, se basará en nuestra reserva`cache.app`. Pero vamos a activar el etiquetado añadiendo `tags: true`:
+
+[[[ code('e6c0a87394') ]]]
 
 Ahora, en `symfonycasts_object_translation.yaml`, configura nuestro pool personalizado poniendo: `cache: pool:`. ¿Cómo lo llamamos aquí? `object_translation.cache`
-cópialo y pégalo.
+cópialo y pégalo:
 
-De vuelta en el navegador, actualiza... 4 consultas, esto debería estar utilizando el nuevo pool. Actualiza de nuevo... Se ha reducido a 1 consulta. Perfecto
+[[[ code('b9aee088ca') ]]]
+
+De nuevo en el navegador, actualiza... 4 consultas, esto debería estar utilizando el nuevo pool. Actualiza de nuevo... Se ha reducido a 1 consulta. Perfecto
 
 ## Invalidación de etiquetas de caché (de verdad)
 
