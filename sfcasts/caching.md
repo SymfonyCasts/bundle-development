@@ -49,7 +49,7 @@ PhpStorm is complaining because these variables are *no longer in scope*. Make
 them available in the function by adding `use ($locale, $type, $id)` after
 `function()`:
 
-[[[ code('[[[ code('4732ba394e') ]]]') ]]]
+[[[ code('4732ba394e') ]]]
 
 Finally, we can return the `$translations` at the end of the callable.
 
