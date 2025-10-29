@@ -22,7 +22,7 @@ Ahora, abajo en el método `translationsFor()`, justo después de calcular el`$i
 
 El segundo argumento es donde ocurre la diversión: es una llamada `function()...`:
 
-[[[ code('e585d7ac9e') ]]]
+[[[ code('6c88a2fe7b') ]]]
 
 El funcionamiento es bastante ingenioso. Cuando llamas a `get()`, primero comprueba si la clave existe en la caché. Si no es así, ejecuta la llamada y almacena el resultado. Ahora, en las siguientes llamadas con la misma clave, devuelve el valor almacenado en caché ¡y se salta por completo la llamada! De alguna manera, ¡consigues el conjunto de la caché y lo obtienes todo en la llamada!
 
@@ -54,7 +54,7 @@ En la barra de herramientas de depuración web, puedes hacer clic en el icono de
 
 ## Implementar etiquetas de caché
 
-¡Hora de la bonificación! Los Contratos de Caché de Symfony tienen una función muy interesante: el etiquetado. Esto te permite agrupar elementos en caché e invalidarlos juntos. ¡Creo que nuestro bundle debería soportarlo!
+¡Hora de la bonificación! Los Contratos de Caché de Symfony tienen una función muy interesante: el etiquetado. Esto te permite agrupar elementos en caché e invalidarlos juntos. Creo que nuestro bundle debería soportarlo
 
 Volviendo a `ObjectTranslator::translationsFor()`, esta llamada a la caché acepta un argumento:`ItemInterface $item`:
 
