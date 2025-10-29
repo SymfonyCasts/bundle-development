@@ -16,7 +16,11 @@ as flexible as the Symfony Cache component. So, let's use that.
 ## Injecting the Symfony Cache Component
 
 First things first, we need to inject the `CacheInterface` in the constructor:
-`private CacheInterface $cache`. Make sure to import the one from `Symfony\Contracts\Cache`.
+`private CacheInterface $cache`:
+
+[[[ code('e585d7ac9e') ]]]
+
+Make sure to import the one from `Symfony\Contracts\Cache`.
 
 Now, you may have used either of the PSR cache-interfaces before. Symfony supports
 these, but also provides its own *cache contracts*. For our use case, I think it's
@@ -29,7 +33,9 @@ Now, down in the `translationsFor()` method, right after we calculate the
 This needs to be unique to what we're caching. In double quotes, use
 string interpolation to create a key like this: `object_translation.{$locale}.{$type}.{$id}`.
 
-The second argument is where the fun happens - it's a callable `function()...`.
+The second argument is where the fun happens - it's a callable `function()...`:
+
+[[[ code('e585d7ac9e') ]]]
 
 How this works is pretty neat. When you call `get()`, it first checks if the
 key exists in the cache. If not, it runs the callable and stores the result.
@@ -41,7 +47,11 @@ method, including our normalization code, and cut it. Paste it inside.
 
 PhpStorm is complaining because these variables are *no longer in scope*. Make
 them available in the function by adding `use ($locale, $type, $id)` after
-`function()`.
+`function()`:
+
+[[[ code('[[[ code('4732ba394e') ]]]') ]]]
+
+Finally, we can return the `$translations` at the end of the callable.
 
 ## Wiring up the Cache Service
 
@@ -55,7 +65,9 @@ symfony console debug:autowiring CacheInterface
 Nice! `cache.app` is what we want.
 
 Back in our code, open our bundle's `services.php` file. Right here, below
-`service('doctrine')`, add: `service('cache.app')`.
+`service('doctrine')`, add: `service('cache.app')`:
+
+[[[ code('27fd79cc04') ]]]
 
 Time to try this out! Back in your browser, we're on the French homepage.
 Refresh the page. Still seeing four queries - this is expected as this
@@ -73,7 +85,11 @@ allows you to group cached items and invalidate them together. I think
 our bundle should support this!
 
 Back in `ObjectTranslator::translationsFor()`, this cache callable accepts an argument:
-`ItemInterface $item`. This object gives us the opportunity to configure things
+`ItemInterface $item`:
+
+[[[ code('0164d3e5f5') ]]]
+
+This object gives us the opportunity to configure things
 about this specific cache item - like adding tags!
 
 One thing about cache tagging, is not all cache adapters support it. For instance
@@ -82,7 +98,9 @@ your default `cache.app` does not. Check if it's supported by adding
 one from `Symfony\Contracts\Cache`.
 
 Now we're able to add tags! Inside the if, write `$item->tag()`. This takes an array. What tags
-would be useful? How about `object-translation` and `object-translation-{$type}`.
+would be useful? How about `object-translation` and `object-translation-{$type}`:
+
+[[[ code('d25e45e8cd') ]]]
 
 User's can now invalidate *all* object translations... or, just a specific type.
 

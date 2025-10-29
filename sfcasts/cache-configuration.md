@@ -13,11 +13,15 @@ We'll allow two options for caching: the *cache pool* to use, and the
 
 Below the `->stringNode()`'s `->end()`, add an `->arrayNode()` and call
 it `cache`. Close it with an `->end()`, and add some space. Add a
-description with `->info('Cache settings for object translations.')`.
+description with `->info('Cache settings for object translations.')`:
+
+[[[ code('02d2610eac') ]]]
 
 I want the user to be able to disable this whole node to prevent caching entirely. There's
 a shortcut for this: `->canBeDisabled()`. This automatically adds a
-boolean `enabled` option and defaults to `true`. 
+boolean `enabled` option and defaults to `true`:
+
+[[[ code('10e2b42a31') ]]]
 
 ***TIP
 There's also a `canBeEnabled()` method if you want the default to be
@@ -27,17 +31,23 @@ There's also a `canBeEnabled()` method if you want the default to be
 ## Adding Children
 
 Now to add the two sub-options: Write `->children()` and close it with an
-`->end()`.
+`->end()`:
+
+[[[ code('b970a0b0b2') ]]]
 
 The first child is going to be `->stringNode('pool')->end()`. Inside,
 `->info('The cache pool to use for storing object translations.')`. I
 know every Symfony app has a `cache.app` pool, so use this as the default
-value with `->defaultValue('cache.app')`.
+value with `->defaultValue('cache.app')`:
+
+[[[ code('4f9c798b36') ]]]
 
 Next, add an `->integerNode('ttl')->end()` and inside,
 `->info('The time-to-live for cached translations, in seconds. null for no expiration')`.
 Even though this is an integer node, unless we explicitly disallow it, `null`
-can be used. By default, I want no expiration, so `->defaultNull()`.
+can be used. By default, I want no expiration, so `->defaultNull()`:
+
+[[[ code('254a831acc') ]]]
 
 ## Debugging the Config
 
@@ -67,21 +77,32 @@ First, copy this property and paste it above the constructor.
 
 In the constructor, remove `private`, we want this just as a normal argument.
 Make it nullable by prefixing the type-hint with `?` and give it a default value
-of `null`.
+of `null`:
 
-Below, add a new property argument for the ttl: `private ?int $cacheTtl = null`.
+[[[ code('08a557bb08') ]]]
+
+Below, add a new property argument for the ttl: `private ?int $cacheTtl = null`:
+
+[[[ code('1c4d949517') ]]]
 
 We could add some checks to only use caching if a cache adapter was injected...
 but... there's a cleaner way to do this. The *null object pattern*.
 
-Inside the constructor, write `$this->cache = $cache ?? new NullAdapter()`.
+Inside the constructor, write `$this->cache = $cache ?? new NullAdapter()`:
+
+[[[ code('1508b556a1') ]]]
+
 Sweet, now we don't have to change any code that uses the cache!
 
 Now to use the `cacheTtl` value. Down in `translationsFor()`, inside the callable,
 we already injected the `ItemInterface` - this is what we set the expiration on.
 
 Add a check to see if the ttl is set: `if ($this->cacheTtl)`. Inside:
-`$item->expiresAfter($this->cacheTtl)`. Done!
+`$item->expiresAfter($this->cacheTtl)`:
+
+[[[ code('dd3382a70a') ]]]
+
+Done!
 
 ## Using the Configuration
 
@@ -99,13 +120,22 @@ Perfect, here's our cache array, the two options, plus enabled.
 Back in `loadExtension()`, remove the `dd`. Because we're going to be
 using this service definition multiple times, create a variable
 for it. Copy the `$builder->getDefinition(...)`, and above, write
-`$objectTranslatorDef =` and... paste.
+`$objectTranslatorDef =` and... paste:
 
-Below, refactor to call `->setArgument()` on our new variable. Setting
-the `translation_class` is always required, but we only set the cache if
-enabled.
+[[[ code('590b03a840') ]]]
 
-Write `if ($config['cache']['enabled'])`. Inside, configure
+Below, refactor to call `->setArgument()` on our new variable:
+
+[[[ code('3c8cfac20a') ]]]
+
+Setting the `translation_class` is always required, but we only set the
+cache if enabled.
+
+Write `if ($config['cache']['enabled'])`:
+
+[[[ code('16fe3e13ee') ]]]
+
+Inside, configure
 the cache pool and ttl arguments. First, `$objectTranslatorDef->setArgument()`.
 Find the argument index by quickly jumping back to the `ObjectTranslator` constructor,
 and count the arguments, 0, 1, 2, 3, 4. Got it!
@@ -113,10 +143,14 @@ and count the arguments, 0, 1, 2, 3, 4. Got it!
 Use `4` as the first argument, and for the second, we can't just use the raw
 `pool` string - it needs to be a service reference. So write
 `new Reference()`, be sure to import this from the DependencyInjection namespace.
-Inside, pass `$config['cache']['pool']`. 
+Inside, pass `$config['cache']['pool']`:
+
+[[[ code('8380b537be') ]]]
 
 For the ttl, we *can* use the raw integer, so
-`$objectTranslatorDef->setArgument(5, $config['cache']['ttl'])`.
+`$objectTranslatorDef->setArgument(5, $config['cache']['ttl'])`:
+
+[[[ code('7683cc6ac2') ]]]
 
 I think we're good to go! First, let's make sure our app's cache is cleared.
 At your terminal, run:
@@ -135,11 +169,15 @@ a custom pool!
 
 In our app's `cache.yaml`, uncomment the `pools` section. Name our pool
 `object_translation.cache`. By default, this will just piggyback on our
-`cache.app` pool. But let's enable tagging by adding `tags: true`.
+`cache.app` pool. But let's enable tagging by adding `tags: true`:
+
+[[[ code('e6c0a87394') ]]]
 
 Now, in `symfonycasts_object_translation.yaml`, configure our custom
 pool by setting: `cache: pool:`. What did we call it here...? `object_translation.cache`
-copy that and paste.
+copy that and paste:
+
+[[[ code('b9aee088ca') ]]]
 
 Back in the browser, refresh... 4 queries, this should be using the new pool.
 Refresh again... Down to 1 query. Perfect!
