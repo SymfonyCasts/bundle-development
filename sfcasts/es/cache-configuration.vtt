@@ -1,0 +1,357 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:03.666 align:middle
+¡Nuestras traducciones de objetos se
+están almacenando con éxito en la caché!
+
+00:00:03.666 --> 00:00:07.026 align:middle
+Ahora quiero permitir que el
+usuario configure su grupo de caché
+
+00:00:07.196 --> 00:00:09.336 align:middle
+y el tiempo que desea almacenar
+en caché las traducciones.
+
+00:00:09.686 --> 00:00:12.776 align:middle
+Para ello, vamos a utilizar a nuestro
+viejo amigo, la configuración del bundle.
+
+00:00:13.516 --> 00:00:16.906 align:middle
+Abre nuestro ObjectTranslationBundle
+y busca el método configure().
+
+00:00:17.626 --> 00:00:22.966 align:middle
+Permitiremos dos opciones para la caché: el pool
+de caché a utilizar, y el tiempo de vida o ttl.
+
+00:00:23.466 --> 00:00:25.166 align:middle
+Podemos agrupar estas dos opciones.
+
+00:00:25.606 --> 00:00:30.246 align:middle
+Debajo del ->stringNode()'s ->end(),
+añade un ->arrayNode() y llámalo cache.
+
+00:00:30.786 --> 00:00:33.136 align:middle
+Ciérralo con un ->end(),
+y añade un espacio.
+
+00:00:33.696 --> 00:00:38.896 align:middle
+Añade una descripción con ->info('Cache
+settings for object translations.'):
+
+00:00:38.896 --> 00:00:43.026 align:middle
+Quiero que el usuario pueda desactivar todo este nodo
+para evitar por completo el almacenamiento en caché.
+
+00:00:43.396 --> 00:00:46.196 align:middle
+Hay un atajo para esto: ->canBeDisabled().
+
+00:00:46.516 --> 00:00:54.856 align:middle
+Esto añade automáticamente una opción
+booleana enabled y por defecto true:
+
+00:00:55.536 --> 00:01:00.466 align:middle
+Ahora añade las dos subopciones: Escribe
+->children() y ciérralo con un ->end():
+
+00:01:01.466 --> 00:01:06.046 align:middle
+El primer hijo será
+->stringNode('pool')->end().
+
+00:01:06.046 --> 00:01:13.616 align:middle
+Dentro, ->info('The cache pool to
+use for storing object translations.').
+
+00:01:13.616 --> 00:01:18.016 align:middle
+Sé que todas las aplicaciones Symfony tienen un grupo
+cache.app, así que úsalo como valor por defecto
+
+00:01:18.186 --> 00:01:27.826 align:middle
+con ->defaultValue('cache.app'): A continuación,
+añade un ->integerNode('ttl')->end() y dentro,
+
+00:01:28.416 --> 00:01:32.486 align:middle
+->info('El tiempo de vida para las
+traducciones en caché, en segundos.
+
+00:01:32.726 --> 00:01:34.126 align:middle
+null para no caducidad').
+
+00:01:34.956 --> 00:01:39.826 align:middle
+Aunque se trata de un nodo entero, a menos que lo
+desautoricemos explícitamente, se puede utilizar null.
+
+00:01:40.126 --> 00:01:43.966 align:middle
+Por defecto, no quiero caducidad,
+así que ->defaultNull():
+
+00:01:44.736 --> 00:01:48.076 align:middle
+Vuelve a comprobar que todo esto se ve
+bien saltando a tu terminal y ejecutando:
+
+00:01:48.076 --> 00:01:55.396 align:middle
+symfony console config:dump-reference
+symfonycasts_object_translation ¡ Bonita
+
+00:01:55.466 --> 00:01:57.536 align:middle
+configuración, muy bien documentada!
+
+00:01:57.956 --> 00:02:01.166 align:middle
+Comprueba la opción enabled añadida
+automáticamente por canBeDisabled().
+
+00:02:01.986 --> 00:02:06.146 align:middle
+Hay otro comando para mostrar realmente la
+configuración actual (y todos los valores por defecto)
+
+00:02:06.146 --> 00:02:06.736 align:middle
+de un bundle.
+
+00:02:07.396 --> 00:02:14.396 align:middle
+Ejecuta: symfony console debug:config
+symfonycasts_object_translation Genial,
+
+00:02:14.636 --> 00:02:16.696 align:middle
+esta es la configuración
+que cargará nuestro bundle.
+
+00:02:17.426 --> 00:02:19.396 align:middle
+Ahora prepararemos nuestro código
+para la nueva configuración.
+
+00:02:19.776 --> 00:02:22.756 align:middle
+Abre ObjectTranslator.php.
+
+00:02:22.756 --> 00:02:26.936 align:middle
+Como ahora el almacenamiento en caché es opcional,
+tenemos que permitir null para la propiedad CacheInterface.
+
+00:02:27.296 --> 00:02:30.606 align:middle
+Primero, copia esta propiedad y
+pégala encima del constructor.
+
+00:02:31.186 --> 00:02:35.386 align:middle
+En el constructor, elimina private,
+lo queremos como un argumento normal.
+
+00:02:35.786 --> 00:02:38.436 align:middle
+Hazlo anulable anteponiendo
+a la sugerencia de tipo ?
+
+00:02:38.436 --> 00:02:44.136 align:middle
+y dale un valor por defecto de null: A continuación,
+añade un nuevo argumento de propiedad para el ttl:
+
+00:02:44.516 --> 00:02:51.336 align:middle
+private ?int $cacheTtl = null: Podríamos añadir
+algunas comprobaciones para que sólo se utilice la
+
+00:02:51.336 --> 00:02:53.206 align:middle
+caché si se ha inyectado
+un adaptador de caché...
+
+00:02:53.426 --> 00:02:55.386 align:middle
+pero... hay una forma
+más limpia de hacer esto.
+
+00:02:55.516 --> 00:02:56.996 align:middle
+El patrón de objeto nulo.
+
+00:02:57.616 --> 00:03:03.246 align:middle
+Dentro del constructor, escribe
+$this->cache = $cache ??
+
+00:03:03.926 --> 00:03:09.016 align:middle
+new NullAdapter(): Genial, ¡ahora no tenemos que
+cambiar ningún código que utilice la caché!
+
+00:03:09.646 --> 00:03:11.596 align:middle
+Ahora a utilizar el valor cacheTtl.
+
+00:03:12.056 --> 00:03:17.076 align:middle
+Abajo en translationsFor(), dentro de la
+llamada, ya hemos inyectado el ItemInterface -
+
+00:03:17.236 --> 00:03:18.956 align:middle
+esto es en lo que fijamos la caducidad.
+
+00:03:19.456 --> 00:03:24.396 align:middle
+Añade una comprobación para ver si el ttl
+está establecido: if ($this->cacheTtl).
+
+00:03:24.726 --> 00:03:31.096 align:middle
+Dentro: $item->expiresAfter($this->cacheTtl):
+¡Listo!
+
+00:03:31.536 --> 00:03:35.586 align:middle
+Por último, tenemos que ajustar la definición de nuestro
+servicio para que utilice nuestra nueva configuración.
+
+00:03:36.226 --> 00:03:41.696 align:middle
+Abre el services.php de nuestro bundle y
+elimina el argumento service('cache.app').
+
+00:03:42.126 --> 00:03:45.476 align:middle
+Ahora es opcional y se configurará en
+función de la configuración del usuario.
+
+00:03:46.146 --> 00:03:49.226 align:middle
+Ahora, ve a
+ObjectTranslationBundle::loadExtension().
+
+00:03:49.816 --> 00:03:52.476 align:middle
+Para volver a comprobar el
+aspecto de nuestro $config, dd...
+
+00:03:53.046 --> 00:03:55.336 align:middle
+y... de vuelta en el navegador, actualiza.
+
+00:03:56.106 --> 00:03:59.476 align:middle
+Perfecto, aquí está nuestra matriz de
+caché, las dos opciones, además de activada.
+
+00:04:00.246 --> 00:04:02.296 align:middle
+De vuelta en loadExtension(), quita el dd.
+
+00:04:02.796 --> 00:04:05.916 align:middle
+Como vamos a utilizar esta
+definición de servicio varias veces,
+
+00:04:06.156 --> 00:04:07.316 align:middle
+crea una variable para ella.
+
+00:04:07.706 --> 00:04:14.436 align:middle
+Copia el $builder->getDefinition(...), y
+encima, escribe $objectTranslatorDef = y...
+
+00:04:14.546 --> 00:04:19.336 align:middle
+pega: Abajo, refactoriza para llamar a
+->setArgument() en nuestra nueva variable:
+
+00:04:19.946 --> 00:04:24.826 align:middle
+Configurar translation_class siempre es necesario,
+pero sólo configuramos la caché si está activada.
+
+00:04:25.316 --> 00:04:32.556 align:middle
+Escribe if ($config['cache']['enabled']): Dentro,
+configura el pool de caché y los argumentos ttl.
+
+00:04:32.896 --> 00:04:36.626 align:middle
+Primero,
+$objectTranslatorDef->setArgument().
+
+00:04:37.306 --> 00:04:41.306 align:middle
+Encuentra el índice de argumentos saltando
+rápidamente al constructor ObjectTranslator,
+
+00:04:41.426 --> 00:04:44.496 align:middle
+y cuenta los argumentos, 0, 1, 2, 3, 4.
+
+00:04:44.786 --> 00:04:50.356 align:middle
+¡Ya está! Utiliza 4 como primer argumento, y para el segundo,
+no podemos utilizar simplemente la cadena pool sin procesar:
+
+00:04:50.556 --> 00:04:52.386 align:middle
+tiene que ser una referencia de servicio.
+
+00:04:52.596 --> 00:04:57.576 align:middle
+Así que escribe new Reference(), asegúrate de
+importarlo del espacio de nombres DependencyInjection.
+
+00:04:58.056 --> 00:05:04.766 align:middle
+Dentro, pasa $config['cache']['pool']: Para el
+ttl, podemos utilizar el entero sin procesar,
+
+00:05:04.796 --> 00:05:08.446 align:middle
+así que
+$objectTranslatorDef->setArgument (5,
+
+00:05:08.586 --> 00:05:13.696 align:middle
+$config['cache']['ttl']):
+¡Creo que ya estamos listos!
+
+00:05:14.126 --> 00:05:16.406 align:middle
+Primero, asegurémonos de que la caché
+de nuestra aplicación está limpia.
+
+00:05:16.826 --> 00:05:23.586 align:middle
+En tu terminal, ejecuta: symfony console
+cache:clear En el navegador, actualiza...
+
+00:05:24.136 --> 00:05:27.526 align:middle
+4 consultas, esto debería
+calcular y fijar la caché.
+
+00:05:27.886 --> 00:05:28.666 align:middle
+Actualiza de nuevo...
+
+00:05:29.056 --> 00:05:30.026 align:middle
+Se ha reducido a 1 consulta.
+
+00:05:30.586 --> 00:05:32.406 align:middle
+Vale, en realidad no ha cambiado mucho...
+
+00:05:32.526 --> 00:05:34.936 align:middle
+así que vamos a configurarlo
+con un pool personalizado
+
+00:05:35.586 --> 00:05:39.256 align:middle
+En cache.yaml de nuestra aplicación,
+descomenta la sección pools.
+
+00:05:39.786 --> 00:05:42.936 align:middle
+Nombra nuestro pool object_translation.cache.
+
+00:05:43.536 --> 00:05:46.566 align:middle
+Por defecto, se basará en
+nuestro grupo cache.app.
+
+00:05:46.926 --> 00:05:53.926 align:middle
+Pero habilitemos el etiquetado añadiendo tags:
+true: Ahora, en symfonycasts_object_translation.yaml,
+
+00:05:54.196 --> 00:05:57.596 align:middle
+configura nuestro pool personalizado
+estableciendo: cache: pool:.
+
+00:05:58.076 --> 00:05:58.996 align:middle
+¿Cómo lo llamamos aquí?
+
+00:05:59.516 --> 00:06:04.896 align:middle
+object_translation.cache cópialo y pégalo:
+De nuevo en el navegador, actualiza...
+
+00:06:05.906 --> 00:06:08.466 align:middle
+4 consultas, esto debería
+estar utilizando el nuevo pool.
+
+00:06:08.876 --> 00:06:09.686 align:middle
+Actualiza de nuevo...
+
+00:06:10.186 --> 00:06:11.086 align:middle
+Se ha reducido a 1 consulta.
+
+00:06:11.346 --> 00:06:15.436 align:middle
+¡Perfecto! Ahora deberíamos poder ver realmente
+cómo funciona la invalidación de etiquetas de caché.
+
+00:06:15.806 --> 00:06:22.926 align:middle
+Ve a tu terminal y ejecuta: symfony console
+cache:pool:invalidate-tags object-translation
+
+00:06:23.936 --> 00:06:25.636 align:middle
+Vuelve al navegador y actualiza...
+
+00:06:26.306 --> 00:06:27.186 align:middle
+4 consultas.
+
+00:06:27.396 --> 00:06:31.356 align:middle
+¡Eso significa que los elementos etiquetados de la
+caché se invalidaron y tuvieron que calcularse de nuevo!
+
+00:06:32.086 --> 00:06:35.596 align:middle
+Bien, nuestro ObjectTranslator
+se ha convertido en un monstruo.
+
+00:06:36.026 --> 00:06:38.146 align:middle
+A continuación, ¡refactoricemos esta bestia!
