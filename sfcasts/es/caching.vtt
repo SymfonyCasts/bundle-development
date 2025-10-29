@@ -1,0 +1,277 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:05.306 align:middle
+Estamos realizando algunas memoizaciones en memoria
+para reducir las llamadas a la base de datos, pero
+
+00:00:05.596 --> 00:00:07.806 align:middle
+sólo mientras dura una petición.
+
+00:00:07.966 --> 00:00:10.506 align:middle
+Seguimos viendo 4 consultas en
+la página de inicio en francés.
+
+00:00:10.736 --> 00:00:14.836 align:middle
+1 para obtener los artículos y 3 para
+obtener las traducciones (1 por artículo).
+
+00:00:15.476 --> 00:00:18.066 align:middle
+Como es probable que estas
+traducciones no cambien tan a menudo,
+
+00:00:18.256 --> 00:00:21.686 align:middle
+implementemos además una estrategia de
+almacenamiento en caché más persistente.
+
+00:00:22.156 --> 00:00:24.876 align:middle
+Sumérgete en el código del
+servicio ObjectTranslator.
+
+00:00:25.256 --> 00:00:30.186 align:middle
+Aquí abajo, en el método translationsFor(),
+este findBy() es el que realiza las consultas.
+
+00:00:30.386 --> 00:00:31.856 align:middle
+¡Esto es lo que queremos almacenar en caché!
+
+00:00:32.396 --> 00:00:36.526 align:middle
+Doctrine ofrece algo de caché de resultados,
+pero puede resultar complejo y no es
+
+00:00:36.526 --> 00:00:39.106 align:middle
+tan flexible como el componente Symfony Cache.
+
+00:00:39.316 --> 00:00:40.196 align:middle
+Así que vamos a utilizarlo.
+
+00:00:40.996 --> 00:00:44.546 align:middle
+Lo primero es lo primero, tenemos que
+inyectar el CacheInterface en el constructor:
+
+00:00:44.876 --> 00:00:51.136 align:middle
+private CacheInterface $cache: Asegúrate
+de importar el de Symfony\Contracts\Cache.
+
+00:00:51.856 --> 00:00:55.456 align:middle
+Es posible que ya hayas utilizado
+alguna de las interfaces de caché PSR.
+
+00:00:55.916 --> 00:01:00.176 align:middle
+Symfony las soporta, pero también
+proporciona sus propios contratos de caché.
+
+00:01:00.506 --> 00:01:02.406 align:middle
+Para nuestro caso de uso, creo que es superior.
+
+00:01:03.026 --> 00:01:07.266 align:middle
+Ahora, abajo en el método translationsFor(),
+justo después de calcular el $id,
+
+00:01:07.556 --> 00:01:11.146 align:middle
+escribe return $this->cache->get().
+
+00:01:11.296 --> 00:01:14.096 align:middle
+El primer argumento es la clave de caché.
+
+00:01:14.466 --> 00:01:16.466 align:middle
+Esto tiene que ser único para lo
+que estamos almacenando en caché.
+
+00:01:17.016 --> 00:01:22.986 align:middle
+Entre comillas dobles, utiliza la interpolación de cadenas para crear
+una clave como ésta: object_translation.{$locale}.{$type}.{$id}.
+
+00:01:24.966 --> 00:01:28.026 align:middle
+El segundo argumento es
+
+00:01:28.916 --> 00:01:30.956 align:middle
+el más divertido: es una
+
+00:01:31.246 --> 00:01:34.546 align:middle
+llamada a function()...: Funciona
+de una forma bastante clara. Cuando
+
+00:01:34.856 --> 00:01:38.556 align:middle
+llamas a get(), primero comprueba si
+la clave existe en la caché. Si no,
+
+00:01:38.756 --> 00:01:41.576 align:middle
+ejecuta la llamada y almacena
+el resultado. Ahora, en
+
+00:01:42.346 --> 00:01:46.306 align:middle
+las siguientes llamadas con la misma clave,
+devuelve el valor almacenado en caché ¡y se salta
+
+00:01:46.306 --> 00:01:48.356 align:middle
+completamente la llamada! De alguna manera,
+
+00:01:49.026 --> 00:01:51.996 align:middle
+¡consigues el conjunto de la caché y
+lo obtienes todo en la llamada! Para las
+
+00:01:52.636 --> 00:01:56.836 align:middle
+tripas de esta función, selecciona el resto
+del método translationsFor(), incluido nuestro
+
+00:01:56.836 --> 00:01:59.286 align:middle
+código de normalización, y córtalo. Pégalo
+
+00:01:59.996 --> 00:02:00.926 align:middle
+dentro. PhpStorm
+
+00:02:02.046 --> 00:02:05.896 align:middle
+se está quejando porque estas variables
+ya no están en el ámbito. Haz que
+
+00:02:06.406 --> 00:02:13.026 align:middle
+estén disponibles en la función añadiendo use
+($locale, $type, $id) después de function(): Por último,
+
+00:02:13.616 --> 00:02:21.956 align:middle
+podemos devolver $translations
+al final de la llamada. Ahora
+
+00:02:21.956 --> 00:02:27.106 align:middle
+necesitamos cablear este nuevo
+argumento del constructor, así que
+
+00:02:27.106 --> 00:02:30.406 align:middle
+utilicemos nuestro truco para
+obtener el ID del servicio. En tu
+
+00:02:30.406 --> 00:02:36.376 align:middle
+terminal, ejecuta: symfony console
+debug:autowiring CacheInterface Bien! cache.app es
+
+00:02:36.376 --> 00:02:38.906 align:middle
+lo que queremos. De vuelta a
+
+00:02:39.226 --> 00:02:44.556 align:middle
+nuestro código, abre el archivo
+services.php de nuestro bundle. Justo aquí,
+
+00:02:44.556 --> 00:02:50.396 align:middle
+debajo de service('doctrine'), añade:
+service('cache.app'): ¡Es hora de probarlo! De vuelta en
+
+00:02:50.396 --> 00:02:54.226 align:middle
+tu navegador, estamos en la página
+principal francesa. Actualiza la
+
+00:02:54.226 --> 00:02:54.846 align:middle
+página. Sigues viendo
+
+00:02:55.406 --> 00:03:03.486 align:middle
+cuatro peticiones, lo cual es de esperar, ya que esta
+petición debería estar calculando la caché. Ahora, actualiza
+
+00:03:03.926 --> 00:03:05.326 align:middle
+de nuevo. ¡BAM!
+
+00:03:05.676 --> 00:03:08.696 align:middle
+Sólo hay una consulta ¡ Eso es caché
+
+00:03:08.696 --> 00:03:10.846 align:middle
+! En la
+
+00:03:11.306 --> 00:03:17.836 align:middle
+barra de herramientas de depuración web, puedes hacer clic
+en el icono de la caché para obtener detalles sobre la
+
+00:03:18.316 --> 00:03:21.626 align:middle
+actividad de la caché para
+esta petición. 3 llamadas
+
+00:03:21.626 --> 00:03:23.216 align:middle
+y 3 aciertos. Aquí abajo
+
+00:03:23.486 --> 00:03:28.196 align:middle
+podemos ver las claves de caché
+utilizadas. ¡Hora de la bonificación!
+
+00:03:28.196 --> 00:03:29.456 align:middle
+Los Contratos de Caché de Symfony
+
+00:03:29.456 --> 00:03:33.376 align:middle
+tienen una función muy
+interesante: el etiquetado. Esto te
+
+00:03:33.376 --> 00:03:38.156 align:middle
+permite agrupar elementos en caché
+e invalidarlos juntos. ¡ Creo
+
+00:03:38.156 --> 00:03:43.246 align:middle
+que nuestro bundle debería
+soportarlo! Volviendo
+
+00:03:43.246 --> 00:03:51.986 align:middle
+aObjectTranslator::translationsFor(), esta llamada a
+la caché acepta un argumento: ItemInterface $item:
+
+00:03:52.436 --> 00:03:58.266 align:middle
+Este objeto nos da la oportunidad
+de configurar cosas sobre este
+
+00:03:58.646 --> 00:04:01.616 align:middle
+elemento específico de la caché,
+¡como añadir etiquetas! Una cosa
+
+00:04:01.616 --> 00:04:06.506 align:middle
+sobre el etiquetado de caché, es que no todos los
+adaptadores de caché lo soportan. Por ejemplo,
+
+00:04:06.576 --> 00:04:09.766 align:middle
+tu cache.app por defecto no lo hace. Comprueba
+
+00:04:10.546 --> 00:04:11.946 align:middle
+si es compatible añadiendo if ($this->cache
+
+00:04:11.946 --> 00:04:15.816 align:middle
+instanceof TagAwareCacheInterface). Asegúrate
+
+00:04:15.816 --> 00:04:17.316 align:middle
+de importar el de
+Symfony\Contracts\Cache. ¡Ahora
+
+00:04:17.346 --> 00:04:18.006 align:middle
+ya podemos añadir etiquetas! Dentro del
+
+00:04:18.036 --> 00:04:18.936 align:middle
+if, escribe $item->tag(). Esto toma
+
+00:04:18.966 --> 00:04:19.386 align:middle
+un array. ¿Qué etiquetas
+
+00:04:19.416 --> 00:04:20.076 align:middle
+serían útiles? Qué tal
+
+00:04:20.106 --> 00:04:21.816 align:middle
+object-translation y object-translation-{$type}:
+Ahora los usuarios pueden
+
+00:04:21.846 --> 00:04:23.166 align:middle
+invalidar todas las traducciones
+de objetos... o, sólo
+
+00:04:23.196 --> 00:04:23.856 align:middle
+un tipo específico. Para ver
+
+00:04:23.886 --> 00:04:25.446 align:middle
+cómo funcionaría, salta a tu
+terminal y ejecuta: symfony console
+
+00:04:25.476 --> 00:04:27.876 align:middle
+cache:pool:invalidate-tags object-translation
+Esto dice que se ha hecho correctamente, pero como
+
+00:04:27.906 --> 00:04:29.106 align:middle
+ya he dicho, cache.app no admite el
+etiquetado. A continuación, vamos a
+
+00:04:29.136 --> 00:04:31.146 align:middle
+añadir alguna configuración de bundle para que los
+usuarios puedan elegir un grupo de caché... y otras
+
+00:04:31.176 --> 00:04:31.596 align:middle
+opciones.
