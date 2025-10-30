@@ -1,0 +1,212 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index 89f7afa..04a7707 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -3,6 +3,7 @@
+ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+ 
+ use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
++use SymfonyCasts\ObjectTranslationBundle\TranslatableMappingManager;
+ use SymfonyCasts\ObjectTranslationBundle\Twig\ObjectTranslatorExtension;
+ 
+ return static function (ContainerConfigurator $container): void {
+@@ -11,13 +12,18 @@ return static function (ContainerConfigurator $container): void {
+             ->args([
+                 service('translation.locale_switcher'),
+                 param('kernel.default_locale'),
+-                abstract_arg('translation class'),
+-                service('doctrine'),
++                service('.symfonycasts.object_translator.mapping_manager'),
+             ])
+             ->tag('twig.runtime')
+ 
+         ->alias(ObjectTranslator::class, 'symfonycasts.object_translator')
+ 
++        ->set('.symfonycasts.object_translator.mapping_manager', TranslatableMappingManager::class)
++            ->args([
++                abstract_arg('translation class'),
++                service('doctrine'),
++            ])
++
+         ->set('.symfonycasts.object_translator.twig_extension', ObjectTranslatorExtension::class)
+             ->tag('twig.extension')
+     ;
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 1f7496b..1a8325a 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -58,11 +58,12 @@ final class ObjectTranslationBundle extends AbstractBundle
+ 
+         $objectTranslatorDef = $builder->getDefinition('symfonycasts.object_translator');
+ 
+-        $objectTranslatorDef->setArgument(2, $config['translation_class']);
+-
+         if ($config['cache']['enabled']) {
+-            $objectTranslatorDef->setArgument(4, new Reference($config['cache']['pool']));
+-            $objectTranslatorDef->setArgument(5, $config['cache']['ttl']);
++            $objectTranslatorDef->setArgument(3, new Reference($config['cache']['pool']));
++            $objectTranslatorDef->setArgument(4, $config['cache']['ttl']);
+         }
++
++        $builder->getDefinition('.symfonycasts.object_translator.mapping_manager')
++            ->setArgument(0, $config['translation_class']);
+     }
+ }
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 49e867a..737342b 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -2,14 +2,11 @@
+ 
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
+-use Doctrine\Persistence\ManagerRegistry;
+ use Symfony\Component\Cache\Adapter\NullAdapter;
+ use Symfony\Contracts\Cache\CacheInterface;
+ use Symfony\Contracts\Cache\ItemInterface;
+ use Symfony\Contracts\Cache\TagAwareCacheInterface;
+ use Symfony\Contracts\Translation\LocaleAwareInterface;
+-use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
+-use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+ 
+ final class ObjectTranslator
+ {
+@@ -19,8 +16,7 @@ final class ObjectTranslator
+     public function __construct(
+         private LocaleAwareInterface $localeAware,
+         private string $defaultLocale,
+-        private string $translationClass,
+-        private ManagerRegistry $doctrine,
++        private TranslatableMappingManager $mappingManager,
+         ?CacheInterface $cache = null,
+         private ?int $cacheTtl = null,
+     ) {
+@@ -48,28 +44,8 @@ final class ObjectTranslator
+ 
+     private function translationsFor(object $object, string $locale): array
+     {
+-        $class = new \ReflectionClass($object);
+-        $type = $class->getAttributes(Translatable::class)[0]?->newInstance()->name ?? null;
+-
+-        if (!$type) {
+-            throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));
+-        }
+-
+-        $om = $this->doctrine->getManagerForClass($object::class);
+-
+-        if (!$om) {
+-            throw new \LogicException(sprintf('No object manager found for class "%s".', $object::class));
+-        }
+-
+-        $id = $om->getClassMetadata($object::class)
+-            ->getIdentifierValues($object)
+-        ;
+-
+-        if (1 !== count($id)) {
+-            throw new \LogicException(sprintf('Class "%s" must have a single identifier to be translatable.', $object::class));
+-        }
+-
+-        $id = reset($id);
++        $type = $this->mappingManager->translatableTypeFor($object);
++        $id = $this->mappingManager->idFor($object);
+ 
+         return $this->cache->get(
+             "object_translation.{$locale}.{$type}.{$id}",
+@@ -82,20 +58,7 @@ final class ObjectTranslator
+                     $item->expiresAfter($this->cacheTtl);
+                 }
+ 
+-                /** @var Translation[] $translations */
+-                $translations = $this->doctrine->getRepository($this->translationClass)->findBy([
+-                    'locale' => $locale,
+-                    'objectType' => $type,
+-                    'objectId' => $id,
+-                ]);
+-
+-                $translationValues = [];
+-
+-                foreach ($translations as $translation) {
+-                    $translationValues[$translation->field] = $translation->value;
+-                }
+-
+-                return $translationValues;
++                return $this->mappingManager->translationsFor($locale, $type, $id);
+             }
+         );
+     }
+diff --git a/object-translation-bundle/src/TranslatableMappingManager.php b/object-translation-bundle/src/TranslatableMappingManager.php
+new file mode 100644
+index 0000000..6cb44a7
+--- /dev/null
++++ b/object-translation-bundle/src/TranslatableMappingManager.php
+@@ -0,0 +1,70 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle;
++
++use Doctrine\Persistence\ManagerRegistry;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
++use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
++
++/**
++ * @internal
++ */
++final class TranslatableMappingManager
++{
++    public function __construct(
++        private string $translationClass,
++        private ManagerRegistry $doctrine,
++    ) {
++    }
++
++    public function translatableTypeFor(object $object): string
++    {
++        $class = new \ReflectionClass($object);
++        $type = $class->getAttributes(Translatable::class)[0]?->newInstance()->name ?? null;
++
++        if (!$type) {
++            throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));
++        }
++
++        return $type;
++    }
++
++    public function idFor(object $object): string
++    {
++        $om = $this->doctrine->getManagerForClass($object::class);
++
++        if (!$om) {
++            throw new \LogicException(sprintf('No object manager found for class "%s".', $object::class));
++        }
++
++        $id = $om->getClassMetadata($object::class)
++            ->getIdentifierValues($object)
++        ;
++
++        if (1 !== count($id)) {
++            throw new \LogicException(sprintf('Class "%s" must have a single identifier to be translatable.', $object::class));
++        }
++
++        $id = reset($id);
++
++        return $id;
++    }
++
++    public function translationsFor(string $locale, string $type, string $id): array
++    {
++        /** @var Translation[] $translations */
++        $translations = $this->doctrine->getRepository($this->translationClass)->findBy([
++            'locale' => $locale,
++            'objectType' => $type,
++            'objectId' => $id,
++        ]);
++
++        $translationValues = [];
++
++        foreach ($translations as $translation) {
++            $translationValues[$translation->field] = $translation->value;
++        }
++
++        return $translationValues;
++    }
++}

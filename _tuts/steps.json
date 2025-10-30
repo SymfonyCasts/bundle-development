@@ -289,7 +289,12 @@
             "id": "22-custom-cache-pool",
             "name": "22. custom cache pool",
             "description": null
+        },
+        {
+            "id": "23-mappingmanager",
+            "name": "23. MappingManager",
+            "description": null
         }
     ],
-    "sha": "7d588eeba6600189e76e4fb9911daa1a7b2c3861"
+    "sha": "082abfa5074d90104f6182ec1cbfcc01e84f18f1"
 }
