@@ -569,3 +569,35 @@
 - `symfony console cache:pool:invalidate-tags object-translation`
 - Refresh - cache was cleared for object translations!
 
+## Mapping Manager
+
+- Create `TransatableMappingManager`
+    - `final` & `@internal`
+    - `public function translatableTypeFor(object $object): ?string`
+        - copy reflection logic from `ObjectTranslator` (return the name or null)
+    - Constructor, inject `private ManagerRegistry $doctrine`
+    - `public function idFor(object $object): string`
+        - copy id logic from `ObjectTranslator` (return id)
+        - `return (string) reset($id);`
+    - `public function translationsFor(string $locale, string $type, string $id): array`
+        - inject `private string $translationClass`
+        - copy translation fetching logic from `ObjectTranslator::translationsFor()` (return array)
+- In `ObjectTranslator`
+    - replace `$translationClass` and `$doctrine` with `private TranslatableMappingManager $mappingManager`
+    - In `translationsFor()`, replace with:
+        - `$type = $this->mappingManager->translatableTypeFor($object);`
+        - `$id = $this->mappingManager->idFor($object);`
+        - remove the checks for valid id - this is handled in the manager
+        - In the callable:
+            - remove the array mapping logic - this is handled in the manager
+            - `return $this->mappingManager->translationsFor($locale, $type, $id);`
+        - Clean up the namespaces
+- In `services.php`
+    - add new service: `->set('.symfonycasts.object_translator.mapping_manager', TranslatableMappingManager::class)`
+    - `->args([])` cut and paste from `ObjectTranslator` service
+    - In `ObjectTranslator` service, add: `service('.symfonycasts.object_translator.mapping_manager'),`
+- In `ObjectTranslationBundle::loadExtension()`
+    - In `setArgument()` calls, 3,4
+    - Inline getDefinition call
+    - `$builder->getDefinition('.symfonycasts.object_translator.mapping_manager')`
+- Test that everything still works!
