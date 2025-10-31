@@ -71,11 +71,11 @@ con ->defaultValue('cache.app'): A continuación,
 añade un ->integerNode('ttl')->end() y dentro,
 
 00:01:28.416 --> 00:01:32.486 align:middle
-->info('El tiempo de vida para las
-traducciones en caché, en segundos.
+->info('The time-to-live for cached
+translations, in seconds. 
 
 00:01:32.726 --> 00:01:34.126 align:middle
-null para no caducidad').
+null for no expiration').
 
 00:01:34.956 --> 00:01:39.826 align:middle
 Aunque se trata de un nodo entero, a menos que lo
