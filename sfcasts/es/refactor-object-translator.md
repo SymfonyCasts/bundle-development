@@ -58,7 +58,8 @@ Por último, en la llamada a la caché, sustituye la lógica de Doctrine para ob
 
 Hemos refactorizado el código, pero necesitamos actualizar nuestras definiciones de servicio.
 
-En `services.php`, añade nuestro nuevo servicio con`->set('.`, para convertirlo en un servicio oculto,`symfonycasts.object_translator.mapping_manager`. Para los args, utiliza`->args([])` y expande. En la definición `ObjectTranslator` anterior, corta los argumentos relacionados con Doctrine y pégalos como argumentos de nuestro nuevo servicio:
+En `services.php`, añade nuestro nuevo servicio con`->set('.`, para convertirlo en un servicio oculto,`symfonycasts.object_translator.mapping_manager`. Clase: `TranslatableMappingManager`. 
+Para los args, utiliza`->args([])` y expande. En la definición `ObjectTranslator` anterior, corta los argumentos relacionados con Doctrine y pégalos como argumentos de nuestro nuevo servicio:
 
 [[[ code('c090bc5e91') ]]]
 
@@ -78,7 +79,7 @@ En nuestra configuración de caché, estos índices de argumentos se han desplaz
 
 [[[ code('23613c9d26') ]]]
 
-Hay que trasladar el `translation_class` a nuestro nuevo servicio. Por tanto, escribe`$builder->getDefinition('symfonycasts.object_translator.mapping_manager')`. Copia la llamada `setArgument` anterior y pégala aquí. Para el índice, comprueba el constructor de`TranslatableMappingManager`. Es `0`, así que vuelve a`loadExtension()`, cambia el índice a `0` y elimina la variable de arriba:
+Hay que trasladar el `translation_class` a nuestro nuevo servicio. Por tanto, escribe`$builder->getDefinition('.symfonycasts.object_translator.mapping_manager')`. Copia la llamada `setArgument` anterior y pégala aquí. Para el índice, comprueba el constructor de`TranslatableMappingManager`. Es `0`, así que vuelve a`loadExtension()`, cambia el índice a `0` y elimina esta variable pícara de arriba:
 
 [[[ code('091cdbcc01') ]]]
 
