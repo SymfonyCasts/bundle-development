@@ -89,7 +89,8 @@ We've refactored the code but need to update our service definitions.
 
 In `services.php`, add our new service with
 `->set('.`, to make it a hidden service,
-`symfonycasts.object_translator.mapping_manager`. For the args, use
+`symfonycasts.object_translator.mapping_manager`. Class: `TranslatableMappingManager`. 
+For the args, use
 `->args([])` and expand. In the `ObjectTranslator` definition above,
 cut the Doctrine-related arguments, and paste as our new service's
 arguments:
@@ -118,7 +119,7 @@ calls to use `3, 4` instead of `5, 6`:
 [[[ code('23613c9d26') ]]]
 
 The `translation_class` needs to be moved to our new service. So, write
-`$builder->getDefinition('symfonycasts.object_translator.mapping_manager')`.
+`$builder->getDefinition('.symfonycasts.object_translator.mapping_manager')`.
 Copy the `setArgument` call above and paste it here. For the index, check
 `TranslatableMappingManager`'s constructor. It's `0`, so back in
 `loadExtension()`, change the index to `0` and delete this rogue variable above:
