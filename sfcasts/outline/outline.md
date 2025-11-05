@@ -601,3 +601,84 @@
     - Inline getDefinition call
     - `$builder->getDefinition('.symfonycasts.object_translator.mapping_manager')`
 - Test that everything still works!
+
+## Warmup Command
+
+- By default, translations are cached indefinitely
+    - We can set an expiry but when if we want to refresh the cache?
+        - Like we've updated the database?
+- Let's create a console command to "warmup" the cache
+- Create `ObjectTranslationWarmupCommand` in the `Command` namespace
+    - `final` and `@internal` (the command is public but the code isn't)
+    - extends `Command`
+    - Add `#[AsCommand(`
+      name: 'object-translation:warmup',
+      description: 'Warms up the object translation cache.'
+      )]`
+    - Override constructor and `execute()`
+    - In constructor, remove argument, pass nothing to parent
+        - `private ObjectTranslator $translator`
+        - `private TranslatableMappingManager $mappingManager`
+        - `private LocaleSwitcher $localeSwitcher`
+        - `private array $locales`
+    - In `execute()`
+        - `return self::SUCCESS`;
+        - `$io = new SymfonyStyle($input, $output)`
+        - `$io->title('Warming up Object Translation Cache')`
+        - `$count = 0`
+- We need to get all translatable entities
+- In `TranslatableMappingManager`
+    - `public function allTranslatableObjects(): iterable`
+    - `foreach ($this->doctrine->getManagers() as $om) {`
+    - `foreach ($om->getMetadataFactory()->getAllMetadata() as $metadata) {`
+    - `$class = $metadata->getName();`
+    - `if (!(new \ReflectionClass($class))->getAttributes(Translatable::class)) {`
+        - `continue`
+    - `yield from $om->getRepository($class)->findAll();`
+- Back in `ObjectTranslationWarmupCommand`
+    - `foreach ($io->progressIterate($this->mappingManager->allTranslatableObjects()) as $object) {`
+    - `$count++;`
+    - `foreach ($this->locales as $locale) {`
+    - `$this->localeSwitcher->runWithLocale($locale, function() use ($object, $locale) {`
+        - `$this->translator->translate($object, $locale);`
+        - `$io->success("Warmed up the cache for {$count} translations.");`
+- We need for force the locale in `ObjectTranslator::translate()`
+    - In `translate()`, add `?string $locale = null`
+    - Change first line to:
+        - `$locale = $locale ?? $this->localeAware->getLocale();`
+
+## Configure the Warmup Command
+
+- In `services.php`
+    - ```
+    ->set('.symfonycasts.object_translator.warmup_command', ObjectTranslationWarmupCommand::class)
+            ->args([
+                service('symfonycasts.object_translator'),
+                service('.symfonycasts.object_translator.mapping_manager'),
+                service('translation.locale_switcher'),
+                param('kernel.enabled_locales'),
+            ])
+            ->tag('console.command')
+    ```
+- Try it out! `symfony console object-translation:warmup`
+- We need a way to "force" the refresh
+    - We can do this by invalidating the cache tags before warming up
+    - But, user might not be using a tag-aware cache
+    - We need to expire early and rebuild at the same time...
+    - Cache Contracts has us covered!
+- In `ObjectTranslator::translationsFor()`
+    - Check out `CacheInterface` `get()`
+    - `float $beta` helps with stampede by giving a chance to expire early and re-compute
+    - During warmup, we want it to always expire early - INF!
+    - Add `bool $forceRefresh` to method
+    - Add a third argument to `get()`
+        - `$forceRefresh ? \INF : null` (to use the default behavior)
+    - In `translate()`, add another argument: `array $options = []`
+        - we might add additional options later
+        - In `translationsFor()` call, add:
+            - `$options['force_refresh'] ?? false`
+- In `ObjectTranslationWarmupCommand`
+    - `$this->translator->translate($object, $locale, ['force_refresh' => true]);`
+- We have a subtle bug in `TranslatableMappingManager::translationTypeFor()`
+    - The nullsafe operator after `[0]` outputs an error if there are no attributes
+    - update...
