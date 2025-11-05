@@ -1,0 +1,16 @@
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 737342b..d69f63b 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -31,9 +31,9 @@ final class ObjectTranslator
+      *
+      * @return T
+      */
+-    public function translate(object $object): object
++    public function translate(object $object, ?string $locale = null): object
+     {
+-        $locale = $this->localeAware->getLocale();
++        $locale = $locale ?? $this->localeAware->getLocale();
+ 
+         if ($this->defaultLocale === $locale) {
+             return $object;

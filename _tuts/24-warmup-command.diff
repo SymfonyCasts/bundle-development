@@ -1,0 +1,48 @@
+diff --git a/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php b/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php
+new file mode 100644
+index 0000000..df130fe
+--- /dev/null
++++ b/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php
+@@ -0,0 +1,42 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Command;
++
++use Symfony\Component\Console\Attribute\AsCommand;
++use Symfony\Component\Console\Command\Command;
++use Symfony\Component\Console\Input\InputInterface;
++use Symfony\Component\Console\Output\OutputInterface;
++use Symfony\Component\Console\Style\SymfonyStyle;
++use Symfony\Component\Translation\LocaleSwitcher;
++use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
++use SymfonyCasts\ObjectTranslationBundle\TranslatableMappingManager;
++
++/**
++ * @internal
++ */
++#[AsCommand(
++    name: 'object-translation:warmup',
++    description: 'Warms up the object translation cache.',
++)]
++final class ObjectTranslationWarmupCommand extends Command
++{
++    public function __construct(
++        private ObjectTranslator $translator,
++        private TranslatableMappingManager $mappingManager,
++        private LocaleSwitcher $localeAware,
++        private array $locales,
++    ) {
++        parent::__construct();
++    }
++
++    protected function execute(InputInterface $input, OutputInterface $output): int
++    {
++        $io = new SymfonyStyle($input, $output);
++
++        $io->title('Warming up Object Translation Cache');
++
++        $count = 0;
++
++        return self::SUCCESS;
++    }
++}

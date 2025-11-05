@@ -1,0 +1,28 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index 04a7707..53ad0fe 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+ 
++use SymfonyCasts\ObjectTranslationBundle\Command\ObjectTranslationWarmupCommand;
+ use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
+ use SymfonyCasts\ObjectTranslationBundle\TranslatableMappingManager;
+ use SymfonyCasts\ObjectTranslationBundle\Twig\ObjectTranslatorExtension;
+@@ -24,6 +25,15 @@ return static function (ContainerConfigurator $container): void {
+                 service('doctrine'),
+             ])
+ 
++        ->set('.symfonycasts.object_translator.warmup_command', ObjectTranslationWarmupCommand::class)
++            ->args([
++                service('symfonycasts.object_translator'),
++                service('.symfonycasts.object_translator.mapping_manager'),
++                service('translation.locale_switcher'),
++                param('kernel.enabled_locales'),
++            ])
++            ->tag('console.command')
++
+         ->set('.symfonycasts.object_translator.twig_extension', ObjectTranslatorExtension::class)
+             ->tag('twig.extension')
+     ;

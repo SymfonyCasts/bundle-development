@@ -1,0 +1,26 @@
+diff --git a/object-translation-bundle/src/TranslatableMappingManager.php b/object-translation-bundle/src/TranslatableMappingManager.php
+index 00ba337..42b61c8 100644
+--- a/object-translation-bundle/src/TranslatableMappingManager.php
++++ b/object-translation-bundle/src/TranslatableMappingManager.php
+@@ -3,6 +3,7 @@
+ namespace SymfonyCasts\ObjectTranslationBundle;
+ 
+ use Doctrine\Persistence\ManagerRegistry;
++use Doctrine\Persistence\Proxy;
+ use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
+ use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+ 
+@@ -20,7 +21,12 @@ final class TranslatableMappingManager
+     public function translatableTypeFor(object $object): string
+     {
+         $class = new \ReflectionClass($object);
+-        $type = $class->getAttributes(Translatable::class)[0]?->newInstance()->name ?? null;
++
++        if ($class->implementsInterface(Proxy::class)) {
++            $class = $class->getParentClass();
++        }
++
++        $type = ($class->getAttributes(Translatable::class)[0] ?? null)?->newInstance()->name ?? null;
+ 
+         if (!$type) {
+             throw new \LogicException(sprintf('Class "%s" is not translatable.', $object::class));

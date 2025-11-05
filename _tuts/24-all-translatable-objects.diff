@@ -1,0 +1,24 @@
+diff --git a/object-translation-bundle/src/TranslatableMappingManager.php b/object-translation-bundle/src/TranslatableMappingManager.php
+index 6cb44a7..00ba337 100644
+--- a/object-translation-bundle/src/TranslatableMappingManager.php
++++ b/object-translation-bundle/src/TranslatableMappingManager.php
+@@ -67,4 +67,19 @@ final class TranslatableMappingManager
+ 
+         return $translationValues;
+     }
++
++    public function allTranslatableObjects(): iterable
++    {
++        foreach ($this->doctrine->getManagers() as $om) {
++            foreach ($om->getMetadataFactory()->getAllMetadata() as $metadata) {
++                $class = $metadata->getName();
++
++                if (!(new \ReflectionClass($class))->getAttributes(Translatable::class)) {
++                    continue;
++                }
++
++                yield from $om->getRepository($class)->findAll();
++            }
++        }
++    }
+ }

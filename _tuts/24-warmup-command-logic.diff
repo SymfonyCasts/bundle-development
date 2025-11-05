@@ -1,0 +1,23 @@
+diff --git a/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php b/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php
+index df130fe..5fc9ed2 100644
+--- a/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php
++++ b/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php
+@@ -37,6 +37,18 @@ final class ObjectTranslationWarmupCommand extends Command
+ 
+         $count = 0;
+ 
++        foreach ($io->progressIterate($this->mappingManager->allTranslatableObjects()) as $object) {
++            foreach ($this->locales as $locale) {
++                $this->localeAware->runWithLocale($locale, function () use ($object, $locale) {
++                    $this->translator->translate($object, $locale);
++                });
++            }
++
++            ++$count;
++        }
++
++        $io->success("Warmed up cache for {$count} translatable objects.");
++
+         return self::SUCCESS;
+     }
+ }

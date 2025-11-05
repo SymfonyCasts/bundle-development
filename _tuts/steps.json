@@ -294,7 +294,42 @@
             "id": "23-mappingmanager",
             "name": "23. MappingManager",
             "description": null
+        },
+        {
+            "id": "24-warmup-command",
+            "name": "24. warmup command",
+            "description": null
+        },
+        {
+            "id": "24-all-translatable-objects",
+            "name": "24. all translatable objects",
+            "description": null
+        },
+        {
+            "id": "24-warmup-command-logic",
+            "name": "24. warmup command logic",
+            "description": null
+        },
+        {
+            "id": "24-translate-locale",
+            "name": "24. translate locale",
+            "description": null
+        },
+        {
+            "id": "25-warmup-command-service-config",
+            "name": "25. warmup command service config",
+            "description": null
+        },
+        {
+            "id": "25-fix-reflection-bug",
+            "name": "25. fix reflection bug",
+            "description": null
+        },
+        {
+            "id": "25-force-refresh",
+            "name": "25. force refresh",
+            "description": null
         }
     ],
-    "sha": "082abfa5074d90104f6182ec1cbfcc01e84f18f1"
+    "sha": "3858511748b66939c6606194f137135f0646e7d9"
 }
