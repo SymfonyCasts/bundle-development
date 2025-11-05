@@ -71,6 +71,9 @@ chapters:
     cache-warmup-command:
         tutsFirstStep: null
         tutsLastStep: null
+    warmup-command-config:
+        tutsFirstStep: null
+        tutsLastStep: null
     export-command:
         tutsFirstStep: null
         tutsLastStep: null
