@@ -69,11 +69,11 @@ chapters:
         tutsFirstStep: 23-mappingmanager
         tutsLastStep: 23-mappingmanager
     cache-warmup-command:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 24-warmup-command
+        tutsLastStep: 24-translate-locale
     warmup-command-config:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 25-warmup-command-service-config
+        tutsLastStep: 25-force-refresh
     export-command:
         tutsFirstStep: null
         tutsLastStep: null
