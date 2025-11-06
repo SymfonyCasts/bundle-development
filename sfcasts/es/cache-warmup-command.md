@@ -14,7 +14,7 @@ A continuación, haz que extienda `Command` del componente de consola `Symfony`.
 
 Dentro de la clase, anula dos métodos: el constructor y `execute()`.
 
-En el constructor, no queremos este argumento `$name`, pero aún así tenemos que llamar al constructor padre, sólo que sin argumentos.
+En el constructor, no queremos este argumento `$name`, pero seguimos necesitando llamar al constructor padre, sólo que sin argumentos.
 
 ## Inyectar servicios
 
@@ -56,7 +56,7 @@ Dentro, crea un bucle anidado para las localizaciones: `foreach ($this->locales 
 
 Ahora, escribe `$this->localeSwitcher->runWithLocale()`. Este método toma dos argumentos: la `$locale` a la que queremos cambiar, y un callable. En este caso, `use ($object, $locale)`. Cambiará la configuración regional de toda la aplicación mientras dure la llamada. Después, volverá a la configuración anterior.
 
-Dentro de la llamada, `$this->translator->`... ¿Dónde está mi autocompletado? Se me olvidó importar la clase `ObjectTranslator`. Ya está.
+Dentro de la llamada, `$this->translator->`... ¿Dónde está mi autocompletado? Se me ha olvidado importar la clase `ObjectTranslator`. Ya está.
 
 Vuelve abajo, escribe `translate($object, $locale)`.
 
@@ -70,7 +70,7 @@ Arriba, donde estamos llamando a `translate()`, PhpStorm no está contento con e
 
 Entra en `ObjectTranslator::translate()` y añádelo:`?string $locale = null`. Cuando obtengamos la configuración regional actual, intenta utilizar primero la configuración regional pasada: `$locale ??`.
 
-Si se pasa, se utilizará; si no, se utilizará la configuración regional de la petición actual.
+Si se pasa, se utilizará; si no, se extraerá de la petición.
 
 De vuelta a nuestro comando, ¡PhpStorm está contento!
 
