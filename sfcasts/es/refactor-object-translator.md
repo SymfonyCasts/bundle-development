@@ -79,7 +79,7 @@ En nuestra configuración de caché, estos índices de argumentos se han desplaz
 
 [[[ code('23613c9d26') ]]]
 
-Hay que trasladar el `translation_class` a nuestro nuevo servicio. Por tanto, escribe`$builder->getDefinition('.symfonycasts.object_translator.mapping_manager')`. Copia la llamada `setArgument` anterior y pégala aquí. Para el índice, comprueba el constructor de`TranslatableMappingManager`. Es `0`, así que vuelve a`loadExtension()`, cambia el índice a `0` y elimina esta variable pícara de arriba:
+Hay que mover el `translation_class` a nuestro nuevo servicio. Por tanto, escribe`$builder->getDefinition('.symfonycasts.object_translator.mapping_manager')`. Copia la llamada `setArgument` anterior y pégala aquí. Para el índice, comprueba el constructor de`TranslatableMappingManager`. Es `0`, así que vuelve a`loadExtension()`, cambia el índice a `0` y elimina esta variable pícara de arriba:
 
 [[[ code('091cdbcc01') ]]]
 
