@@ -116,7 +116,7 @@ Jump into `ObjectTranslator::translate()` and add it:
 `?string $locale = null`. Where we're fetching the current locale,
 attempt to use the passed locale first: `$locale ??`.
 
-When passed, *it* will be used, otherwise, the current request's locale will be used.
+When passed, *it* will be used, otherwise, it'll be pulled from the request.
 
 Back over in our command, PhpStorm is happy!
 
