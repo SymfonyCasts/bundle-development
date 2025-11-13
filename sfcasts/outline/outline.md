@@ -682,3 +682,38 @@
 - We have a subtle bug in `TranslatableMappingManager::translationTypeFor()`
     - The nullsafe operator after `[0]` outputs an error if there are no attributes
     - update...
+
+## Export Command
+
+- Need a way to add/update/maintain translations
+    - Eventually: form type, easy admin integration, etc.
+    - For now:
+        - Command to extract our default locale (en) content
+        - Command to import translated content from a file
+- New command: `ObjectTranslationExportCommand`
+    - Copy/paste and explain
+- in `services.php` - wire up
+- In Command, `translatableValuesFor()` - create method
+    - return type iterable
+    - Time to use our `TranslatableProperty` attribute!
+    - `$class = new \ReflectionClass($object);`
+    - `foreach ($class->getProperties() as $property) {`
+        - `if (!$property->getAttributes(TranslatableProperty::class)) { continue; `
+        - `yield $property->getName() => $property->getValue($object);`
+- Test command
+
+## Import Command
+
+- New command: `ObjectTranslationImportCommand`
+    - Copy/paste and explain
+- In `services.php` - wire up
+- in Command, `upsert()` - create method
+    - all params string, return void
+    - `$om = $this->doctrine->getManagerForClass($this->translationClass);`
+    - `$translation = $om->getRepository($this->translationClass)->findOneBy()`
+    - `if (!$translation)`
+        - `$translation = new ($this->translationClass)();`
+        - set `objectType`, `objectId`, `locale`, `field`
+    - set `value`
+    - persist/flush
+- test import
