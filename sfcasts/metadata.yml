@@ -75,8 +75,8 @@ chapters:
         tutsFirstStep: 25-warmup-command-service-config
         tutsLastStep: 25-force-refresh
     export-command:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 26-export-command
+        tutsLastStep: 26-export-command
     import-command:
         tutsFirstStep: null
         tutsLastStep: null
