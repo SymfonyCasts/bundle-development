@@ -1,0 +1,132 @@
+diff --git a/object-translation-bundle/config/services.php b/object-translation-bundle/config/services.php
+index 53ad0fe..50a5a8f 100644
+--- a/object-translation-bundle/config/services.php
++++ b/object-translation-bundle/config/services.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+ 
++use SymfonyCasts\ObjectTranslationBundle\Command\ObjectTranslationExportCommand;
+ use SymfonyCasts\ObjectTranslationBundle\Command\ObjectTranslationWarmupCommand;
+ use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
+ use SymfonyCasts\ObjectTranslationBundle\TranslatableMappingManager;
+@@ -34,6 +35,12 @@ return static function (ContainerConfigurator $container): void {
+             ])
+             ->tag('console.command')
+ 
++        ->set('.symfonycasts.object_translator.export_command', ObjectTranslationExportCommand::class)
++            ->args([
++                service('.symfonycasts.object_translator.mapping_manager'),
++            ])
++            ->tag('console.command')
++
+         ->set('.symfonycasts.object_translator.twig_extension', ObjectTranslatorExtension::class)
+             ->tag('twig.extension')
+     ;
+diff --git a/object-translation-bundle/src/Command/ObjectTranslationExportCommand.php b/object-translation-bundle/src/Command/ObjectTranslationExportCommand.php
+new file mode 100644
+index 0000000..713a5e9
+--- /dev/null
++++ b/object-translation-bundle/src/Command/ObjectTranslationExportCommand.php
+@@ -0,0 +1,71 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Command;
++
++use Symfony\Component\Console\Attribute\AsCommand;
++use Symfony\Component\Console\Command\Command;
++use Symfony\Component\Console\Input\InputArgument;
++use Symfony\Component\Console\Input\InputInterface;
++use Symfony\Component\Console\Output\OutputInterface;
++use Symfony\Component\Console\Style\SymfonyStyle;
++use SymfonyCasts\ObjectTranslationBundle\TranslatableMappingManager;
++
++/**
++ * @internal
++ */
++#[AsCommand(
++    name: 'object-translation:export',
++    description: 'Exports object translations to a CSV.',
++)]
++final class ObjectTranslationExportCommand extends Command
++{
++    public function __construct(
++        private TranslatableMappingManager $mappingManager,
++    ) {
++        parent::__construct();
++    }
++
++    protected function configure(): void
++    {
++        $this
++            ->addArgument('file', InputArgument::REQUIRED, 'The CSV file to export to.')
++        ;
++    }
++
++    protected function execute(InputInterface $input, OutputInterface $output): int
++    {
++        $io = new SymfonyStyle($input, $output);
++        $file = $input->getArgument('file');
++
++        $io->title('Exporting Object Translations to CSV');
++
++        $fp = fopen($file, 'w');
++
++        fputcsv($fp, [
++            'type',
++            'id',
++            'field',
++            'value',
++        ]);
++
++        foreach ($io->progressIterate($this->mappingManager->allTranslatableObjects()) as $object) {
++            $type = $this->mappingManager->translatableTypeFor($object);
++            $id = $this->mappingManager->idFor($object);
++
++            foreach ($this->mappingManager->translatableValuesFor($object) as $field => $value) {
++                fputcsv($fp, [
++                    $type,
++                    $id,
++                    $field,
++                    $value,
++                ]);
++            }
++        }
++
++        fclose($fp);
++
++        $io->success(sprintf('Exported to "%s"', $file));
++
++        return self::SUCCESS;
++    }
++}
+diff --git a/object-translation-bundle/src/TranslatableMappingManager.php b/object-translation-bundle/src/TranslatableMappingManager.php
+index 42b61c8..babe320 100644
+--- a/object-translation-bundle/src/TranslatableMappingManager.php
++++ b/object-translation-bundle/src/TranslatableMappingManager.php
+@@ -5,6 +5,7 @@ namespace SymfonyCasts\ObjectTranslationBundle;
+ use Doctrine\Persistence\ManagerRegistry;
+ use Doctrine\Persistence\Proxy;
+ use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\TranslatableProperty;
+ use SymfonyCasts\ObjectTranslationBundle\Model\Translation;
+ 
+ /**
+@@ -88,4 +89,17 @@ final class TranslatableMappingManager
+             }
+         }
+     }
++
++    public function translatableValuesFor(object $object): iterable
++    {
++        $class = new \ReflectionClass($object);
++
++        foreach ($class->getProperties() as $property) {
++            if (!$property->getAttributes(TranslatableProperty::class)) {
++                continue;
++            }
++
++            yield $property->getName() => $property->getValue($object);
++        }
++    }
+ }
