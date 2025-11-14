@@ -1,3 +1,16 @@
+diff --git a/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php b/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php
+index 5fc9ed2..941d828 100644
+--- a/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php
++++ b/object-translation-bundle/src/Command/ObjectTranslationWarmupCommand.php
+@@ -40,7 +40,7 @@ final class ObjectTranslationWarmupCommand extends Command
+         foreach ($io->progressIterate($this->mappingManager->allTranslatableObjects()) as $object) {
+             foreach ($this->locales as $locale) {
+                 $this->localeAware->runWithLocale($locale, function () use ($object, $locale) {
+-                    $this->translator->translate($object, $locale);
++                    $this->translator->translate($object, $locale, ['force_refresh' => true]);
+                 });
+             }
+ 
 diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
 index d69f63b..707d6e0 100644
 --- a/object-translation-bundle/src/ObjectTranslator.php

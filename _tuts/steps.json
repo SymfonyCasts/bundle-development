@@ -334,7 +334,17 @@
             "id": "26-export-command",
             "name": "26. export command",
             "description": null
+        },
+        {
+            "id": "27-remove-weakmap",
+            "name": "27. remove weakmap",
+            "description": null
+        },
+        {
+            "id": "27-import-command",
+            "name": "27. import command",
+            "description": null
         }
     ],
-    "sha": "f817e0d5e42cc056af37cadba3253b884d809ff5"
+    "sha": "611aafa0effbb71b8806988030a4306e13631547"
 }
