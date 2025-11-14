@@ -78,8 +78,8 @@ chapters:
         tutsFirstStep: 26-export-command
         tutsLastStep: 26-export-command
     import-command:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 27-remove-weakmap
+        tutsLastStep: 27-import-command
     bundle-dependencies:
         tutsFirstStep: null
         tutsLastStep: null
