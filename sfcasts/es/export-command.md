@@ -4,7 +4,9 @@ Muy bien, ya casi hemos terminado la codificación para la versión 1.0. Pero no
 
 ## El comando Exportar
 
-Lo primero es lo primero, vamos a construir ese comando de exportación. Para agilizar las cosas, ya lo he creado. En el directorio `tutorial`, copia`ObjectTranslationExportCommand.php` en el directorio `src/Command`del bundle. Si no lo ves en tu directorio `tutorial`, no te preocupes. Puedes copiarlo desde el script que aparece a continuación.
+Lo primero es lo primero, vamos a construir ese comando de exportación. Para agilizar las cosas, ya lo he creado. En el directorio `tutorial`, copia`ObjectTranslationExportCommand.php` en el directorio `src/Command`del bundle. Si no lo ves en tu directorio `tutorial`, no te preocupes. Puedes copiarlo desde el script que aparece a continuación:
+
+[[[ code('b8b8bfd735') ]]]
 
 Ahora, vamos a diseccionar un poco este comando. Debería resultarte familiar. Nombre del comando: `object-translation:export`, descripción: `Exports object translations to a CSV`.
 
@@ -24,19 +26,31 @@ Por último, debajo de los dos bucles, `fclose()` el archivo y mostramos un mens
 
 Ahora tenemos que cablear este comando. Dirígete al archivo `services.php` de nuestro bundle. Añade `->set('.symfonycasts.object_translator.export_command, ObjectTranslationExportCommand::class)`. Para `args()`, sólo un servicio: copia y pega esto del comando anterior.
 
-Por último, `->tag('console.command')`.
+Por último, `->tag('console.command')`:
+
+[[[ code('6df82dddd1') ]]]
 
 ## Crear un nuevo método
 
-En el `ObjectTranslationExportCommand`, este método `translatableValuesFor()`de nuestro servicio gestor de mapas no existe. Créalo. Utiliza`object` como tipo de argumento y `iterable` como tipo de retorno.
+De vuelta a `ObjectTranslationExportCommand`, este método `translatableValuesFor()`en nuestro servicio gestor de mapeo no existe. Créalo. Utiliza`object` como tipo de argumento y `iterable` como tipo de retorno:
 
-Utilizaremos la reflexión para obtener estas propiedades, así que primero, obtén la clase de reflexión con `$class = new \ReflectionClass($object);`. Después, haz un bucle sobre las propiedades con `foreach ($class->getProperties() as $property)`.
+[[[ code('ebbd828336') ]]]
+
+Utilizaremos la reflexión para obtener estas propiedades, así que primero, obtén la clase de reflexión con `$class = new \ReflectionClass($object);`. A continuación, haz un bucle sobre las propiedades con `foreach ($class->getProperties() as $property)`:
+
+[[[ code('813f436c8c') ]]]
 
 ¿Cómo sabemos qué propiedades son traducibles? ¿Recuerdas el atributo`TranslatableProperty` que creamos antes? Aún no lo hemos utilizado, ¡pero ha llegado su momento! En las entidades de nuestra app, este atributo marca las propiedades traducibles.
 
-Primero, excluye las propiedades que no tienen este atributo.`if (!$property->getAttributes(TranslatableProperty::class))`, `continue`.
+Primero, excluye las propiedades que no tienen este atributo.`if (!$property->getAttributes(TranslatableProperty::class))`, `continue`:
 
-Ahora sabemos que la propiedad es traducible, así que,`yield $property->getName() => $property->getValue($object)`. Aunque la propiedad sea privada o esté protegida, al utilizar la reflexión de esta forma, podemos obtener el valor.
+[[[ code('7b931ce582') ]]]
+
+Ahora sabemos que la propiedad es traducible, así que,`yield $property->getName() => $property->getValue($object)`:
+
+[[[ code('3dcf5d200e') ]]]
+
+Aunque la propiedad sea privada o esté protegida, al utilizar la reflexión de esta forma, podemos obtener el valor.
 
 De vuelta al comando... ¡genial! ¡Se acabó el aviso!
 
