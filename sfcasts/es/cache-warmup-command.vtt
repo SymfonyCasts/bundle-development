@@ -1,0 +1,327 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:05.196 align:middle
+De acuerdo, por defecto, nuestras traducciones de
+objetos se almacenan en caché indefinidamente.
+
+00:00:05.556 --> 00:00:09.536 align:middle
+Podemos configurar una caducidad, pero ¿y si
+quisiéramos forzar una actualización anticipada?
+
+00:00:10.056 --> 00:00:12.816 align:middle
+Quizás hemos actualizado la base
+de datos con nuevas traducciones,
+
+00:00:12.816 --> 00:00:14.346 align:middle
+y queremos que el sitio lo refleje.
+
+00:00:14.866 --> 00:00:18.186 align:middle
+Claro, podríamos borrar toda la caché
+o invalidar la etiqueta de caché.
+
+00:00:18.416 --> 00:00:21.316 align:middle
+Pero esto podría afectar a miles de
+traducciones y, en un sitio con mucho tráfico,
+
+00:00:21.316 --> 00:00:23.906 align:middle
+podría provocar ralentizaciones
+mientras se repobla la caché.
+
+00:00:24.356 --> 00:00:26.596 align:middle
+Creemos una función de
+calentamiento de la caché.
+
+00:00:26.976 --> 00:00:28.596 align:middle
+Esto borrará cada elemento de la caché
+
+00:00:28.636 --> 00:00:31.436 align:middle
+y simultáneamente la refrescará
+con la última versión.
+
+00:00:31.926 --> 00:00:33.846 align:middle
+Para ello, crearemos un comando de consola.
+
+00:00:34.366 --> 00:00:35.466 align:middle
+En tu IDE,
+
+00:00:35.466 --> 00:00:40.136 align:middle
+dentro de nuestro directorio object-translation-bundle's
+src, crea una nueva clase PHP.
+
+00:00:40.506 --> 00:00:43.206 align:middle
+Llámala ObjectTranslationWarmupCommand.
+
+00:00:43.576 --> 00:00:45.406 align:middle
+Estará en el espacio de nombres Command.
+
+00:00:45.556 --> 00:00:50.186 align:middle
+Con PhpStorm, podemos actualizar el espacio de
+nombres aquí, y lo creará en el directorio adecuado.
+
+00:00:50.836 --> 00:00:51.346 align:middle
+Allá vamos.
+
+00:00:51.346 --> 00:00:54.536 align:middle
+Primero, marca la clase como final y @internal.
+
+00:00:55.006 --> 00:00:58.826 align:middle
+El comando en sí será público, pero
+el código del comando será interno.
+
+00:00:59.396 --> 00:01:02.836 align:middle
+A continuación, haz que extienda Command
+del componente de consola Symfony.
+
+00:01:03.326 --> 00:01:05.976 align:middle
+En la parte superior, añade
+el atributo AsCommand.
+
+00:01:06.616 --> 00:01:08.996 align:middle
+Nombre: object-translation:warmup.
+
+00:01:09.986 --> 00:01:12.896 align:middle
+Descripción: Warms up the
+object translation cache..
+
+00:01:14.156 --> 00:01:18.616 align:middle
+Dentro de la clase, anula dos
+métodos: el constructor y execute().
+
+00:01:19.956 --> 00:01:22.286 align:middle
+En el constructor, no
+queremos este argumento $name,
+
+00:01:22.286 --> 00:01:25.666 align:middle
+pero aún así necesitamos llamar al
+constructor padre, sólo que sin argumentos.
+
+00:01:26.086 --> 00:01:28.966 align:middle
+Haz algo de espacio e inyecta
+los siguientes servicios.
+
+00:01:29.416 --> 00:01:36.506 align:middle
+private ObjectTranslator $translator y private
+TranslatableMappingManager $mappingManager. A
+
+00:01:37.446 --> 00:01:42.986 align:middle
+continuación, private LocaleSwitcher
+$localeSwitcher, que es un servicio especial que nos
+
+00:01:42.986 --> 00:01:47.216 align:middle
+permite cambiar temporalmente la configuración regional
+de toda la aplicación mientras ejecutamos algún código.
+
+00:01:47.216 --> 00:01:51.596 align:middle
+Esto será útil para calentar las
+traducciones en todas las locales disponibles.
+
+00:01:51.596 --> 00:01:58.016 align:middle
+Por último, necesitamos esas configuraciones regionales,
+así que inyecta private array $locales: Abajo en execute(),
+
+00:01:58.226 --> 00:02:00.666 align:middle
+elimina la llamada al padre ya
+que el método padre está vacío.
+
+00:02:01.086 --> 00:02:03.656 align:middle
+Este método debe devolver un número
+entero como código de estado.
+
+00:02:03.656 --> 00:02:06.796 align:middle
+Así que, antes de que se nos
+olvide, devuelve self::SUCCESS.
+
+00:02:07.686 --> 00:02:12.726 align:middle
+Arriba, escribe, $io = new
+SymfonyStyle($input, $output).
+
+00:02:13.226 --> 00:02:17.556 align:middle
+Esto nos proporciona una bonita forma de interactuar con
+la consola utilizando el estilo recomendado por Symfony.
+
+00:02:17.996 --> 00:02:19.386 align:middle
+Añade un título para este comando:
+
+00:02:19.666 --> 00:02:24.436 align:middle
+$io->title('Warming up
+Object Translation Cache').
+
+00:02:25.306 --> 00:02:27.936 align:middle
+Inicia una variable de recuento: $count = 0.
+
+00:02:28.546 --> 00:02:31.436 align:middle
+Esto nos ayudará a llevar la cuenta
+de cuántos objetos hemos calentado.
+
+00:02:32.276 --> 00:02:34.906 align:middle
+Necesitamos una forma de obtener
+todos los objetos traducibles.
+
+00:02:35.116 --> 00:02:38.816 align:middle
+Así que, en nuestro TranslatableMappingManager,
+crea un nuevo método:
+
+00:02:39.806 --> 00:02:43.936 align:middle
+public function allTranslatableObjects().
+
+00:02:43.936 --> 00:02:48.366 align:middle
+Tipo de retorno: iterable: Primero, haz
+un bucle sobre los gestores de objetos:
+
+00:02:48.366 --> 00:02:57.076 align:middle
+foreach ($this->doctrine->getManagers() as $om): Las
+aplicaciones complejas pueden tener varios gestores de objetos
+
+00:02:57.076 --> 00:02:58.666 align:middle
+, así que esto nos asegurará
+que los cubrimos todos.
+
+00:02:59.426 --> 00:03:03.446 align:middle
+Dentro de esto, necesitamos obtener todas las
+clases de entidad que soporta este gestor.
+
+00:03:03.656 --> 00:03:10.106 align:middle
+Así que foreach
+($om->getMetadataFactory()->getAllMetadata()
+
+00:03:10.106 --> 00:03:17.136 align:middle
+as $metadata): Aquí, obtén el nombre de la clase
+de entidad con $class = $metadata->getName().
+
+00:03:17.906 --> 00:03:20.396 align:middle
+Ahora tenemos que omitir las
+clases que no son traducibles.
+
+00:03:20.756 --> 00:03:30.206 align:middle
+Hazlo con if (!(new
+\ReflectionClass($class))->getAttributes(Translatable::class)). Esto
+
+00:03:32.036 --> 00:03:35.886 align:middle
+devolverá un array vacío si la clase
+no tiene el atributo Translatable. En
+
+00:03:36.226 --> 00:03:41.776 align:middle
+este caso, continue para pasar a la siguiente clase:
+Ahora sabemos que tenemos una clase traducible, así que
+
+00:03:41.866 --> 00:03:42.436 align:middle
+escribe: yield
+
+00:03:42.556 --> 00:03:43.006 align:middle
+from
+
+00:03:43.006 --> 00:03:51.716 align:middle
+$this->doctrine->getRepository($class)->findAll():
+Estamos devolviendo un generador que itera
+
+00:03:51.716 --> 00:03:55.936 align:middle
+sobre todos los objetos traducibles en
+todos los gestores de objetos. Vale, esta
+
+00:03:56.556 --> 00:04:00.546 align:middle
+no es la forma más eficiente de hacerlo, ya que
+estamos cargando todas las entidades en memoria
+
+00:04:00.546 --> 00:04:02.956 align:middle
+- potencialmente decenas de miles...
+
+00:04:03.256 --> 00:04:05.476 align:middle
+Tomemos nota de esto como una
+futura mejora. Volviendo a
+
+00:04:06.226 --> 00:04:09.326 align:middle
+nuestro comando, SymfonyStyle tiene
+un método superútil para iterar
+
+00:04:09.326 --> 00:04:11.336 align:middle
+cosas con una barra de
+progreso. Después de iniciar
+
+00:04:11.396 --> 00:04:14.266 align:middle
+la variable $count, escribe: foreach
+($io->progressIterate($this->mappingManager->allTranslatableObjects())
+
+00:04:14.266 --> 00:04:21.026 align:middle
+as $object):
+
+00:04:21.026 --> 00:04:24.246 align:middle
+progressIterate esencialmente envuelve
+
+00:04:25.256 --> 00:04:28.026 align:middle
+el iterable que le demos, y maneja la
+
+00:04:28.026 --> 00:04:31.006 align:middle
+salida de la barra de progreso en el
+terminal por nosotros. Dentro, crea un
+
+00:04:31.536 --> 00:04:39.496 align:middle
+bucle anidado para las locales: foreach ($this->locales as $locale):
+Ahora, escribe $this->localeSwitcher->runWithLocale(). Este
+
+00:04:39.696 --> 00:04:43.476 align:middle
+método toma
+
+00:04:44.106 --> 00:04:48.316 align:middle
+dos argumentos: la $locale a la que queremos
+cambiar, y un callable. Para ello utiliza
+
+00:04:48.316 --> 00:04:53.666 align:middle
+($objeto, $localidad): Esto cambiará la
+configuración regional de toda la aplicación mientras
+
+00:04:53.666 --> 00:04:55.066 align:middle
+dure la llamada. Después,
+
+00:04:55.126 --> 00:04:57.976 align:middle
+volverá a la configuración
+anterior. Dentro de la llamada,
+
+00:04:58.986 --> 00:05:02.426 align:middle
+$this->translator->... ¿Dónde está mi
+
+00:05:03.716 --> 00:05:05.246 align:middle
+autocompletado? Uy, se me olvidó
+
+00:05:06.336 --> 00:05:09.276 align:middle
+importar la clase ObjectTranslator. Ya está.
+
+00:05:09.396 --> 00:05:09.896 align:middle
+Vuelve abajo, escribe
+
+00:05:10.656 --> 00:05:18.096 align:middle
+translate($object, $locale): Al final del bucle
+exterior, aumenta la cuenta con $count++: Por último,
+
+00:05:18.096 --> 00:05:26.516 align:middle
+antes de volver, añade un mensaje de resumen
+de éxito: $io->success("Calentada la caché
+
+00:05:26.516 --> 00:05:32.876 align:middle
+para {$count} objetos traducibles."): Arriba, donde
+estamos llamando a translate(), PhpStorm no está contento
+
+00:05:32.876 --> 00:05:35.546 align:middle
+con este argumento $locale. Eso es porque
+
+00:05:35.856 --> 00:05:38.206 align:middle
+no existe en la firma del método.
+Salta a ObjectTranslator::translate()
+
+00:05:38.746 --> 00:05:45.036 align:middle
+y añádelo: ?string $locale
+= null: Cuando obtengamos
+
+00:05:45.756 --> 00:05:51.516 align:middle
+la configuración regional actual, intenta utilizar primero
+la configuración regional pasada: $locale ??: Si se pasa,
+
+00:05:52.126 --> 00:05:56.066 align:middle
+se utilizará; si no, se extraerá
+de la petición. De vuelta a
+
+00:05:57.006 --> 00:05:59.606 align:middle
+nuestro comando, ¡PhpStorm está
+contento! A continuación, conectaremos
+
+00:06:00.156 --> 00:06:02.956 align:middle
+este comando y lo probaremos
