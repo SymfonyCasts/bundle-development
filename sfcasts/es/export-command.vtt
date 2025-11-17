@@ -1,0 +1,263 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:03.956 align:middle
+Muy bien, ya casi hemos terminado la
+codificación para la versión 1.0.
+
+00:00:04.216 --> 00:00:07.926 align:middle
+Pero nos queda una cosa por
+hacer: gestionar las traducciones.
+
+00:00:08.486 --> 00:00:12.676 align:middle
+Con el tiempo, me gustaría que este bundle incluyera
+quizás un FormType que permita a los usuarios
+
+00:00:12.676 --> 00:00:15.586 align:middle
+integrar la gestión de las traducciones
+en su interfaz de administrador.
+
+00:00:15.586 --> 00:00:21.646 align:middle
+Pero por ahora, vamos a crear dos comandos de
+consola: uno para exportar los campos traducibles
+
+00:00:21.646 --> 00:00:25.636 align:middle
+en la configuración regional predeterminada,
+inglés en nuestro caso, a un archivo CSV.
+
+00:00:26.146 --> 00:00:28.956 align:middle
+A continuación, el usuario llevará
+este archivo a un servicio de traducción
+
+00:00:29.126 --> 00:00:32.136 align:middle
+que traduzca los valores a las
+configuraciones regionales admitidas.
+
+00:00:32.616 --> 00:00:36.526 align:middle
+Luego, tendremos un comando de importación
+para volver a aspirar estos archivos traducidos.
+
+00:00:36.526 --> 00:00:39.786 align:middle
+Lo primero es lo primero, vamos a
+crear ese comando de exportación.
+
+00:00:40.246 --> 00:00:42.206 align:middle
+Para agilizar las cosas, ya lo he creado.
+
+00:00:42.496 --> 00:00:47.916 align:middle
+En el directorio tutorial, copia
+ObjectTranslationExportCommand.php
+
+00:00:47.916 --> 00:00:50.356 align:middle
+en el directorio src/Command del bundle.
+
+00:00:50.926 --> 00:00:53.566 align:middle
+Si no lo ves en tu directorio
+tutorial, no te preocupes.
+
+00:00:53.596 --> 00:00:57.856 align:middle
+Puedes copiarlo del script que aparece a continuación:
+Ahora, vamos a diseccionar un poco este comando.
+
+00:00:58.326 --> 00:00:59.306 align:middle
+Debería resultarte familiar.
+
+00:00:59.556 --> 00:01:03.166 align:middle
+Nombre del comando:
+object-translation:export, descripción:
+
+00:01:03.356 --> 00:01:06.486 align:middle
+Exports object translations to a CSV.
+
+00:01:06.486 --> 00:01:10.336 align:middle
+Para el constructor, sólo estamos inyectando
+nuestro TranslatableMappingManager -
+
+00:01:10.606 --> 00:01:11.446 align:middle
+eso es todo lo que necesitaremos.
+
+00:01:12.146 --> 00:01:15.176 align:middle
+El método configure() es donde
+configuramos los argumentos y las opciones.
+
+00:01:15.606 --> 00:01:20.116 align:middle
+Este comando tomará un argumento: la
+ruta del archivo al que exportar el CSV.
+
+00:01:20.786 --> 00:01:24.166 align:middle
+El usuario puede pasar una
+ruta absoluta o relativa.
+
+00:01:24.166 --> 00:01:28.866 align:middle
+En execute(), creamos el $io, cogemos el
+argumento $file, y luego emitimos un título.
+
+00:01:29.366 --> 00:01:31.446 align:middle
+A continuación, fopen
+el archivo para escribir.
+
+00:01:31.446 --> 00:01:35.196 align:middle
+Como será un CSV, utilizaremos fputcsv()
+
+00:01:35.196 --> 00:01:39.586 align:middle
+para escribir las cabeceras de las
+columnas: tipo, ID, campo y valor.
+
+00:01:40.196 --> 00:01:45.056 align:middle
+Al igual que nuestro comando de calentamiento, avanzamos
+iterando sobre todos nuestros objetos traducibles.
+
+00:01:45.686 --> 00:01:47.946 align:middle
+Obtén el tipo y el ID de cada objeto
+
+00:01:48.126 --> 00:01:52.216 align:middle
+y, a continuación, itera sobre este método
+del gestor de mapeo translatableValuesFor()
+
+00:01:52.396 --> 00:01:53.436 align:middle
+, que crearemos en breve.
+
+00:01:53.986 --> 00:01:59.106 align:middle
+Este método itera sobre los nombres y valores
+de los campos traducibles del objeto traducible.
+
+00:01:59.946 --> 00:02:05.476 align:middle
+Dentro, fputcsv() una fila con
+el tipo, ID, campo y valor.
+
+00:02:05.476 --> 00:02:10.926 align:middle
+Por último, debajo de los dos bucles, fclose()
+el archivo y mostramos un mensaje de éxito.
+
+00:02:11.266 --> 00:02:12.876 align:middle
+Ahora tenemos que cablear este comando.
+
+00:02:13.106 --> 00:02:15.736 align:middle
+Dirígete al archivo
+services.php de nuestro bundle.
+
+00:02:16.706 --> 00:02:22.876 align:middle
+Añade ->set('.symfonycasts.object_translator.export_command,
+ObjectTranslationExportCommand::class).
+
+00:02:23.466 --> 00:02:26.316 align:middle
+Para
+
+00:02:27.706 --> 00:02:32.616 align:middle
+el args(), sólo un servicio: copia y pega
+esto del comando anterior. Por último,
+
+00:02:32.616 --> 00:02:40.306 align:middle
+->tag('console.command'): De vuelta
+a ObjectTranslationExportCommand, este
+
+00:02:40.616 --> 00:02:44.906 align:middle
+métodotranslatableValuesFor() de nuestro
+servicio gestor de mapas no existe. Créalo.
+
+00:02:45.126 --> 00:02:47.576 align:middle
+Utiliza
+
+00:02:47.576 --> 00:02:53.166 align:middle
+object como tipo de argumento y iterable como
+tipo de retorno: Utilizaremos la reflexión para
+
+00:02:53.166 --> 00:02:56.626 align:middle
+obtener estas propiedades, así que
+primero, obtén la clase de reflexión con
+
+00:02:56.626 --> 00:03:00.806 align:middle
+$class = new \ReflectionClass($object);.
+A continuación,
+
+00:03:01.636 --> 00:03:08.236 align:middle
+haz un bucle sobre las propiedades con foreach
+($class->getProperties() as $property): ¿Cómo
+
+00:03:09.166 --> 00:03:11.166 align:middle
+sabemos qué propiedades
+son traducibles? ¿Recuerdas
+
+00:03:11.596 --> 00:03:14.766 align:middle
+el atributo TranslatableProperty
+que creamos antes?
+
+00:03:15.226 --> 00:03:17.596 align:middle
+Aún no lo hemos utilizado,
+¡pero ha llegado su momento! En
+
+00:03:18.446 --> 00:03:22.076 align:middle
+las entidades de nuestra app, este atributo
+marca las propiedades traducibles. Primero,
+
+00:03:22.076 --> 00:03:25.246 align:middle
+excluye las propiedades que
+no tengan este atributo. if
+
+00:03:26.046 --> 00:03:32.826 align:middle
+(!$property->getAttributes(TranslatableProperty::class)),
+continue: Ahora
+
+00:03:32.826 --> 00:03:36.686 align:middle
+sabemos que la propiedad es traducible,
+así que, yield $property->getName()
+
+00:03:36.686 --> 00:03:43.916 align:middle
+=> $property->getValue($object):
+Incluso si
+
+00:03:44.696 --> 00:03:46.866 align:middle
+la propiedad es privada o
+está protegida, al utilizar
+
+00:03:46.866 --> 00:03:49.386 align:middle
+la reflexión de esta forma, podemos
+obtener el valor. De vuelta al
+
+00:03:50.116 --> 00:03:50.976 align:middle
+comando... ¡genial! ¡
+
+00:03:50.976 --> 00:03:53.466 align:middle
+Se acabó el aviso! ¡ Es hora de
+
+00:03:54.226 --> 00:03:55.246 align:middle
+probarlo! En
+
+00:03:55.616 --> 00:04:05.826 align:middle
+el terminal, Ejecuta: symfony console object-translation:export
+var/export.csv ¡Bien! La barra de progreso
+
+00:04:05.826 --> 00:04:09.176 align:middle
+muestra que se han exportado 12 objetos y se
+han guardado en el directorio var de nuestro
+
+00:04:09.176 --> 00:04:13.236 align:middle
+proyecto como export.csv. De vuelta a
+
+00:04:13.236 --> 00:04:15.786 align:middle
+tu IDE, busca ese archivo
+y ábrelo Y... ¡boom! ¡
+
+00:04:17.186 --> 00:04:18.646 align:middle
+Aquí lo tienes! La primera fila
+
+00:04:18.646 --> 00:04:23.756 align:middle
+son nuestras cabeceras de columna, y cada fila de abajo es la
+versión exportada en inglés de los campos traducibles de nuestro
+
+00:04:23.916 --> 00:04:26.846 align:middle
+objeto traducible. Tiene un aspecto
+
+00:04:27.386 --> 00:04:31.356 align:middle
+algo desagradable debido a todos los saltos de línea
+en los campos de contenido de nuestro artículo, pero
+
+00:04:31.526 --> 00:04:35.186 align:middle
+ten por seguro que se trata de
+un CSV válido. A continuación,
+
+00:04:35.186 --> 00:04:38.496 align:middle
+crearemos el comando de importación para
+devolver la versión traducida de este archivo
+
+00:04:38.496 --> 00:04:40.456 align:middle
+a nuestro proyecto.
