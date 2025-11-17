@@ -66,7 +66,7 @@ Ahora sabemos que tenemos una clase traducible, así que escribe:`yield from $th
 
 Estamos devolviendo un generador que itera sobre todos los objetos traducibles en todos los gestores de objetos.
 
-Vale, esta no es la forma más eficiente de hacerlo, ya que estamos cargando todas las entidades en memoria - potencialmente 10's de miles... Anotemos esto como una futura mejora.
+Vale, esta no es la forma más eficiente de hacerlo, ya que estamos cargando todas las entidades en memoria - potencialmente 10's de miles... Tomemos nota de esto como una futura mejora.
 
 Volviendo a nuestro comando, `SymfonyStyle` tiene un método superútil para iterar cosas con una barra de progreso. Después de iniciar la variable `$count`, escribe:`foreach ($io->progressIterate($this->mappingManager->allTranslatableObjects()) as $object)`:
 
