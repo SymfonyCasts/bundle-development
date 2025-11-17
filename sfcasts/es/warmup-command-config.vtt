@@ -1,0 +1,294 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:05.736 align:middle
+Ya tenemos nuestra clase de comando warmup creada,
+ahora necesitamos configurarla como servicio.
+
+00:00:05.736 --> 00:00:09.386 align:middle
+En tus aplicaciones, esto se haría
+automáticamente gracias al atributo AsCommand,
+
+00:00:09.786 --> 00:00:13.376 align:middle
+pero en los bundles, como en cualquier otro
+servicio, tenemos que configurarlo manualmente.
+
+00:00:13.776 --> 00:00:16.176 align:middle
+Abre el archivo services.php de nuestro bundle.
+
+00:00:16.596 --> 00:00:17.886 align:middle
+Añádelo como nuevo servicio
+
+00:00:17.886 --> 00:00:23.906 align:middle
+con ->set('.symfonycasts.object_translator.warmup_command').
+Clase:
+
+00:00:25.226 --> 00:00:32.296 align:middle
+ObjectTranslationWarmupCommand: Añade algunos args():
+El primero es el servicio traductor de objetos, así que
+
+00:00:32.296 --> 00:00:35.816 align:middle
+escribe service() y copia y pega
+el ID de ese servicio. El siguiente
+
+00:00:40.286 --> 00:00:42.116 align:middle
+es el gestor de mapeo service(). Copia y pega
+
+00:00:42.436 --> 00:00:44.286 align:middle
+también el ID de ese servicio.
+
+00:00:46.816 --> 00:00:48.776 align:middle
+El siguiente service() es el conmutador
+de configuraciones regionales, es
+
+00:00:49.036 --> 00:00:51.926 align:middle
+el mismo servicio que usamos
+antes, así que copia y pega eso.
+
+00:00:54.746 --> 00:01:01.696 align:middle
+El último argumento son las localizaciones habilitadas,
+escribe param('kernel.enabled_locales'): Por último, marca
+
+00:01:01.856 --> 00:01:06.486 align:middle
+este servicio como comando de consola
+con ->tag('console.command'): Vamos
+
+00:01:06.486 --> 00:01:08.966 align:middle
+a probar este comando en el terminal. Ejecuta:
+
+00:01:09.426 --> 00:01:15.586 align:middle
+symfony console object-translation:warmup
+-v El -v nos dará un seguimiento de
+
+00:01:15.586 --> 00:01:16.906 align:middle
+cualquier error que encontremos. Y...
+
+00:01:17.576 --> 00:01:18.976 align:middle
+tenemos un error. Bueno,
+
+00:01:19.296 --> 00:01:22.366 align:middle
+en realidad una advertencia:
+"Clave de matriz 0 no definida".
+
+00:01:22.956 --> 00:01:24.846 align:middle
+Fíjate en la primera línea del stack trace,
+
+00:01:24.956 --> 00:01:28.406 align:middle
+nos está señalando la línea 23 de
+TranslatableMappingManager. Comprueba
+
+00:01:29.286 --> 00:01:30.766 align:middle
+esa clase y encuentra la línea.
+
+00:01:30.766 --> 00:01:35.576 align:middle
+Es sutil pero, estamos intentando utilizar
+el operador seguro null en un array.
+
+00:01:35.966 --> 00:01:38.226 align:middle
+No nos protege de las claves indefinidas. Para
+
+00:01:38.656 --> 00:01:42.496 align:middle
+solucionarlo, encierra esto
+entre corchetes y añade ?? null:
+
+00:01:42.496 --> 00:01:46.826 align:middle
+Prueba de nuevo el comando: ¡Genial! ¡
+
+00:01:46.826 --> 00:01:47.556 align:middle
+Ha funcionado! Pero
+
+00:01:47.956 --> 00:01:50.876 align:middle
+en realidad hay un error aún más
+sutil que puede aparecer aquí... Borra
+
+00:01:51.576 --> 00:01:55.766 align:middle
+la caché sin calentamiento: symfony
+console cache:clear --no-warmup
+
+00:01:56.116 --> 00:02:02.096 align:middle
+Ejecuta de nuevo el comando
+de calentamiento: Hmm...
+
+00:02:02.196 --> 00:02:07.006 align:middle
+"La clase Proxies__CG__\App\Entity\Category
+no es traducible"
+
+00:02:07.386 --> 00:02:08.896 align:middle
+¿Qué pasa con este nombre de clase?
+
+00:02:09.596 --> 00:02:12.336 align:middle
+Lo que ocurre es que Doctrine genera
+entre bastidores una clase proxy que
+
+00:02:12.336 --> 00:02:15.016 align:middle
+extiende tu clase de entidad. En
+
+00:02:15.096 --> 00:02:17.266 align:middle
+este caso, App\Entity\Category. Esta
+
+00:02:17.656 --> 00:02:20.706 align:middle
+clase proxy es la que permite
+a Doctrine hacer su magia. En
+
+00:02:21.486 --> 00:02:26.136 align:middle
+TranslatableMappingManager, el objeto
+pasado es a veces uno de estos proxies. Y
+
+00:02:26.436 --> 00:02:30.496 align:middle
+esa clase proxy no tiene el atributo
+Translatable, ése es el problema. Recuerda que
+
+00:02:31.086 --> 00:02:34.216 align:middle
+la clase proxy extiende nuestra clase entidad.
+
+00:02:34.216 --> 00:02:37.936 align:middle
+Podemos utilizar la reflexión para obtener la clase
+padre si detectamos que es un proxy. Después de
+
+00:02:37.936 --> 00:02:46.096 align:middle
+crear ReflectionClass, escribe if
+($class->implementsInterface(Proxy::class)). Importa
+
+00:02:46.096 --> 00:02:51.966 align:middle
+la clase de Doctrine\Persistence: Todos los
+proxies generados tienen esta interfaz. Dentro,
+
+00:02:51.966 --> 00:02:59.106 align:middle
+escribe $class = $class->getParentClass()
+para obtener la verdadera clase entidad: Esto
+
+00:02:59.106 --> 00:03:03.166 align:middle
+debería solucionar el problema, pero confírmalo
+ejecutando de nuevo el borrado de caché sin calentamiento:
+
+00:03:03.856 --> 00:03:07.046 align:middle
+Ejecuta de nuevo el comando de
+calentamiento: ¡Bien! Esta vez no hay
+
+00:03:07.046 --> 00:03:11.276 align:middle
+errores, y nuestra barra de progreso
+muestra 12 entidades procesadas. ¡ Esto
+
+00:03:11.516 --> 00:03:12.836 align:middle
+sí que es un resultado elegante! Ahora
+
+00:03:13.506 --> 00:03:15.586 align:middle
+nos queda una última cosa
+por hacer. Actualmente,
+
+00:03:16.026 --> 00:03:17.846 align:middle
+cuando estamos calentando la caché, si
+
+00:03:17.846 --> 00:03:21.366 align:middle
+una traducción ya está en
+la caché, no se recalcula.
+
+00:03:21.366 --> 00:03:25.136 align:middle
+Actualmente, este comando sólo es realmente
+útil para calentar una caché vacía.
+
+00:03:25.556 --> 00:03:29.706 align:middle
+Necesitamos forzar el recálculo de las traducciones, aunque
+ya estén en caché. ¡ Los Contratos de Caché de Symfony
+
+00:03:29.706 --> 00:03:32.036 align:middle
+nos cubren las espaldas! En
+
+00:03:32.666 --> 00:03:36.846 align:middle
+ObjectTranslator::translationsFor(),
+profundiza en el método de caché get().
+
+00:03:37.286 --> 00:03:38.806 align:middle
+En CacheInterface. ¿Ves
+
+00:03:38.806 --> 00:03:41.466 align:middle
+este parámetro float $beta? Echa
+
+00:03:41.696 --> 00:03:42.876 align:middle
+un vistazo a su docblock. "Un
+
+00:03:43.946 --> 00:03:48.706 align:middle
+flotador que, a medida que crece, controla la
+probabilidad de activar la expiración anticipada. 0
+
+00:03:49.126 --> 00:03:52.666 align:middle
+lo desactiva, INF fuerza la
+expiración inmediata" Esta
+
+00:03:53.296 --> 00:03:57.966 align:middle
+función ayuda con las estampidas de caché, si un
+montón de elementos caducan al mismo tiempo, hay
+
+00:03:58.156 --> 00:04:01.936 align:middle
+una probabilidad de que algunos caduquen
+antes para ayudar a repartir la carga. Para
+
+00:04:01.936 --> 00:04:06.096 align:middle
+nuestro propósito, podemos pasar infinito
+para forzar la caducidad inmediata. De vuelta
+
+00:04:06.956 --> 00:04:13.136 align:middle
+en ObjectTranslator::translationsFor(), añade un
+nuevo parámetro: bool $forceRefresh = false: Ahora,
+
+00:04:13.136 --> 00:04:16.906 align:middle
+para el tercer argumento de
+cache->get(), pasa $forceRefresh ? \INF
+
+00:04:16.906 --> 00:04:24.376 align:middle
+: null: Si es verdadero, usa infinito como
+$beta para forzar la caducidad, si no, pasa
+
+00:04:24.376 --> 00:04:26.576 align:middle
+null para usar el comportamiento
+por defecto. Arriba
+
+00:04:27.246 --> 00:04:31.076 align:middle
+en translate(), PhpStorm se queja de que
+necesitamos pasar este nuevo parámetro. Añade
+
+00:04:31.796 --> 00:04:35.476 align:middle
+un tercer argumento al
+método: array $options = []:
+
+00:04:35.616 --> 00:04:39.146 align:middle
+Podríamos haber utilizado un
+parámetro específico para esto, pero
+
+00:04:39.396 --> 00:04:42.946 align:middle
+utilizar una matriz de opciones facilitará
+añadir más opciones en el futuro. Amplía
+
+00:04:43.396 --> 00:04:49.506 align:middle
+la llamada translationsFor() y para el tercer
+argumento: $options['force_refresh'] ?? false:
+
+00:04:49.506 --> 00:04:55.686 align:middle
+Por último, de vuelta a nuestro comando de
+calentamiento, en el bucle más interno donde
+
+00:04:55.686 --> 00:05:02.246 align:middle
+estamos llamando a translate(), añade un
+tercer argumento: ['force_refresh' => true]:
+
+00:05:03.796 --> 00:05:08.916 align:middle
+En el terminal, vuelve a ejecutar el comando de
+calentamiento: No hay errores, ¡eso es buena señal! Si
+
+00:05:08.916 --> 00:05:13.696 align:middle
+quieres comprobar que la actualización se produce
+realmente, puedes cambiar algunas traducciones en
+
+00:05:13.696 --> 00:05:15.806 align:middle
+la base de datos y, a
+continuación, ejecutar el comando.
+
+00:05:16.326 --> 00:05:17.846 align:middle
+Deberías ver reflejados estos cambios al
+
+00:05:17.846 --> 00:05:20.986 align:middle
+actualizar la página - y ninguna
+nueva consulta a la base de datos.
+
+00:05:21.646 --> 00:05:24.856 align:middle
+A continuación, añadiremos dos comandos
+más que necesitamos para la versión 1.0
