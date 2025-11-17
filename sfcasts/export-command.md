@@ -16,7 +16,9 @@ First things first, let's build that export command. To make things
 quicker, I've already created it. In the `tutorial` directory, copy
 `ObjectTranslationExportCommand.php` into the bundle's `src/Command`
 directory. If you don't see it in your `tutorial` directory, don't worry.
-You can copy it from the script below.
+You can copy it from the script below:
+
+[[[ code('b8b8bfd735') ]]]
 
 Now, let's dissect this command a bit. This should look familiar. Command
 name: `object-translation:export`, description: `Exports object translations to a CSV`.
@@ -47,17 +49,23 @@ Now we need to wire up this command. Head over to our bundle's `services.php` fi
 Add `->set('.symfonycasts.object_translator.export_command, ObjectTranslationExportCommand::class)`.
 For the `args()`, just the one service: copy and paste this from the command above.
 
-Finally, `->tag('console.command')`.
+Finally, `->tag('console.command')`:
+
+[[[ code('6df82dddd1') ]]]
 
 ## Creating a New Method
 
 Back in the `ObjectTranslationExportCommand`, this `translatableValuesFor()`
 method on our mapping manager service doesn't exist. Create it. Use
-`object` as the argument type and `iterable` as the return type.
+`object` as the argument type and `iterable` as the return type:
+
+[[[ code('ebbd828336') ]]]
 
 We'll use reflection to grab these properties, so first, get the reflection
 class with `$class = new \ReflectionClass($object);`. Next, loop over the
-properties with `foreach ($class->getProperties() as $property)`.
+properties with `foreach ($class->getProperties() as $property)`:
+
+[[[ code('813f436c8c') ]]]
 
 How do we know what properties are translatable? Remember the
 `TranslatableProperty` attribute we created earlier? We haven't used it yet
@@ -65,10 +73,16 @@ but now is it's time to shine! In our app's entities, this attribute
 marks the translatable properties.
 
 First, exclude the properties that don't have this attribute.
-`if (!$property->getAttributes(TranslatableProperty::class))`, `continue`.
+`if (!$property->getAttributes(TranslatableProperty::class))`, `continue`:
+
+[[[ code('7b931ce582') ]]]
 
 Now we know the property is translatable, so,
-`yield $property->getName() => $property->getValue($object)`. Even if the property
+`yield $property->getName() => $property->getValue($object)`:
+
+[[[ code('3dcf5d200e') ]]]
+
+Even if the property
 is private or protected, when using reflection like this, we can get the value.
 
 Back in the command... sweet! No more warning!

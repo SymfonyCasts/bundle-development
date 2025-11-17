@@ -7,16 +7,22 @@ we need to configure it manually.
 
 Open our bundle's `services.php` file. Add it as a new service with
 `->set('.symfonycasts.object_translator.warmup_command')`. Class:
-`ObjectTranslationWarmupCommand`.
+`ObjectTranslationWarmupCommand`:
+
+[[[ code('7fe24e3822') ]]]
 
 Add some `args()`: First is the object translator service, so write
 `service()` and copy-paste that service ID. Next is the mapping manager
 `service()`. Copy-paste that service ID as well. The next `service()` is
 the locale switcher, it's the same service we used above, so copy-paste that.
 
-The last argument is the enabled locales, write `param('kernel.enabled_locales')`.
+The last argument is the enabled locales, write `param('kernel.enabled_locales')`:
 
-Finally, mark this service as a console command with `->tag('console.command')`.
+[[[ code('11725b5843') ]]]
+
+Finally, mark this service as a console command with `->tag('console.command')`:
+
+[[[ code('47c2b3f47e') ]]]
 
 Let's test this command out in the terminal. Run:
 
@@ -36,7 +42,9 @@ Check out that class and find the line.
 
 It's subtle but, we're trying to use the *null safe operator* on an array. It
 doesn't protect us from undefined keys. To fix this, wrap this in brackets,
-and add `?? null`.
+and add `?? null`:
+
+[[[ code('4098c0527f') ]]]
 
 Try the command again:
 
@@ -77,9 +85,15 @@ Remember, the proxy class extends our entity class. We can use reflection to
 get the parent class if we detect that it's a proxy.
 
 After creating the `ReflectionClass`, write `if ($class->implementsInterface(Proxy::class))`.
-Import the class from `Doctrine\Persistence`. All generated proxies have this interface.
+Import the class from `Doctrine\Persistence`:
 
-Inside, write `$class = $class->getParentClass()` to get the *true* entity class.
+[[[ code('9524938cb2') ]]]
+
+All generated proxies have this interface.
+
+Inside, write `$class = $class->getParentClass()` to get the *true* entity class:
+
+[[[ code('ad9a795d34') ]]]
 
 This should fix the issue but confirm by running the cache clear with no warm-up
 again:
@@ -117,18 +131,34 @@ there's a probability that some will expire early to help spread out the load.
 
 For our purpose, we can pass infinity to force immediate expiration.
 
-Back in `ObjectTranslator::translationsFor()`, add a new parameter: `bool $forceRefresh = false`.
-Now, for the third argument of `cache->get()`, pass `$forceRefresh ? \INF : null`. If true,
-use infinity as the `$beta` to force expiration, otherwise, pass `null` to use the default behavior.
+Back in `ObjectTranslator::translationsFor()`, add a new parameter: `bool $forceRefresh = false`:
+
+[[[ code('3e2767b0ea') ]]]
+
+Now, for the third argument of `cache->get()`, pass `$forceRefresh ? \INF : null`:
+
+[[[ code('fd35867cd6') ]]]
+
+
+If true, use infinity as the `$beta` to force expiration, otherwise, pass `null` to use
+the default behavior.
 
 Up in `translate()`, PhpStorm is complaining that we need to pass this new parameter. Add
-a third argument to the method: `array $options = []`. We could have used a dedicated parameter
+a third argument to the method: `array $options = []`:
+
+[[[ code('bb7e60d761') ]]]
+
+We could have used a dedicated parameter
 for this, but using an options array will make it easier to add more options in the future.
 
-Expand the `translationsFor()` call and for the third argument: `$options['force_refresh'] ?? false`.
+Expand the `translationsFor()` call and for the third argument: `$options['force_refresh'] ?? false`:
+
+[[[ code('a6ca52bb21') ]]]
 
 Finally, back in our warm-up command, in the innermost loop where we're calling
-`translate()`, add a third argument: `['force_refresh' => true]`.
+`translate()`, add a third argument: `['force_refresh' => true]`:
+
+[[[ code('e593fe7327') ]]]
 
 Over in the terminal, run the warm-up command again:
 

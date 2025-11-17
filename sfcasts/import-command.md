@@ -14,14 +14,18 @@ let's just remove the `WeakMap` entirely. I think our cache system is robust
 enough that we won't run into performance issues. If we do, we can always
 reintroduce it later.
 
-So, remove the `$translatedObjects` property and all references to it below.
+So, remove the `$translatedObjects` property and all references to it below:
+
+[[[ code('22fa9c6f10') ]]]
 
 ## The Import Command
 
 Alright, with that out of the way, let's turn our attention to the import
 command. In the `tutorial/` folder, copy `ObjectTranslationImportCommand.php`
 to our bundle's `Command/` directory. If you don't see this file, you can
-copy it from the script below.
+copy it from the script below:
+
+[[[ code('e4fef51ea8') ]]]
 
 Let's walk though it. It's pretty similar to the export command. In `configure()`,
 the first argument is the CSV file to import, and the second argument is the locale
@@ -40,43 +44,64 @@ finally, close the file, finish the progress bar, and output a success message.
 
 Cool! Let's wire it up. In our bundle's `services.php` file, copy the definition
 for the export command and paste it below. Fix the indentation, rename the
-id to `import_command` and change the class to `ObjectTranslationImportCommand`.
+id to `import_command` and change the class to `ObjectTranslationImportCommand`:
+
+[[[ code('1ae703f329') ]]]
 
 ## Implementing the `upsert()` Method
 
 Now for that `upsert()` method. Back in our command, find the `upsert()` call
 and add the method to `TranslatableMappingManager`. Set all the parameter
-types to `string` and the return type to `void`.
+types to `string` and the return type to `void`:
+
+[[[ code('0dc111daf8') ]]]
 
 If you're not familiar with the term "upsert", it's a combination of "update" and
 "insert". It means to update an existing record if it exists, or insert a new
 one if it doesn't. This is exactly what we want to do when importing translations.
 
 First, grab the "Object Manager" for the object translation class using
-`$om = $this->doctrine->getManagerForClass($this->translationClass)`. Now
-try and find an existing translation:
+`$om = $this->doctrine->getManagerForClass($this->translationClass)`:
+
+[[[ code('8639412018') ]]]
+
+Now try and find an existing translation:
 `$translation = $om->getRepository($this->translationClass)->findOneBy()`.
 For the criteria: `'objectType' => $type`, `'objectId' => $id`,
-`'locale' => $locale`, and `'field' => $field`. These 4 properties uniquely
-identify a translation.
+`'locale' => $locale`, and `'field' => $field`.
+
+[[[ code('3f630146a6') ]]]
+
+These 4 properties uniquely identify a translation:
 
 If we get a translation from the database, this is an update, if not, it's an insert.
 
 Check if this translation doesn't exist with `if (!$translation)`. In this
 case, we need to create a new one. So, instantiate a translation object:
-`$translation = new ($this->translationClass)()`. Yep, you can totally instantiate
-a class with a variable like this!
+`$translation = new ($this->translationClass)()`:
+
+[[[ code('c79ef79704') ]]]
+
+Yep, you can totally instantiate a class with a variable like this!
 
 Quickly pop into our `Model/Translation` class... cool, all the properties are public.
 So, back in our `upsert()` method, `$translation->objectType = $type`,
 `$translation->objectId = $id`, `$translation->locale = $locale`, and
-`$translation->field = $field`.
+`$translation->field = $field`:
 
-Below, set the value with `$translation->value = $value`.
+[[[ code('3f7a9c1644') ]]]
+
+Below, set the value with `$translation->value = $value`:
+
+[[[ code('166be118ba') ]]]
 
 Finally, save the translation with `$om->persist($translation)` and
-`$om->flush()`. The persist call is required for new translations, but
-it's safe to call it for existing ones too.
+`$om->flush()`:
+
+[[[ code('8397eb3b2b') ]]]
+
+The persist call is required for new translations, but it's safe to call it for
+existing ones too.
 
 Back in the command, the undefined method error is gone.
 

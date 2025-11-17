@@ -31,6 +31,8 @@ Within the class, override two methods: the constructor and `execute()`.
 In the constructor, we don't want this `$name` argument, but we still
 need to call the parent constructor - just with no arguments.
 
+[[[ code('6ee9243bfc') ]]]
+
 ## Injecting Services
 
 Make some room, and inject the following services.
@@ -41,7 +43,9 @@ that allows us to temporarily switch the locale for the entire application while
 we run some code. This will be useful for warming up translations in all
 available locales.
 
-Finally, we need those locales, so inject `private array $locales`.
+Finally, we need those locales, so inject `private array $locales`:
+
+[[[ code('8d39d03bff') ]]]
 
 ## `execute()` Method
 
@@ -57,26 +61,40 @@ Add a title for this command: `$io->title('Warming up Object Translation Cache')
 Initiate a count variable: `$count = 0`. This will help us keep track of how many
 objects we warmed up.
 
+[[[ code('2079d12878') ]]]
+
 ## Iterating Over Translatable Objects
 
 We need a way to get all the translatable objects. So, over in our `TranslatableMappingManager`,
-create a new method: `public function allTranslatableObjects()`. Return type: `iterable`.
+create a new method: `public function allTranslatableObjects()`. Return type: `iterable`:
 
-First, loop over the object managers: `foreach ($this->doctrine->getManagers() as $om)`.
+[[[ code('2e25f65634') ]]]
+
+First, loop over the object managers: `foreach ($this->doctrine->getManagers() as $om)`:
+
+[[[ code('e6ff9ceb9b') ]]]
+
 Complex apps can have multiple object managers, so this will ensure we cover them all.
 
 Inside this, we need to get all the entity classes that this manager
-supports. So `foreach ($om->getMetadataFactory()->getAllMetadata() as $metadata)`.
+supports. So `foreach ($om->getMetadataFactory()->getAllMetadata() as $metadata)`:
+
+[[[ code('1360732d4b') ]]]
 
 Here, get the entity class name with `$class = $metadata->getName()`. Now we need to skip
 classes that aren't translatable. Do this with
 `if (!(new \ReflectionClass($class))->getAttributes(Translatable::class))`. This will
 return an empty array if the class doesn't have the `Translatable` attribute. In this
-case, `continue` to move onto the next class.
+case, `continue` to move onto the next class:
+
+[[[ code('a51884ed46') ]]]
 
 We now know we have a translatable class, so write:
-`yield from $this->doctrine->getRepository($class)->findAll()`. We're returning
-a generator that iterates over all translatable objects in all object managers.
+`yield from $this->doctrine->getRepository($class)->findAll()`:
+
+[[[ code('daea41bfc6') ]]]
+
+We're returning a generator that iterates over all translatable objects in all object managers.
 
 Ok, this isn't the most efficient way to do this, as we're loading all
 entities into memory - potentially 10's of thousands... Let's just
@@ -85,27 +103,40 @@ make note of this as a future improvement.
 Back in our command, `SymfonyStyle` has a super handy method for iterating
 things with a progress bar. After initiating the `$count` variable,
 write:
-`foreach ($io->progressIterate($this->mappingManager->allTranslatableObjects()) as $object)`.
+`foreach ($io->progressIterate($this->mappingManager->allTranslatableObjects()) as $object)`:
+
+[[[ code('f14fbc79e4') ]]]
 
 `progressIterate` essentially wraps the iterable we give it, and handles
 the progress bar output in the terminal for us.
 
-Inside, create a nested loop for the locales: `foreach ($this->locales as $locale)`.
+Inside, create a nested loop for the locales: `foreach ($this->locales as $locale)`:
+
+[[[ code('ac38d95687') ]]]
 
 Now, write `$this->localeSwitcher->runWithLocale()`. This method takes two arguments:
-the `$locale` we want to switch to, and a callable. For this `use ($object, $locale)`.
+the `$locale` we want to switch to, and a callable. For this `use ($object, $locale)`:
+
+[[[ code('282e033682') ]]]
+
 This will switch the locale app-wide for the duration of the callable. After,
 it'll switch it back to whatever it was before.
 
 Inside the callable, `$this->translator->`... Hey! Where's my autocompletion?!
 Oops, I forgot to import the `ObjectTranslator` class. There we go.
 
-Back down, write `translate($object, $locale)`.
+Back down, write `translate($object, $locale)`:
 
-At the end of the outer loop, increase the count with `$count++`.
+[[[ code('91382b6321') ]]]
+
+At the end of the outer loop, increase the count with `$count++`:
+
+[[[ code('8e72481ee9') ]]]
 
 Finally, before returning, add a success summary message:
-`$io->success("Warmed up the cache for {$count} translatable objects.")`.
+`$io->success("Warmed up the cache for {$count} translatable objects.")`:
+
+[[[ code('314d261a3c') ]]]
 
 ## Overriding the Locale in `translate()`
 
@@ -113,8 +144,14 @@ Up where we're calling `translate()`, PhpStorm isn't happy with this
 `$locale` argument. That's because it doesn't exist in the method signature.
 
 Jump into `ObjectTranslator::translate()` and add it:
-`?string $locale = null`. Where we're fetching the current locale,
-attempt to use the passed locale first: `$locale ??`.
+`?string $locale = null`:
+
+[[[ code('8ad3b66da9') ]]]
+
+Where we're fetching the current locale,
+attempt to use the passed locale first: `$locale ??`:
+
+[[[ code('7ca9d3ce2c') ]]]
 
 When passed, *it* will be used, otherwise, it'll be pulled from the request.
 
