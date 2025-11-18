@@ -1,0 +1,315 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:05.106 align:middle
+Antes de abordar el comando de importación, he
+observado un error en nuestro ObjectTranslator.
+
+00:00:05.526 --> 00:00:07.876 align:middle
+Ábrelo y echa un vistazo
+al método translate().
+
+00:00:08.296 --> 00:00:10.356 align:middle
+Estamos utilizando un WeakMap,
+cuya clave es el objeto.
+
+00:00:10.856 --> 00:00:15.336 align:middle
+El problema es que si traduces un objeto con la
+configuración regional francesa y, más tarde,
+
+00:00:15.336 --> 00:00:19.466 align:middle
+traduces el mismo objeto con la configuración
+regional española, obtendrás la versión francesa,
+
+00:00:19.586 --> 00:00:21.066 align:middle
+porque eso es lo que hay en WeakMap.
+
+00:00:21.556 --> 00:00:24.336 align:middle
+Una solución sería incluir la configuración
+regional en la clave de la caché,
+
+00:00:24.646 --> 00:00:26.996 align:middle
+pero WeakMap no admite claves complejas.
+
+00:00:27.396 --> 00:00:31.466 align:middle
+Podríamos utilizar una estructura anidada: una matriz de
+WeakMap's, cada una con la clave de la configuración regional.
+
+00:00:31.766 --> 00:00:35.066 align:middle
+Pero para simplificar las cosas por ahora,
+vamos a eliminar por completo WeakMap.
+
+00:00:35.126 --> 00:00:39.116 align:middle
+Creo que nuestro sistema de caché es lo suficientemente
+robusto como para que no tengamos problemas de rendimiento.
+
+00:00:39.406 --> 00:00:41.596 align:middle
+Si lo hacemos, siempre podemos
+reintroducirlo más adelante.
+
+00:00:42.186 --> 00:00:50.206 align:middle
+Así pues, elimina la propiedad $translatedObjects y todas
+las referencias a ella que aparecen a continuación: Bien,
+
+00:00:50.296 --> 00:00:53.306 align:middle
+una vez aclarado esto, pasemos
+al comando de importación.
+
+00:00:53.746 --> 00:00:59.016 align:middle
+En la carpeta tutorial/, copia
+ObjectTranslationImportCommand.php
+
+00:00:59.016 --> 00:01:00.636 align:middle
+en el directorio Command/ de nuestro bundle.
+
+00:01:01.196 --> 00:01:05.276 align:middle
+Si no ves este archivo, puedes copiarlo del script
+que aparece a continuación: Vamos a recorrerlo.
+
+00:01:05.426 --> 00:01:07.206 align:middle
+Es bastante similar al comando exportar.
+
+00:01:07.646 --> 00:01:11.196 align:middle
+En configure(), el primer argumento
+es el archivo CSV a importar,
+
+00:01:11.376 --> 00:01:14.066 align:middle
+y el segundo argumento es la configuración
+regional para la que estamos importando.
+
+00:01:14.616 --> 00:01:17.856 align:middle
+En execute(), estamos cogiendo
+el file y el locale del $input,
+
+00:01:18.046 --> 00:01:22.066 align:middle
+creando el objeto $io, y luego abriendo
+el archivo pasado como legible.
+
+00:01:22.776 --> 00:01:26.726 align:middle
+Esta vez, creamos manualmente una barra de
+progreso en lugar de utilizar progressIterate().
+
+00:01:27.246 --> 00:01:32.016 align:middle
+Iniciamos la barra de progreso y, a continuación,
+utilizamos fgetcsv para pasar por la primera fila
+
+00:01:32.016 --> 00:01:35.236 align:middle
+del archivo CSV (las cabeceras)
+que no queremos importar.
+
+00:01:35.996 --> 00:01:40.736 align:middle
+A continuación, hacemos un bucle sobre todas las
+filas del archivo CSV, expandiéndolas en variables, y
+
+00:01:40.946 --> 00:01:44.806 align:middle
+luego las pasamos a este método upsert()
+aún no creado en nuestro gestor de mapeo.
+
+00:01:45.426 --> 00:01:49.526 align:middle
+Todavía en este bucle, hacemos avanzar la barra
+de progreso y, finalmente, cerramos el archivo,
+
+00:01:49.866 --> 00:01:52.796 align:middle
+terminamos la barra de progreso
+y mostramos un mensaje de éxito.
+
+00:01:53.466 --> 00:01:54.636 align:middle
+¡Genial! Vamos a conectarlo.
+
+00:01:55.186 --> 00:01:58.686 align:middle
+En el archivo services.php de
+nuestro bundle, copia la definición
+
+00:01:58.686 --> 00:02:01.096 align:middle
+del comando exportar y pégala a continuación.
+
+00:02:01.936 --> 00:02:07.026 align:middle
+Corrige la sangría, renombra el id
+a import_command y cambia la clase
+
+00:02:07.026 --> 00:02:11.336 align:middle
+a ObjectTranslationImportCommand:
+Ahora el método upsert().
+
+00:02:11.686 --> 00:02:16.736 align:middle
+De vuelta en nuestro comando, busca la llamada a upsert()
+y añade el método a TranslatableMappingManager.
+
+00:02:17.326 --> 00:02:27.106 align:middle
+Establece todos los tipos de parámetros en string y
+el tipo de retorno en void: Si no estás familiarizado
+
+00:02:27.106 --> 00:02:30.686 align:middle
+con el término "upsert", es una
+combinación de "update" e "insert".
+
+00:02:30.996 --> 00:02:35.466 align:middle
+Significa actualizar un registro existente
+si existe, o insertar uno nuevo si no existe.
+
+00:02:35.786 --> 00:02:38.776 align:middle
+Esto es exactamente lo que queremos
+hacer al importar traducciones.
+
+00:02:39.456 --> 00:02:44.596 align:middle
+Primero, coge el " Gestor de objetos" para la
+clase de traducción del objeto utilizando $om =
+
+00:02:45.316 --> 00:02:51.206 align:middle
+$this->doctrine->getManagerForClass($this->translationClass):
+Ahora
+
+00:02:52.016 --> 00:02:54.076 align:middle
+intenta encontrar una traducción
+existente: $translation
+
+00:02:54.076 --> 00:03:01.096 align:middle
+= $om->getRepository($this->translationClass)->findOneBy().
+Para
+
+00:03:01.366 --> 00:03:02.126 align:middle
+los
+
+00:03:02.126 --> 00:03:09.896 align:middle
+criterios 'objectType' => $type,
+'objectId' => $id, 'locale' =>
+
+00:03:10.696 --> 00:03:15.366 align:middle
+$locale, y 'field' => $field. Estas 4
+
+00:03:16.106 --> 00:03:20.506 align:middle
+propiedades identifican de forma única una
+traducción: Si obtenemos una traducción de la
+
+00:03:20.506 --> 00:03:23.956 align:middle
+base de datos, se trata de una actualización,
+si no, es una inserción. Comprueba si
+
+00:03:24.626 --> 00:03:28.366 align:middle
+esta traducción no existe con
+if (!$translation). En este caso
+
+00:03:29.186 --> 00:03:30.966 align:middle
+, tenemos que crear una
+nueva. Así que instanciar
+
+00:03:31.106 --> 00:03:39.556 align:middle
+un objeto traducción: $translation =
+new ($this->translationClass)(): Sí,
+
+00:03:39.796 --> 00:03:44.836 align:middle
+¡puedes instanciar una clase con una
+variable como ésta! Entra rápidamente
+
+00:03:45.296 --> 00:03:47.666 align:middle
+en nuestra clase Model/Translation...
+genial, todas las
+
+00:03:48.296 --> 00:03:50.006 align:middle
+propiedades son públicas. Así que, de vuelta
+
+00:03:50.126 --> 00:03:54.316 align:middle
+en nuestro método upsert(), $translation->objectType
+= $type, $translation->objectId =
+
+00:03:54.316 --> 00:04:02.596 align:middle
+$id, $translation->locale =
+$locale, y $translation->field
+
+00:04:03.216 --> 00:04:10.996 align:middle
+= $field: A continuación, establece el valor con
+$translation->value = $value: Por último, guarda
+
+00:04:11.956 --> 00:04:18.776 align:middle
+la traducción con $om->persist($translation)
+y $om->flush(): La llamada a persistir
+
+00:04:19.346 --> 00:04:21.876 align:middle
+es necesaria para las
+traducciones nuevas, pero es
+
+00:04:22.066 --> 00:04:24.026 align:middle
+seguro llamarla también para
+las existentes. De vuelta al
+
+00:04:24.846 --> 00:04:27.736 align:middle
+comando, el error de método indefinido
+ha desaparecido. ¡Hora de probar!
+
+00:04:28.376 --> 00:04:29.266 align:middle
+Si
+
+00:04:29.636 --> 00:04:33.536 align:middle
+recuerdas el capítulo anterior, exportamos
+nuestras traducciones de objetos a este
+
+00:04:33.736 --> 00:04:36.406 align:middle
+archivovar/export.csv. Tomé
+
+00:04:36.566 --> 00:04:42.336 align:middle
+este archivo y traduje la columna value al español
+y al francés utilizando GitHub Copilot. En
+
+00:04:42.966 --> 00:04:46.866 align:middle
+el directoriotutorial/, encontrarás
+import.es.csv y import.fr.csv
+
+00:04:47.376 --> 00:04:51.286 align:middle
+con los valores traducidos. Si
+
+00:04:51.796 --> 00:04:54.066 align:middle
+no los ves, están enlazados en el
+script que aparece a continuación.
+
+00:04:54.806 --> 00:04:57.966 align:middle
+En el terminal, importa las traducciones
+al español ejecutando: symfony console
+
+00:04:58.106 --> 00:05:08.506 align:middle
+object-translation:import tutorial/import.es.csv
+es Genial, 15 traducciones
+
+00:05:08.606 --> 00:05:10.136 align:middle
+importadas. Ahora
+
+00:05:10.536 --> 00:05:17.286 align:middle
+las del francés: symfony console
+object-translation:import tutorial/import.fr.csv fr Como
+
+00:05:17.286 --> 00:05:25.096 align:middle
+hemos hecho cambios en la base de datos, necesitamos
+actualizar nuestra caché de traducciones. Por suerte,
+
+00:05:25.556 --> 00:05:30.936 align:middle
+tenemos nuestro comando de calentamiento:
+symfony console object-translation:warmup
+
+00:05:31.926 --> 00:05:36.136 align:middle
+En el navegador, estamos en la página de inicio en francés y
+vemos aquí nuestros datos fijos en francés. Actualiza... y...
+
+00:05:36.446 --> 00:05:37.016 align:middle
+¡Genial!
+
+00:05:37.056 --> 00:05:39.896 align:middle
+Todos los artículos
+
+00:05:40.136 --> 00:05:42.276 align:middle
+están traducidos al francés. Cambiamos al
+
+00:05:42.686 --> 00:05:43.966 align:middle
+español y... ¡Boom! ¡ Artículos en español
+
+00:05:44.916 --> 00:05:46.696 align:middle
+! Haz clic en un
+
+00:05:47.166 --> 00:05:49.756 align:middle
+artículo para ver el contenido
+completo traducido. Bien, ¡el
+
+00:05:51.216 --> 00:05:54.786 align:middle
+código inicial del bundle para una versión
+1.0 está listo! A continuación, vamos a
+
+00:05:55.246 --> 00:05:59.086 align:middle
+empezar a trabajar en los metadatos
+necesarios para lanzar este bundle al mundo.
