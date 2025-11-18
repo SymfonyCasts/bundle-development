@@ -294,10 +294,10 @@ exterior, aumenta la cuenta con $count++: Por último,
 
 00:05:18.096 --> 00:05:26.516 align:middle
 antes de volver, añade un mensaje de resumen
-de éxito: $io->success("Calentada la caché
+de éxito: $io->success("Warmed up the cache
 
 00:05:26.516 --> 00:05:32.876 align:middle
-para {$count} objetos traducibles."): Arriba, donde
+for {$count} translatable objects."): Arriba, donde
 estamos llamando a translate(), PhpStorm no está contento
 
 00:05:32.876 --> 00:05:35.546 align:middle
