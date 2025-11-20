@@ -1,0 +1,64 @@
+diff --git a/object-translation-bundle/.gitignore b/object-translation-bundle/.gitignore
+index 48b8bf9..d1502b0 100644
+--- a/object-translation-bundle/.gitignore
++++ b/object-translation-bundle/.gitignore
+@@ -1 +1,2 @@
+ vendor/
++composer.lock
+diff --git a/object-translation-bundle/composer.json b/object-translation-bundle/composer.json
+index 4ff1218..2a57807 100644
+--- a/object-translation-bundle/composer.json
++++ b/object-translation-bundle/composer.json
+@@ -19,5 +19,14 @@
+             "email": "kevinbond@gmail.com"
+         }
+     ],
+-    "require": {}
++    "require": {
++        "symfony/framework-bundle": "^7.3",
++        "symfony/translation": "^7.3",
++        "doctrine/doctrine-bundle": "^2.18",
++        "doctrine/orm": "^3.5"
++    },
++    "require-dev": {
++        "phpunit/phpunit": "^9.6",
++        "symfony/phpunit-bridge": "^7.3"
++    }
+ }
+diff --git a/object-translation-bundle/phpunit.xml.dist b/object-translation-bundle/phpunit.xml.dist
+new file mode 100644
+index 0000000..7a42ef1
+--- /dev/null
++++ b/object-translation-bundle/phpunit.xml.dist
+@@ -0,0 +1,31 @@
++<?xml version="1.0" encoding="UTF-8"?>
++
++<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
++<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
++         bootstrap="vendor/autoload.php"
++         colors="true"
++         failOnRisky="true"
++         failOnWarning="true"
++>
++    <php>
++        <ini name="error_reporting" value="-1" />
++        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0&amp;quiet[]=indirect&amp;quiet[]=other"/>
++    </php>
++
++    <testsuites>
++        <testsuite name="symfonycasts/object-translation-bundle Test Suite">
++            <directory>tests</directory>
++        </testsuite>
++    </testsuites>
++
++    <coverage>
++        <include>
++            <directory>src</directory>
++        </include>
++    </coverage>
++
++    <listeners>
++        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
++    </listeners>
++</phpunit>

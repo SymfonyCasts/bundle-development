@@ -344,7 +344,17 @@
             "id": "27-import-command",
             "name": "27. import command",
             "description": null
+        },
+        {
+            "id": "28-deps",
+            "name": "28. deps",
+            "description": null
+        },
+        {
+            "id": "28-integration-test",
+            "name": "28. integration test",
+            "description": null
         }
     ],
-    "sha": "611aafa0effbb71b8806988030a4306e13631547"
+    "sha": "0733b2f4fc38b603974be068dcc191b960a74eb7"
 }

@@ -1,0 +1,69 @@
+diff --git a/object-translation-bundle/.gitignore b/object-translation-bundle/.gitignore
+index d1502b0..b71de58 100644
+--- a/object-translation-bundle/.gitignore
++++ b/object-translation-bundle/.gitignore
+@@ -1,2 +1,3 @@
+ vendor/
++var/
+ composer.lock
+diff --git a/object-translation-bundle/phpunit.xml.dist b/object-translation-bundle/phpunit.xml.dist
+index 7a42ef1..6556e35 100644
+--- a/object-translation-bundle/phpunit.xml.dist
++++ b/object-translation-bundle/phpunit.xml.dist
+@@ -11,6 +11,7 @@
+     <php>
+         <ini name="error_reporting" value="-1" />
+         <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0&amp;quiet[]=indirect&amp;quiet[]=other"/>
++        <env name="KERNEL_CLASS" value="SymfonyCasts\ObjectTranslationBundle\Tests\Fixture\TestKernel"/>
+     </php>
+ 
+     <testsuites>
+diff --git a/object-translation-bundle/tests/Fixture/TestKernel.php b/object-translation-bundle/tests/Fixture/TestKernel.php
+new file mode 100644
+index 0000000..8c83c5c
+--- /dev/null
++++ b/object-translation-bundle/tests/Fixture/TestKernel.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Tests\Fixture;
++
++use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
++use Symfony\Component\Config\Loader\LoaderInterface;
++use Symfony\Component\DependencyInjection\ContainerBuilder;
++use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
++use Symfony\Component\HttpKernel\Kernel;
++
++class TestKernel extends Kernel
++{
++    use MicroKernelTrait;
++
++    private function configureContainer(ContainerConfigurator $container, LoaderInterface $loader, ContainerBuilder $builder): void
++    {
++        $container->extension('framework', [
++            'test' => true,
++        ]);
++    }
++}
+diff --git a/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php b/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php
+new file mode 100644
+index 0000000..8916d82
+--- /dev/null
++++ b/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php
+@@ -0,0 +1,16 @@
++<?php
++
++namespace SymfonyCasts\ObjectTranslationBundle\Tests\Integration;
++
++use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
++use Symfony\Contracts\Cache\CacheInterface;
++
++class ObjectTranslatorTest extends KernelTestCase
++{
++    public function testCanFetchService()
++    {
++        $cache = self::getContainer()->get(CacheInterface::class);
++
++        $this->assertInstanceOf(CacheInterface::class, $cache);
++    }
++}
