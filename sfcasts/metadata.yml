@@ -81,8 +81,8 @@ chapters:
         tutsFirstStep: 27-remove-weakmap
         tutsLastStep: 27-import-command
     bundle-dependencies:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 28-deps
+        tutsLastStep: 28-deps
     integration-testing:
         tutsFirstStep: null
         tutsLastStep: null
