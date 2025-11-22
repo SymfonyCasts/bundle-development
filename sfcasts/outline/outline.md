@@ -717,3 +717,74 @@
     - set `value`
     - persist/flush
 - test import
+
+## Bundle Dependencies
+
+- We've been depending on our app's dependencies, time for the bundle to be standalone
+- `cd object-translation-bundle`
+- `composer require symfony/framework-bundle`
+    - Some bundle authors require the individual components, but I prefer framework-bundle
+- `composer require symfony/translation`
+- `composer require doctrine/orm doctrine/doctrine-bundle`
+- `composer require --dev phpunit/phpunit:"9.6" symfony/phpunit-bridge`
+    - don't need to specify version for phpunit-bridge
+- copy `phpunit.xml.dist` and review
+- run `symfony php vendor/bin/phpunit tests` - all pass!
+
+## Integration Tests
+
+- in `tests`, create `Integration` directory
+- Create `ObjectTranslatorTest` extends `KernelTestCase`
+    - `testCanAccessService`
+    - `$cache = self::getContainer()->get(CacheInterface::class);`
+    - `$this->assertInstanceOf(CacheInterface::class, $cache);`
+- run `symfony php vendor/bin/phpunit` - error!
+    - need `KERNEL_CLASS`... so we need a test kernel!
+- In `tests/Fixture`, create `TestKernel` extends `Kernel`, use `MicroKernelTrait`
+    - In `configureContainer()` (copy from trait)
+        - `$builder->loadFromExtension('framework', ['test' => true]);`
+    - Copy namespace
+- In `phpunit.xml.dist`:
+    - `<env name="KERNEL_CLASS" value="<{paste}\TestKernel"/>`
+- run tests - pass!
+- The default location of the container's var directory is the same as composer.json
+    - Add `var` to `.gitignore`
+
+## Doctrine Tests
+
+## 29
+
+- `composer require --dev zenstruck/foundry`
+- Copy `Translation`/`Entity1` entities to `tests/Fixture/Entity`
+- We need to enable bundles
+- In `TestKernel`, override `registerBundles()`
+    - `yield new FrameworkBundle();`
+    - `yield new DoctrineBundle();`
+    - `yield new ObjectTranslationBundle();`
+    - `yield new ZenstruckFoundryBundle()`
+- Our `translation_class` must be configured...
+- In `TestKernel::configureContainer()`
+    - `$builder->loadFromExtension('symfonycasts_object_translation', [`
+      'translation_class' => Fixture\Entity\Translation::class,
+      ]);
+    - `$builder->loadFromExtension('doctrine', [`
+      'dbal' => [
+      'url' => 'sqlite:///%kernel.project_dir%/var/data.db',
+      ],
+      'orm' => ["mapping" => [__DIR__.'/Entity' => 'SymfonyCasts\ObjectTranslationBundle\Tests\Fixture\Entity']],
+      ]);
+- In `ObjectTranslatorTest`
+    - `use Factories, ResetDatabase`
+    - rename test to `public function testCanTranslate()`
+        - `$entity = persist(Entity1::class, ['property1' => 'value1']);`
+        - `persist(Translation::class, [`
+          'objectType' => 'entity1',
+          'objectId' => $entity->id,
+          'locale' => 'fr',
+          'field' => 'property1',
+          'value' => 'translated1',
+          ]);`
+        - `$translator = self::getContainer()->get(ObjectTranslator::class);`
+        - `$translated = $translator->translate($entity, 'fr');`
+        - `$this->assertSame('translated1', $translated->property1);`
+- run tests - all pass!
