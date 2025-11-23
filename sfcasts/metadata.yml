@@ -90,20 +90,20 @@ chapters:
         tutsFirstStep: 28-integration-test
         tutsLastStep: 28-integration-test
     multi-symfony-versions:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 28-integration-test
+        tutsLastStep: 28-integration-test
     metadata-php-cs-fixer:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 28-integration-test
+        tutsLastStep: 28-integration-test
     static-analysis:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 28-integration-test
+        tutsLastStep: 28-integration-test
     github-actions:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 28-integration-test
+        tutsLastStep: 28-integration-test
     publish-to-packagist:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 28-integration-test
+        tutsLastStep: 28-integration-test
     flex-recipe:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 28-integration-test
+        tutsLastStep: 28-integration-test
