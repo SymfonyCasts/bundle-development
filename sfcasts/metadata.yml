@@ -89,6 +89,9 @@ chapters:
     doctrine-tests:
         tutsFirstStep: 28-integration-test
         tutsLastStep: 28-integration-test
+    multi-symfony-versions:
+        tutsFirstStep: null
+        tutsLastStep: null
     metadata-php-cs-fixer:
         tutsFirstStep: null
         tutsLastStep: null
@@ -98,9 +101,9 @@ chapters:
     github-actions:
         tutsFirstStep: null
         tutsLastStep: null
-    flex-recipe:
+    publish-to-packagist:
         tutsFirstStep: null
         tutsLastStep: null
-    publish-to-packagist:
+    flex-recipe:
         tutsFirstStep: null
         tutsLastStep: null

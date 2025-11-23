@@ -788,3 +788,79 @@
         - `$translated = $translator->translate($entity, 'fr');`
         - `$this->assertSame('translated1', $translated->property1);`
 - run tests - all pass!
+
+## Testing with Multiple Symfony Versions
+
+- In `composer.json`
+    - set php to `>=8.2`
+    - `symfony/framework-bundle` to `^6.4|^7.0`
+    - `symfony/translation` to `^6.4|^7.0`
+- When running tests with multiple Symfony versions, cleaning up is important
+    - add `tests/bootstrap.php`
+        - `require '../vendor/autoload.php';`
+        - `(new Filesystem())->remove(__DIR__.'/../var');`
+    - Open `phpunit.xml.dist`
+        - `bootstrap="tests/bootstrap.php"`
+- `symfony composer update --prefer-lowest`
+- `symfony php vendor/bin/phpunit`
+- `stringNode()` doesn't exist in 6.4 - was new in 7.x
+    - In `ObjectTranslationBundle::configure()`
+        - change to `scalarNode()`'s to `scalarNode()`'s
+- Run tests - pass!
+- `symfony composer update`
+    - installing Symfony 7.3 because 7.4 isn't released yet
+- In `composer.json`:
+    - `minimum-stability` to `dev`
+    - `prefer-stable` to `true`
+- `symfony composer update`
+    - nothing changed because of prefer-stable
+    - I want to test against 7.4
+- `symfony composer global require symfony/flex`
+- `SYMFONY_REQUIRE=7.4.* symfony composer update`
+- `SYMFONY_REQUIRE=7.2.* symfony composer update`
+
+## Metadata and Code Style
+
+- Copy/review LICENSE file
+- Copy/review README.md file
+    - Add `## Full Default Configuration` section
+    - In project root, run `symfony console config:dump-reference symfonycasts_object_translation`
+    - copy/paste output to README.md
+- Copy/review `.editorconfig` file
+- Add `.gitattributes`
+    - `/tests export-ignore` (to not include tests in the released package)
+- `symfony composer require --dev php-cs-fixer/shim`
+    - the shim prevents compatibility issues
+    - a compiled phar
+- Copy `.php-cs-fixer.dist.php` file
+- In terminal run `symfony php vendor/bin/php-cs-fixer fix -v`
+- Check the changes
+- add `.php-cs-fixer.cache` to `.gitignore`
+
+## Static Analysis with PHPStan
+
+- `symfony composer require --dev phpstan/phpstan`
+- Copy/review `phpstan.neon` file
+    - just `src` for now
+    - level 5 to start, but we can increase later
+- In terminal run `symfony php vendor/bin/phpstan analyse`
+    - `ObjectTranslationBundle::configure()` - this system confuses PHPStan
+    - Add `@phpstan-ignore method.notFound`
+- Run again - 2 errors
+    - We forgot to add twig as a dependency
+    - It is not a strict dependency, so we'll add to dev
+    - `symfony composer require --dev twig/twig`
+- Run PHPStan again - passes!
+
+## Adding to GitHub and Continuous Integration
+
+- create the github repo
+- copy ci.yml
+- create repo and push to github
+- check Actions run
+
+## Publishing to Packagist
+
+- ...
+
+## Symfony Flex Recipe
