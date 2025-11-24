@@ -16,7 +16,7 @@ Ahora, añade nuestra primera dependencia:
 symfony composer require symfony/framework-bundle
 ```
 
-Algunos creadores de bundles prefieren incluir los componentes subyacentes sin exigir directamente el `framework-bundle`. Es un enfoque perfectamente válido, pero yo prefiero exigir el `framework-bundle` porque simplifica las cosas. Este bundle no puede funcionar sin `framework-bundle`. Para mí, eso lo convierte en una dependencia directa.
+Algunos creadores de bundles prefieren incluir los componentes subyacentes sin exigir directamente el `framework-bundle`. Y aunque es un enfoque perfectamente válido, yo prefiero exigir el `framework-bundle` porque simplifica las cosas. Este bundle no puede funcionar sin `framework-bundle`. Para mí, eso lo convierte en una dependencia directa.
 
 Siguiente:
 
@@ -56,7 +56,9 @@ Este paquete nos ayuda a gestionar las advertencias de desaprobación cuando eje
 
 Ya estamos casi listos para ejecutar nuestras pruebas bundle de forma autónoma, pero antes necesitamos un archivo de configuración PHPUnit.
 
-En el directorio `tutorials/`, copia `phpunit.xml.dist` en nuestro directorio`object-translation-bundle/`. Si no lo ves, no te preocupes, puedes copiarlo desde el script que aparece a continuación.
+En el directorio `tutorials/`, copia `phpunit.xml.dist` en nuestro directorio`object-translation-bundle/`. Si no lo ves, no te preocupes, puedes copiarlo desde el script que aparece a continuación:
+
+[[[ code('046df39238') ]]]
 
 Si tienes curiosidad por el sufijo `.dist`, es una convención que indica que este archivo es una plantilla. Puedes copiarlo en `phpunit.xml` y modificarlo como necesites sin afectar a la plantilla original. `phpunit.xml` tiene prioridad sobre `phpunit.xml.dist` si ambos están presentes.
 
@@ -64,7 +66,7 @@ Descomprimamos este archivo de configuración. Es claramente XML, el nodo raíz 
 
 El nodo `php` es donde configuramos los ajustes y variables de entorno de `php.ini`. La variable de entorno `SYMFONY_DEPRECATIONS_HELPER` es particularmente importante. Indica al puente PHPUnit de Symfony cómo manejar las advertencias de depreciación. Este valor es un gran valor por defecto para el desarrollo de paquetes de terceros, ya que sólo provoca un fallo si nuestro bundle causa directamente una depreciación. No podemos hacer mucho con las depreciaciones causadas por los paquetes de los que depende nuestro bundle, así que las ignoramos.
 
-El nodo `testsuites` define nuestros conjuntos de pruebas. Aquí tenemos un único conjunto para el directorio `tests`. Finalmente, cuando ejecutamos informes de cobertura de código, el nodo `coverage` es donde especificamos los directorios fuente para el análisis de cobertura.
+El nodo `testsuites` define nuestros conjuntos de pruebas. Aquí tenemos un único conjunto para el directorio `tests`. Finalmente, cuando ejecutamos informes de cobertura de código, en el nodo `coverage` es donde especificamos los directorios fuente para el análisis de cobertura.
 
 Por último, en el nodo `listeners`, registramos el receptor de pruebas proporcionado por el puente PHPUnit de Symfony.
 
