@@ -17,7 +17,7 @@ remote url by clicking the "Code" dropdown and copying the "SSH" link.
 At your terminal, navigate to a clean directory and clone your fork with:
 
 ```terminal
-git clone <paste-your-remote-link-here>
+git clone <paste>
 ```
 
 Navigate to the directory:
