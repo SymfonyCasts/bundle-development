@@ -70,7 +70,9 @@ need a PHPUnit configuration file.
 
 In the `tutorials/` directory, copy `phpunit.xml.dist` into our
 `object-translation-bundle/` directory. If you don't see it, no worries,
-you can copy it from the script below.
+you can copy it from the script below:
+
+[[[ code('046df39238') ]]]
 
 If you're curious about the `.dist` suffix, it's a convention indicating
 that this file is a template. You can copy it to `phpunit.xml` and modify it
