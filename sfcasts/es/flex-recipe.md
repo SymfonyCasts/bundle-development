@@ -9,7 +9,7 @@ Para añadir una receta, primero haz un fork del repositorio `symfony/recipes-co
 En tu terminal, navega a un directorio limpio y clona con él tu fork:
 
 ```terminal
-git clone <paste-your-remote-link-here>
+git clone <paste>
 ```
 
 Navega hasta el directorio:
