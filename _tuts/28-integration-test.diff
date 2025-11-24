@@ -1,11 +1,12 @@
 diff --git a/object-translation-bundle/.gitignore b/object-translation-bundle/.gitignore
-index d1502b0..b71de58 100644
+index d1502b0..e57e850 100644
 --- a/object-translation-bundle/.gitignore
 +++ b/object-translation-bundle/.gitignore
-@@ -1,2 +1,3 @@
+@@ -1,2 +1,4 @@
  vendor/
 +var/
  composer.lock
++.phpunit.result.cache
 diff --git a/object-translation-bundle/phpunit.xml.dist b/object-translation-bundle/phpunit.xml.dist
 index 7a42ef1..6556e35 100644
 --- a/object-translation-bundle/phpunit.xml.dist
@@ -47,7 +48,7 @@ index 0000000..8c83c5c
 +}
 diff --git a/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php b/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php
 new file mode 100644
-index 0000000..8916d82
+index 0000000..a317751
 --- /dev/null
 +++ b/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php
 @@ -0,0 +1,16 @@
@@ -60,7 +61,7 @@ index 0000000..8916d82
 +
 +class ObjectTranslatorTest extends KernelTestCase
 +{
-+    public function testCanFetchService()
++    public function testCanAccessService()
 +    {
 +        $cache = self::getContainer()->get(CacheInterface::class);
 +
