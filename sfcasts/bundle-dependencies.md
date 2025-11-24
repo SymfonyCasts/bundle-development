@@ -20,7 +20,7 @@ symfony composer require symfony/framework-bundle
 ```
 
 Some bundle creators prefer to include the underlying components without
-directly requiring the `framework-bundle`. That's a perfectly valid
+directly requiring the `framework-bundle`. And while that's a perfectly valid
 approach, but I'm partial to requiring the `framework-bundle` because it simplifies
 things. This bundle can't function without the `framework-bundle`. To me,
 that makes it a direct dependency.

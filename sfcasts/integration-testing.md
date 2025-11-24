@@ -61,8 +61,8 @@ directly. Copy the method signature, and paste into our `TestKernel`, importing
 the necessary classes.
 
 We just need to configure the framework for testing. Write:
-`$builder->loadFromExtension('framework');`. This is the *key* you are used to seeing
-in your app's `config/packages/framework.yaml`. Then `['test' => true]` to enable the
+`$builder->loadFromExtension('framework');`. This is the *key* you're used to seeing
+in your app's YAML configuration files. Then `['test' => true]` to enable the
 testing mode.
 
 ## `KERNEL_CLASS` Environment Variable
