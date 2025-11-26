@@ -50,7 +50,7 @@ En el directorio `tests` de nuestro bundle, crea una nueva carpeta llamada `Fixt
 
 ## `TestKernel` Configuración
 
-Escarba en `MicroKernelTrait` y encuentra este método `configureContainer`. La versión del rasgo busca los archivos `YAML` para la configuración. Podemos anularlo para definir la configuración directamente. Copia la firma del método y pégala en nuestro `TestKernel`, importando las clases necesarias:
+Ahonda en `MicroKernelTrait` y encuentra este método `configureContainer`. La versión del rasgo busca los archivos `YAML` para la configuración. Podemos anularlo para definir la configuración directamente. Copia la firma del método y pégala en nuestro `TestKernel`, importando las clases necesarias:
 
 [[[ code('4aa982b13f') ]]]
 
