@@ -1,0 +1,280 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:02.836 align:middle
+Ya tenemos funcionando las pruebas
+unitarias de nuestro bundle,
+
+00:00:03.026 --> 00:00:06.306 align:middle
+ahora toca algo un poco más
+complicado: las pruebas de integración.
+
+00:00:06.696 --> 00:00:10.936 align:middle
+Estas pruebas utilizarán el contenedor de servicios
+Symfony completo, como en una aplicación real.
+
+00:00:11.346 --> 00:00:15.406 align:middle
+Esto nos permite probar los servicios y sus
+interacciones en un entorno más realista.
+
+00:00:15.906 --> 00:00:21.186 align:middle
+En el directorio tests de nuestro bundle, junto al
+directorio Unit, crea una nueva carpeta Integration.
+
+00:00:22.646 --> 00:00:26.266 align:middle
+El principal punto de entrada de nuestro
+bundle es este servicio ObjectTranslator
+
+00:00:26.546 --> 00:00:29.856 align:middle
+, por lo que es un gran candidato para
+nuestra primera prueba de integración.
+
+00:00:29.856 --> 00:00:35.036 align:middle
+Dentro de este nuevo directorio, crea una
+nueva clase PHP llamada ObjectTranslatorTest.
+
+00:00:35.666 --> 00:00:38.936 align:middle
+No tenemos que preocuparnos de marcarla
+como final o @internal para las pruebas.
+
+00:00:39.066 --> 00:00:41.896 align:middle
+Ni siquiera estarán disponibles cuando
+se utilice el bundle como dependencia.
+
+00:00:42.486 --> 00:00:48.546 align:middle
+En lugar de extender desde TestCase de PHPUnit ,
+extiende KernelTestCase: Esto nos permite arrancar
+
+00:00:48.546 --> 00:00:51.196 align:middle
+el núcleo de Symfony y acceder
+al contenedor de servicios.
+
+00:00:51.196 --> 00:00:57.656 align:middle
+Para nuestra primera prueba, vamos a empezar de forma
+super sencilla: public function testCanAccessService():
+
+00:00:58.326 --> 00:01:02.166 align:middle
+Esto sólo será una prueba temporal para asegurarnos de que
+nuestra configuración de prueba de integración funciona.
+
+00:01:02.786 --> 00:01:07.176 align:middle
+Dentro, cogeremos un servicio que sé que toda
+aplicación Symfony tiene: el CacheInterface.
+
+00:01:07.596 --> 00:01:14.736 align:middle
+Escribe: $cache =
+self::getContainer()->get(CacheInterface::class); y
+
+00:01:15.576 --> 00:01:20.106 align:middle
+luego $this->assertInstanceOf(CacheInterface::class,
+$cache);:
+
+00:01:20.106 --> 00:01:25.006 align:middle
+Si esta aserción pasa, ¡nuestra configuración
+de prueba de integración funciona!
+
+00:01:25.576 --> 00:01:28.606 align:middle
+En el terminal, navega hasta el
+directorio bundle y ejecuta: symfony
+
+00:01:28.726 --> 00:01:33.966 align:middle
+php vendor/bin/phpunit Hmm... un
+
+00:01:34.086 --> 00:01:37.466 align:middle
+error, y sí, es de testCanAccessService.
+
+00:01:37.716 --> 00:01:40.976 align:middle
+Dice que hay que configurar esta
+variable de entorno KERNEL_CLASS... Vale,
+
+00:01:41.726 --> 00:01:44.706 align:middle
+para una prueba de integración,
+necesitamos un núcleo Symfony. En
+
+00:01:45.196 --> 00:01:48.606 align:middle
+nuestra aplicación tenemos un Kernel, pero no
+podemos utilizarlo en nuestras pruebas de bundle...
+
+00:01:48.896 --> 00:01:50.976 align:middle
+Tenemos que crear un núcleo
+específico para la prueba
+
+00:01:51.696 --> 00:01:55.606 align:middle
+En el directorio tests de nuestro bundle, crea
+una nueva carpeta llamada Fixture. Dentro,
+
+00:01:56.566 --> 00:02:04.086 align:middle
+crea una nueva clase llamada TestKernel que
+extienda a Symfony\Component\HttpKernel\Kernel y
+
+00:02:04.086 --> 00:02:09.166 align:middle
+que sea use MicroKernelTrait:
+¡Kernel de pruebas hecho! Bueno...
+
+00:02:09.606 --> 00:02:10.576 align:middle
+no del todo.
+
+00:02:10.846 --> 00:02:12.166 align:middle
+Necesita algo de configuración. En
+
+00:02:12.616 --> 00:02:16.116 align:middle
+las aplicaciones reales, utilizamos archivos
+YAML, y también puedes hacerlo aquí. Este
+
+00:02:16.616 --> 00:02:18.806 align:middle
+directorioFixture es como una miniapp.
+
+00:02:19.386 --> 00:02:21.266 align:middle
+Para evitar tener un montón de archivos extra,
+
+00:02:21.486 --> 00:02:24.716 align:middle
+podemos añadir la configuración
+directamente en nuestra clase TestKernel.
+
+00:02:25.576 --> 00:02:29.806 align:middle
+Entra en MicroKernelTrait y encuentra
+este método configureContainer.
+
+00:02:30.326 --> 00:02:33.266 align:middle
+La versión del rasgo busca los
+archivos YAML para la configuración.
+
+00:02:33.666 --> 00:02:36.456 align:middle
+Podemos anularlo para definir la
+configuración directamente. Copia
+
+00:02:36.936 --> 00:02:41.696 align:middle
+la firma del método y pégala en nuestro
+TestKernel, importando las clases necesarias:
+
+00:02:42.446 --> 00:02:44.836 align:middle
+Sólo tenemos que configurar el
+framework para las pruebas. Escribe:
+
+00:02:45.236 --> 00:02:49.606 align:middle
+$builder->loadFromExtension('framework');.
+Esta
+
+00:02:50.156 --> 00:02:54.316 align:middle
+es la clave que estás acostumbrado a ver en los archivos
+de configuración YAML de tu aplicación. A continuación,
+
+00:02:54.956 --> 00:03:00.776 align:middle
+['test' => true] para activar
+el modo de pruebas: Ahora
+
+00:03:01.446 --> 00:03:04.636 align:middle
+tenemos que informar a nuestras pruebas
+de integración sobre esto TestKernel.
+
+00:03:05.006 --> 00:03:06.646 align:middle
+La forma más sencilla de
+hacerlo es establecer esa
+
+00:03:06.646 --> 00:03:10.556 align:middle
+variable de entornoKERNEL_CLASS de la
+que se quejaba el error de prueba. Copia
+
+00:03:11.216 --> 00:03:16.806 align:middle
+el espacio de nombres de TestKernel y abre el
+archivo phpunit.xml.dist de nuestro bundle. Dentro
+
+00:03:17.376 --> 00:03:20.506 align:middle
+del nodo <php>, añade
+otra variable de entorno: <env
+
+00:03:20.906 --> 00:03:32.466 align:middle
+name="KERNEL_CLASS" value="{pegar el espacio de nombres
+que hemos copiado}/TestKernel" />: ¡Genial! Ahora
+
+00:03:32.716 --> 00:03:34.836 align:middle
+esta variable está disponible
+en nuestras pruebas y
+
+00:03:34.836 --> 00:03:38.236 align:middle
+el KernelTestCase de Symfony la utilizará
+para arrancar nuestro TestKernel.
+
+00:03:38.976 --> 00:03:42.526 align:middle
+De nuevo en el terminal, ejecuta de
+nuevo las pruebas: ¡Woo! ¡ Todo en
+
+00:03:42.616 --> 00:03:43.366 align:middle
+verde! ¡ Nuestra
+
+00:03:43.616 --> 00:03:45.166 align:middle
+prueba de integración funciona!
+
+00:03:45.856 --> 00:03:49.966 align:middle
+De vuelta en nuestro IDE, en nuestro directorio
+bundle, vemos un nuevo directorio var. Si
+
+00:03:50.316 --> 00:03:53.396 align:middle
+lo abres, podrás ver los archivos
+caché de nuestro contenedor de pruebas.
+
+00:03:53.726 --> 00:03:59.416 align:middle
+No queremos confirmar este archivo, así que abre el directorio
+.gitignore de nuestro bundle y añádele var/: Después de
+
+00:03:59.416 --> 00:04:02.386 align:middle
+guardar, podemos ver que
+ahora se ignora var/. Si
+
+00:04:02.386 --> 00:04:06.616 align:middle
+te preguntas por qué este directorio
+var está aquí y no en otra parte, es
+
+00:04:06.866 --> 00:04:11.226 align:middle
+porque cuando se crea la caché del contenedor,
+si no se especifica explícitamente,
+
+00:04:11.316 --> 00:04:14.226 align:middle
+asciende por la estructura de directorios
+empezando por nuestro TestKernel, hasta que
+
+00:04:14.386 --> 00:04:16.746 align:middle
+encuentra un archivo composer.json.
+
+00:04:17.196 --> 00:04:19.246 align:middle
+Entonces crea el directorio var junto a él.
+
+00:04:19.726 --> 00:04:21.936 align:middle
+Puedes configurar totalmente esta
+ubicación si quieres, quizás a
+
+00:04:22.096 --> 00:04:25.396 align:middle
+un directorio temporal pero, a mí me
+gusta la ubicación por defecto. Mientras
+
+00:04:26.186 --> 00:04:29.136 align:middle
+estamos en .gitignore, vamos a
+añadir un par de cosas más. ¿Ves
+
+00:04:29.436 --> 00:04:31.396 align:middle
+el archivo composer.lock de nuestro bundle?
+
+00:04:31.746 --> 00:04:33.576 align:middle
+Añádelo también a .gitignore:
+
+00:04:33.576 --> 00:04:36.906 align:middle
+Es muy importante que no confirmes
+este archivo para los bundles.
+
+00:04:36.966 --> 00:04:37.896 align:middle
+Pronto verás por qué.
+
+00:04:38.596 --> 00:04:42.176 align:middle
+Añade también este archivo
+.phpunit.result.cache:
+
+00:04:42.516 --> 00:04:46.076 align:middle
+Está generado por PHPUnit, y no queremos
+confirmarlo. A continuación, vamos
+
+00:04:46.076 --> 00:04:49.366 align:middle
+a sustituir nuestra sencilla prueba
+de integración por algo real: una
+
+00:04:49.656 --> 00:04:52.296 align:middle
+prueba que utilice nuestro
+bundle para traducir una entidad.
