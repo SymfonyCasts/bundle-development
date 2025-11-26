@@ -1,0 +1,250 @@
+WEBVTT
+
+00:00:01.036 --> 00:00:05.126 align:middle
+En este momento, nuestro bundle está anidado
+dentro de una aplicación Symfony completa.
+
+00:00:05.576 --> 00:00:09.756 align:middle
+Depende de las dependencias de la
+aplicación sin definir ninguna propia.
+
+00:00:10.006 --> 00:00:12.996 align:middle
+Así que ya es hora de que especifiquemos
+algunas dependencias para nuestro bundle.
+
+00:00:13.546 --> 00:00:17.376 align:middle
+Lo primero es lo primero, en tu terminal,
+navega hasta nuestro directorio bundle con:
+
+00:00:17.666 --> 00:00:22.356 align:middle
+cd object-translation-bundle Ahora,
+añade nuestra primera dependencia:
+
+00:00:22.816 --> 00:00:28.636 align:middle
+symfony composer require symfony/framework-bundle
+Algunos creadores de bundles
+
+00:00:28.636 --> 00:00:33.356 align:middle
+prefieren incluir los componentes subyacentes
+sin requerir directamente el framework-bundle.
+
+00:00:33.716 --> 00:00:35.526 align:middle
+Y aunque es un enfoque perfectamente válido
+
+00:00:35.846 --> 00:00:39.446 align:middle
+, yo prefiero exigir el framework-bundle
+porque simplifica las cosas.
+
+00:00:39.696 --> 00:00:42.136 align:middle
+Este bundle no puede funcionar
+sin framework-bundle.
+
+00:00:42.426 --> 00:00:44.756 align:middle
+Para mí, eso lo convierte
+en una dependencia directa.
+
+00:00:45.306 --> 00:00:50.236 align:middle
+Siguiente: symfony composer require
+symfony/translation Necesitamos esto
+
+00:00:50.236 --> 00:00:53.376 align:middle
+porque necesitamos los servicios que
+proporciona el componente de traducción,
+
+00:00:53.506 --> 00:00:55.206 align:middle
+como el LocaleAwareInterface.
+
+00:00:55.686 --> 00:01:06.596 align:middle
+A continuación, Ejecuta: symfony composer require
+doctrine/doctrine-bundle doctrine/orm Genial,
+
+00:01:06.846 --> 00:01:10.096 align:middle
+estas son las dependencias mínimas que
+necesita nuestro bundle para funcionar.
+
+00:01:10.676 --> 00:01:13.396 align:middle
+Ahora, es el momento de añadir
+algunas dependencias de desarrollo.
+
+00:01:13.716 --> 00:01:16.096 align:middle
+Ejecuta: symfony composer require
+
+00:01:16.336 --> 00:01:27.716 align:middle
+--dev phpunit/phpunit:"^9.6" El símbolo ^ indica
+aquí que nos parece bien cualquier versión superior
+
+00:01:27.716 --> 00:01:31.796 align:middle
+(o igual) a la 9.6, pero inferior a la 10.0.
+
+00:01:32.326 --> 00:01:35.936 align:middle
+Sé que hay versiones más recientes
+de phpunit, pero no sé muy
+
+00:01:35.936 --> 00:01:38.586 align:middle
+bien cómo funciona el seguimiento
+de las versiones obsoletas.
+
+00:01:38.856 --> 00:01:40.896 align:middle
+Así que, de momento, me quedo con la 9.6.
+
+00:01:41.396 --> 00:01:45.926 align:middle
+Hablando de seguimiento de las desaprobaciones,
+añade también: symfony composer require
+
+00:01:46.156 --> 00:01:52.516 align:middle
+--dev symfony/phpunit-bridge Este paquete nos ayuda
+a gestionar las advertencias de desaprobación
+
+00:01:52.516 --> 00:01:53.666 align:middle
+cuando ejecutamos nuestras pruebas.
+
+00:01:54.416 --> 00:01:57.466 align:middle
+Ya estamos casi listos para ejecutar nuestras
+pruebas bundle de forma autónoma, pero antes
+
+00:01:57.526 --> 00:01:59.666 align:middle
+necesitamos un archivo de
+configuración PHPUnit.
+
+00:02:00.336 --> 00:02:04.696 align:middle
+En el directorio tutorials/,
+copia phpunit.xml.dist
+
+00:02:05.016 --> 00:02:07.396 align:middle
+en nuestro directorio
+object-translation-bundle/.
+
+00:02:07.846 --> 00:02:11.116 align:middle
+Si no lo ves, no te preocupes, puedes copiarlo
+desde el script que aparece a continuación:
+
+00:02:11.796 --> 00:02:14.086 align:middle
+Si tienes curiosidad por el sufijo .dist,
+
+00:02:14.316 --> 00:02:17.136 align:middle
+es una convención que indica que
+este archivo es una plantilla.
+
+00:02:17.556 --> 00:02:23.756 align:middle
+Puedes copiarlo en phpunit.xml y modificarlo como
+necesites sin afectar a la plantilla original.
+
+00:02:24.266 --> 00:02:30.226 align:middle
+phpunit.xml tiene prioridad sobre
+phpunit.xml.dist si ambos están presentes.
+
+00:02:30.896 --> 00:02:32.596 align:middle
+Descomprimamos este archivo de configuración.
+
+00:02:32.786 --> 00:02:38.276 align:middle
+Es claramente XML, el nodo raíz phpunit tiene varios
+atributos: algunas cosas del espacio de nombres
+
+00:02:38.276 --> 00:02:41.326 align:middle
+y del esquema de las que no necesitas
+preocuparte demasiado, excepto
+
+00:02:41.326 --> 00:02:44.006 align:middle
+saber que añade soporte de
+autocompletado, lo cual está bien.
+
+00:02:44.586 --> 00:02:49.256 align:middle
+El atributo bootstrap indica a PHPUnit qué
+archivo debe cargar antes de ejecutar las pruebas.
+
+00:02:49.626 --> 00:02:52.096 align:middle
+En nuestro caso, es el archivo
+de carga automática de Composer.
+
+00:02:52.836 --> 00:02:55.866 align:middle
+colors activa/desactiva la
+salida de color en el terminal.
+
+00:02:56.276 --> 00:03:00.146 align:middle
+failOnRisky y failOnWarning configuran
+el comportamiento de PHPUnit
+
+00:03:00.246 --> 00:03:02.826 align:middle
+cuando encuentra pruebas
+arriesgadas o advertencias.
+
+00:03:03.066 --> 00:03:04.386 align:middle
+Son buenos valores por defecto.
+
+00:03:05.066 --> 00:03:09.686 align:middle
+El nodo php es donde configuramos los
+ajustes y variables de entorno de php.ini.
+
+00:03:10.116 --> 00:03:14.206 align:middle
+La variable de entorno SYMFONY_DEPRECATIONS_HELPER
+es particularmente importante.
+
+00:03:14.576 --> 00:03:18.306 align:middle
+Indica al puente PHPUnit de Symfony cómo
+manejar las advertencias de depreciación.
+
+00:03:18.696 --> 00:03:21.856 align:middle
+Este valor es un gran valor por defecto
+para el desarrollo de paquetes de terceros
+
+00:03:22.066 --> 00:03:26.486 align:middle
+, ya que sólo provoca un fallo si nuestro
+bundle causa directamente una depreciación.
+
+00:03:27.116 --> 00:03:29.036 align:middle
+No podemos hacer mucho con
+las depreciaciones causadas
+
+00:03:29.036 --> 00:03:32.096 align:middle
+por los paquetes de los que depende
+nuestro bundle, así que las ignoramos.
+
+00:03:32.826 --> 00:03:34.916 align:middle
+El nodo testsuites define
+nuestros conjuntos de pruebas.
+
+00:03:35.196 --> 00:03:37.596 align:middle
+Aquí tenemos un único conjunto
+para el directorio tests.
+
+00:03:38.156 --> 00:03:41.266 align:middle
+Finalmente, cuando ejecutamos informes de
+cobertura de código, en el nodo coverage es
+
+00:03:41.266 --> 00:03:44.656 align:middle
+donde especificamos los directorios
+fuente para el análisis de cobertura.
+
+00:03:45.306 --> 00:03:48.876 align:middle
+Por último, en el nodo listeners, registramos
+el receptor de pruebas proporcionado
+
+00:03:48.876 --> 00:03:50.776 align:middle
+por el puente PHPUnit de Symfony.
+
+00:03:51.516 --> 00:03:53.096 align:middle
+¡Es hora de ejecutar el conjunto
+de pruebas de nuestro bundle!
+
+00:03:53.096 --> 00:04:00.836 align:middle
+En el terminal, ejecuta: symfony
+php vendor/bin/phpunit ¡Genial!
+
+00:04:01.006 --> 00:04:02.236 align:middle
+¡Todas nuestras pruebas pasan!
+
+00:04:02.236 --> 00:04:05.906 align:middle
+Ahora, si recuerdas, sólo
+tenemos pruebas unitarias,
+
+00:04:05.906 --> 00:04:08.426 align:middle
+que prueban clases
+individuales de forma aislada.
+
+00:04:08.856 --> 00:04:11.536 align:middle
+A continuación, añadiremos una
+prueba de integración para verificar
+
+00:04:11.536 --> 00:04:14.696 align:middle
+que nuestro bundle funciona correctamente
+dentro de una aplicación Symfony.
