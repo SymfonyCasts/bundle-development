@@ -48,8 +48,8 @@ Open up our `phpunit.xml.dist` file and find the
 `vendor/autoload.php`. Change it to `tests/bootstrap.php`. We're basically
 wrapping the Composer autoloader with our own bootstrap file.
 
-To make sure this is working correctly, jump over to the terminal. Ensure
-to be in the `object-translation-bundle` directory and run:
+To verify this is working correctly, jump over to the terminal. Make
+sure you're in the `object-translation-bundle` directory and run:
 
 ```terminal
 symfony php vendor/bin/phpunit
@@ -130,9 +130,8 @@ because of the `prefer-stable` option.
 
 ## Installing Symfony Flex Globally
 
-There's a bit of a hidden Symfony Flex trick to help installing different versions
-of Symfony. We need to install Symfony Flex *globally* on our system. At your terminal,
-run:
+There's a bit of a hidden Symfony Flex trick to help install different versions
+of Symfony. We need to install Symfony Flex *globally* on our system, so run:
 
 ```terminal
 symfony composer global require symfony/flex

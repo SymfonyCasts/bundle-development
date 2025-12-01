@@ -30,7 +30,7 @@ finally, our bundle, `yield new ObjectTranslationBundle()`.
 
 Now we need more configuration. In `configureContainer()`, add
 `$builder->loadFromExtension('symfonycasts_object_translation', ['translation_class' => Translation::class])`.
-It's hard to see in this small screen - we need to import the one from
+It's hard to see on this small screen, but we need to import the one from
 our test fixtures. I think this one is it. I'll scroll up to the namespaces
 to confirm. Yep, that's the one.
 
@@ -71,7 +71,7 @@ symfony php vendor/bin/phpunit
 Darn! An error - "Foundry is not yet booted."
 
 Ohhh, I forgot the required Foundry traits. Back in the test class,
-`use Factories`, this initialized Foundry. And `ResetDatabase`, which resets
+`use Factories`, which initializes Foundry, and `ResetDatabase`, which resets
 the database before each test.
 
 Moment of truth, take two:
