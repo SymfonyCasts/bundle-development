@@ -1,0 +1,191 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:04.536 align:middle
+Es hora de convertir este stub de prueba de
+integración en una prueba adecuada para nuestro bundle.
+
+00:00:05.026 --> 00:00:08.196 align:middle
+Para ello vamos a utilizar una base
+de datos real y entidades reales
+
+00:00:08.746 --> 00:00:12.906 align:middle
+En el terminal, instala Zenstruck Foundry para que
+nos ayude a gestionar nuestra base de datos de pruebas
+
+00:00:12.906 --> 00:00:22.706 align:middle
+y las entidades: symfony composer require --dev
+zenstruck/foundry De vuelta a nuestro IDE,
+
+00:00:22.706 --> 00:00:25.616 align:middle
+en el directorio tutorial,
+copia la carpeta Entity
+
+00:00:25.616 --> 00:00:28.196 align:middle
+en el directorio tests/Fixture
+de nuestro bundle.
+
+00:00:28.916 --> 00:00:34.016 align:middle
+Si no ves estas entidades, cópialas del script que aparece
+a continuación: Entity1 es nuestra entidad simulada
+
+00:00:34.016 --> 00:00:36.126 align:middle
+que traduciremos en nuestras pruebas.
+
+00:00:36.426 --> 00:00:39.756 align:middle
+Es traducible, tiene un ID
+y una propiedad traducible.
+
+00:00:40.226 --> 00:00:42.706 align:middle
+La entidad Translation es igual
+que la de nuestra aplicación.
+
+00:00:43.426 --> 00:00:46.406 align:middle
+En nuestro TestKernel, tenemos
+que decirle qué bundles cargar.
+
+00:00:47.056 --> 00:00:48.796 align:middle
+Anula el método registerBundles().
+
+00:00:49.726 --> 00:00:55.226 align:middle
+Dentro, yield new FrameworkBundle(),
+yield new DoctrineBundle(),
+
+00:00:56.086 --> 00:01:00.296 align:middle
+yield new ZenstruckFoundryBundle(),
+y finalmente, nuestro bundle,
+
+00:01:00.496 --> 00:01:05.026 align:middle
+yield new ObjectTranslationBundle():
+Ahora necesitamos más configuración.
+
+00:01:05.436 --> 00:01:14.066 align:middle
+En configureContainer(), añade $builder->loadFromExtension
+('symfonycasts_object_translation', ['translation_class'
+
+00:01:14.456 --> 00:01:20.586 align:middle
+=> Translation::class]). Es difícil
+
+00:01:21.176 --> 00:01:25.106 align:middle
+de ver en esta pequeña pantalla, pero tenemos que
+importar el de nuestros accesorios de prueba. Creo que
+
+00:01:25.226 --> 00:01:27.496 align:middle
+es éste. Me desplazaré
+
+00:01:27.496 --> 00:01:29.296 align:middle
+hasta los espacios de nombres
+para confirmarlo. Sí, es
+
+00:01:29.806 --> 00:01:32.536 align:middle
+éste: Ahora a configurar Doctrine. Añade
+$builder->loadFromExtension ('doctrine',
+
+00:01:32.816 --> 00:01:37.196 align:middle
+[]). Primero configura
+
+00:01:37.376 --> 00:01:52.926 align:middle
+dbal con 'url' =>
+'sqlite:///%kernel.project_dir%/var/data.db': Para la
+
+00:01:52.926 --> 00:01:58.886 align:middle
+configuración deorm, voy a pegar
+este fragmento (puedes cogerlo
+
+00:01:58.886 --> 00:02:03.266 align:middle
+del script de abajo): Esto indica al ORM de Doctrine
+dónde encontrar nuestras entidades de prueba. De vuelta a
+
+00:02:04.306 --> 00:02:07.436 align:middle
+nuestra clase de prueba, borra el método
+de prueba existente. En primer lugar,
+
+00:02:07.856 --> 00:02:11.536 align:middle
+tenemos que crear una instancia de nuestra
+entidad simulada, Entity1. Para ello utilizaremos
+
+00:02:12.156 --> 00:02:14.006 align:middle
+una fábrica de Foundry. Podríamos
+
+00:02:14.416 --> 00:02:19.036 align:middle
+crear una clase de fábrica real, pero para simplificar las
+cosas, utilizaremos una fábrica dinámica. Escribe $entity
+
+00:02:19.616 --> 00:02:23.866 align:middle
+= persist(), importa la función
+de Foundry. Entity1::class
+
+00:02:24.366 --> 00:02:31.446 align:middle
+como primer argumento, y un array
+con 'property1' => 'value1'
+
+00:02:31.446 --> 00:02:37.166 align:middle
+como segundo: Ahora para la entidad Translation:
+persist(Translation::class). De nuevo, asegúrate
+
+00:02:37.426 --> 00:02:40.266 align:middle
+de importar la de nuestras
+instalaciones de prueba. El array
+
+00:02:41.146 --> 00:02:43.976 align:middle
+será 'objectType' => '',
+
+00:02:44.326 --> 00:02:47.856 align:middle
+pasa a nuestra clase Entity1 para confirmar
+el alias: entity1. A continuación, 'objectId'
+
+00:02:50.056 --> 00:03:02.306 align:middle
+=> $entity->id, 'locale' => 'fr', 'field'
+=> 'property1', y por último, 'value' =>
+
+00:03:02.536 --> 00:03:08.266 align:middle
+'translated1': A continuación, obtén nuestro
+servicio de traductor de objetos con $translator
+
+00:03:08.266 --> 00:03:15.476 align:middle
+= self::getContainer()->get(ObjectTranslator::class):
+Traduce la entidad
+
+00:03:15.756 --> 00:03:23.196 align:middle
+$translated = $translator->translate($entity)
+y pasa fr como segundo
+
+00:03:23.196 --> 00:03:27.096 align:middle
+argumento para forzar la traducción
+al francés: Por último, afirma que la
+
+00:03:27.096 --> 00:03:32.956 align:middle
+propiedad traducida es la que esperamos: $this->assertSame('translated1',
+$translated->property1); : ¡ Momento de
+
+00:03:32.956 --> 00:03:37.766 align:middle
+la verdad! De vuelta al
+
+00:03:38.026 --> 00:03:45.456 align:middle
+terminal, ejecuta nuestras pruebas: symfony
+php vendor/bin/phpunit ¡Maldita sea! Un error:
+
+00:03:45.456 --> 00:03:48.166 align:middle
+"Foundry aún no se ha iniciado" Ohhh, olvidé
+
+00:03:48.836 --> 00:03:51.236 align:middle
+los rasgos requeridos de
+Foundry. De vuelta a la
+
+00:03:51.556 --> 00:03:57.436 align:middle
+clase de prueba, use Factories, que inicializa
+Foundry, y ResetDatabase, que reinicia la
+
+00:03:57.436 --> 00:04:04.066 align:middle
+base de datos antes de cada prueba: Momento de la
+verdad, toma dos: ¡Genial! ¡Todo verde! ¡ Nuestra
+
+00:04:04.136 --> 00:04:04.836 align:middle
+prueba de integración
+
+00:04:05.166 --> 00:04:07.966 align:middle
+con una base de datos real funciona!
+A continuación, probaremos
+
+00:04:08.746 --> 00:04:13.236 align:middle
+nuestro bundle con diferentes versiones de
+Symfony para garantizar la compatibilidad.
