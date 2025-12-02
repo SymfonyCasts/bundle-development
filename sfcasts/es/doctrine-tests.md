@@ -10,7 +10,11 @@ symfony composer require --dev zenstruck/foundry
 
 ## Entidades de prueba
 
-De vuelta a nuestro IDE, en el directorio `tutorial`, copia la carpeta `Entity` en el directorio `tests/Fixture` de nuestro bundle. Si no ves estas entidades, cópialas del script que aparece a continuación.
+De vuelta a nuestro IDE, en el directorio `tutorial`, copia la carpeta `Entity` en el directorio `tests/Fixture` de nuestro bundle. Si no ves estas entidades, cópialas desde el script que aparece a continuación:
+
+[[[ code('5cfeb12b25') ]]]
+
+[[[ code('ab28a3f403') ]]]
 
 `Entity1` es nuestra entidad simulada que traduciremos en nuestras pruebas. Es traducible, tiene un ID y una propiedad traducible.
 
@@ -18,26 +22,48 @@ La entidad `Translation` es igual que la de nuestra aplicación.
 
 ## Más configuración de `TestKernel` 
 
-En nuestro `TestKernel`, tenemos que decirle qué bundles cargar. Anula el método `registerBundles()`. Dentro, `yield new FrameworkBundle()`,`yield new DoctrineBundle()`, `yield new ZenstruckFoundryBundle()`, y finalmente, nuestro bundle, `yield new ObjectTranslationBundle()`.
+En nuestro `TestKernel`, tenemos que decirle qué bundles cargar. Anula el método `registerBundles()`. Dentro, `yield new FrameworkBundle()`,`yield new DoctrineBundle()`, `yield new ZenstruckFoundryBundle()`, y finalmente, nuestro bundle, `yield new ObjectTranslationBundle()`:
 
-Ahora necesitamos más configuración. En `configureContainer()`, añade`$builder->loadFromExtension('symfonycasts_object_translation', ['translation_class' => Translation::class])`. Es difícil de ver en esta pequeña pantalla, pero necesitamos importar el de nuestras instalaciones de prueba. Creo que es ésta. Me desplazaré hasta los espacios de nombres para confirmarlo. Sí, es éste.
+[[[ code('a899cbbc4c') ]]]
 
-Ahora a configurar Doctrine. Añade`$builder->loadFromExtension('doctrine', [])`. Primero configura `dbal` con`'url' => 'sqlite:///%kernel.project_dir%/var/data.db'`.
+Ahora necesitamos más configuración. En `configureContainer()`, añade`$builder->loadFromExtension('symfonycasts_object_translation', ['translation_class' => Translation::class])`. Es difícil de ver en esta pequeña pantalla, pero necesitamos importar el de nuestras instalaciones de prueba. Creo que es ésta. Me desplazaré hasta los espacios de nombres para confirmarlo. Sí, es éste:
 
-Para la configuración de `orm`, voy a pegar este fragmento (puedes cogerlo del script de abajo). Esto indica al ORM de Doctrine dónde encontrar nuestras entidades de prueba.
+[[[ code('43bbd4edd2') ]]]
+
+Ahora a configurar Doctrine. Añade`$builder->loadFromExtension('doctrine', [])`. Primero configura `dbal` con`'url' => 'sqlite:///%kernel.project_dir%/var/data.db'`:
+
+[[[ code('da3a66eec5') ]]]
+
+Para la configuración de `orm`, voy a pegar este fragmento (puedes cogerlo del script de abajo):
+
+[[[ code('5e07e0e376') ]]]
+
+Esto indica al ORM de Doctrine dónde encontrar nuestras entidades de prueba.
 
 ## La prueba `ObjectTransator::translate()` 
 
 De vuelta a nuestra clase de prueba, borra el método de prueba existente. En primer lugar, tenemos que crear una instancia de nuestra entidad simulada, `Entity1`. Para ello utilizaremos una fábrica de Foundry. Podríamos crear una clase de fábrica real, pero para simplificar las cosas, utilizaremos una fábrica dinámica. Escribe `$entity = persist()`, importa la función de Foundry `Entity1::class`
-como primer argumento, y un array con `'property1' => 'value1'` como segundo.
+como primer argumento, y un array con `'property1' => 'value1'` como segundo:
 
-Ahora la entidad `Translation`: `persist(Translation::class)`. De nuevo, asegúrate de importar la de nuestras instalaciones de prueba. El array será `'objectType' => ''`, pasa a nuestra clase `Entity1` para confirmar el alias: `entity1`. A continuación, `'objectId' => $entity->id`,`'locale' => 'fr'`, `'field' => 'property1'`, y por último, `'value' => 'translated1'`.
+[[[ code('07a0d82d77') ]]]
 
-A continuación, obtén nuestro servicio traductor de objetos con`$translator = self::getContainer()->get(ObjectTranslator::class)`. Traduce la entidad:`$translated = $translator->translate($entity)` y pasa `fr` como segundo argumento para forzar la traducción al francés.
+Ahora la entidad `Translation`: `persist(Translation::class)`. De nuevo, asegúrate de importar la de nuestras instalaciones de prueba. El array será `'objectType' => ''`, pasa a nuestra clase `Entity1` para confirmar el alias: `entity1`. A continuación, `'objectId' => $entity->id`,`'locale' => 'fr'`, `'field' => 'property1'`, y por último, `'value' => 'translated1'`:
 
-Por último, afirma que la propiedad traducida es la que esperamos`$this->assertSame('translated1', $translated->property1);`
+[[[ code('0dcd3fe3c8') ]]]
 
-¡El momento de la verdad! De vuelta al terminal, ejecuta nuestras pruebas:
+Más abajo, obtén nuestro servicio traductor de objetos con`$translator = self::getContainer()->get(ObjectTranslator::class)`:
+
+[[[ code('71d5c38ff3') ]]]
+
+Traduce la entidad:`$translated = $translator->translate($entity)` y pasa `fr` como segundo argumento para forzar la traducción al francés:
+
+[[[ code('bb368d2cf1') ]]]
+
+Por último, afirma que la propiedad traducida es la que esperamos:`$this->assertSame('translated1', $translated->property1);`:
+
+[[[ code('3256eea2c9') ]]]
+
+¡Momento de la verdad! De vuelta al terminal, ejecuta nuestras pruebas:
 
 ```terminal
 symfony php vendor/bin/phpunit
@@ -45,7 +71,9 @@ symfony php vendor/bin/phpunit
 
 ¡Maldita sea! Un error: "Foundry aún no se ha iniciado"
 
-Ohhh, olvidé los rasgos necesarios de Foundry. De vuelta a la clase de prueba,`use Factories`, que inicializa Foundry, y `ResetDatabase`, que reinicia la base de datos antes de cada prueba.
+Ohhh, olvidé los rasgos necesarios de Foundry. De vuelta a la clase de prueba,`use Factories`, que inicializa Foundry, y `ResetDatabase`, que reinicia la base de datos antes de cada prueba:
+
+[[[ code('a4ef1e71cb') ]]]
 
 Momento de la verdad, toma dos:
 
