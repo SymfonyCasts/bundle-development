@@ -26,7 +26,7 @@ A continuación, escribe `(new Filesystem())`, importa el del componente Symfony
 
 Ahora tenemos que decirle a PHPUnit que utilice este archivo antes de ejecutar nuestras pruebas. Abre nuestro archivo `phpunit.xml.dist` y busca la etiqueta`<phpunit>`. ¿Ves el atributo `bootstrap`? Actualmente está configurado como`vendor/autoload.php`. Cámbialo a `tests/bootstrap.php`. Básicamente estamos envolviendo el autocargador de Composer con nuestro propio archivo bootstrap.
 
-Para asegurarte de que esto funciona correctamente, salta al terminal. Asegúrate de estar en el directorio `object-translation-bundle` y ejecuta:
+Para comprobar que esto funciona correctamente, salta al terminal. Asegúrate de que estás en el directorio `object-translation-bundle` y ejecuta:
 
 ```terminal
 symfony php vendor/bin/phpunit
@@ -86,7 +86,7 @@ De vuelta al terminal, si volvemos a ejecutar la actualización, no obtendremos 
 
 ## Instalar Symfony Flex globalmente
 
-Hay un pequeño truco oculto de Symfony Flex para ayudar a instalar diferentes versiones de Symfony. Necesitamos instalar Symfony Flex globalmente en nuestro sistema. En tu terminal, ejecuta:
+Hay un pequeño truco oculto de Symfony Flex para ayudar a instalar diferentes versiones de Symfony. Necesitamos instalar Symfony Flex globalmente en nuestro sistema, así que ejecuta:
 
 ```terminal
 symfony composer global require symfony/flex
@@ -124,7 +124,7 @@ Para probar otra versión de Symfony compatible, por ejemplo la 7.2, ejecuta el 
 SYMFONY_REQUIRE=7.2.* symfony composer update
 ```
 
-Sí, tenemos instaladas las versiones 7.2, así que ejecuta de nuevo el conjunto de pruebas:
+Sí, tenemos instaladas las versiones 7.2, así que vuelve a ejecutar el conjunto de pruebas:
 
 ```terminal-silent
 symfony php vendor/bin/phpunit
