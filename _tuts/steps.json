@@ -354,7 +354,12 @@
             "id": "28-integration-test",
             "name": "28. integration test",
             "description": null
+        },
+        {
+            "id": "30-doctrine-tests",
+            "name": "30. Doctrine tests",
+            "description": null
         }
     ],
-    "sha": "c54ac855279486e30e313f7da84d3c8f48ca1873"
+    "sha": "0afea21e8cc087b8fbdc69a5877751455af7d6ce"
 }
