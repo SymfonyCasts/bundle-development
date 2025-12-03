@@ -4,11 +4,15 @@
 
 Antes, sin embargo, añadiremos la configuración necesaria para que las Acciones de GitHub ejecuten nuestras pruebas, análisis estáticos y verifiquen nuestras normas de codificación.
 
-En la raíz de nuestro bundle, añade el siguiente directorio y subdirectorio: `.github/workflows`. Copia el archivo `ci.yml` del directorio `tutorial` en `workflows`. O cópialo del script de abajo si no lo encuentras.
+En la raíz de nuestro bundle, añade el siguiente directorio y subdirectorio: `.github/workflows`. Copia el archivo `ci.yml` del directorio `tutorial` en `workflows`:
+
+[[[ code('24cd941137') ]]]
+
+O cópialo del script de abajo si no lo encuentras.
 
 ## Comprender el flujo de trabajo de las acciones de GitHub
 
-Hay mucho que desentrañar aquí, ¡así que vamos a ello! La sección `on` define los eventos que activarán nuestro flujo de trabajo. Queremos que se ejecute cuando se envíe código o se cree o modifique una petición de extracción. Además, este cron garantiza que el flujo de trabajo se ejecute dos veces al mes, los días 1 y 16. Esto es útil para garantizar que sigue funcionando con las últimas dependencias.
+Hay mucho que desentrañar aquí, ¡así que vamos a ello! La sección `on` define los eventos que activarán nuestro flujo de trabajo. Queremos que se ejecute cuando se envíe código o se cree o modifique una petición de extracción. Además, esta programación cron garantiza que el flujo de trabajo se ejecute dos veces al mes, los días 1 y 16. Esto es útil para garantizar que sigue funcionando con las últimas dependencias.
 
 A continuación, configuramos `jobs`. El primero, `tests`, es el que ejecuta nuestro conjunto de pruebas en varias versiones de PHP y Symfony. Lo hace utilizando la estrategia `matrix` para crear combinaciones de trabajos. Lo tenemos ejecutándose en PHP `8.2`, `8.3`, y `8.4`, y en las versiones de Symfony `6.4`, `7.3`, y `7.4`. Se creará un trabajo para cada permutación de estos valores. Este `include` añade un caso especial personalizado a la matriz, que se ejecuta en nuestra versión de PHP menos compatible, `8.2` y con la opción `prefer-lowest` Composer.
 
@@ -24,7 +28,7 @@ Finalmente, el último paso ejecuta nuestro conjunto de pruebas con `vendor/bin/
 
 Nuestra siguiente tarea es `static-analysis`, que ejecuta PHPStan. Este trabajo es mucho más sencillo, ya que no tiene matriz. Es mejor ejecutar el análisis estático en la última versión de PHP, 8.4 en nuestro caso, para detectar la mayoría de los problemas.
 
-Para la tarea `php-cs-fixer`, la ejecutamos en nuestra versión de PHP menos compatible, la 8.2, para asegurarnos de que no sugiere correcciones que no son compatibles con esa versión. También he añadido los indicadores `--dry-run` y `--diff` al comando para que no cambie realmente ningún archivo, sino que muestre una diferencia de lo que hay que cambiar en la salida de la acción.
+Para la tarea `php-cs-fixer`, la ejecutamos en nuestra versión de PHP menos compatible, la 8.2, para asegurarnos de que no sugiere correcciones que no son compatibles con esa versión. También he añadido los indicadores `--dry-run` y `--diff` al comando para que no cambie realmente ningún archivo, pero muestre una diferencia de lo que hay que cambiar en la salida de la acción.
 
 ## Crear el repositorio
 
