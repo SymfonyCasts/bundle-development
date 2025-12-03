@@ -22,7 +22,7 @@ Cambia las dependencias de Symfony a `^6.4|^7.0`:
 
 Esto significa básicamente que estamos permitiendo versiones superiores a la 6.4 pero inferiores a la 8.
 
-En `require-dev`, tenemos el `symfony/phpunit-bridge`. Es bastante indulgente con sus requisitos, por lo que no necesitamos cambiar realmente nada aquí.
+En `require-dev`, tenemos el `symfony/phpunit-bridge`. Es bastante indulgente con sus requisitos, así que no necesitamos cambiar nada realmente aquí.
 
 ## Archivo Bootstrap de prueba
 
