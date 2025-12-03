@@ -7,7 +7,11 @@ supports.
 
 If we look at our bundle's `composer.json` file, the first thing I want to
 do is set the allowed PHP version. In the `require` section, add
-`"php": ">=8.2"`. This means we're requiring PHP 8.2 or anything newer.
+`"php": ">=8.2"`:
+
+[[[ code('b2e362cf4e') ]]]
+
+This means we're requiring PHP 8.2 or anything newer.
 
 Some folks aren't a fan of this because it's a bit open-ended, we're saying we'll
 support PHP 10 when it comes out. I get it, but I personally follow
@@ -20,8 +24,11 @@ restrictive. `^7.3` means anything from 7.3 up to, but not including,
 8.0. Symfony 6.4 still has support for quite some time, so I'd like to
 support that as well.
 
-Change the Symfony dependencies to `^6.4|^7.0`. This basically means we're
-allowing versions greater than 6.4 but less than 8.
+Change the Symfony dependencies to `^6.4|^7.0`:
+
+[[[ code('b0f64c9928') ]]]
+
+This basically means we're allowing versions greater than 6.4 but less than 8.
 
 In `require-dev`, we have the `symfony/phpunit-bridge`. It's pretty forgiving
 with its requirements so we don't need to really change anything here.
@@ -36,17 +43,24 @@ files in the `var` directory won't be compatible.
 It's best to clear our that directory before running tests. In our `tests`
 directory, create a new file called `bootstrap.php`. Inside,
 `require __DIR__ . '/../vendor/autoload.php';` to load the Composer
-autoloader.
+autoloader:
+
+[[[ code('03577eec03') ]]]
 
 Below, write `(new Filesystem())`, import the one from the Symfony
 Filesystem component. Then call `->remove(__DIR__ . '/../var');` to delete
-that directory.
+that directory:
+
+[[[ code('24d59aab0f') ]]]
 
 Now we need to tell PHPUnit to use this file before running our tests.
 Open up our `phpunit.xml.dist` file and find the
 `<phpunit>` tag. See the `bootstrap` attribute? It's currently set to
-`vendor/autoload.php`. Change it to `tests/bootstrap.php`. We're basically
-wrapping the Composer autoloader with our own bootstrap file.
+`vendor/autoload.php`. Change it to `tests/bootstrap.php`:
+
+[[[ code('b202d72750') ]]]
+
+We're basically wrapping the Composer autoloader with our own bootstrap file.
 
 To verify this is working correctly, jump over to the terminal. Make
 sure you're in the `object-translation-bundle` directory and run:
@@ -92,7 +106,9 @@ Symfony repository on GitHub and searched for `stringNode`. I found
 the PR that introduced it, which mentioned it was added in 7.2.
 
 Replace all instances of `stringNode` with `scalarNode`, which *is* supported in 6.4 and
-does the same thing in this case.
+does the same thing in this case:
+
+[[[ code('a16222195b') ]]]
 
 Back in the terminal, run the tests again...
 
@@ -121,8 +137,11 @@ them to the Symfony team before the final release.
 Open our `composer.json` file. By default, Composer only installs stable versions.
 To allow installing development versions, add the following option:
 `"minimum-stability": "dev"`. This will now *always* install dev dependencies,
-which we don't want. So, add another option: `"prefer-stable": true`. Now,
-Composer will prefer stable versions, but *can* install dev versions if a constraint
+which we don't want. So, add another option: `"prefer-stable": true`:
+
+[[[ code('c82e5db917') ]]]
+
+Now, Composer will prefer stable versions, but *can* install dev versions if a constraint
 requires it.
 
 Back in the terminal, if we run the update again, we don't get any dev versions

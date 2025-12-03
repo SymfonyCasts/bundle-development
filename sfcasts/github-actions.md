@@ -6,8 +6,11 @@ First though, we'll add the configuration needed for GitHub Actions to run our t
 static analysis, and verify our coding standards.
 
 In our bundle root, add the following directory and subdirectory: `.github/workflows`.
-Copy the `ci.yml` file from the `tutorial` directory into `workflows`. Or
-copy it from the script below if you can't find it.
+Copy the `ci.yml` file from the `tutorial` directory into `workflows`:
+
+[[[ code('24cd941137') ]]]
+
+Or copy it from the script below if you can't find it.
 
 ## Understanding the GitHub Actions Workflow
 

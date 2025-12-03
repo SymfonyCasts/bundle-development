@@ -8,7 +8,9 @@ versions. We're on the home stretch!
 Let's add a license file to our bundle. In the `tutorial` directory copy the
 `LICENSE.md` file to the root of our bundle. If you don't see the files
 we're copying in your tutorial directory, don't worry! They're all in the
-script below.
+script below:
+
+[[[ code('9d8405ffe3') ]]]
 
 This is the standard MIT license to match what we have in our `composer.json`
 file.
@@ -16,7 +18,11 @@ file.
 ## Documentation
 
 Now, copy the `README.md` file from the `tutorial` directory to the root of our
-bundle. Now, the Symfony Bundle best practice guide recommends a `doc`
+bundle:
+
+[[[ code('e6665f90d7') ]]]
+
+Now, the Symfony Bundle best practice guide recommends a `doc`
 directory to house documentation and it to be written in the "reStructuredText"
 (or `rst`) format.
 
@@ -55,7 +61,11 @@ output. Self-documenting configuration for the win!
 ## `.editorconfig` File
 
 Next, copy the `.editorconfig` file from the root of our project into the
-bundle. This file ensures consistency in things like spacing and new lines. Many
+bundle:
+
+[[[ code('b94f36a792') ]]]
+
+This file ensures consistency in things like spacing and new lines. Many
 IDEs, including PhpStorm, support this file. It helps prevent weird commits
 with different white space and line break characters. This is especially helpful
 when someone is developing on Windows, which uses different line endings than macOS
@@ -64,7 +74,11 @@ or Linux.
 ## `.gitattributes` File
 
 At the root of our bundle, create a new file called `.gitattributes`. Inside,
-add `/tests export-ignore`. This tells Composer to exclude the `tests`
+add `/tests export-ignore`:
+
+[[[ code('90c8d24a97') ]]]
+
+This tells Composer to exclude the `tests`
 directory when installing this package as a dependency. There's no need for
 our bundle's tests to be included in an end user's project.
 
@@ -86,8 +100,11 @@ If you've used this tool before but this `shim` package is new to you, it's just
 compiled version of PHP CS Fixer that makes installation easier.
 
 Once installed, grab the `.php-cs-fixer.dist.php` file from the tutorial directory
-and copy it into the root of our `object-translation-bundle`. This file configures
-the coding style rules for your project. Open it up and take a look.
+and copy it into the root of our `object-translation-bundle`:
+
+[[[ code('7b90c859eb') ]]]
+
+This file configures the coding style rules for your project. Open it up and take a look.
 
 We're using the Symfony rule set, so our coding style will match Symfony's. Below,
 we're telling it where to look for PHP files to fix: the `src` and `tests` directories.
@@ -106,6 +123,8 @@ Generally, they are easier to read when aligned.
 
 This `.php-cs-fixer.cache` file in the root of our bundle was generated when we
 ran it. It's just a cache to make subsequent runs of PHP CS Fixer faster. Add
-this to our `.gitignore` file so it doesn't get committed.
+this to our `.gitignore` file so it doesn't get committed:
+
+[[[ code('6600ec9cae') ]]]
 
 Next, we're going to use PHPStan to run static code analysis on our bundle's code!

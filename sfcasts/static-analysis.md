@@ -16,8 +16,11 @@ At your terminal, while in your bundle directory, install it by running:
 symfony composer require --dev phpstan/phpstan
 ```
 
-Back in our IDE, add a `phpstan.neon` file to the root of your bundle. Either
-copy it from the `tutorial` directory or from the script below. The `neon` file
+Back in our IDE, add a `phpstan.neon` file to the root of your bundle:
+
+[[[ code('09ac8e48d1') ]]]
+
+Either copy it from the `tutorial` directory or from the script below. The `neon` file
 format is very similar to `yaml`.
 
 Let's take a look at this configuration. This `parameters` section is where
@@ -66,7 +69,9 @@ This error can be safely ignored. We could ignore the entire line, but it's bett
 to ignore just the specific error key so that if a different error arises later,
 it's not also ignored. You can find this key back in the terminal output under
 the error message: `method.notFound`. Copy that. Back on line 19 of
-`ObjectTranslationBundle.php`, suffix the line with a comment `@phpstan-ignore <paste>`.
+`ObjectTranslationBundle.php`, suffix the line with a comment `@phpstan-ignore <paste>`:
+
+[[[ code('362564df6d') ]]]
 
 ## Unknown Class Error
 
