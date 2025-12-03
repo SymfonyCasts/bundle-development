@@ -4,7 +4,11 @@ Es hora de concretar las versiones de PHP y de las dependencias de paquetes que 
 
 ## Añadir requisito de versión de PHP
 
-Si miramos el archivo `composer.json` de nuestro bundle, lo primero que quiero hacer es establecer la versión de PHP permitida. En la sección `require`, añade`"php": ">=8.2"`. Esto significa que requerimos PHP 8.2 o una versión más reciente.
+Si miramos el archivo `composer.json` de nuestro bundle, lo primero que quiero hacer es establecer la versión de PHP permitida. En la sección `require`, añade`"php": ">=8.2"`:
+
+[[[ code('b2e362cf4e') ]]]
+
+Esto significa que requerimos PHP 8.2 o una versión más reciente.
 
 A algunas personas no les gusta esto porque es un poco abierto, estamos diciendo que soportaremos PHP 10 cuando salga. Lo entiendo, pero yo personalmente sigo el ejemplo de Symfony, y ellos utilizan esta restricción para PHP.
 
@@ -12,19 +16,31 @@ A algunas personas no les gusta esto porque es un poco abierto, estamos diciendo
 
 Para las dependencias de paquetes Symfony, las versiones permitidas son bastante restrictivas. `^7.3` significa cualquier cosa desde 7.3 hasta, pero sin incluir, 8.0. Symfony 6.4 aún tiene soporte durante bastante tiempo, así que me gustaría dar soporte también a esa versión.
 
-Cambia las dependencias de Symfony a `^6.4|^7.0`. Esto significa básicamente que permitimos versiones superiores a la 6.4 pero inferiores a la 8.
+Cambia las dependencias de Symfony a `^6.4|^7.0`:
 
-En `require-dev`, tenemos `symfony/phpunit-bridge`. Es bastante indulgente con sus requisitos, así que no necesitamos cambiar nada aquí.
+[[[ code('b0f64c9928') ]]]
+
+Esto significa básicamente que estamos permitiendo versiones superiores a la 6.4 pero inferiores a la 8.
+
+En `require-dev`, tenemos el `symfony/phpunit-bridge`. Es bastante indulgente con sus requisitos, por lo que no necesitamos cambiar realmente nada aquí.
 
 ## Archivo Bootstrap de prueba
 
 ¿Recuerdas cómo se crea este directorio `var` cuando ejecutamos nuestras pruebas? Si cambias entre diferentes versiones de PHP o Symfony localmente, puede crear problemas. Si ejecutas tu conjunto de pruebas en Symfony 6.4, y luego cambias a 7.3, los archivos de caché en el directorio `var` no serán compatibles.
 
-Es mejor borrar ese directorio antes de ejecutar las pruebas. En nuestro directorio `tests`, crea un nuevo archivo llamado `bootstrap.php`. Dentro,`require __DIR__ . '/../vendor/autoload.php';` para cargar el autocargador Composer.
+Es mejor borrar ese directorio antes de ejecutar las pruebas. En nuestro directorio `tests`, crea un nuevo archivo llamado `bootstrap.php`. Dentro,`require __DIR__ . '/../vendor/autoload.php';` para cargar el cargador automático de Composer:
 
-A continuación, escribe `(new Filesystem())`, importa el del componente Symfony Filesystem. A continuación, llama a `->remove(__DIR__ . '/../var');` para eliminar ese directorio.
+[[[ code('03577eec03') ]]]
 
-Ahora tenemos que decirle a PHPUnit que utilice este archivo antes de ejecutar nuestras pruebas. Abre nuestro archivo `phpunit.xml.dist` y busca la etiqueta`<phpunit>`. ¿Ves el atributo `bootstrap`? Actualmente está configurado como`vendor/autoload.php`. Cámbialo a `tests/bootstrap.php`. Básicamente estamos envolviendo el autocargador de Composer con nuestro propio archivo bootstrap.
+A continuación, escribe `(new Filesystem())`, importa el del componente Symfony Filesystem. A continuación, llama a `->remove(__DIR__ . '/../var');` para eliminar ese directorio:
+
+[[[ code('24d59aab0f') ]]]
+
+Ahora tenemos que decirle a PHPUnit que utilice este archivo antes de ejecutar nuestras pruebas. Abre nuestro archivo `phpunit.xml.dist` y busca la etiqueta`<phpunit>`. ¿Ves el atributo `bootstrap`? Actualmente está configurado como`vendor/autoload.php`. Cámbialo a `tests/bootstrap.php`:
+
+[[[ code('b202d72750') ]]]
+
+Básicamente estamos envolviendo el autocargador de Composer con nuestro propio archivo bootstrap.
 
 Para comprobar que esto funciona correctamente, salta al terminal. Asegúrate de que estás en el directorio `object-translation-bundle` y ejecuta:
 
@@ -58,7 +74,9 @@ Vaya, tenemos un error... Desplázate hacia arriba para ver el mensaje "Llamada 
 
 Abre este archivo y busca la línea 21. Ah, aquí está. El método `stringNode()` se introdujo en Symfony 7.2. Como tenemos instalada la 6.4, este método no existe. Si te preguntas cómo lo he averiguado, fui al repositorio de Symfony en GitHub y busqué `stringNode`. Encontré el PR que lo introdujo, que mencionaba que se había añadido en la 7.2.
 
-Sustituye todas las instancias de `stringNode` por `scalarNode`, que es compatible con la 6.4 y hace lo mismo en este caso.
+Sustituye todas las instancias de `stringNode` por `scalarNode`, que se admite en 6.4 y hace lo mismo en este caso:
+
+[[[ code('a16222195b') ]]]
 
 De nuevo en el terminal, ejecuta de nuevo las pruebas...
 
@@ -80,7 +98,11 @@ Podemos ver que está instalando las versiones 7.3 de los paquetes Symfony. Ahor
 
 Para adelantarme, quiero ejecutar nuestras pruebas también en 7.4. Esta es una buena forma de ayudar a la comunidad Symfony. Si encuentras problemas, puedes informar de ellos al equipo de Symfony antes del lanzamiento final.
 
-Abre nuestro archivo `composer.json`. Por defecto, Composer sólo instala versiones estables. Para permitir la instalación de versiones de desarrollo, añade la siguiente opción:`"minimum-stability": "dev"`. Esto instalará siempre las dependencias de desarrollo, cosa que no queremos. Entonces, añade otra opción: `"prefer-stable": true`. Ahora, Composer preferirá las versiones estables, pero puede instalar versiones dev si una restricción lo requiere.
+Abre nuestro archivo `composer.json`. Por defecto, Composer sólo instala versiones estables. Para permitir la instalación de versiones de desarrollo, añade la siguiente opción:`"minimum-stability": "dev"`. Esto instalará siempre las dependencias de desarrollo, cosa que no queremos. Entonces, añade otra opción: `"prefer-stable": true`:
+
+[[[ code('c82e5db917') ]]]
+
+Ahora, Composer preferirá las versiones estables, pero puede instalar versiones dev si una restricción lo requiere.
 
 De vuelta al terminal, si volvemos a ejecutar la actualización, no obtendremos ninguna versión dev gracias a la opción `prefer-stable`.
 
@@ -124,7 +146,7 @@ Para probar otra versión de Symfony compatible, por ejemplo la 7.2, ejecuta el 
 SYMFONY_REQUIRE=7.2.* symfony composer update
 ```
 
-Sí, tenemos instaladas las versiones 7.2, así que vuelve a ejecutar el conjunto de pruebas:
+Sí, tenemos instaladas las versiones 7.2, así que ejecuta de nuevo el conjunto de pruebas:
 
 ```terminal-silent
 symfony php vendor/bin/phpunit
