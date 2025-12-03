@@ -105,8 +105,8 @@ doesn't exist. If you're wondering how I found this out, I went to the
 Symfony repository on GitHub and searched for `stringNode`. I found
 the PR that introduced it, which mentioned it was added in 7.2.
 
-Replace all instances of `stringNode` with `scalarNode`, which *is* supported in 6.4 and
-does the same thing in this case:
+Replace all instances of `stringNode` with `scalarNode`, which *is* supported in 6.4
+and does the same thing in this case:
 
 [[[ code('a16222195b') ]]]
 
