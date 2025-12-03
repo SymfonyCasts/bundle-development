@@ -1,0 +1,375 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:06.156 align:middle
+Es hora de concretar las versiones de PHP y de las
+dependencias de paquetes que admite nuestro bundle.
+
+00:00:06.156 --> 00:00:09.596 align:middle
+Si miramos el archivo composer.json de
+nuestro bundle, lo primero que quiero
+
+00:00:09.596 --> 00:00:12.096 align:middle
+hacer es establecer la
+versión de PHP permitida.
+
+00:00:12.606 --> 00:00:17.746 align:middle
+En la sección require,
+añade "php": ">=8.2":
+
+00:00:18.316 --> 00:00:22.036 align:middle
+Esto significa que necesitamos PHP
+8.2 o una versión más reciente.
+
+00:00:22.036 --> 00:00:25.146 align:middle
+A algunas personas no les gusta
+esto porque es un poco abierto,
+
+00:00:25.286 --> 00:00:27.996 align:middle
+estamos diciendo que
+soportaremos PHP 10 cuando salga.
+
+00:00:28.106 --> 00:00:33.496 align:middle
+Lo entiendo, pero yo personalmente sigo el ejemplo
+de Symfony, que utiliza esta restricción para PHP.
+
+00:00:33.496 --> 00:00:38.306 align:middle
+Para las dependencias del paquete Symfony, las
+versiones permitidas son bastante restrictivas.
+
+00:00:38.306 --> 00:00:43.716 align:middle
+^7.3 significa cualquier cosa desde la
+7.3 hasta, pero sin incluir, la 8.0.
+
+00:00:43.716 --> 00:00:49.066 align:middle
+Symfony 6.4 aún tiene soporte durante bastante tiempo,
+así que me gustaría dar soporte también a esa versión.
+
+00:00:49.626 --> 00:00:54.176 align:middle
+Cambia las dependencias de Symfony a ^6.4|^7.0:
+
+00:00:54.176 --> 00:01:00.476 align:middle
+Esto significa básicamente que estamos permitiendo
+versiones superiores a la 6.4 pero inferiores a la 8.
+
+00:01:01.186 --> 00:01:04.116 align:middle
+En require-dev, tenemos
+la symfony/phpunit-bridge.
+
+00:01:04.456 --> 00:01:08.226 align:middle
+Es bastante indulgente con sus requisitos,
+así que no necesitamos cambiar nada aquí.
+
+00:01:08.876 --> 00:01:12.346 align:middle
+¿Recuerdas cómo se crea este directorio
+var cuando ejecutamos nuestras pruebas?
+
+00:01:12.346 --> 00:01:16.646 align:middle
+Si cambias entre diferentes versiones de PHP
+o Symfony localmente, puede crear problemas.
+
+00:01:16.846 --> 00:01:21.086 align:middle
+Si ejecutas tu conjunto de pruebas en
+Symfony 6.4, y luego cambias a 7.3,
+
+00:01:21.286 --> 00:01:23.996 align:middle
+los archivos de caché en el
+directorio var no serán compatibles.
+
+00:01:24.586 --> 00:01:27.886 align:middle
+Es mejor borrar ese directorio
+antes de ejecutar las pruebas.
+
+00:01:27.886 --> 00:01:32.706 align:middle
+En nuestro directorio tests, crea un
+nuevo archivo llamado bootstrap.php.
+
+00:01:32.706 --> 00:01:35.606 align:middle
+Dentro, require __DIR__ .
+
+00:01:35.706 --> 00:01:44.366 align:middle
+'/../vendor/autoload.php'; para cargar
+el cargador automático de Composer:
+
+00:01:45.186 --> 00:01:51.206 align:middle
+A continuación, escribe (new Filesystem()),
+importa el del componente Symfony Filesystem.
+
+00:01:51.496 --> 00:01:54.896 align:middle
+A continuación, llama a ->remove(__DIR__ .
+
+00:01:55.046 --> 00:02:00.836 align:middle
+'/../var'); para eliminar ese directorio:
+
+00:02:01.566 --> 00:02:06.056 align:middle
+Ahora tenemos que decirle a PHPUnit que utilice
+este archivo antes de ejecutar nuestras pruebas.
+
+00:02:06.056 --> 00:02:10.886 align:middle
+Abre nuestro archivo phpunit.xml.dist
+y busca la etiqueta <phpunit>.
+
+00:02:10.886 --> 00:02:12.806 align:middle
+¿Ves el atributo bootstrap?
+
+00:02:13.076 --> 00:02:16.496 align:middle
+Actualmente está configurado
+como vendor/autoload.php.
+
+00:02:16.496 --> 00:02:20.446 align:middle
+Cámbialo a tests/bootstrap.php:
+
+00:02:20.446 --> 00:02:24.266 align:middle
+Básicamente estamos envolviendo el autocargador
+de Composer con nuestro propio archivo bootstrap.
+
+00:02:24.606 --> 00:02:27.766 align:middle
+Para comprobar que esto funciona
+correctamente, salta al terminal.
+
+00:02:28.086 --> 00:02:31.586 align:middle
+Asegúrate de que estás en el directorio
+object-translation-bundle y ejecuta:
+
+00:02:31.586 --> 00:02:37.296 align:middle
+symfony php vendor/bin/phpunit ¡Excelente!
+
+00:02:37.296 --> 00:02:38.696 align:middle
+Nuestras pruebas siguen pasando.
+
+00:02:39.296 --> 00:02:43.266 align:middle
+Una variación de dependencia importante que
+hay que probar es la versión más baja posible
+
+00:02:43.456 --> 00:02:44.756 align:middle
+que admita nuestro bundle.
+
+00:02:45.146 --> 00:02:49.376 align:middle
+Esto ayuda a garantizar que nuestro código es compatible
+con las versiones más antiguas de nuestras dependencias.
+
+00:02:49.956 --> 00:02:55.916 align:middle
+En nuestro archivo composer.json, para los
+paquetes Symfony, esto significa 6.4.0.
+
+00:02:55.916 --> 00:02:59.976 align:middle
+Para el doctrine-bundle, sería 2.18.0.
+
+00:02:59.976 --> 00:03:06.486 align:middle
+Para obtener estas versiones más bajas instaladas,
+en el terminal, ejecuta: symfony composer update
+
+00:03:06.746 --> 00:03:13.806 align:middle
+--prefer-lowest Podemos ver que Composer
+ha cambiado a las versiones más bajas.
+
+00:03:14.426 --> 00:03:18.366 align:middle
+Bien, ahora vamos a ejecutar de nuevo nuestro conjunto
+de pruebas para ver si todo sigue funcionando.
+
+00:03:19.016 --> 00:03:20.396 align:middle
+Vaya, tenemos un error...
+
+00:03:20.396 --> 00:03:22.176 align:middle
+Desplázate hacia arriba para ver el mensaje
+
+00:03:22.476 --> 00:03:26.146 align:middle
+"Llamada a método indefinido
+NodeBuilder::stringNode()...
+
+00:03:26.396 --> 00:03:29.236 align:middle
+En ObjectTranslationBundle, línea 21".
+
+00:03:29.946 --> 00:03:32.046 align:middle
+Abre este archivo y busca la línea 21.
+
+00:03:33.446 --> 00:03:34.546 align:middle
+Ah, aquí está.
+
+00:03:35.186 --> 00:03:38.376 align:middle
+El método stringNode() se
+introdujo en Symfony 7.2.
+
+00:03:38.376 --> 00:03:42.236 align:middle
+Como tenemos instalada la
+6.4, este método no existe.
+
+00:03:42.236 --> 00:03:46.246 align:middle
+Si te preguntas cómo lo he averiguado,
+fui al repositorio de Symfony
+
+00:03:46.246 --> 00:03:48.446 align:middle
+en GitHub y busqué stringNode.
+
+00:03:48.866 --> 00:03:52.816 align:middle
+Encontré el PR que lo introdujo, que
+mencionaba que se había añadido en la 7.2.
+
+00:03:53.426 --> 00:03:58.936 align:middle
+Sustituye todas las instancias de stringNode
+por scalarNode, que es compatible con la 6.4
+
+00:03:59.036 --> 00:04:00.676 align:middle
+y hace lo mismo en este caso:
+
+00:04:01.996 --> 00:04:03.986 align:middle
+De nuevo en el terminal,
+ejecuta de nuevo las pruebas...
+
+00:04:03.986 --> 00:04:09.406 align:middle
+Genial, todas las pruebas pasan: ¡el código
+que cubren nuestras pruebas es compatible
+
+00:04:09.406 --> 00:04:11.506 align:middle
+con las versiones más bajas
+de nuestras dependencias!
+
+00:04:12.116 --> 00:04:14.796 align:middle
+Para volver a la última versión
+de nuestras dependencias, ejecuta:
+
+00:04:14.966 --> 00:04:23.616 align:middle
+symfony composer update Podemos ver que está
+instalando las versiones 7.3 de los paquetes Symfony.
+
+00:04:23.996 --> 00:04:29.536 align:middle
+Ahora bien, sé que Symfony 7.4 saldrá
+pronto, pero aún no se considera estable.
+
+00:04:29.986 --> 00:04:33.966 align:middle
+Para adelantarme, quiero ejecutar
+nuestras pruebas también en 7.4.
+
+00:04:34.386 --> 00:04:36.576 align:middle
+Esta es una buena forma de
+ayudar a la comunidad Symfony.
+
+00:04:36.996 --> 00:04:42.036 align:middle
+Si encuentras problemas, puedes informar de ellos
+al equipo de Symfony antes del lanzamiento final.
+
+00:04:42.036 --> 00:04:43.736 align:middle
+Abre nuestro archivo composer.json.
+
+00:04:44.116 --> 00:04:47.316 align:middle
+Por defecto, Composer sólo
+instala versiones estables.
+
+00:04:47.566 --> 00:04:49.676 align:middle
+Para permitir la instalación
+de versiones de desarrollo,
+
+00:04:49.856 --> 00:04:53.136 align:middle
+añade la siguiente opción:
+"minimum-stability": "dev".
+
+00:04:53.746 --> 00:04:57.246 align:middle
+Esto instalará siempre las dependencias
+de desarrollo, cosa que no queremos.
+
+00:04:57.246 --> 00:05:01.286 align:middle
+Entonces, añade otra opción:
+"prefer-stable": true:
+
+00:05:01.786 --> 00:05:04.456 align:middle
+Ahora, Composer preferirá
+las versiones estables,
+
+00:05:04.626 --> 00:05:07.866 align:middle
+pero puede instalar versiones dev
+si una restricción lo requiere.
+
+00:05:08.626 --> 00:05:13.486 align:middle
+De vuelta al terminal, si volvemos a ejecutar la
+actualización, no obtendremos ninguna versión de desarrollo
+
+00:05:13.486 --> 00:05:15.636 align:middle
+gracias a la opción prefer-stable.
+
+00:05:16.156 --> 00:05:20.556 align:middle
+Hay un pequeño truco oculto de Symfony Flex para
+ayudar a instalar diferentes versiones de Symfony.
+
+00:05:21.006 --> 00:05:24.736 align:middle
+Necesitamos instalar Symfony Flex globalmente
+en nuestro sistema, así que ejecuta:
+
+00:05:25.026 --> 00:05:31.826 align:middle
+symfony composer global
+require symfony/flex Ahora,
+
+00:05:31.826 --> 00:05:34.746 align:middle
+Symfony Flex es visible para
+todos los comandos de Composer.
+
+00:05:34.746 --> 00:05:43.446 align:middle
+Ahora, para instalar las versiones
+7.4, Ejecuta:: SYMFONY_REQUIRE=7.4.*
+
+00:05:43.446 --> 00:05:48.306 align:middle
+symfony composer update ¡Genial!
+
+00:05:48.406 --> 00:05:52.526 align:middle
+Estamos recibiendo las versiones candidatas
+7.4, que no se consideran estables. Flex
+
+00:05:52.526 --> 00:05:54.976 align:middle
+recoge esta variable de entorno y
+
+00:05:54.976 --> 00:05:58.246 align:middle
+ajusta las restricciones de la versión del
+paquete Symfony en consecuencia. Observa
+
+00:05:58.946 --> 00:06:01.706 align:middle
+este mensaje "Las recetas Symfony
+están deshabilitadas: symfony/flex
+
+00:06:01.806 --> 00:06:05.026 align:middle
+no se encuentra en el
+composer.json raíz". Como
+
+00:06:05.026 --> 00:06:08.586 align:middle
+nuestro bundle no requiere
+symfony/flex directamente, la
+
+00:06:08.796 --> 00:06:11.236 align:middle
+magia normal de Flex a la que estás
+acostumbrado está desactivada. Ejecuta
+
+00:06:11.806 --> 00:06:16.866 align:middle
+de nuevo el conjunto de pruebas: Bien,
+¡todas nuestras pruebas pasan en 7.4! Para
+
+00:06:17.356 --> 00:06:22.776 align:middle
+probar en otra versión de Symfony que admitamos,
+digamos la 7.2, ejecuta el comando composer update con
+
+00:06:22.976 --> 00:06:26.816 align:middle
+la variable de entorno SYMFONY_REQUIRE
+establecida en 7.2.*: Sí,
+
+00:06:26.816 --> 00:06:33.896 align:middle
+tenemos instaladas las versiones 7.2, así que
+
+00:06:33.896 --> 00:06:38.996 align:middle
+vuelve a ejecutar el conjunto de pruebas:
+¡Genial, todo en verde en 7.2! Ya he mencionado
+
+00:06:39.756 --> 00:06:45.006 align:middle
+antes que, a diferencia de nuestras aplicaciones, en los paquetes de
+terceros que necesitan admitir una amplia gama de versiones de dependencias
+
+00:06:45.006 --> 00:06:48.676 align:middle
+, no confirmamos el archivo
+composer.lock. Cada vez que
+
+00:06:49.056 --> 00:06:52.466 align:middle
+instalas versiones diferentes, se actualiza
+el archivo de bloqueo. Confirmarlo
+
+00:06:52.726 --> 00:06:55.266 align:middle
+crea conflictos y otros quebraderos
+de cabeza. A continuación,
+
+00:06:55.886 --> 00:06:59.586 align:middle
+añadiremos documentación y
+otros metadatos a nuestro bundle.
