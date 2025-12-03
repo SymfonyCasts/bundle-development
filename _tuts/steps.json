@@ -359,7 +359,27 @@
             "id": "30-doctrine-tests",
             "name": "30. Doctrine tests",
             "description": null
+        },
+        {
+            "id": "31-multiple-symfony-versions",
+            "name": "31. Multiple Symfony versions",
+            "description": null
+        },
+        {
+            "id": "32-metadata-and-php-cs-fixer",
+            "name": "32. Metadata and PHP-CS-Fixer",
+            "description": null
+        },
+        {
+            "id": "33-phpstan",
+            "name": "33. PHPStan",
+            "description": null
+        },
+        {
+            "id": "34-github-actions",
+            "name": "34. Github Actions",
+            "description": null
         }
     ],
-    "sha": "0afea21e8cc087b8fbdc69a5877751455af7d6ce"
+    "sha": "6d515289829be7bfeb959d668950365dd6ca9760"
 }

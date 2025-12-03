@@ -1,0 +1,393 @@
+diff --git a/object-translation-bundle/.editorconfig b/object-translation-bundle/.editorconfig
+new file mode 100644
+index 0000000..6699076
+--- /dev/null
++++ b/object-translation-bundle/.editorconfig
+@@ -0,0 +1,17 @@
++# editorconfig.org
++
++root = true
++
++[*]
++charset = utf-8
++end_of_line = lf
++indent_size = 4
++indent_style = space
++insert_final_newline = true
++trim_trailing_whitespace = true
++
++[{compose.yaml,compose.*.yaml}]
++indent_size = 2
++
++[*.md]
++trim_trailing_whitespace = false
+diff --git a/object-translation-bundle/.gitattributes b/object-translation-bundle/.gitattributes
+new file mode 100644
+index 0000000..18e14aa
+--- /dev/null
++++ b/object-translation-bundle/.gitattributes
+@@ -0,0 +1 @@
++/tests export-ignore
+diff --git a/object-translation-bundle/.gitignore b/object-translation-bundle/.gitignore
+index e57e850..7fa98ed 100644
+--- a/object-translation-bundle/.gitignore
++++ b/object-translation-bundle/.gitignore
+@@ -2,3 +2,4 @@ vendor/
+ var/
+ composer.lock
+ .phpunit.result.cache
++.php-cs-fixer.cache
+diff --git a/object-translation-bundle/.php-cs-fixer.dist.php b/object-translation-bundle/.php-cs-fixer.dist.php
+new file mode 100644
+index 0000000..bb5bec7
+--- /dev/null
++++ b/object-translation-bundle/.php-cs-fixer.dist.php
+@@ -0,0 +1,11 @@
++<?php
++
++return (new PhpCsFixer\Config())
++    ->setRules([
++        '@Symfony' => true,
++    ])
++    ->setFinder(
++        (new PhpCsFixer\Finder())
++            ->in([__DIR__.'/src', __DIR__.'/tests'])
++    )
++;
+diff --git a/object-translation-bundle/LICENSE.md b/object-translation-bundle/LICENSE.md
+new file mode 100644
+index 0000000..870f437
+--- /dev/null
++++ b/object-translation-bundle/LICENSE.md
+@@ -0,0 +1,19 @@
++Copyright (c) SymfonyCasts <https://symfonycasts.com/>
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is furnished
++to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in all
++copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
++THE SOFTWARE.
+diff --git a/object-translation-bundle/README.md b/object-translation-bundle/README.md
+new file mode 100644
+index 0000000..b3c5283
+--- /dev/null
++++ b/object-translation-bundle/README.md
+@@ -0,0 +1,232 @@
++# symfonycasts/object-translation-bundle
++
++This bundle provides a simple way to translate Doctrine entities in Symfony applications.
++
++## Installation
++
++### Install the bundle via Composer:
++
++```bash
++composer require symfonycasts/object-translation-bundle
++```
++
++### Enable the bundle in your `config/bundles.php` file:
++
++> [!NOTE]
++> This step is not required if you are using Symfony Flex.
++
++```php
++return [
++    // ...
++    ObjectTranslationBundle::class => ['all' => true],
++];
++```
++
++### Create the translation entity in your app:
++
++> [!NOTE]
++> This step is not required if you are using Symfony Flex.
++
++```php
++namespace App\Entity;
++
++use Doctrine\ORM\Mapping as ORM;
++use SymfonyCasts\ObjectTranslationBundle\Model\Translation as BaseTranslation;
++
++#[ORM\Entity]
++class Translation extends BaseTranslation
++{
++    #[ORM\Id]
++    #[ORM\GeneratedValue]
++    #[ORM\Column]
++    public int $id;
++}
++```
++
++### Configure the entity in your `config/packages/object_translation.yaml` file:
++
++> [!NOTE]
++> This step is not required if you are using Symfony Flex.
++
++```yaml
++symfonycasts_object_translation:
++    translation_class: App\Entity\Translation
++```
++
++### Create and run the migration to add the translation table:
++
++```bash
++symfony console make:migration
++symfony console doctrine:migrations:migrate
++```
++
++## Marking Entities as Translatable
++
++To mark an entity as translatable, use the `Translatable` attribute on the entity class
++and the `TranslatableProperty` attribute on the fields you want to translate.
++
++```php
++namespace App\Entity;
++
++use Doctrine\ORM\Mapping as ORM;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\Translatable;
++use SymfonyCasts\ObjectTranslationBundle\Mapping\TranslatableProperty;
++
++#[ORM\Entity]
++#[Translatable('product')]
++class Product
++{
++    // ...
++
++    #[ORM\Column(type: 'string', length: 255)]
++    #[TranslatableProperty]
++    public string $name;
++
++    #[ORM\Column(type: 'text')]
++    #[TranslatableProperty]
++    public string $description;
++}
++```
++
++## Usage
++
++### `ObjectTranslator` Service
++
++You can inject the `ObjectTranslator` service to translate entities.
++
++```php
++use SymfonyCasts\ObjectTranslationBundle\ObjectTranslator;
++
++class ProductController
++{
++    public function show(Product $product, ObjectTranslator $objectTranslator)
++    {
++        // translate into the current request locale
++        $translatedProduct = $objectTranslator->translate($product);
++
++        $translatedProduct->getName(); // returns the translated name (if available)
++        $translatedProduct->getDescription(); // returns the translated description (if available)
++
++        // ...
++    }
++}
++```
++
++The second argument of the `translate()` method allows you to specify a locale:
++
++```php
++$product = $objectTranslator->translate($product, 'fr'); // translates into French
++```
++
++### `translate_object` Twig Filter
++
++If using Twig, you can use the `translate_object` filter to translate entities directly in templates.
++
++```twig
++{% set translatedProduct = product|translate_object %} {# translates into the current request locale #}
++
++{% set frenchProduct = product|translate_object('fr') %} {# translates into French #}
++```
++
++## Managing Translations
++
++The `Translation` database table has the following structure:
++
++- `id`: Primary key (added by you)
++- `object_type`: The *alias* defined in the `Translatable` attribute (e.g., `product`)
++- `object_id`: The ID of the translated entity
++- `locale`: The locale of the translation (e.g., `fr`)
++- `field`: The entity property name being translated (e.g., `description`)
++- `value`: The translated value
++
++Each row represents a single property translation for a specific entity in a specific locale.
++
++You can manage these translations yourself but two console commands are provided to help:
++
++### `object-translation:export`
++``
++This command exports all entity translations, in your default locale, to a CSV file.
++
++```bash
++symfony console object-translation:export translations.csv
++```
++
++This will create a `translations.csv` file at the root of your project with the following structure:
++
++```csv
++type,id,field,value
++```
++
++You can then take this file to translation service for translation. Be sure to keep
++the `type`, `id`, and `field` columns intact. The `value` column is what needs to be translated
++into the desired language.
++
++### `object-translation:import`
++
++This command imports translations from a CSV file created by the `export` command after
++the `value` column has been translated.
++
++```bash
++symfony console object-translation:import translations_fr.csv fr
++```
++
++The first argument is the path to the CSV file, and the second argument is the locale
++of the translations in that file.
++
++## Translation Caching
++
++For performance, translations are cached. By default, they use your `cache.app` pool
++and have no expiration time. This can be configured:
++
++```yaml
++symfonycasts_object_translation:
++    cache:
++        pool: 'cache.object_translation' # a custom pool name
++        ttl: 3600 # expire after one hour
++```
++
++### Translation Tags
++
++If your cache pool supports *cache tagging*, tags are added to the cache keys. Two keys
++are added:
++
++- `object-translation`: All translations are tagged with this key.
++- `object-translation-{type}`: Where `{type}` is the translatable alias (e.g., `product`).
++
++You can invalidate these tags by using the `cache:pool:invalidate-tags` command:
++
++```bash
++# invalidate all object translation caches
++symfony console cache:pool:invalidate-tags object-translation
++
++# invalidate only the translation cache for "product" entities
++symfony console cache:pool:invalidate-tags object-translation-product
++```
++
++### `object-translation:warmup` Command
++
++This command preloads all translations into the cache for all your
++app's enabled locales.
++
++```bash
++symfony console object-translation:warmup
++```
++
++## Full Default Configuration
++
++```yaml
++symfonycasts_object_translation:
++
++    # The class name of your translation entity.
++    translation_class:    ~ # Required, Example: App\Entity\Translation
++
++    # Cache settings for object translations.
++    cache:
++        enabled:              true
++
++        # The cache pool to use for storing object translations.
++        pool:                 cache.app
++
++        # The time-to-livefor cached translations, in seconds, null for no expiration.
++        ttl:                  null
++```
+diff --git a/object-translation-bundle/composer.json b/object-translation-bundle/composer.json
+index 8853af9..2a0fdf5 100644
+--- a/object-translation-bundle/composer.json
++++ b/object-translation-bundle/composer.json
+@@ -29,7 +29,8 @@
+     "require-dev": {
+         "phpunit/phpunit": "^9.6",
+         "symfony/phpunit-bridge": "^7.3",
+-        "zenstruck/foundry": "^2.8"
++        "zenstruck/foundry": "^2.8",
++        "php-cs-fixer/shim": "^3.91"
+     },
+     "minimum-stability": "dev",
+     "prefer-stable": true
+diff --git a/object-translation-bundle/src/ObjectTranslator.php b/object-translation-bundle/src/ObjectTranslator.php
+index 6adba78..1cceae1 100644
+--- a/object-translation-bundle/src/ObjectTranslator.php
++++ b/object-translation-bundle/src/ObjectTranslator.php
+@@ -51,7 +51,7 @@ final class ObjectTranslator
+ 
+         return $this->cache->get(
+             "object_translation.{$locale}.{$type}.{$id}",
+-            function(ItemInterface $item) use ($locale, $type, $id) {
++            function (ItemInterface $item) use ($locale, $type, $id) {
+                 if ($this->cache instanceof TagAwareCacheInterface) {
+                     $item->tag(['object-translation', "object-translation-{$type}"]);
+                 }
+diff --git a/object-translation-bundle/tests/Fixture/TestKernel.php b/object-translation-bundle/tests/Fixture/TestKernel.php
+index cbe695e..b6ea3a3 100644
+--- a/object-translation-bundle/tests/Fixture/TestKernel.php
++++ b/object-translation-bundle/tests/Fixture/TestKernel.php
+@@ -44,8 +44,8 @@ class TestKernel extends Kernel
+                     'Test' => [
+                         'dir' => '%kernel.project_dir%/tests/Fixture/Entity',
+                         'prefix' => 'SymfonyCasts\ObjectTranslationBundle\Tests\Fixture\Entity',
+-                    ]
+-                ]
++                    ],
++                ],
+             ],
+         ]);
+     }
+diff --git a/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php b/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php
+index 30fc448..a7fa545 100644
+--- a/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php
++++ b/object-translation-bundle/tests/Integration/ObjectTranslatorTest.php
+@@ -8,11 +8,13 @@ use SymfonyCasts\ObjectTranslationBundle\Tests\Fixture\Entity\Entity1;
+ use SymfonyCasts\ObjectTranslationBundle\Tests\Fixture\Entity\Translation;
+ use Zenstruck\Foundry\Test\Factories;
+ use Zenstruck\Foundry\Test\ResetDatabase;
++
+ use function Zenstruck\Foundry\Persistence\persist;
+ 
+ class ObjectTranslatorTest extends KernelTestCase
+ {
+-    use Factories, ResetDatabase;
++    use Factories;
++    use ResetDatabase;
+ 
+     public function testCanAccessService()
+     {
+diff --git a/object-translation-bundle/tests/bootstrap.php b/object-translation-bundle/tests/bootstrap.php
+index 49455a2..7526448 100644
+--- a/object-translation-bundle/tests/bootstrap.php
++++ b/object-translation-bundle/tests/bootstrap.php
+@@ -2,6 +2,6 @@
+ 
+ use Symfony\Component\Filesystem\Filesystem;
+ 
+-require __DIR__ . '/../vendor/autoload.php';
++require __DIR__.'/../vendor/autoload.php';
+ 
+-(new Filesystem())->remove(__DIR__ . '/../var');
++(new Filesystem())->remove(__DIR__.'/../var');

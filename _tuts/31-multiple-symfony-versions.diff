@@ -1,0 +1,73 @@
+diff --git a/object-translation-bundle/composer.json b/object-translation-bundle/composer.json
+index 28e7929..8853af9 100644
+--- a/object-translation-bundle/composer.json
++++ b/object-translation-bundle/composer.json
+@@ -20,8 +20,9 @@
+         }
+     ],
+     "require": {
+-        "symfony/framework-bundle": "^7.3",
+-        "symfony/translation": "^7.3",
++        "php": ">=8.2",
++        "symfony/framework-bundle": "^6.4|^7.0",
++        "symfony/translation": "^6.4|^7.0",
+         "doctrine/doctrine-bundle": "^2.18",
+         "doctrine/orm": "^3.5"
+     },
+@@ -29,5 +30,7 @@
+         "phpunit/phpunit": "^9.6",
+         "symfony/phpunit-bridge": "^7.3",
+         "zenstruck/foundry": "^2.8"
+-    }
++    },
++    "minimum-stability": "dev",
++    "prefer-stable": true
+ }
+diff --git a/object-translation-bundle/phpunit.xml.dist b/object-translation-bundle/phpunit.xml.dist
+index 6556e35..a5a9287 100644
+--- a/object-translation-bundle/phpunit.xml.dist
++++ b/object-translation-bundle/phpunit.xml.dist
+@@ -3,7 +3,7 @@
+ <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+ <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+-         bootstrap="vendor/autoload.php"
++         bootstrap="tests/bootstrap.php"
+          colors="true"
+          failOnRisky="true"
+          failOnWarning="true"
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index 1a8325a..a2492e3 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -18,7 +18,7 @@ final class ObjectTranslationBundle extends AbstractBundle
+     {
+         $definition->rootNode()
+             ->children()
+-                ->stringNode('translation_class')
++                ->scalarNode('translation_class')
+                     ->info('The class name of your Translation entity.')
+                     ->example('App\Entity\Translation')
+                     ->isRequired()
+@@ -32,7 +32,7 @@ final class ObjectTranslationBundle extends AbstractBundle
+                     ->info('Cache settings for object translations.')
+                     ->canBeDisabled()
+                     ->children()
+-                        ->stringNode('pool')
++                        ->scalarNode('pool')
+                             ->info('The cache pool to use for storing object translations.')
+                             ->defaultValue('cache.app')
+                         ->end()
+diff --git a/object-translation-bundle/tests/bootstrap.php b/object-translation-bundle/tests/bootstrap.php
+new file mode 100644
+index 0000000..49455a2
+--- /dev/null
++++ b/object-translation-bundle/tests/bootstrap.php
+@@ -0,0 +1,7 @@
++<?php
++
++use Symfony\Component\Filesystem\Filesystem;
++
++require __DIR__ . '/../vendor/autoload.php';
++
++(new Filesystem())->remove(__DIR__ . '/../var');

@@ -1,0 +1,38 @@
+diff --git a/object-translation-bundle/composer.json b/object-translation-bundle/composer.json
+index 2a0fdf5..e3648f4 100644
+--- a/object-translation-bundle/composer.json
++++ b/object-translation-bundle/composer.json
+@@ -30,7 +30,9 @@
+         "phpunit/phpunit": "^9.6",
+         "symfony/phpunit-bridge": "^7.3",
+         "zenstruck/foundry": "^2.8",
+-        "php-cs-fixer/shim": "^3.91"
++        "php-cs-fixer/shim": "^3.91",
++        "phpstan/phpstan": "^2.1",
++        "twig/twig": "^3.22"
+     },
+     "minimum-stability": "dev",
+     "prefer-stable": true
+diff --git a/object-translation-bundle/phpstan.neon b/object-translation-bundle/phpstan.neon
+new file mode 100644
+index 0000000..91e6453
+--- /dev/null
++++ b/object-translation-bundle/phpstan.neon
+@@ -0,0 +1,4 @@
++parameters:
++    level: 5
++    paths:
++        - src
+diff --git a/object-translation-bundle/src/ObjectTranslationBundle.php b/object-translation-bundle/src/ObjectTranslationBundle.php
+index a2492e3..75af8b2 100644
+--- a/object-translation-bundle/src/ObjectTranslationBundle.php
++++ b/object-translation-bundle/src/ObjectTranslationBundle.php
+@@ -16,7 +16,7 @@ final class ObjectTranslationBundle extends AbstractBundle
+ 
+     public function configure(DefinitionConfigurator $definition): void
+     {
+-        $definition->rootNode()
++        $definition->rootNode() // @phpstan-ignore method.notFound
+             ->children()
+                 ->scalarNode('translation_class')
+                     ->info('The class name of your Translation entity.')
