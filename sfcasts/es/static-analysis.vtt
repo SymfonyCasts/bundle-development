@@ -1,0 +1,266 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:04.346 align:middle
+Mientras que las pruebas verifican que tu
+código funciona como se espera ejecutándolo,
+
+00:00:04.376 --> 00:00:08.046 align:middle
+el análisis estático examina
+tu código sin ejecutarlo.
+
+00:00:08.506 --> 00:00:11.366 align:middle
+Esto ayuda a detectar posibles problemas
+que las pruebas podrían pasar por alto.
+
+00:00:11.726 --> 00:00:14.726 align:middle
+Es una forma estupenda de mejorar la
+calidad y la mantenibilidad del código.
+
+00:00:15.186 --> 00:00:19.086 align:middle
+No sólo eso, un beneficio secundario es
+que las mejoras sugeridas a menudo conducen
+
+00:00:19.086 --> 00:00:22.256 align:middle
+a un mejor autocompletado
+en IDEs como PhpStorm.
+
+00:00:22.936 --> 00:00:25.936 align:middle
+Mi herramienta preferida para el
+análisis estático es PHPStan.
+
+00:00:26.606 --> 00:00:30.466 align:middle
+En tu terminal, mientras estás en tu
+directorio bundle, instálalo ejecutando:
+
+00:00:30.556 --> 00:00:43.616 align:middle
+symfony composer require --dev phpstan/phpstan De
+vuelta a nuestro IDE, añade un archivo phpstan.neon
+
+00:00:43.616 --> 00:00:48.696 align:middle
+a la raíz de tu bundle: Cópialo del directorio
+tutorial o del script que aparece a continuación.
+
+00:00:49.486 --> 00:00:51.866 align:middle
+El formato del archivo neon
+es muy similar al de yaml.
+
+00:00:52.596 --> 00:00:54.166 align:middle
+Echemos un vistazo a esta configuración.
+
+00:00:54.786 --> 00:00:58.936 align:middle
+En esta sección parameters es donde
+configuramos cómo queremos que funcione PHPStan.
+
+00:00:58.936 --> 00:01:02.966 align:middle
+PHPStan funciona en diferentes
+niveles, de cero a diez.
+
+00:01:03.316 --> 00:01:06.676 align:middle
+Cero es el más permisivo
+y diez el más estricto.
+
+00:01:07.236 --> 00:01:08.976 align:middle
+Elegir un nivel es un acto de equilibrio.
+
+00:01:09.126 --> 00:01:13.906 align:middle
+Un nivel más bajo significa menos problemas notificados,
+pero puede pasar por alto algunos problemas potenciales.
+
+00:01:13.906 --> 00:01:17.976 align:middle
+Un nivel más alto detecta más problemas,
+pero también puede resultar abrumador
+
+00:01:17.976 --> 00:01:19.736 align:middle
+el número de problemas notificados.
+
+00:01:20.326 --> 00:01:24.016 align:middle
+Una buena práctica consiste en empezar
+con un nivel bajo y aumentarlo gradualmente
+
+00:01:24.016 --> 00:01:25.886 align:middle
+a medida que resuelves
+los problemas notificados.
+
+00:01:26.276 --> 00:01:30.716 align:middle
+De este modo, puedes mejorar la calidad de tu
+código de forma incremental sin sentirte abrumado.
+
+00:01:30.716 --> 00:01:33.196 align:middle
+Yo he empezado con un nivel moderado de 5.
+
+00:01:33.826 --> 00:01:37.176 align:middle
+El path es un conjunto de rutas
+que queremos que PHPStan analice.
+
+00:01:37.656 --> 00:01:39.896 align:middle
+Para empezar, nos centraremos
+en el directorio src.
+
+00:01:40.396 --> 00:01:45.396 align:middle
+Analizar tests también puede ser beneficioso, pero por
+simplicidad, de momento nos quedaremos sólo con src.
+
+00:01:45.996 --> 00:01:46.946 align:middle
+¡Es hora de ejecutarlo!
+
+00:01:47.336 --> 00:01:55.886 align:middle
+De nuevo en tu terminal, ejecuta: symfony
+php vendor/bin/phpstan analyse ¡Muy bien!
+
+00:01:55.886 --> 00:01:59.466 align:middle
+PHPStan está analizando los archivos
+del directorio src de nuestro bundle.
+
+00:01:59.856 --> 00:02:02.086 align:middle
+Parece que tenemos tres errores que solucionar.
+
+00:02:02.186 --> 00:02:03.646 align:middle
+Vamos a tratarlos uno a uno
+
+00:02:04.276 --> 00:02:10.516 align:middle
+El primero, en ObjectTranslationBundle.php
+en la línea 19, tiene el mensaje "Call
+
+00:02:10.516 --> 00:02:13.566 align:middle
+to undefined method
+NodeDefinition::children() ".
+
+00:02:14.226 --> 00:02:17.196 align:middle
+Bien, vayamos a ese archivo
+y busquemos la línea 19.
+
+00:02:17.896 --> 00:02:18.776 align:middle
+Aquí está pero...
+
+00:02:18.886 --> 00:02:23.966 align:middle
+hmm... la línea 19 está llamando a ->rootNode(),
+es la línea 20 la que está llamando a ->children().
+
+00:02:24.606 --> 00:02:26.906 align:middle
+Esto se debe a que, desde
+la perspectiva de PHPStan,
+
+00:02:27.076 --> 00:02:30.346 align:middle
+toda esta cadena de llamadas a
+métodos se considera una línea
+
+00:02:30.436 --> 00:02:33.306 align:middle
+y los errores se notifican en
+la primera línea de la cadena.
+
+00:02:33.976 --> 00:02:35.826 align:middle
+Este error es en realidad un falso positivo.
+
+00:02:35.826 --> 00:02:40.356 align:middle
+A PHPStan le cuesta entender estos árboles
+de configuración profundamente encadenados.
+
+00:02:40.816 --> 00:02:44.946 align:middle
+Sabemos que funciona como se espera porque nuestra
+prueba fallaría al construir el contenedor
+
+00:02:44.946 --> 00:02:46.196 align:middle
+si hubiera un problema real.
+
+00:02:46.456 --> 00:02:48.176 align:middle
+Este error puede ignorarse con seguridad.
+
+00:02:48.776 --> 00:02:54.076 align:middle
+Podríamos ignorar toda la línea, pero es mejor
+ignorar sólo la clave específica del error para que
+
+00:02:54.076 --> 00:02:57.316 align:middle
+, si surge otro error más
+adelante, no se ignore también.
+
+00:02:57.766 --> 00:03:03.216 align:middle
+Puedes encontrar esta clave en la salida del terminal,
+debajo del mensaje de error: method.notFound.
+
+00:03:03.616 --> 00:03:04.266 align:middle
+Cópiala. De
+
+00:03:04.846 --> 00:03:08.916 align:middle
+nuevo en la línea 19 de
+ObjectTranslationBundle.php,
+
+00:03:08.916 --> 00:03:15.166 align:middle
+añade un comentario a la línea @phpstan-ignore
+<paste>: De nuevo en el terminal,
+
+00:03:15.346 --> 00:03:19.296 align:middle
+ejecuta de nuevo el análisis:
+¡Ahora sólo hay dos errores!
+
+00:03:19.396 --> 00:03:21.386 align:middle
+En las líneas 12 y 17
+
+00:03:21.386 --> 00:03:24.916 align:middle
+de nuestra clase ObjectTranslatorExtension,
+la extensión Twig.
+
+00:03:24.916 --> 00:03:26.896 align:middle
+Busca y abre esa clase.
+
+00:03:26.996 --> 00:03:31.706 align:middle
+PHPStan dice que esta clase
+AbstractExtension no existe.
+
+00:03:32.096 --> 00:03:34.556 align:middle
+Sin embargo, según PhpStorm, sí existe...
+
+00:03:34.826 --> 00:03:36.476 align:middle
+Esto se debe a que estamos
+trabajando en este bundle
+
+00:03:36.476 --> 00:03:39.406 align:middle
+dentro de un proyecto Symfony
+completo que tiene Twig instalado.
+
+00:03:39.816 --> 00:03:44.386 align:middle
+Cuando ejecutamos PHPStan en el contexto
+de nuestro bundle, esta clase no existe.
+
+00:03:44.856 --> 00:03:48.566 align:middle
+Esto tiene fácil solución, sólo necesitamos
+que nuestro bundle dependa de Twig.
+
+00:03:48.926 --> 00:03:51.836 align:middle
+Pero no quiero que Twig
+sea una dependencia dura.
+
+00:03:52.226 --> 00:03:56.996 align:middle
+Puede que un usuario esté utilizando nuestro
+bundle en un proyecto de sólo API sin Twig.
+
+00:03:57.426 --> 00:04:00.436 align:middle
+No quiero que tengan que instalar
+Twig sólo por nuestro bundle.
+
+00:04:00.876 --> 00:04:04.246 align:middle
+Por tanto, necesitaremos Twig
+como dependencia de desarrollo.
+
+00:04:04.746 --> 00:04:08.676 align:middle
+En tu terminal, añádelo
+con: symfony composer require
+
+00:04:08.936 --> 00:04:18.846 align:middle
+--dev twig/twig Ahora, vuelve a
+ejecutar el análisis: ¡No hay errores!
+
+00:04:19.106 --> 00:04:21.426 align:middle
+Al añadir Twig se han solucionado
+los dos errores restantes
+
+00:04:21.456 --> 00:04:24.106 align:middle
+, ya que ambos estaban relacionados
+con la falta de clases Twig.
+
+00:04:24.756 --> 00:04:26.836 align:middle
+A continuación, vamos a
+subir nuestro bundle a GitHub
+
+00:04:26.976 --> 00:04:30.136 align:middle
+y a configurar la integración
+continua con las Acciones de GitHub.
