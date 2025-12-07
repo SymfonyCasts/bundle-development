@@ -59,7 +59,8 @@ Now to create the GitHub repository! Head over to GitHub and create a new reposi
 by clicking the plus icon in the top right and selecting `New repository`.
 
 For the *owner*, I'm going to choose the SymfonyCasts organization, but you can
-select your personal account if you want to follow along. For the description,
+select your personal account if you want to follow along. Repository name?
+`object-translation-bundle`. For the description,
 I'll just copy it from our `composer.json` file. Visibility? I'm going
 to make it public because I'll be publishing this to Packagist.
 
