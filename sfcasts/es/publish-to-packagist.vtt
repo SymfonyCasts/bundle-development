@@ -1,0 +1,209 @@
+WEBVTT
+
+00:00:00.816 --> 00:00:02.816 align:middle
+Nuestro bundle ya está alojado en GitHub
+
+00:00:03.016 --> 00:00:06.196 align:middle
+y nuestra integración continua con las
+Acciones de GitHub ¡está en verde!
+
+00:00:06.656 --> 00:00:10.466 align:middle
+Para que se pueda instalar a través de
+Composer, tenemos que publicarlo en Packagist.
+
+00:00:10.996 --> 00:00:12.766 align:middle
+No podrás seguir esta parte,
+
+00:00:13.046 --> 00:00:15.836 align:middle
+no queremos inundar Packagist
+con duplicados de nuestro bundle.
+
+00:00:16.186 --> 00:00:19.036 align:middle
+Pero puedes utilizarlo como guía
+para publicar tus propios bundles.
+
+00:00:19.756 --> 00:00:23.226 align:middle
+Ve a Packagist.org e inicia
+sesión con tu cuenta de GitHub.
+
+00:00:24.986 --> 00:00:26.446 align:middle
+Haz clic en "Enviar" en el menú superior.
+
+00:00:26.976 --> 00:00:32.066 align:middle
+Para la URL del repositorio, copia la URL
+de tu repositorio de GitHub y pégala...
+
+00:00:32.426 --> 00:00:33.386 align:middle
+y haz clic en "Comprobar".
+
+00:00:34.096 --> 00:00:37.106 align:middle
+Este paso busca paquetes
+existentes con nombres similares.
+
+00:00:37.406 --> 00:00:41.296 align:middle
+Si ya existe un paquete que se ajusta a tus
+necesidades, puede que no necesites publicar uno nuevo.
+
+00:00:41.786 --> 00:00:44.056 align:middle
+Veo que ya hay un paquete
+con un nombre similar,
+
+00:00:44.336 --> 00:00:46.496 align:middle
+pero procederé de todos modos
+haciendo clic en "Enviar".
+
+00:00:47.066 --> 00:00:50.186 align:middle
+Y... Bien, ¡estamos en la
+página de nuestro nuevo paquete!
+
+00:00:50.596 --> 00:00:51.926 align:middle
+Aquí ocurren varias cosas.
+
+00:00:52.356 --> 00:00:55.126 align:middle
+En primer lugar, Packagist
+rastrea los metadatos
+
+00:00:55.326 --> 00:00:58.606 align:middle
+de nuestro paquete para determinar todas
+nuestras ramas, etiquetas y dependencias.
+
+00:00:58.976 --> 00:01:03.646 align:middle
+También configura automáticamente un webhook
+de GitHub para que se notifique a Packagist
+
+00:01:03.816 --> 00:01:06.446 align:middle
+que vuelva a rastrear nuestro paquete
+cada vez que introduzcamos código nuevo.
+
+00:01:07.066 --> 00:01:10.526 align:middle
+Cuando ya no veas el mensaje "Este
+paquete no se actualiza automáticamente",
+
+00:01:10.726 --> 00:01:12.266 align:middle
+significa que el webhook está configurado.
+
+00:01:12.816 --> 00:01:14.446 align:middle
+Esto se puede confirmar cuando veas el
+
+00:01:14.446 --> 00:01:17.706 align:middle
+mensaje "Este paquete se actualiza
+automáticamente" en la barra lateral derecha.
+
+00:01:18.986 --> 00:01:22.196 align:middle
+De vuelta en la página del repositorio de
+GitHub, haz clic en la pestaña "Configuración"
+
+00:01:22.376 --> 00:01:24.196 align:middle
+y, a continuación, en "Webhooks"
+en la barra lateral izquierda.
+
+00:01:25.236 --> 00:01:28.196 align:middle
+Este es el webhook que Packagist
+añadió automáticamente por nosotros.
+
+00:01:28.816 --> 00:01:33.996 align:middle
+En Packagist ahora, sólo tenemos esta rama
+1.x porque no hemos creado ninguna versión.
+
+00:01:34.606 --> 00:01:38.566 align:middle
+Crearé una versión en GitHub haciendo clic
+en "Versiones" en la barra lateral derecha
+
+00:01:38.816 --> 00:01:40.566 align:middle
+y haciendo clic en "Crear nueva versión".
+
+00:01:41.356 --> 00:01:47.766 align:middle
+Podemos elegir una etiqueta git existente para utilizarla en
+la publicación, pero, como aún no tenemos ninguna etiqueta,
+
+00:01:47.796 --> 00:01:52.716 align:middle
+escribiré v1.0.0, pulsaré "Crear nueva etiqueta"
+y luego "Crear" en este cuadro de diálogo.
+
+00:01:53.426 --> 00:01:57.226 align:middle
+GitHub tiene un práctico botón para generar
+notas de publicación, así que haré clic en él.
+
+00:01:57.906 --> 00:02:02.756 align:middle
+Rellenará automáticamente el título con el nombre de nuestra
+etiqueta y generará un enlace al registro de cambios completo.
+
+00:02:03.296 --> 00:02:07.956 align:middle
+Esto no es demasiado emocionante para una versión
+inicial, pero cuando añades versiones posteriores,
+
+00:02:08.146 --> 00:02:10.076 align:middle
+genera una bonita lista de cambios.
+
+00:02:10.656 --> 00:02:15.046 align:middle
+Sólo añadiré una nota: "Versión inicial"
+y haré clic en "Publicar versión".
+
+00:02:16.586 --> 00:02:18.226 align:middle
+1.¡Lanzamiento 0 realizado!
+
+00:02:18.686 --> 00:02:23.706 align:middle
+De vuelta en la página de nuestro repositorio,
+podemos ver la versión 1.0 listada como "última".
+
+00:02:24.216 --> 00:02:26.216 align:middle
+Esto debería haber activado el webhook
+
+00:02:26.436 --> 00:02:29.716 align:middle
+de Packagist, así que volvemos a la página
+del paquete en Packagist, actualizamos...
+
+00:02:29.786 --> 00:02:31.406 align:middle
+y... ¡ahí está!
+
+00:02:31.606 --> 00:02:35.536 align:middle
+Nuestra versión 1.0 ya está disponible
+y puede instalarse con Composer
+
+00:02:35.996 --> 00:02:37.076 align:middle
+¡Veamos si funciona!
+
+00:02:37.466 --> 00:02:42.226 align:middle
+En algún lugar de tu sistema, crea una nueva
+aplicación Symfony temporal ejecutando: symfony new
+
+00:02:42.466 --> 00:02:47.066 align:middle
+--webapp test-my-bundle Espera a que se cree...
+
+00:02:47.266 --> 00:02:52.096 align:middle
+y luego navega hasta ella: cd
+test-my-bundle ¡Requiere nuestro bundle!
+
+00:02:52.366 --> 00:03:00.786 align:middle
+symfony composer require
+symfonycasts/object-translation-bundle Vale,
+
+00:03:00.886 --> 00:03:07.526 align:middle
+tenemos un error, pero mira aquí: ¡Composer ha
+descargado e instalado v1.0.0 de nuestro bundle!
+
+00:03:08.086 --> 00:03:09.926 align:middle
+El error proviene de Symfony Flex.
+
+00:03:10.146 --> 00:03:14.066 align:middle
+Está viendo que hemos instalado un bundle, así que
+lo ha activado automáticamente en nuestra aplicación.
+
+00:03:14.616 --> 00:03:18.666 align:middle
+El problema es que nuestro bundle requiere
+cierta configuración y una entidad:
+
+00:03:18.976 --> 00:03:22.696 align:middle
+la entidad translation_class y Translation.
+
+00:03:23.326 --> 00:03:25.826 align:middle
+Probablemente un usuario podría
+tropezar y solucionar esto
+
+00:03:25.826 --> 00:03:29.266 align:middle
+leyendo la documentación de nuestro
+bundle, pero es un poco fastidioso...
+
+00:03:29.816 --> 00:03:34.626 align:middle
+A continuación, mejoraremos esta experiencia
+creando una receta Symfony Flex para nuestro bundle
