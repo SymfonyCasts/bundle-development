@@ -36,7 +36,7 @@ Este archivo `manifest.json` es necesario para todas las recetas. Son las instru
 
 La sección `bundles` indica a Flex las clases del bundle que debe activar. De vuelta en la página GitHub de nuestro bundle, navegaré hasta `src/ObjectTranslationBundle.php`, copiaré el espacio de nombres y lo pegaré sobre el existente en el archivo de manifiesto, añadiendo `\\` al final. Ahora, copiaré y pegaré el nombre de la clase. Nuestro archivo de manifiesto está listo.
 
-Pasamos al archivo `post-install.txt`. El contenido de este archivo se muestra en el terminal una vez instalado el paquete, como una forma de proporcionar los siguientes pasos al usuario. Lo modificaré para que haga referencia al nombre de nuestro bundle y enlace a nuestra documentación.
+Pasamos al archivo `post-install.txt`. El contenido de este archivo se muestra en el terminal una vez instalado el paquete, como forma de proporcionar los siguientes pasos al usuario. Lo modificaré para que haga referencia al nombre de nuestro bundle, borraré esta línea, cogeré el enlace a nuestra documentación... y lo pegaré.
 
 Por último, tengo que ajustar los archivos que se copian. En el directorio `src`, podemos eliminar`Controller`, y en `Entity`, cambiaré el nombre del archivo a `Translation.php`. Al abrir ese archivo, copiaré el contenido del README de nuestro bundle y lo pegaré.
 
