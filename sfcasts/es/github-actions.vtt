@@ -1,0 +1,312 @@
+WEBVTT
+
+00:00:01.046 --> 00:00:03.796 align:middle
+¡Por fin ha llegado el momento de
+compartir nuestro bundle con el mundo!
+
+00:00:04.306 --> 00:00:08.826 align:middle
+Antes, sin embargo, añadiremos la configuración necesaria
+para que las Acciones de GitHub ejecuten nuestras pruebas,
+
+00:00:09.046 --> 00:00:12.166 align:middle
+análisis estáticos y verifiquen
+nuestras normas de codificación.
+
+00:00:12.756 --> 00:00:18.696 align:middle
+En la raíz de nuestro bundle, añade el siguiente
+directorio y subdirectorio: .github/workflows.
+
+00:00:19.376 --> 00:00:23.526 align:middle
+Copia el archivo ci.yml del
+directorio tutorial en workflows:
+
+00:00:23.836 --> 00:00:26.306 align:middle
+O cópialo del script que aparece a
+continuación si no lo encuentras.
+
+00:00:27.076 --> 00:00:29.336 align:middle
+Hay mucho que desentrañar aquí,
+¡así que vamos a sumergirnos!
+
+00:00:29.856 --> 00:00:33.566 align:middle
+La sección on define los eventos que
+activarán nuestro flujo de trabajo.
+
+00:00:34.076 --> 00:00:38.466 align:middle
+Queremos que se ejecute cuando se envíe código o
+se cree o modifique una petición de extracción.
+
+00:00:39.116 --> 00:00:43.136 align:middle
+Además, esta programación cron garantiza que
+el flujo de trabajo se ejecute dos veces al mes,
+
+00:00:43.406 --> 00:00:44.796 align:middle
+los días 1 y 16.
+
+00:00:45.226 --> 00:00:48.976 align:middle
+Esto es útil para garantizar que sigue
+funcionando con las últimas dependencias.
+
+00:00:49.656 --> 00:00:51.166 align:middle
+A continuación, configuramos el jobs.
+
+00:00:51.386 --> 00:00:57.406 align:middle
+El primero, tests, es el que ejecuta nuestro conjunto
+de pruebas en varias versiones de PHP y Symfony.
+
+00:00:58.026 --> 00:01:02.476 align:middle
+Lo hace utilizando la estrategia matrix
+para crear combinaciones de trabajos.
+
+00:01:03.076 --> 00:01:13.066 align:middle
+Lo tenemos ejecutándose en PHP 8.2, 8.3, y 8.4,
+y en las versiones de Symfony 6.4, 7.3, y 7.4.
+
+00:01:13.626 --> 00:01:17.146 align:middle
+Se creará un trabajo para cada
+permutación de estos valores.
+
+00:01:17.526 --> 00:01:20.776 align:middle
+Este include añade un caso
+especial personalizado a la matriz,
+
+00:01:21.016 --> 00:01:23.826 align:middle
+que se ejecuta en nuestra
+versión de PHP menos compatible,
+
+00:01:24.066 --> 00:01:27.496 align:middle
+8.2 y con la opción prefer-lowest Composer.
+
+00:01:28.136 --> 00:01:29.656 align:middle
+A continuación, el steps para este trabajo.
+
+00:01:30.166 --> 00:01:33.166 align:middle
+En primer lugar, utilizaremos la
+acción checkout que extrae el código.
+
+00:01:33.796 --> 00:01:37.086 align:middle
+Esta acción setup-php, lo
+has adivinado, instala PHP.
+
+00:01:37.916 --> 00:01:42.036 align:middle
+Observa que este with: version: está
+configurado en una variable matrix.php.
+
+00:01:42.486 --> 00:01:46.626 align:middle
+Estas variables son la forma de personalizar el
+trabajo en función de los valores de la matriz.
+
+00:01:47.226 --> 00:01:51.066 align:middle
+También estamos pasando tools: flex -
+esto instala Symfony Flex globalmente.
+
+00:01:51.836 --> 00:01:55.256 align:middle
+La acción composer-install instala
+las dependencias de nuestro bundle.
+
+00:01:55.576 --> 00:01:59.406 align:middle
+Para dependency-versions, estamos
+pasando la variable matrix.deps.
+
+00:01:59.846 --> 00:02:03.336 align:middle
+Si volvemos a mirar nuestra matriz, veremos
+que siempre está configurada como highest,
+
+00:02:03.386 --> 00:02:05.786 align:middle
+excepto en nuestro caso
+especial, en el que es lowest.
+
+00:02:09.516 --> 00:02:14.646 align:middle
+Estamos pasando la variable de entorno
+SYMFONY_REQUIRE como matrix.symfony para especificar
+
+00:02:14.646 --> 00:02:16.196 align:middle
+qué versión de Symfony instalar.
+
+00:02:17.096 --> 00:02:21.606 align:middle
+Finalmente, el último paso ejecuta nuestro
+conjunto de pruebas con vendor/bin/phpunit.
+
+00:02:22.296 --> 00:02:25.696 align:middle
+Nuestra siguiente tarea es
+static-analysis, que ejecuta PHPStan.
+
+00:02:26.256 --> 00:02:28.816 align:middle
+Este trabajo es mucho más
+sencillo, ya que no tiene matriz.
+
+00:02:29.286 --> 00:02:31.956 align:middle
+Es mejor ejecutar el análisis
+estático en la última versión de PHP,
+
+00:02:31.956 --> 00:02:35.516 align:middle
+8.4 en nuestro caso, para detectar
+la mayoría de los problemas.
+
+00:02:36.756 --> 00:02:42.496 align:middle
+Para la tarea php-cs-fixer, la ejecutamos en
+nuestra versión de PHP menos compatible, 8.2,
+
+00:02:42.716 --> 00:02:46.486 align:middle
+para asegurarnos de que no sugiere correcciones
+que no son compatibles con esa versión.
+
+00:02:47.226 --> 00:02:50.006 align:middle
+También he añadido las banderas --dry-run y
+
+00:02:50.236 --> 00:02:55.616 align:middle
+--diff al comando para que no cambie realmente ningún
+archivo, pero muestre una diferencia de lo que hay que
+
+00:02:55.616 --> 00:02:57.506 align:middle
+cambiar en la salida de la acción.
+
+00:02:58.316 --> 00:03:00.096 align:middle
+Ahora, ¡a crear el repositorio de GitHub!
+
+00:03:00.426 --> 00:03:04.296 align:middle
+Dirígete a GitHub y crea un nuevo
+repositorio haciendo clic en el icono más
+
+00:03:04.296 --> 00:03:07.186 align:middle
+de la parte superior derecha y
+seleccionando New repository.
+
+00:03:08.806 --> 00:03:12.326 align:middle
+Para el propietario, voy a elegir
+la organización SymfonyCasts,
+
+00:03:12.566 --> 00:03:16.166 align:middle
+pero puedes seleccionar tu cuenta
+personal si quieres seguir adelante.
+
+00:03:16.206 --> 00:03:22.416 align:middle
+Para la descripción, simplemente la
+copiaré de nuestro archivo composer.json.
+
+00:03:25.146 --> 00:03:25.796 align:middle
+¿Visibilidad?
+
+00:03:25.966 --> 00:03:29.006 align:middle
+Voy a hacerlo público porque
+lo publicaré en Packagist.
+
+00:03:29.566 --> 00:03:32.896 align:middle
+No cambies nada más aquí, no queremos
+ningún código generado por GitHub.
+
+00:03:33.486 --> 00:03:34.986 align:middle
+¡Pulsa Create repository!
+
+00:03:36.916 --> 00:03:38.916 align:middle
+Ahora estamos en la página
+del repositorio vacío.
+
+00:03:39.546 --> 00:03:42.966 align:middle
+Localmente, necesitamos inicializar un
+nuevo repositorio git para nuestro bundle.
+
+00:03:43.366 --> 00:03:47.366 align:middle
+Nuestro bundle vive dentro de una aplicación
+Symfony, que es su propio repositorio git.
+
+00:03:47.886 --> 00:03:51.426 align:middle
+Un repositorio git dentro de otro
+repositorio git puede ser molesto
+
+00:03:51.426 --> 00:03:53.566 align:middle
+de manejar, así que, vamos a sacarlo.
+
+00:03:54.126 --> 00:03:58.766 align:middle
+En tu terminal, navega a un directorio
+fuera de tu aplicación Symfony y ejecuta:
+
+00:03:59.356 --> 00:04:06.556 align:middle
+Esto copia recursivamente el directorio
+bundle a tu ubicación actual.
+
+00:04:07.056 --> 00:04:17.006 align:middle
+Navega hasta el nuevo directorio
+object-translation-bundle y ejecuta: git init
+
+00:04:17.006 --> 00:04:22.726 align:middle
+--initial-branch=1.x Por defecto,
+la rama inicial se llama main,
+
+00:04:23.356 --> 00:04:27.836 align:middle
+el uso de 1.x ayuda a distinguir entre las diferentes
+ramas de versiones principales más adelante.
+
+00:04:28.286 --> 00:04:32.306 align:middle
+La versión 2 de nuestro bundle
+se desarrollaría en la rama 2.x.
+
+00:04:32.896 --> 00:04:34.406 align:middle
+Ahora ejecuta: git add .
+
+00:04:34.406 --> 00:04:36.136 align:middle
+Para escenificar todos los archivos.
+
+00:04:36.806 --> 00:04:39.186 align:middle
+En nuestra página vacía
+del repositorio de GitHub,
+
+00:04:39.436 --> 00:04:43.426 align:middle
+copia el comando para añadir el
+origen remoto: git remote add origin...
+
+00:04:43.676 --> 00:04:44.906 align:middle
+y pégalo en el terminal.
+
+00:04:45.626 --> 00:04:54.216 align:middle
+A continuación, confirma los archivos con: git commit
+-m "Initial commit" Ahora, copia el comando git push
+
+00:04:54.216 --> 00:04:58.766 align:middle
+de GitHub, pégalo en tu terminal,
+cambiando main por 1.x, y ejecútalo:
+
+00:04:58.766 --> 00:05:02.696 align:middle
+git push -u origin 1.x De vuelta
+en GitHub, actualiza la página...
+
+00:05:04.566 --> 00:05:06.306 align:middle
+¡Bien! ¡Aquí está el
+código de nuestro bundle!
+
+00:05:07.356 --> 00:05:12.626 align:middle
+Parece que nuestro README se ha mostrado correctamente,
+e incluso tenemos esta ingeniosa tabla de contenidos.
+
+00:05:13.946 --> 00:05:15.616 align:middle
+También se ha detectado nuestra licencia.
+
+00:05:17.916 --> 00:05:20.846 align:middle
+Si hacemos clic en la pestaña Actions, podemos
+ver que nuestro flujo de trabajo se ha ejecutado
+
+00:05:20.846 --> 00:05:22.706 align:middle
+, ¡y parece que con éxito!
+
+00:05:23.196 --> 00:05:25.496 align:middle
+Haz clic en ella para ver
+los trabajos individuales.
+
+00:05:26.026 --> 00:05:31.196 align:middle
+Estos trabajos que empiezan por PHP son las distintas
+permutaciones creadas a partir de nuestra matriz.
+
+00:05:31.666 --> 00:05:33.996 align:middle
+Si saltamos a una, podemos ver cada paso.
+
+00:05:34.566 --> 00:05:37.556 align:middle
+Si ampliamos el paso Prueba,
+veremos la salida de PHPUnit.
+
+00:05:38.516 --> 00:05:42.966 align:middle
+También podemos ver la salida de
+nuestros trabajos PHPStan y PHP-CS-Fixer.
+
+00:05:43.666 --> 00:05:48.326 align:middle
+Ahora que nuestro bundle está alojado en GitHub,
+podemos publicarlo en Packagist: ¡Eso a continuación!
