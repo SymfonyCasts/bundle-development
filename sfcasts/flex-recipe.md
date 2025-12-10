@@ -58,7 +58,8 @@ Now, I'll copy and paste the class name. Our manifest file is good to go.
 
 Onto the `post-install.txt` file. The contents of this file are displayed in the
 terminal after the package is installed, as a way to provide next steps to the user.
-I'll modify to reference our bundle name and link to our documentation.
+I'll modify to reference our bundle name, delete this line, grab the link to our documentation...
+and paste.
 
 Finally, I need to adjust the files that are copied. In the `src` directory, we can delete
 `Controller`, and in `Entity`, I'll rename the file to `Translation.php`. Opening that file,
