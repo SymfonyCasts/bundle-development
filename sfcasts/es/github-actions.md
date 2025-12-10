@@ -28,7 +28,7 @@ Finalmente, el último paso ejecuta nuestro conjunto de pruebas con `vendor/bin/
 
 Nuestra siguiente tarea es `static-analysis`, que ejecuta PHPStan. Este trabajo es mucho más sencillo, ya que no tiene matriz. Es mejor ejecutar el análisis estático en la última versión de PHP, 8.4 en nuestro caso, para detectar la mayoría de los problemas.
 
-Para la tarea `php-cs-fixer`, la ejecutamos en nuestra versión de PHP menos compatible, la 8.2, para asegurarnos de que no sugiere correcciones que no son compatibles con esa versión. También he añadido los indicadores `--dry-run` y `--diff` al comando para que no cambie realmente ningún archivo, pero muestre una diferencia de lo que hay que cambiar en la salida de la acción.
+Para la tarea `php-cs-fixer`, la ejecutamos en nuestra versión de PHP menos compatible, la 8.2, para asegurarnos de que no sugiere correcciones que no son compatibles con esa versión. También he añadido los indicadores `--dry-run` y `--diff` al comando para que no cambie realmente ningún archivo, sino que muestre una diferencia de lo que hay que cambiar en la salida de la acción.
 
 ## Crear el repositorio
 
