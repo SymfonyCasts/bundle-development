@@ -178,14 +178,13 @@ Puedes encontrar esta clave en la salida del terminal,
 debajo del mensaje de error: method.notFound.
 
 00:03:03.616 --> 00:03:04.266 align:middle
-Cópiala. De
+Cópiala. De vuelta a
 
 00:03:04.846 --> 00:03:08.916 align:middle
-nuevo en la línea 19 de
-ObjectTranslationBundle.php,
+la línea 19 de ObjectTranslationBundle.php,
 
 00:03:08.916 --> 00:03:15.166 align:middle
-añade un comentario a la línea @phpstan-ignore
+añade a la línea un comentario @phpstan-ignore
 <paste>: De nuevo en el terminal,
 
 00:03:15.346 --> 00:03:19.296 align:middle
