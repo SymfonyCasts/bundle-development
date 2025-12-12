@@ -96,7 +96,7 @@ git push origin symfonycasts/object-translation-bundle
 Oops! I forgot to commit the changes, so I'll run:
 
 ```terminal
-git commit -m "add symfonycasts/object-translation-bundle recipe"
+git commit -m "add symfonycasts/object-translation-bundle"
 ```
 
 And push again...
