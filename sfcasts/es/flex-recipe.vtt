@@ -1,0 +1,351 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:05.836 align:middle
+Lo dejamos con esta asquerosa experiencia de usuario
+al instalar nuestro bundle en una aplicación Symfony.
+
+00:00:06.286 --> 00:00:09.306 align:middle
+¡Vamos a crear una receta
+Symfony Flex para mejorar esto!
+
+00:00:09.766 --> 00:00:13.336 align:middle
+La receta añadirá la entidad
+Translation necesaria, y la configurará.
+
+00:00:13.866 --> 00:00:18.016 align:middle
+En tu navegador, navega hasta el
+repositorio symfony/recipes en GitHub.
+
+00:00:18.676 --> 00:00:23.036 align:middle
+Este es el repositorio oficial de recetas y está
+comisariado por el equipo central de Symfony.
+
+00:00:23.726 --> 00:00:25.436 align:middle
+Hay otro repositorio de recetas
+
+00:00:25.436 --> 00:00:28.236 align:middle
+symfony/recipes-contribque está
+impulsado por la comunidad.
+
+00:00:28.236 --> 00:00:31.336 align:middle
+Los colaboradores pueden
+aprobar y fusionar tu receta.
+
+00:00:31.516 --> 00:00:36.136 align:middle
+Para añadir una receta, primero haz un fork
+del repositorio symfony/recipes-contrib.
+
+00:00:36.626 --> 00:00:40.846 align:middle
+Yo ya tengo una bifurcación en
+kbond/recipes-contrib, así que navegaré hasta allí.
+
+00:00:41.496 --> 00:00:46.536 align:middle
+Obtén la url remota de git haciendo clic en el
+desplegable "Código" y copiando el enlace "SSH".
+
+00:00:46.966 --> 00:00:50.876 align:middle
+En tu terminal, navega a un directorio
+limpio y clona con él tu fork:
+
+00:00:51.216 --> 00:00:59.136 align:middle
+git clone Navega hasta el directorio:
+cd recipes-contrib Y crea una nueva rama
+
+00:00:59.136 --> 00:01:06.316 align:middle
+para tu pull request: git checkout -b
+symfonycasts/object-translation-bundle Ahora abre
+
+00:01:06.316 --> 00:01:08.576 align:middle
+este directorio como proyecto en tu IDE.
+
+00:01:08.986 --> 00:01:11.966 align:middle
+Yo lo tengo clonado en otro
+sitio y ya abierto en PhpStorm.
+
+00:01:12.516 --> 00:01:14.446 align:middle
+Verás esta gran lista de directorios.
+
+00:01:14.776 --> 00:01:18.296 align:middle
+Cada directorio corresponde a una
+organización o nombre de usuario.
+
+00:01:18.876 --> 00:01:21.636 align:middle
+Dentro de cada uno hay un
+directorio para cada nombre de
+
+00:01:21.736 --> 00:01:25.266 align:middle
+paquete, y dentro de éste hay un
+directorio para cada versión del paquete.
+
+00:01:25.606 --> 00:01:26.776 align:middle
+¡Vamos a crear el nuestro!
+
+00:01:27.196 --> 00:01:29.996 align:middle
+En la raíz, crea un directorio
+y un subdirectorio nuevos:
+
+00:01:29.996 --> 00:01:33.166 align:middle
+symfonycasts/object-translation-bundle.
+
+00:01:34.566 --> 00:01:38.386 align:middle
+Dentro de él, crea otro
+directorio para la versión: 1.0.
+
+00:01:39.256 --> 00:01:44.026 align:middle
+En lugar de crear la receta desde cero, voy a
+copiar una receta con una configuración similar:
+
+00:01:44.026 --> 00:01:45.696 align:middle
+una entidad y alguna configuración.
+
+00:01:46.156 --> 00:01:51.686 align:middle
+Copiaré el contenido de
+zenstruck/messenger-monitor-bundle/0.5
+
+00:01:52.026 --> 00:01:54.516 align:middle
+y lo pegaré en nuestro nuevo directorio 1.0.
+
+00:01:56.656 --> 00:02:00.266 align:middle
+Este archivo manifest.json es
+necesario para todas las recetas.
+
+00:02:00.266 --> 00:02:02.596 align:middle
+Son las instrucciones de la receta.
+
+00:02:03.016 --> 00:02:07.936 align:middle
+La sección copy-from-recipe indica a Flex
+que copie los directorios config y src
+
+00:02:07.936 --> 00:02:10.376 align:middle
+de esta receta en el proyecto del usuario.
+
+00:02:11.106 --> 00:02:14.336 align:middle
+La sección bundles indica a Flex las
+clases del bundle que debe activar.
+
+00:02:14.946 --> 00:02:19.976 align:middle
+De vuelta a la página GitHub de nuestro bundle,
+navegaré hasta src/ObjectTranslationBundle.php,
+
+00:02:19.976 --> 00:02:27.246 align:middle
+copiaré el espacio de nombres y lo pegaré sobre el
+existente en el archivo de manifiesto, añadiendo \\ al final.
+
+00:02:27.886 --> 00:02:29.726 align:middle
+Ahora, copiaré y pegaré
+el nombre de la clase.
+
+00:02:29.726 --> 00:02:34.436 align:middle
+Nuestro archivo de manifiesto está listo.
+
+00:02:35.056 --> 00:02:37.276 align:middle
+Pasamos al archivo post-install.txt.
+
+00:02:37.696 --> 00:02:41.916 align:middle
+El contenido de este archivo se muestra en el
+terminal una vez instalado el paquete, como
+
+00:02:42.006 --> 00:02:44.376 align:middle
+forma de proporcionar los
+siguientes pasos al usuario.
+
+00:02:45.136 --> 00:02:54.916 align:middle
+Lo modificaré para que haga referencia al nombre de nuestro bundle,
+borraré esta línea, cogeré el enlace a nuestra documentación...
+
+00:02:54.916 --> 00:02:57.466 align:middle
+y pegarlo.
+
+00:02:57.656 --> 00:03:00.946 align:middle
+Por último, tengo que ajustar
+los archivos que se copian.
+
+00:03:01.336 --> 00:03:05.426 align:middle
+En el directorio src, podemos
+eliminar Controller, y en Entity,
+
+00:03:06.026 --> 00:03:09.386 align:middle
+cambiaré el nombre del
+archivo a Translation.php.
+
+00:03:09.386 --> 00:03:19.266 align:middle
+Al abrir ese archivo, copiaré el contenido
+del README de nuestro bundle y lo pegaré.
+
+00:03:19.266 --> 00:03:25.816 align:middle
+En config/packages, cambiaré el nombre del archivo
+a symfonycasts_object_translation.yaml y pegaré
+
+00:03:25.816 --> 00:03:27.936 align:middle
+la configuración del README de nuestro bundle.
+
+00:03:33.146 --> 00:03:34.146 align:middle
+¡Ya está listo!
+
+00:03:34.526 --> 00:03:36.196 align:middle
+De vuelta al terminal, navegaré
+
+00:03:36.196 --> 00:03:41.356 align:middle
+hasta el directorio recipe-contrib que tengo
+abierto en PhpStorm, y ejecutaré: git add .
+
+00:03:41.876 --> 00:03:43.266 align:middle
+Para escanear los nuevos archivos.
+
+00:03:43.756 --> 00:03:46.536 align:middle
+Luego ejecuta: git status Para
+asegurarme de que he capturado todo.
+
+00:03:47.106 --> 00:03:47.676 align:middle
+¡Tiene buena pinta!
+
+00:03:48.056 --> 00:03:49.776 align:middle
+Ahora haré un push a mi fork en GitHub:
+
+00:03:50.196 --> 00:03:56.406 align:middle
+git push origin
+symfonycasts/object-translation-bundle ¡Uy!
+
+00:03:56.406 --> 00:03:58.616 align:middle
+Me olvidé de confirmar los
+cambios, así que ejecutaré:
+
+00:03:58.726 --> 00:04:00.666 align:middle
+git commit -m
+
+00:04:00.846 --> 00:04:06.286 align:middle
+"add symfonycasts/object-translation-bundle"
+Y push de nuevo...
+
+00:04:08.096 --> 00:04:11.756 align:middle
+De vuelta en el navegador, navegaré al
+repositorio de Symfony. recipe-contrib
+
+00:04:13.886 --> 00:04:18.506 align:middle
+GitHub ha detectado la nueva rama en mi bifurcación
+y me pide que cree un pull request, así
+
+00:04:18.586 --> 00:04:21.146 align:middle
+que haré clic en "Comparar y pull request".
+
+00:04:21.796 --> 00:04:27.736 align:middle
+Mejoraré un poco el título y en la
+descripción me pide la URL de Packagist.
+
+00:04:27.996 --> 00:04:35.536 align:middle
+La buscaré, la copiaré y la pegaré.
+
+00:04:36.766 --> 00:04:38.356 align:middle
+Ahora, ¡"Crear pull request"!
+
+00:04:38.356 --> 00:04:43.106 align:middle
+Si espero unos segundos, aparece
+un bot que comenta automáticamente
+
+00:04:43.106 --> 00:04:45.316 align:middle
+con instrucciones sobre cómo probar la receta.
+
+00:04:45.856 --> 00:04:46.456 align:middle
+¡Ya está!
+
+00:04:47.706 --> 00:04:52.036 align:middle
+De vuelta a mi terminal, en un directorio nuevo,
+crearé de nuevo esa aplicación temporal de Symfony:
+
+00:04:52.256 --> 00:05:02.126 align:middle
+symfony new --webapp my-bundle-test Y
+navego hasta ella: cd my-bundle-test
+
+00:05:02.126 --> 00:05:07.116 align:middle
+De vuelta en las instrucciones de la receta PR,
+copiaré este comando export SYMFONY_ENDPOINT
+
+00:05:07.206 --> 00:05:08.636 align:middle
+y lo pegaré en mi terminal.
+
+00:05:09.356 --> 00:05:13.356 align:middle
+Esta variable de entorno cambia la
+búsqueda por defecto de la receta Symfony
+
+00:05:13.536 --> 00:05:16.366 align:middle
+Flex por una ruta personalizada
+que incluye mi PR.
+
+00:05:17.086 --> 00:05:21.216 align:middle
+Ahora, copiaré el comando require de
+Composer para mi bundle y lo pegaré.
+
+00:05:21.986 --> 00:05:22.956 align:middle
+Momento de la verdad...
+
+00:05:24.666 --> 00:05:28.736 align:middle
+Vale, ¡veo que se ha instalado el
+bundle y me pide que ejecute la receta!
+
+00:05:29.056 --> 00:05:29.936 align:middle
+¡Buena señal!
+
+00:05:30.366 --> 00:05:34.776 align:middle
+Las recetas oficiales no te piden confirmación,
+pero las de sí lo hacen por defecto. contrib
+
+00:05:35.116 --> 00:05:36.136 align:middle
+Elijo "sí"...
+
+00:05:36.136 --> 00:05:39.706 align:middle
+y... ¡no hay error!
+
+00:05:39.986 --> 00:05:41.936 align:middle
+¡Eso significa que nuestra receta
+ha funcionado como esperábamos!
+
+00:05:42.626 --> 00:05:44.876 align:middle
+También podemos ver el mensaje
+posterior a la instalación.
+
+00:05:45.426 --> 00:05:47.396 align:middle
+Confirmaré que la entidad
+se ha añadido ejecutando:
+
+00:05:47.426 --> 00:05:52.036 align:middle
+ls src/Entity Genial, aquí está
+el archivo . Translation.php
+
+00:05:52.356 --> 00:05:56.036 align:middle
+Y si ejecuto: Aquí ls config/packages está,
+
+00:05:56.276 --> 00:05:59.536 align:middle
+veo el archivo .
+symfonycasts_object_translation.yaml
+
+00:05:59.536 --> 00:06:03.806 align:middle
+Ahora que hemos confirmado que la
+receta funciona, volvamos a nuestro RP,
+
+00:06:03.806 --> 00:06:07.276 align:middle
+copiemos este comando y
+ejecutémoslo. unset SYMFONY_ENDPOINT
+
+00:06:08.246 --> 00:06:11.776 align:middle
+Esto restablece la búsqueda de
+recetas a la ruta oficial de Symfony.
+
+00:06:12.526 --> 00:06:14.736 align:middle
+Y... Con esto terminamos este curso bundle
+
+00:06:15.066 --> 00:06:16.266 align:middle
+Pero, ¡no es el final!
+
+00:06:16.266 --> 00:06:21.006 align:middle
+No dudes en ayudarme a mejorar nuestro bundle
+enviando incidencias o peticiones en GitHub.
+
+00:06:21.466 --> 00:06:24.076 align:middle
+¡Nos vendrían bien más pruebas!
+
+00:06:24.076 --> 00:06:27.596 align:middle
+Espero que esta aventura haya sido divertida,
+útil y quizás un poco inspiradora.
+
+00:06:28.126 --> 00:06:29.906 align:middle
+Hasta la próxima, ¡feliz programación!
