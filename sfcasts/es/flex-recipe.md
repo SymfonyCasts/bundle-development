@@ -6,7 +6,7 @@ En tu navegador, navega hasta el repositorio `symfony/recipes` en GitHub. Este e
 
 Para añadir una receta, primero haz un fork del repositorio `symfony/recipes-contrib`. Yo ya tengo una bifurcación en `kbond/recipes-contrib`, así que navegaré hasta allí. Obtén la url remota de git haciendo clic en el desplegable "Código" y copiando el enlace "SSH".
 
-En tu terminal, navega a un directorio limpio y clona con él tu fork:
+En tu terminal, navega a un directorio limpio y clona con él tu bifurcación:
 
 ```terminal
 git clone <paste>
@@ -76,13 +76,13 @@ Y push de nuevo...
 
 De vuelta en el navegador, navegaré al repositorio `recipe-contrib` de Symfony. GitHub ha detectado la nueva rama en mi bifurcación y me pide que cree un pull request, así que haré clic en "Comparar & pull request".
 
-Mejoraré un poco el título y en la descripción me pide la URL de Packagist. La buscaré, la copiaré y la pegaré.
+Mejoraré un poco el título y en la descripción, me pide la URL de Packagist. La buscaré, la copiaré y la pegaré.
 
 Ahora, ¡"Crear pull request"!
 
 Si espero unos segundos, aparece un bot que comenta automáticamente con instrucciones sobre cómo probar la receta. ¡Ya está!
 
-De vuelta en mi terminal, en un directorio nuevo, crearé de nuevo esa aplicación temporal de Symfony:
+De vuelta a mi terminal, en un directorio nuevo, crearé de nuevo esa aplicación temporal de Symfony:
 
 ```terminal
 symfony new --webapp my-bundle-test
