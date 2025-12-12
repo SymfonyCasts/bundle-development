@@ -69,12 +69,12 @@ git push origin symfonycasts/object-translation-bundle
 ¡Uy! Me olvidé de confirmar los cambios, así que ejecutaré:
 
 ```terminal
-git commit -m "add symfonycasts/object-translation-bundle recipe"
+git commit -m "add symfonycasts/object-translation-bundle"
 ```
 
 Y push de nuevo...
 
-De vuelta en el navegador, navegaré al repositorio `recipe-contrib` de Symfony. GitHub ha detectado la nueva rama en mi bifurcación y me pide que cree un pull request, así que haré clic en "Comparar y pull request".
+De vuelta en el navegador, navegaré al repositorio `recipe-contrib` de Symfony. GitHub ha detectado la nueva rama en mi bifurcación y me pide que cree un pull request, así que haré clic en "Comparar & pull request".
 
 Mejoraré un poco el título y en la descripción me pide la URL de Packagist. La buscaré, la copiaré y la pegaré.
 
@@ -82,7 +82,7 @@ Ahora, ¡"Crear pull request"!
 
 Si espero unos segundos, aparece un bot que comenta automáticamente con instrucciones sobre cómo probar la receta. ¡Ya está!
 
-De vuelta a mi terminal, en un directorio nuevo, crearé de nuevo esa aplicación temporal de Symfony:
+De vuelta en mi terminal, en un directorio nuevo, crearé de nuevo esa aplicación temporal de Symfony:
 
 ```terminal
 symfony new --webapp my-bundle-test
