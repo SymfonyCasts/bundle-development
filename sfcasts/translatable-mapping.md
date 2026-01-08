@@ -140,6 +140,10 @@ Choose `y` to confirm recreating the database.
 
 Let's do a quick sanity check to ensure these translations were indeed loaded:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM translation'
 ```
