@@ -84,7 +84,7 @@ Ahora vamos a traducir el contenido. Copia todo este `TranslationFactory::create
 
 [[[ code('c2ba8ba5a0') ]]]
 
-¡Basta para empezar!
+¡Suficiente para empezar!
 
 En tu terminal, vuelve a cargar los accesorios con:
 
@@ -94,7 +94,11 @@ symfony console foundry:load-fixtures
 
 Elige `y` para confirmar la recreación de la base de datos.
 
-Hagamos una comprobación rápida para asegurarnos de que las traducciones se han cargado:
+Hagamos una comprobación rápida para asegurarnos de que las traducciones se han cargado correctamente:
+
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
 
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM translation'
