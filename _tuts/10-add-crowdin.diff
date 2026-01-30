@@ -23,7 +23,7 @@ index 4d46d94..b7481a4 100644
          "symfony/flex": "^2.5.1",
          "symfony/framework-bundle": "7.2.*",
 diff --git a/composer.lock b/composer.lock
-index 2259a4c..c05bd8c 100644
+index ed99305..02beb42 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
@@ -35,7 +35,7 @@ index 2259a4c..c05bd8c 100644
      "packages": [
          {
              "name": "composer/semver",
-@@ -2408,6 +2408,79 @@
+@@ -2411,6 +2411,79 @@
              ],
              "time": "2025-04-07T19:09:28+00:00"
          },

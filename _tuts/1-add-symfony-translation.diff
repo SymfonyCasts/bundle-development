@@ -11,7 +11,7 @@ index ad31dfa..4d46d94 100644
          "symfony/yaml": "7.2.*",
          "symfonycasts/tailwind-bundle": "^0.10.0",
 diff --git a/composer.lock b/composer.lock
-index 49ea2ea..2259a4c 100644
+index 2c2c572..ed99305 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
@@ -23,7 +23,7 @@ index 49ea2ea..2259a4c 100644
      "packages": [
          {
              "name": "composer/semver",
-@@ -4596,6 +4596,101 @@
+@@ -4599,6 +4599,101 @@
              ],
              "time": "2025-04-20T20:18:16+00:00"
          },
@@ -125,24 +125,6 @@ index 49ea2ea..2259a4c 100644
          {
              "name": "symfony/translation-contracts",
              "version": "v3.5.1",
-@@ -8823,7 +8918,7 @@
-     ],
-     "aliases": [],
-     "minimum-stability": "stable",
--    "stability-flags": [],
-+    "stability-flags": {},
-     "prefer-stable": true,
-     "prefer-lowest": false,
-     "platform": {
-@@ -8831,7 +8926,7 @@
-         "ext-ctype": "*",
-         "ext-iconv": "*"
-     },
--    "platform-dev": [],
-+    "platform-dev": {},
-     "platform-overrides": {
-         "php": "8.2"
-     },
 diff --git a/config/packages/translation.yaml b/config/packages/translation.yaml
 new file mode 100644
 index 0000000..490bfc2
